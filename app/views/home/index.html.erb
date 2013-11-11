@@ -1,0 +1,15 @@
+<% if user_signed_in? %>
+
+	<h3>you have succesfully signed in</h3>
+	<%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+
+<% else %>
+
+	<h1> Welcome to the Learning Object Evaluation Platform</h1>
+
+	<%= render 'home/login' %>
+
+	<%= link_to "Sign In", new_user_session_path, :method => :get %>
+	<%= link_to "Sign up", new_user_registration_path, :method => :get %>
+
+<% end %>

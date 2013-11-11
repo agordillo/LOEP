@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NewLOEP</title>
+  <title>LOEP - Learning Object Evaluation Platform</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<%= yield %>
+<div class='header'>
+	<%= render 'layouts/header' %>
+</div>
+
+<div class='container'>
+	<%= yield %>
+</div>
+
+<div class='footer'>
+	<%= render 'layouts/footer' %>
+</div>
 
 </body>
 </html>
