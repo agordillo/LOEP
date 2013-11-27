@@ -26,5 +26,4 @@ gem 'devise'
 # Deploy with Capistrano
 # gem 'capistrano'
 
-# To use debugger
-# gem 'debugger'
+gem 'pry-rails', :group => :development
