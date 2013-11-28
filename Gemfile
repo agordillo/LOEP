@@ -16,6 +16,7 @@ gem 'jquery-rails'
 
 gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'devise'
+gem 'cancan'
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
