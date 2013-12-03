@@ -9,7 +9,7 @@ class Ability
         # else
         #     can :read, :all
         # end
-
+        binding.pry
         if user.role? :admin
             can :manage, :all
         else

@@ -1,8 +1,8 @@
 <% unless user_signed_in? %>
   <%= form_for("user", :url => user_session_path) do |f| %>
-    <%= f.label :name %>
+    <%= f.label :email %>
     <br/>
-    <%= f.text_field :name , :size=>'15',:maxlength=>'32' %>
+    <%= f.text_field :email , :size=>'15',:maxlength=>'32' %>
     <br/>
     <%= f.label :password %>
     <br/>
