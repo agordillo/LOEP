@@ -2,7 +2,7 @@
   <%= form_for("user", :url => user_session_path) do |f| %>
 
     <p class="login_legend"> Username or Email </p>
-    <%= f.text_field :email , :size=>'15',:maxlength=>'32', :class=>'login_email_input' %>
+    <%= f.text_field :login , :size=>'15',:maxlength=>'32', :class=>'login_email_input' %>
 
     <p class="login_legend"> Password </p>
     <%= f.password_field :password , :size=>'15', :maxlength=>'32', :class=>'login_password_input' %>
