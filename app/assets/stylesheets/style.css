@@ -112,6 +112,7 @@ html, body {
 	display: inline-block;
 	text-align: center;
 	min-width: 70px;
+	margin-bottom: 6px;
 }
 
 .sign_in_button:hover, .sign_up_frontpage:hover {
@@ -129,3 +130,22 @@ p.login_legend {
 	text-decoration: none;
 }
 
+.remember_me_label {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.forgot_password_label {
+	white-space: nowrap;
+	margin-left: 15px;
+	float: right;
+	margin-top: 1px;
+}
+
+@media (max-width: 900px) {
+	.forgot_password_label {
+		float: none;
+		margin-left: 0px;
+	}
+}
