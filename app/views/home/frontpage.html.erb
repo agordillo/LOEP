@@ -1,5 +1,3 @@
-
-
 <div id="front_page_wrapper">
 	<div id="frontpage_C1">
 		<h1> Welcome to the Learning Object Evaluation Platform</h1>
@@ -11,7 +9,7 @@
 		</div>
 		<div id="frontpage_B">
 			<h1>New to LOEP?</h1>
-			<%= link_to "Sign up", new_user_registration_path, :method => :get, :class => 'sign_up_frontpage'  %>
+			<%= link_to "Sign up", new_user_registration_path, :method => :get, :class => 'sign_up_button'  %>
 		</div>
 	</div>
 </div>
@@ -21,16 +19,14 @@
 		_centerVertically();
 		window.onresize = function(){
 			_centerVertically();
-			console.log("onresize");
 		}
 	});
 
 	var _centerVertically = function(){
 		//Center frontpage div vertically
-		var marginTop = Math.max((($("#front_page_wrapper").parent().height()-$("#front_page_wrapper").height()-$("#footer").height())/2),0);
-		marginTop = marginTop * 0.5;
-		var marginTopPercentage = (marginTop*100)/$("#front_page_wrapper").parent().width();
-		$("#front_page_wrapper").css("margin-top", marginTopPercentage + "%");
-		// $("#front_page_wrapper").css("margin-top", marginTop + "px");
+		// var marginTop = Math.max((($("#front_page_wrapper").parent().height()-$("#front_page_wrapper").height()-$("#footer").height())/2),0);
+		// marginTop = marginTop * 0.5;
+		// var marginTopPercentage = (marginTop*100)/$("#front_page_wrapper").parent().width();
+		// $("#front_page_wrapper").css("margin-top", marginTopPercentage + "%");
 	}
 </script>

@@ -12,13 +12,16 @@ def create
 	@user.password = params[:user][:password]
 	@user.password_confirmation =params[:user][:password_confirmation]
 	@user.valid?
-	if @user.errors.blank? and verify_recaptcha
-		@user.save
-		redirect_to sign_in_url
-	else
-		if !verify_recaptcha
+
+	if @user.errors.blank?
+		if verify_recaptcha
+			@user.save
+			redirect_to "/home"
+		else
 			flash[:alert] = "There was an error with the recaptcha code below. Please re-enter the code and click submit."
+			render :action => "new"
 		end
+	else
 		render :action => "new"
 	end
 end

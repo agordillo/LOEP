@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def after_sign_in_path_for(resource)
-	return "/home"
+	  sign_in_url = "/home"
   end
 
   # Overwriting the sign_out redirect path method

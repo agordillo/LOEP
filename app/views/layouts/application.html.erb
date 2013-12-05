@@ -8,16 +8,18 @@
 </head>
 <body>
 
-<div id='header'>
-	<%= render 'layouts/header' %>
-</div>
+<div id="wrapper">
+	<div id='header'>
+		<%= render 'layouts/header' %>
+	</div>
 
-<div id='container'>
-	<%= yield %>
-</div>
+	<div id='container'>
+		<%= yield %>
+	</div>
 
-<div id='footer'>
-	<%= render 'layouts/footer' %>
+	<div id='footer'>
+		<%= render 'layouts/footer' %>
+	</div>
 </div>
 
 </body>

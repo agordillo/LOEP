@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles
 
   validates :name,
+  :allow_nil => false,
+  :length => { :in => 3..255 },
   :uniqueness => {
     :case_sensitive => false
   }

@@ -1,41 +1,36 @@
-<h2>Sign up IN REGISTRATION CONTROLLER</h2>
+<div class="registration_wrapper">
+  <% if flash[:alert] %>
+    <div class="alert alert-danger"><%= flash[:alert] %></div>
+  <% end %>
 
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
+  <% devise_error_messages!.each do |msg| %>
+      <% if msg.is_a?(String) %>
+        <div class="alert alert-danger"><%= msg %></div>
+      <% end %>
+  <% end %>
 
-  <div>
-    <%= f.label :username %>
-    <br />
-    <%=text_field_tag "user[name]",@user.name %>
-  </div>
+  <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
 
-  <div>
-    <%= f.label :email %>
-    <br />
-    <%= f.email_field :email %>
-  </div>
+      <p class="form_legend">Username</p>
+      <%=text_field_tag "user[name]",@user.name, :class=>'register_input' %>
 
-  <div>
-    <%= f.label :birthday %>
-    <br />
-    <%=text_field_tag "user[birthday]",@user.birthday %>
-  </div>
+      <p class="form_legend">Email</p>
+      <%= f.email_field :email, :class=>'register_input' %>
 
-  <div>
-    <%= f.label :password %>
-    <br />
-    <%= f.password_field :password %>
-  </div>
+      <p class="form_legend">Birthday</p>
+      <%=text_field_tag "user[birthday]",@user.birthday, :class=>'register_input' %>
 
-  <div>
-    <%= f.label :password_confirmation %>
-    <br />
-    <%= f.password_field :password_confirmation %>
-  </div>
+      <p class="form_legend">Password</p>
+      <%= f.password_field :password, :class=>'register_input' %>
 
-  <%= recaptcha_tags %>
+    <p class="form_legend">Password confirmation</p>
+    <%= f.password_field :password_confirmation, :class=>'register_input' %>
 
-  <div><%= f.submit "Sign up" %></div>
-<% end %>
+    <div class="captcha_wrapper">
+      <%= recaptcha_tags %>
+    </div>
 
-<%= render "devise/shared/links" %>
+    <%= f.submit "Sign up", :class => 'sign_up_button' %>
+  <% end %>
+  </br>
+</div>

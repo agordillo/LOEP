@@ -1,10 +1,14 @@
+<% if flash[:alert] %>
+    <div class="alert alert-danger"><%= flash[:alert] %></div>
+<% end %>
+
 <% unless user_signed_in? %>
   <%= form_for("user", :url => user_session_path) do |f| %>
 
-    <p class="login_legend"> Username or Email </p>
+    <p class="form_legend"> Username or Email </p>
     <%= f.text_field :login , :size=>'15',:maxlength=>'32', :class=>'login_email_input' %>
 
-    <p class="login_legend"> Password </p>
+    <p class="form_legend"> Password </p>
     <%= f.password_field :password , :size=>'15', :maxlength=>'32', :class=>'login_password_input' %>
 	
     <%= f.submit "Sign in", :class=>'sign_in_button' %> <br />
