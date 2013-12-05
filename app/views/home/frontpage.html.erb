@@ -1,8 +1,34 @@
-<h1> FRONT PAGE </h1>
+<div id="front_page_wrapper">
+	<div id="frontpage_C1">
+		<h1> Welcome to the Learning Object Evaluation Platform</h1>
+		<p> This platform aims to provide teachers and educators with a set of tools to facilitate the evaluation of small and self-contained web educational resources, known as Learning Objects. LOEP provides user and Learning Object management functionality, review assignments, a suite of evaluation tools (web and downloadable surveys, peer review mechanisms, ...) to evaluate Learning Objects according to several formal evaluation models, and training material for reviewers and educators. </p>
+	</div>
+	<div id="frontpage_C2">
+		<div id="frontpage_A">
+			<%= render 'home/login' %>
+		</div>
+		<div id="frontpage_B">
+			<h1>New to LOEP?</h1>
+			<%= link_to "Sign up", new_user_registration_path, :method => :get, :class => 'sign_up_frontpage'  %>
+		</div>
+	</div>
+</div>
 
-<h1> Welcome to the Learning Object Evaluation Platform</h1>
+<script type="text/javascript">
+	$(document).ready(function(){
+		_centerVertically();
+		window.onresize = function(){
+			_centerVertically();
+			console.log("onresize");
+		}
+	});
 
-<%= render 'home/login' %>
-
-<%= link_to "Sign In", new_user_session_path, :method => :get %>
-<%= link_to "Sign up", new_user_registration_path, :method => :get %>
+	var _centerVertically = function(){
+		//Center frontpage div vertically
+		var marginTop = Math.max((($("#front_page_wrapper").parent().height()-$("#front_page_wrapper").height()-$("#footer").height())/2),0);
+		marginTop = marginTop * 0.5;
+		var marginTopPercentage = (marginTop*100)/$("#front_page_wrapper").parent().width();
+		$("#front_page_wrapper").css("margin-top", marginTopPercentage + "%");
+		// $("#front_page_wrapper").css("margin-top", marginTop + "px");
+	}
+</script>

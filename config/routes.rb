@@ -2,12 +2,13 @@ NewLOEP::Application.routes.draw do
   devise_for :users, :controllers => { :registrations => "registrations" }
   as :user do
     get 'signin' => 'home#frontpage', :as => :new_user_session
+    get '/users/sign_out' => 'devise/sessions#destroy'
   end
+  
   root :to =>'home#frontpage'
   match '/home' => 'home#index'
   
   resources :users
-  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
