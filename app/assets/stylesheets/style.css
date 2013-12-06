@@ -16,16 +16,74 @@ body > iframe {
 	position: relative;
 }
 
+/* Header */
+
 #header {
 	text-align: center;
 	width: 100%;
 	height: 27%;
 }
 
+#topbar {
+	min-height: 40px;
+	height: 40px;
+	margin-bottom: 2px;
+	position: relative;
+}
+
+.navbar-top {
+	float: none !important;
+	position: absolute;
+	right: 0;
+	margin-right: 3%;
+	list-style: none;
+	list-style-type: none;
+	margin-top: 10px;
+}
+
+.navbar-top li {
+	display: inline;
+	padding: 10px 10px 10px 10px;
+}
+
+.navbar-top li span {
+	font-size: 16px;
+}
+
+#logo_wrapper {
+	width: 100%;
+	max-height: 100%;
+	height: 175px;
+}
+
 #header_logo {
-	max-width: 60%;
+	max-width: 100%;
 	max-height: 100%;
 }
+
+li.userbox {
+
+}
+
+li.userbox a {
+	text-decoration: none;
+	font-weight: bold;
+}
+
+li.userbox a:hover {
+	/*color: #2B4923;*/
+}
+
+li.userbox img {
+	display: none;
+	max-height: 23px;
+	margin-right: 5px;
+	margin-top: -4px;
+	border-radius: 3px;
+	box-shadow: 0 1px 0 #fff;
+}
+
+/* Container */
 
 #container{
 	width: 100%;
@@ -35,6 +93,8 @@ body > iframe {
 	padding-bottom: 40px !important;
 	display: block;
 }
+
+/* Footer */
 
 #footer {
   position: absolute;
@@ -113,8 +173,7 @@ body > iframe {
 	margin-bottom: 8px;
 }
 
-.sign_in_button, .sign_up_button {
-	width: 30%;
+.loep_button {
 	background-color: #2B4923;
 	border: 1px solid #373736;
 	color: white;
@@ -130,10 +189,21 @@ body > iframe {
 	margin-bottom: 6px;
 }
 
-.sign_in_button:hover, .sign_up_button:hover {
+.loep_button:hover {
 	opacity: 1;
 	text-decoration: none;
 	color: white;
+}
+
+.sign_in_button, .sign_up_button {
+	width: 30%;
+}
+
+.update_button {
+	width: 30%;
+}
+
+.cancel_button {
 }
 
 p.form_legend {
@@ -142,6 +212,12 @@ p.form_legend {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	font-weight: normal;
+}
+
+p.form_before_button {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 10px;
 }
 
 .sign_up_button {

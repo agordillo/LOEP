@@ -5,11 +5,6 @@ class ApplicationController < ActionController::Base
 	  sign_in_url = "/home"
   end
 
-  # Overwriting the sign_out redirect path method
-  def after_sign_out_path_for(resource_or_scope)
-    return root_path
-  end
-
   #CanCan Rescue
   rescue_from CanCan::AccessDenied do |exception|
     flash[:error] = exception.message

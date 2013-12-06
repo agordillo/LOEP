@@ -56,8 +56,16 @@ module NewLOEP
     # config.active_record.whitelist_attributes = true
     config.active_record.whitelist_attributes = false
 
+
+
     # Enable the asset pipeline
     config.assets.enabled = true
+
+    #Add fonts to assets path
+    config.assets.paths << "#{Rails}/vendor/assets/fonts"
+
+    #Compile assets
+    #rake assets:precompile RAILS_ENV=development
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'

@@ -1,1 +1,27 @@
-<a href="/home"><img id="header_logo" src="/assets/loep_logo.png"/></a>
+<% if user_signed_in? %>
+	<!-- Top bar -->
+	<nav id="topbar" class="navbar navbar-default" role="navigation">
+	    <ul class="navbar-top">
+        <li class="userbox">
+          <a href="<%=edit_user_registration_path(current_user)%>">
+            <img src="/assets/default_avatar.png">
+            <%=current_user.name%> (<%=current_user.rol%>)
+          </a>
+        </li>
+	      <li>
+	      	<a title="Home" href="<%=home_path%>"><span class="glyphicon glyphicon-home"></span></a>
+	      </li>
+	      <li>
+	      	<a title="Settings" href="<%=edit_user_registration_path(current_user)%>"><span class="glyphicon glyphicon-wrench"></span></a>
+	      </li>
+	      <li>
+	      	<a title="Sign out" href="/users/sign_out" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-log-out"></span></a>
+	      </li>
+	    </ul>
+	</nav>
+<% end %>
+<div id="logo_wrapper">
+	<a href="<%=home_path%>">
+		<img id="header_logo" src="/assets/loep_logo.png"/>
+	</a>	
+</div>

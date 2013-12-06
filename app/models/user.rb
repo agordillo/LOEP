@@ -33,4 +33,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def confirmation_required?
+    false
+  end
+
+  #---------------------------------------------------------------------------------
+
+  def rol
+    self.roles.first.name
+  end
+
 end

@@ -11,12 +11,15 @@ def create
 	@user.email = params[:user][:email]
 	@user.password = params[:user][:password]
 	@user.password_confirmation =params[:user][:password_confirmation]
+	#Add role
+	@user.roles.push(Role.reviewer)
 	@user.valid?
 
 	if @user.errors.blank?
-		if verify_recaptcha
+		if true || verify_recaptcha
 			@user.save
-			redirect_to "/home"
+			sign_in @user, :bypass => true
+			redirect_to "/"
 		else
 			flash[:alert] = "There was an error with the recaptcha code below. Please re-enter the code and click submit."
 			render :action => "new"

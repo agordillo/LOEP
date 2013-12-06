@@ -10,4 +10,12 @@ module ApplicationHelper
 	def resource_class
 	  devise_mapping.to
 	end
+
+	def home_path
+		if user_signed_in?
+			return "/home"
+		else
+			return "/"
+		end
+	end
 end
