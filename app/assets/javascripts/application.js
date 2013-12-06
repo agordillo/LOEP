@@ -7,6 +7,8 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
+// Precompile assets: rake assets:precompile RAILS_ENV=development
+//
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
@@ -15,5 +17,6 @@
 //= require jquery-ui-1.10.3.custom.min.js
 //= require jquery_ujs
 //= require custom.confirm.js
+//= require bootstrap.min.js
 //= require_tree .
 
