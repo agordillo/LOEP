@@ -7,12 +7,14 @@ end
 def create
 	@user = User.new
 	@user.name = params[:user][:name]
+	@user.gender = params[:user][:gender]
 	@user.birthday = params[:user][:birthday]
 	@user.email = params[:user][:email]
 	@user.password = params[:user][:password]
 	@user.password_confirmation =params[:user][:password_confirmation]
 	#Add role
 	@user.roles.push(Role.reviewer)
+
 	@user.valid?
 
 	if @user.errors.blank?

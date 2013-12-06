@@ -19,6 +19,13 @@
       <p class="form_legend">Email</p>
       <%= f.email_field :email, :class=>'register_input' %>
 
+      <p class="form_legend">Birthday</p>
+      <%=text_field_tag "user[birthday]",@user.birthday.strftime("%d/%m/%Y"), :class=>'register_input', :id=>"birthday_datepicker" %>
+
+      <p class="form_legend">Gender</p>
+      <%= f.radio_button :gender, 1 %><span class="gender_label">Male</span>
+      <%= f.radio_button :gender, 2 %><span class="gender_label">Female</span>
+
       <p class="form_legend">Password (leave blank if you don't want to change it)</p>
       <%= f.password_field :password, :autocomplete => "off", :class=>'register_input' %>
 
@@ -43,3 +50,18 @@
     <%= button_to "Cancel", registration_path(resource_name), :class => 'loep_button cancel_button', :data => { :confirm => "Are you sure?" }, :method => :delete %>
   </p>
 </div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+    $('#birthday_datepicker').datepicker({ 
+      yearRange: "-100:+0", // this is the option you're looking for
+      showOn: "both", 
+      dateFormat : 'dd/mm/yy',
+      changeMonth : true,
+      changeYear : true,
+      maxDate: '-1d',
+      buttonImage: "/assets/calendar_icon.png", 
+      buttonImageOnly: true 
+    });
+  });
+</script>
