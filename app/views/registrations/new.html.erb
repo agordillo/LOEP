@@ -24,6 +24,9 @@
     <%= f.radio_button :gender, 1 %><span class="gender_label">Male</span>
     <%= f.radio_button :gender, 2 %><span class="gender_label">Female</span>
 
+    <p class="form_legend">Areas of interest</p>
+    <input name="user[tag_list]" id="tags" value="" />
+
     <p class="form_legend">Password</p>
     <%= f.password_field :password, :class=>'register_input' %>
 
@@ -53,4 +56,11 @@
       buttonImageOnly: true 
     });
   });
+
+  $('#tags').tagsInput();
+
+  // $('#tags').tagsInput({    
+  //   autocomplete_url:'http://myserver.com/api/autocomplete',
+  //   autocomplete:{selectFirst:true,width:'100px',autoFill:true}
+  // });
 </script>

@@ -20,11 +20,15 @@
       <%= f.email_field :email, :class=>'register_input' %>
 
       <p class="form_legend">Birthday</p>
-      <%=text_field_tag "user[birthday]",@user.birthday.strftime("%d/%m/%Y"), :class=>'register_input', :id=>"birthday_datepicker" %>
+
+      <%=text_field_tag "user[birthday]",@user.readable_birthday, :class=>'register_input', :id=>"birthday_datepicker" %>
 
       <p class="form_legend">Gender</p>
       <%= f.radio_button :gender, 1 %><span class="gender_label">Male</span>
       <%= f.radio_button :gender, 2 %><span class="gender_label">Female</span>
+
+      <p class="form_legend">Areas of interest</p>
+      <input name="user[tag_list]" id="tags" value="<%=@user.tag_list.join(",")%>"/>
 
       <p class="form_legend">Password (leave blank if you don't want to change it)</p>
       <%= f.password_field :password, :autocomplete => "off", :class=>'register_input' %>
@@ -52,7 +56,7 @@
 </div>
 
 <script type="text/javascript">
-  jQuery(document).ready(function($) {
+  jQuery(document).ready(function($){
     $('#birthday_datepicker').datepicker({ 
       yearRange: "-100:+0", // this is the option you're looking for
       showOn: "both", 
@@ -63,5 +67,7 @@
       buttonImage: "/assets/calendar_icon.png", 
       buttonImageOnly: true 
     });
+
+    $('#tags').tagsInput();
   });
 </script>

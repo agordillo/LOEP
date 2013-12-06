@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :birthday, :gender
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :birthday, :gender, :tag_list
 
   has_and_belongs_to_many :roles
 
@@ -37,10 +37,22 @@ class User < ActiveRecord::Base
     false
   end
 
+  #acts_as_taggable
+  # Alias for acts_as_taggable_on :tags
+  acts_as_taggable
+
   #---------------------------------------------------------------------------------
 
   def rol
     self.roles.first.name
+  end
+
+  def readable_birthday
+    unless self.birthday.nil?
+      self.birthday.strftime("%d/%m/%Y")
+    else
+      ""
+    end
   end
 
 end

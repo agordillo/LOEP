@@ -27,4 +27,6 @@ gem 'cancan'
 # Deploy with Capistrano
 # gem 'capistrano'
 
+gem 'acts-as-taggable-on'
+
 gem 'pry-rails', :group => :development
