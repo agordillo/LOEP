@@ -57,10 +57,11 @@
     });
   });
 
-  $('#tags').tagsInput();
+  // $('#tags').tagsInput();
 
-  // $('#tags').tagsInput({    
-  //   autocomplete_url:'http://myserver.com/api/autocomplete',
-  //   autocomplete:{selectFirst:true,width:'100px',autoFill:true}
-  // });
+  $('#tags').tagsInput({ 
+    autocomplete_url:'http://localhost:3000/tags',
+    'minChars' : 2,
+    'maxChars' : 25 //if not provided there is no limit,
+  });
 </script>
