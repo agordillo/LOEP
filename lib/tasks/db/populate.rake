@@ -2,6 +2,8 @@ namespace :db do
   task :populate => :environment do
   	desc "Populating db"
 
+  	puts "Populate start"
+
   	#Removing data
   	Role.delete_all
   	User.delete_all

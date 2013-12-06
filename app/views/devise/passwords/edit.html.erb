@@ -1,16 +1,27 @@
-<h2>Change your password</h2>
+<div class="registration_wrapper">
+  <h2>Change your password</h2>
 
-<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
-  <%= devise_error_messages! %>
-  <%= f.hidden_field :reset_password_token %>
+  <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
 
-  <div><%= f.label :password, "New password" %><br />
-  <%= f.password_field :password, :autofocus => true %></div>
+    <% devise_error_messages!.each do |msg| %>
+      <% if msg.is_a?(String) %>
+        <div class="alert alert-danger"><%= msg %></div>
+      <% end %>
+    <% end %>
 
-  <div><%= f.label :password_confirmation, "Confirm new password" %><br />
-  <%= f.password_field :password_confirmation %></div>
+    <%= f.hidden_field :reset_password_token %>
 
-  <div><%= f.submit "Change my password" %></div>
-<% end %>
+    <p class="form_legend">New password</p>
+    <%= f.password_field :password, :autofocus => true, :class=>'register_input' %>
 
-<%= render "devise/shared/links" %>
+    <p class="form_legend">Confirm new password</p>
+    <%= f.password_field :password_confirmation, :class=>'register_input' %>
+
+    <p class="form_before_button">&nbsp;</p>
+    <%= f.submit "Change my password", :class => 'loep_button update_button' %>
+  <% end %>
+
+  </br>
+  <%= link_to "Back", :back %>
+
+</div>

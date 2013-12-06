@@ -12,4 +12,8 @@
 //
 
 //= require jquery-1.10.2.min.js
+//= require jquery-ui-1.10.3.custom.min.js
+//= require jquery_ujs
+//= require custom.confirm.js
 //= require_tree .
+

@@ -262,3 +262,31 @@ p.form_before_button {
 #recaptcha_response_field {
 	line-height: normal !important;
 }
+
+
+/* JQuery UI Fix and customizing */
+
+.ui-icon-closethick-wrapper {
+	width: 10%;
+	padding: 0px 0px 0px 3px !important;
+}
+
+.ui-dialog-buttonset > button {
+	background-color: #2B4923;
+	border: 1px solid #373736;
+	color: white;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	border-radius: 4px;
+	font-weight: normal;
+	font-size: 15px;
+	opacity: 0.9;
+	padding: 1px 6px;
+	display: inline-block;
+	text-align: center;
+	min-width: 70px;
+	margin-bottom: 6px;
+}
+
+.noTitleStuff .ui-dialog-titlebar {
+	display:none
+}

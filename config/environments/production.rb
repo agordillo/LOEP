@@ -48,6 +48,16 @@ NewLOEP::Application.configure do
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # config.assets.precompile += %w( search.js )
 
+  #Config action mailer
+  #(supposing you have a SMTP server on localhost:25)
+  # TODO. Configure SMTP server
+  config.action_mailer.default_url_options = {:host => 'yourdomain.com'}
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address => "127.0.0.1",
+    :port    => "25",
+    :domain  => 'yourdomain.com'
+  }
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 
