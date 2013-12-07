@@ -4,16 +4,26 @@ class Ability
     def initialize(user)
 
         user ||= User.new # guest user (not logged in)
-        # if user.admin?
-        #     can :manage, :all
-        # else
-        #     can :read, :all
-        # end
 
-        if user.rol? :admin
-            can :manage, :all
-        else
+        if user.role? :SuperAdmin 
+            #SuperAdmin
+            can [:update, :destroy], User do |u|
+               user.compareRole > u.compareRole
+            end
             can :read, :all
+
+        elsif user.role? :Admin
+            #Admin
+            can [:update, :destroy], User do |u|
+               user.compareRole > u.compareRole
+            end
+            can :read, :all
+        elsif !user.role.nil?
+            #Reviewers and Users
+            can :show, User, :id => user.id
+            can :update, User, :id => user.id
+        else
+            #Not loggued users
         end
 
         # The first argument to `can` is the action you are giving the user 
@@ -31,6 +41,8 @@ class Ability
         #
         #   can :update, Article, :published => true
         #
+
+        #:read is an alias for [:show, :index].
 
         #Example of def initialize(user) method
         # user ||= User.new # guest user (not logged in)

@@ -1,7 +1,8 @@
 class RegistrationsController < Devise::RegistrationsController
 
-  def new
-  	@user = User.new
+  def edit
+    authorize! :edit, resource
+    super
   end
 
   def create
@@ -33,6 +34,8 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def update
+    authorize! :update, resource
+
     #Its not possible to change the roles here, because
     #params[:user][:roles] access is restricted for security reasons
     #Try to pass this param will trigger a "Can't mass-assign protected attributes: roles" error

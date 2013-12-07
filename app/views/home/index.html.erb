@@ -1,5 +1,8 @@
 <%= render :partial => '/home/menu' %>
 <div id="homepagecontent">
+	<% if flash[:alert] %>
+    	<div class="alert alert-danger"><%= flash[:alert] %></div>
+	<% end %>
 	Place your content here
 </div>
 

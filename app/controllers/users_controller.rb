@@ -3,15 +3,18 @@ class UsersController < ApplicationController
 
 	def index
 		@users = User.all.sort_by {|user| user.compareRole }.reverse
+		authorize! :index, @users
 	end
 
 	def show
 		@user = User.find(params[:id])
+		authorize! :show, @user
 	end
 
 	def edit
-		session[:return_to] ||= request.referer
 		@user = User.find(params[:id])
+		authorize! :edit, @user
+		session[:return_to] ||= request.referer
 	end
 
 	# Users are created only by the registrations controller
@@ -20,6 +23,7 @@ class UsersController < ApplicationController
 
 	def update
 		@user = User.find(params[:id])
+		authorize! :update, @user
 
 		#params[:user][:roles] access is restricted for security reasons
 		#Try to pass this param will trigger a "Can't mass-assign protected attributes: roles" error
