@@ -68,6 +68,10 @@
       buttonImageOnly: true 
     });
 
-    $('#tags').tagsInput();
+    $('#tags').tagsInput({
+      autocomplete_url:'http://localhost:3000/tags',
+      'minChars' : 2,
+      'maxChars' : 25 //if not provided there is no limit,
+    })
   });
 </script>

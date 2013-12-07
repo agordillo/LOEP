@@ -7,9 +7,11 @@ class ApplicationController < ActionController::Base
 
   def serve_tags
   	term = params["term"].downcase;
-  	@tags = JSON(File.read("public/tag_list.json"))
-  	@popularTags = User.tag_counts.order(:count).limit(50)
-  	#TODO: Merge @tag array and @popularTags record
+    if term.length < 2
+      render :json => Hash.new
+      return
+    end
+    @tags = _getTags
   	render :json => @tags.reject{|tag| _rejectTag(tag,term) }
   end
 
@@ -20,6 +22,24 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def _getTags
+    staticTags = JSON(File.read("public/tag_list.json"))
+    popularTags = _getPopularTags.map { |tag| tag.name }
+    tags = (staticTags + popularTags).uniq
+    tags.sort_by!{ |tag| tag.downcase } #sort it alphabetically
+  end
+
+  def _getPopularTags
+    User.tag_counts.order(:count).limit(80)
+
+    # mtags = ActsAsTaggableOn::Tagging.
+    #         includes(:tag).
+    #         # where(:context => "topics").
+    #         group("tags.name").
+    #         select("tags.name, COUNT(*) as count")
+    # mtags.count
+  end
 
   def _rejectTag(tag,term)
   	if tag.downcase.include? term
