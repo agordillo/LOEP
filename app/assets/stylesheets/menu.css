@@ -1,0 +1,94 @@
+/* Home menu */
+
+#homemenu_wrapper{
+	width: 210px;
+	float: left;
+	padding: 5px 8px 8px 8px;
+	margin: 20px 0px 20px 0px;
+	background-color: #2B4923;
+	border-radius: 12px;
+	overflow: hidden;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	font-size: 15px;
+	color: white;
+}
+
+#homemenu_wrapper > p {
+	padding: 6px 5px 1px 10px;
+}
+
+#homemenu {
+	margin-top: 0px;
+	padding: 1px 0px 0px 0px;
+	width: 100%;
+	height: 100%;
+	color: black;
+	background-color: #EFEFEF;
+	box-shadow-left: 
+		0 5px 15px 1px rgba(0, 0, 0, 0.6), 
+		0 0 200px 1px rgba(255, 255, 255, 0.5);
+}
+
+#homemenu ul {
+	padding: 0px;
+	margin-left: 10px;
+}
+
+#homemenu h3 {
+	font-size: 15px;
+	line-height: 34px;
+	padding: 0 10px;
+	margin-bottom: 2px;
+	cursor: pointer;
+}
+
+#homemenu a {
+	color: black;
+	text-decoration: none;
+}
+
+#homemenu ul li h3 a {
+	
+}
+
+#homemenu h3:hover {
+	text-shadow: 0 0 1px rgba(255, 255, 255, 0.7);
+}
+
+#homemenu h3 span {
+	font-size: 16px;
+	margin-right: 10px;
+}
+
+#homemenu li {
+	list-style-type: none;
+}
+
+#homemenu ul ul li a {
+	font-size: 14px;
+	line-height: 35px;
+	display: block;
+	padding: 0 15px;
+	margin-left: 10px;
+}
+
+#homemenu ul ul li {
+	/*transition for smooth hover animation*/
+	transition: all 0.15s;
+	border-left: 5px solid #EFEFEF;
+}
+
+#homemenu ul ul li:hover {
+	background-color: #EFEFEF;
+	border-left: 5px solid #2B4923;
+}
+
+/*Lets hide the non active LIs by default*/
+#homemenu ul ul {
+	display: none;
+}
+
+#homemenu li.active ul {
+	display: block;
+}

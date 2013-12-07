@@ -1,0 +1,49 @@
+/* Frontpage */
+
+#front_page_wrapper{
+	width: 100%;
+	display: inline-block;
+	margin-top: 5%;
+	/*border: 5px solid yellow;*/
+}
+
+#frontpage_C1 {
+	margin-left: 10%;
+	width: 42%;
+	margin-right: 3%;
+	float: left;
+
+	/*border: 5px solid red;*/
+}
+
+#frontpage_C2 {
+	margin-right: 10%;
+	width: 35%;
+	display: block;
+	float: right;
+
+	/*border: 5px solid blue;*/
+}
+
+#frontpage_A {
+	width: 100%;
+	height: 70%;
+
+	/*border: 5px solid black;*/
+}
+
+#frontpage_B {
+	width: 100%;
+	height: 30%;
+
+	/*border: 5px solid orange;*/
+}
+
+#front_page_wrapper h1 {
+	font-size: 21px;
+}
+
+#frontpage_C1 p {
+	color: #999;
+	font-size: 15px;
+}

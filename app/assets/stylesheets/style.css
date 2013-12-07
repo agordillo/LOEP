@@ -16,6 +16,7 @@ body > iframe {
 	position: relative;
 }
 
+
 /* Header */
 
 #header {
@@ -83,6 +84,7 @@ li.userbox img {
 	box-shadow: 0 1px 0 #fff;
 }
 
+
 /* Container */
 
 #container{
@@ -92,7 +94,20 @@ li.userbox img {
 	padding: 3% 5% 0% 5%;
 	padding-bottom: 40px !important;
 	display: block;
+	overflow: hidden;
 }
+
+/* Home container */
+
+#homepagecontent {
+	height: auto;
+	display: block;
+	width: auto;
+	margin-top: 20px;
+	margin-left: 250px;
+	border: 1px solid red;
+}
+
 
 /* Footer */
 
@@ -109,78 +124,16 @@ li.userbox img {
 }
 
 
-/* Frontpage */
-
-#front_page_wrapper{
-	width: 100%;
-	display: inline-block;
-	margin-top: 5%;
-	/*border: 5px solid yellow;*/
-}
-
-#frontpage_C1 {
-	margin-left: 10%;
-	width: 42%;
-	margin-right: 3%;
-	float: left;
-
-	/*border: 5px solid red;*/
-}
-
-#frontpage_C2 {
-	margin-right: 10%;
-	width: 35%;
-	display: block;
-	float: right;
-
-	/*border: 5px solid blue;*/
-}
-
-#frontpage_A {
-	width: 100%;
-	height: 70%;
-
-	/*border: 5px solid black;*/
-}
-
-#frontpage_B {
-	width: 100%;
-	height: 30%;
-
-	/*border: 5px solid orange;*/
-}
-
-#front_page_wrapper h1 {
-	font-size: 21px;
-}
-
-#frontpage_C1 p {
-	color: #999;
-	font-size: 15px;
-}
-
-
-/* Login */
-.login_email_input {
-	width: 100%;
-}
-
-.login_password_input {
-	width: 68%;
-}
-
-.login_email_input, .login_password_input {
-	margin-bottom: 8px;
-}
+/* General styless */
 
 .loep_button {
 	background-color: #2B4923;
 	border: 1px solid #373736;
-	color: white;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	border-radius: 4px;
 	font-weight: normal;
 	font-size: 15px;
+	color: white;
+	border-radius: 4px;
 	opacity: 0.9;
 	padding: 1px 6px;
 	display: inline-block;
@@ -195,145 +148,5 @@ li.userbox img {
 	color: white;
 }
 
-.sign_in_button, .sign_up_button {
-	width: 30%;
-}
-
-.update_button {
-	width: 30%;
-}
-
-.cancel_button {
-}
-
-p.form_legend {
-	margin-top: 5px;
-	margin-bottom: 1px;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 14px;
-	font-weight: normal;
-}
-
-.registration_wrapper p.form_legend {
-	margin-top: 8px;
-}
-
-p.form_before_button {
-	margin-top: 0px;
-	margin-bottom: 0px;
-	font-size: 10px;
-}
-
-.sign_up_button {
-	text-decoration: none;
-}
-
-.remember_me_label {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 14px;
-	font-weight: normal;
-}
-
-.forgot_password_label {
-	white-space: nowrap;
-	margin-left: 15px;
-	float: right;
-	margin-top: 1px;
-}
-
-@media (max-width: 900px) {
-	.forgot_password_label {
-		float: none;
-		margin-left: 0px;
-	}
-}
-
-/* Registration */
-
-.registration_wrapper {
-	padding: 0% 10% 0% 10%;
-}
-
-.register_input {
-	width: 50%;
-}
-
-.captcha_wrapper {
-	padding: 15px 0px 18px 0px;
-	margin-left: -3px;
-}
-
-#recaptcha_response_field {
-	line-height: normal !important;
-}
 
 
-/* JQuery UI Fix and customizing */
-
-.ui-icon-closethick-wrapper {
-	width: 10%;
-	padding: 0px 0px 0px 3px !important;
-}
-
-.ui-dialog-buttonset > button {
-	background-color: #2B4923;
-	border: 1px solid #373736;
-	color: white;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	border-radius: 4px;
-	font-weight: normal;
-	font-size: 15px;
-	opacity: 0.9;
-	padding: 1px 6px;
-	display: inline-block;
-	text-align: center;
-	min-width: 70px;
-	margin-bottom: 6px;
-}
-
-.noTitleStuff .ui-dialog-titlebar {
-	display:none
-}
-
-
-/* Datepicker */
-
-img.ui-datepicker-trigger {
-	height: 35px;
-	margin-left: 5px;
-	cursor: pointer;
-	opacity: 0.9;
-}
-
-img.ui-datepicker-trigger:hover {
-	opacity: 1;
-}
-
-
-/* Gender radiobutton */
-
-span.gender_label {
-	margin-left: 5px;
-	margin-right: 5px;
-	font-size: 13px;
-}
-
-.gender_buttons {
-	display: inline;
-}
-
-.gender_buttons > div {
-	display: inline;
-}
-
-/* Tags */
-
-#tags_tagsinput {
-	width: 50% !important;
-	min-height: 82px !important;
-}
-
-span.tag {
-/*	color: white;
-	background-color: #2B4923;*/
-}

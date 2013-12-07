@@ -1,0 +1,47 @@
+<div id="homemenu_wrapper">
+	<p> Main Menu </p>
+	<div id="homemenu">
+		<ul>
+			<li>
+				<a href="/home"><h3><span class="glyphicon glyphicon-home"></span>Home</h3></a>
+			</li>
+			<li>
+				<a href="/assignments"><h3><span class="glyphicon glyphicon-time"></span>Assignments</h3></a>
+			</li>
+			<li>
+				<h3><span class="glyphicon glyphicon-book"></span>Documentation</h3>
+				<ul>
+					<li><a href="#">LORI</a></li>
+					<li><a href="#">LOEM</a></li>
+					<li><a href="#">LOES-T</a></li>
+					<li><a href="#">LOES-S</a></li>
+				</ul>
+			</li>
+			<% if !current_user.nil? and current_user.rol?("admin") %>
+				<li>
+					<h3><span class="glyphicon glyphicon-list"></span>Learning Objects</h3>
+					<ul>
+						<li><a href="/los/new">Add New</a></li>
+						<li><a href="/los">List</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="/users"><h3><span class="glyphicon glyphicon-user"></span>Users</h3></a>
+				</li>
+			<% end %>
+		</ul>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#homemenu h3").click(function(){
+			//slide up all the link lists
+			$("#homemenu ul ul").slideUp();
+			//slide down the link list below the h3 clicked - only if its closed
+			if(!$(this).next().is(":visible")){
+				$(this).next().slideDown();
+			}
+		});
+	});
+</script>

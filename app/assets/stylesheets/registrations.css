@@ -1,0 +1,60 @@
+/* Registrations: new and edit */
+
+.registration_wrapper {
+	padding: 0% 10% 0% 10%;
+}
+
+.register_input {
+	width: 50%;
+}
+
+.captcha_wrapper {
+	padding: 15px 0px 18px 0px;
+	margin-left: -3px;
+}
+
+#recaptcha_response_field {
+	line-height: normal !important;
+}
+
+/* Datepicker */
+
+img.ui-datepicker-trigger {
+	height: 35px;
+	margin-left: 5px;
+	cursor: pointer;
+	opacity: 0.9;
+}
+
+img.ui-datepicker-trigger:hover {
+	opacity: 1;
+}
+
+
+/* Gender radiobutton */
+
+span.gender_label {
+	margin-left: 5px;
+	margin-right: 5px;
+	font-size: 13px;
+}
+
+.gender_buttons {
+	display: inline;
+}
+
+.gender_buttons > div {
+	display: inline;
+}
+
+/* Tags */
+
+#tags_tagsinput {
+	width: 50% !important;
+	min-height: 82px !important;
+}
+
+span.tag {
+/*	color: white;
+	background-color: #2B4923;*/
+}
