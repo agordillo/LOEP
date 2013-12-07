@@ -40,3 +40,21 @@ $.rails.showConfirmDialog = function(link){
       }
     });
 };
+
+$(document).on('click', '[promptOkAlertDialog="true"]', function(event){
+  var link = $(event.target);
+  var message = $(link).attr('data-confirm');
+  html = '<div id="dialog" title="Basic dialog"><p>'+message+'</p></div>';
+   $(html).dialog({
+      resizable: false,
+      modal: true,
+      dialogClass: 'noTitleStuff',
+      buttons: {
+        "Ok": function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+});
+      
+

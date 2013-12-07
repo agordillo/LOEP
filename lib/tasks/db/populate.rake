@@ -9,6 +9,7 @@ namespace :db do
   	User.delete_all
 
   	#Creating Roles
+  	role_sadmin = Role.create!  :name  => "SuperAdmin"
   	role_admin = Role.create!  :name  => "Admin"
   	role_reviewer = Role.create!  :name  => "Reviewer"
 	role_user = Role.create!  :name  => "User"
@@ -19,7 +20,8 @@ namespace :db do
 	user_admin.email = "admin@loep.com"
 	user_admin.password = "admin"
 	user_admin.password_confirmation = "admin"
-	user_admin.roles.push(role_admin) #Role.first
+	user_admin.roles.push(role_sadmin)
+	user_admin.roles.push(role_admin)
 	user_admin.save(:validate => false)
 
 	user_reviewer = User.new

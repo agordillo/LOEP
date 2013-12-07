@@ -15,6 +15,9 @@ class User < ActiveRecord::Base
   :uniqueness => {
     :case_sensitive => false
   }
+  validates :birthday, :presence => { :message => "can't be blank" }
+  validates :gender, :presence => { :message => "can't be blank" }
+
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'
@@ -45,6 +48,10 @@ class User < ActiveRecord::Base
 
   def rol
     self.roles.first.name
+  end
+
+  def rol?(role)
+        return !!self.roles.find_by_name(role.to_s.camelize)
   end
 
   def readable_birthday

@@ -10,7 +10,7 @@ class Ability
         #     can :read, :all
         # end
 
-        if user.role? :admin
+        if user.rol? :admin
             can :manage, :all
         else
             can :read, :all
@@ -51,10 +51,6 @@ class Ability
 
         # See the wiki for details:
         # https://github.com/ryanb/cancan/wiki/Defining-Abilities
-    end
-
-    def role?(role)
-        return !!self.roles.find_by_name(role.to_s.camelize)
     end
 
 end

@@ -318,6 +318,14 @@ span.gender_label {
 	font-size: 13px;
 }
 
+.gender_buttons {
+	display: inline;
+}
+
+.gender_buttons > div {
+	display: inline;
+}
+
 /* Tags */
 
 #tags_tagsinput {
