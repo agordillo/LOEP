@@ -1,0 +1,18 @@
+<%= render :partial => '/home/menu' %>
+<div id="homepagecontent">
+  <table cellspacing='0' class="loep_table">
+    <tr>
+      <th>Username</th>
+      <th>Role</th>
+      <th></th>
+    </tr>
+    <% @users.each do |user| %>
+      <tr>
+        <td><a href="<%=user_path(user)%>"><%=user.name%></a></td>
+        <td><%=user.role%></td>
+        <td class="tdcenter"><a href="<%=edit_user_path(user)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+

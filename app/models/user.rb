@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   }
   validates :birthday, :presence => { :message => "can't be blank" }
   validates :gender, :presence => { :message => "can't be blank" }
+  validates :roles, :presence => { :message => "can't be blank" }
 
 
   # Virtual attribute for authenticating by either username or email
@@ -46,12 +47,16 @@ class User < ActiveRecord::Base
 
   #---------------------------------------------------------------------------------
 
-  def rol
-    self.roles.first.name
+  def role
+    if self.role?("SuperAdmin")
+      "SuperAdmin"
+    else
+      self.roles.first.name
+    end
   end
 
-  def rol?(role)
-        return !!self.roles.find_by_name(role.to_s.camelize)
+  def role?(role)
+    return !!self.roles.find_by_name(role.to_s.camelize)
   end
 
   def readable_birthday
@@ -59,6 +64,34 @@ class User < ActiveRecord::Base
       self.birthday.strftime("%d/%m/%Y")
     else
       ""
+    end
+  end
+
+  def assignRole(newRoleName)
+    if self.role?("SuperAdmin")
+      #SuperAdmin is always superAdmin
+      return
+    end
+
+    newRole = Role.find_by_name(newRoleName)
+    if !newRole.nil?
+      self.roles.delete_all
+      self.roles.push(newRole)
+      if newRole.name == "SuperAdmin"
+        self.roles.push(Role.find_by_name("Admin"));
+      end
+    end
+  end
+
+  def compareRole
+    if self.role == "SuperAdmin"
+      return 4
+    elsif self.role == "Admin"
+      return 3
+     elsif self.role == "Reviewer"
+      return 2
+     else
+      return 1
     end
   end
 

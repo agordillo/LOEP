@@ -17,7 +17,7 @@
 					<li><a href="#">LOES-S</a></li>
 				</ul>
 			</li>
-			<% if !current_user.nil? and current_user.rol?("admin") %>
+			<% if iamAdmin? %>
 				<li>
 					<h3><span class="glyphicon glyphicon-list"></span>Learning Objects</h3>
 					<ul>

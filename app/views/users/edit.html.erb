@@ -1,26 +1,28 @@
 <div class="registration_wrapper">
-  <h2>Settings</h2>
-
   <% if flash[:alert] %>
     <div class="alert alert-danger"><%= flash[:alert] %></div>
   <% end %>
 
-  <% devise_error_messages!.each do |msg| %>
-      <% if msg.is_a?(String) %>
-        <div class="alert alert-danger"><%= msg %></div>
-      <% end %>
-  <% end %>
+  <h2>Edit Profile</h2>
 
-  <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
-
+  <%= form_for @user do |f| %>
       <p class="form_legend">Username</p>
-      <%=text_field_tag "user[name]",@user.name, :class=>'register_input' %>
+      <%= f.text_field :name, :class=>'register_input' %>
+
+      <% if iamSuperAdmin? || (iamAdmin? and !isAdmin?(@user)) %>
+        <p class="form_legend">Role</p>
+        <select id="user_role" name="role">
+          <option value="SuperAdmin" <%="selected=true" if @user.role=="SuperAdmin"%>>SuperAdmin</option>
+          <option value="Admin" <%="disabled=true" if @user.role=="SuperAdmin"%> <%="selected=true" if @user.role=="Admin"%>>Admin</option>
+          <option value="Reviewer" <%="disabled=true" if @user.role=="SuperAdmin"%> <%="selected=true" if @user.role=="Reviewer"%>>Reviewer</option>
+          <option value="User" <%="disabled=true" if @user.role=="SuperAdmin"%> <%="selected=true" if @user.role=="User"%>>User</option>
+        </select>
+      <% end %>
 
       <p class="form_legend">Email</p>
       <%= f.email_field :email, :class=>'register_input' %>
 
       <p class="form_legend">Birthday</p>
-
       <%=text_field_tag "user[birthday]",@user.readable_birthday, :class=>'register_input', :id=>"birthday_datepicker" %>
 
       <p class="form_legend">Gender</p>
@@ -32,33 +34,12 @@
       <p class="form_legend">Areas of interest</p>
       <input name="user[tag_list]" id="tags" value="<%=@user.tag_list.join(",")%>"/>
 
-      <p class="form_legend">Password (leave blank if you don't want to change it)</p>
-      <%= f.password_field :password, :autocomplete => "off", :class=>'register_input' %>
-
-      <p class="form_legend">Password confirmation</p>
-      <%= f.password_field :password_confirmation, :class=>'register_input' %>
-
-      <p class="form_legend">Current password (we need your current password to confirm your changes)</p>
-      <%= f.password_field :current_password, :class=>'register_input' %>
-
       <p class="form_before_button">&nbsp;</p>
       <%= f.submit "Update", :class => 'loep_button update_button' %>
-
   <% end %>
 
   </br>
   <%= link_to "Back", :back %>
-
-  </br>
-  </br>
-  <h3>Cancel my account</h3>
-  <p>
-    <% unless @user.role?("SuperAdmin") %>
-      <%= button_to "Cancel", registration_path(resource_name), :class => 'loep_button cancel_button', :data => { :confirm => "Are you sure?" }, :method => :delete %>
-    <% else %>
-      <input class="loep_button cancel_button" data-confirm="You are the SuperAdmin, you can't cancel your account." type="submit" promptOkAlertDialog="true" value="Cancel">
-    <% end %>
-  </p>
 </div>
 
 <script type="text/javascript">
