@@ -3,7 +3,11 @@
     <div class="alert alert-danger"><%= flash[:alert] %></div>
   <% end %>
 
-  <h2>Edit Profile</h2>
+  <% if iamAdmin? %>
+    <h2>Edit user: <%=@user.name%></h2>
+  <% else %>
+    <h2><%=@user.name%></h2>
+  <% end %>
 
   <%= form_for @user do |f| %>
       <p class="form_legend">Username</p>

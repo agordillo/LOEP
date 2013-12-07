@@ -1,0 +1,64 @@
+<div class="profile_wrapper registration_wrapper">
+  <% if flash[:alert] %>
+    <div class="alert alert-danger"><%= flash[:alert] %></div>
+  <% end %>
+
+  <h2><%=@user.name%></h2>
+  <% if current_user == @user || iamAdmin? %>
+    <a href="<%=edit_user_path(@user)%>"><p> Edit profile </p></a>
+  <% end %>
+  </br>
+
+  <p class="profile_legend">Username</p>
+  <p class="profile_value"><%=@user.name%></p>
+
+  <p class="profile_legend">Role</p>
+  <p class="profile_value"><%=@user.role%></p>
+
+  <p class="profile_legend">Email</p>
+  <p class="profile_value"><%=@user.email%></p>
+
+  <p class="profile_legend">Birthday</p>
+  <p class="profile_value"><%=@user.readable_birthday%></p>
+
+  <p class="profile_legend">Age</p>
+  <p class="profile_value"><%=@user.age%></p>
+
+  <p class="profile_legend">Gender</p>
+  <% if @user.gender == 1 %>
+    <p class="profile_value"><%="Male"%></p>
+  <% elsif @user.gender == 2 %>
+    <p class="profile_value"><%="Female"%></p>
+  <% end %>
+  
+  <p class="profile_legend">Areas of interest</p>
+  <div class="tagsinput">
+    <% @user.tag_list.each do |tag| %>
+      <p class="profile_value"><span class='tag'><%=tag%></span></p>
+    <% end %>
+  </div> 
+ 
+  </br>
+  <%= link_to "Back", :back %>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    $('#birthday_datepicker').datepicker({ 
+      yearRange: "-100:+0", // this is the option you're looking for
+      showOn: "both", 
+      dateFormat : 'dd/mm/yy',
+      changeMonth : true,
+      changeYear : true,
+      maxDate: '-1d',
+      buttonImage: "/assets/calendar_icon.png", 
+      buttonImageOnly: true 
+    });
+
+    $('#tags').tagsInput({
+      autocomplete_url:'http://localhost:3000/tags',
+      'minChars' : 2,
+      'maxChars' : 25 //if not provided there is no limit,
+    })
+  });
+</script>

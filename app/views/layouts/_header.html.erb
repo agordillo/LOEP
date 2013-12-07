@@ -3,7 +3,7 @@
 	<nav id="topbar" class="navbar navbar-default" role="navigation">
 	    <ul class="navbar-top">
         <li class="userbox">
-          <a href="<%=edit_user_registration_path(current_user)%>">
+          <a href="<%=user_path(current_user)%>">
             <img src="/assets/default_avatar.png">
             <%=current_user.name%> (<%=current_user.role%>)
           </a>

@@ -67,6 +67,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def age
+    unless self.birthday.nil?
+      age = Date.today.year - self.birthday.year
+      age -= 1 if Date.today < self.birthday.to_date + age.years #for days before birthday
+      return age
+    end
+  end
+
   def assignRole(newRoleName)
     if self.role?("SuperAdmin")
       #SuperAdmin is always superAdmin

@@ -5,6 +5,10 @@ class UsersController < ApplicationController
 		@users = User.all.sort_by {|user| user.compareRole }.reverse
 	end
 
+	def show
+		@user = User.find(params[:id])
+	end
+
 	def edit
 		session[:return_to] ||= request.referer
 		@user = User.find(params[:id])
