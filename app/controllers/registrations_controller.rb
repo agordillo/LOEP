@@ -32,4 +32,11 @@ class RegistrationsController < Devise::RegistrationsController
   	end
   end
 
+  def update
+    #Its not possible to change the roles here, because
+    #params[:user][:roles] access is restricted for security reasons
+    #Try to pass this param will trigger a "Can't mass-assign protected attributes: roles" error
+    super
+  end
+
 end

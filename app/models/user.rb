@@ -103,4 +103,23 @@ class User < ActiveRecord::Base
     end
   end
 
+  def check_permissions_to_change_role(current_user, newRole)
+    if current_user.role?("SuperAdmin") || current_user.role?("Admin")
+      if self.role?("SuperAdmin")
+        return false
+      elsif self.role?("Admin")
+        return current_user.role?("SuperAdmin")
+      else
+        if current_user.role?("SuperAdmin")
+          return true
+        else
+          #Admin can't change a Role to SuperAdmin
+          return newRole!="SuperAdmin"
+        end
+      end
+    else
+      return false
+    end
+  end
+
 end

@@ -16,10 +16,10 @@
       <% if iamSuperAdmin? || (iamAdmin? and !isAdmin?(@user)) %>
         <p class="form_legend">Role</p>
         <select id="user_role" name="role">
-          <option value="SuperAdmin" <%="selected=true" if @user.role=="SuperAdmin"%>>SuperAdmin</option>
-          <option value="Admin" <%="disabled=true" if @user.role=="SuperAdmin"%> <%="selected=true" if @user.role=="Admin"%>>Admin</option>
-          <option value="Reviewer" <%="disabled=true" if @user.role=="SuperAdmin"%> <%="selected=true" if @user.role=="Reviewer"%>>Reviewer</option>
-          <option value="User" <%="disabled=true" if @user.role=="SuperAdmin"%> <%="selected=true" if @user.role=="User"%>>User</option>
+          <option value="SuperAdmin" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "SuperAdmin")%> <%="selected=true" if @user.role=="SuperAdmin"%>>SuperAdmin</option>
+          <option value="Admin" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "Admin")%> <%="selected=true" if @user.role=="Admin"%>>Admin</option>
+          <option value="Reviewer" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "Reviewer")%> <%="selected=true" if @user.role=="Reviewer"%>>Reviewer</option>
+          <option value="User" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "User")%> <%="selected=true" if @user.role=="User"%>>User</option>
         </select>
       <% end %>
 
