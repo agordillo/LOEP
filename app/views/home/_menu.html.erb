@@ -30,6 +30,12 @@
 						<a href="/users"><h3><span class="glyphicon glyphicon-user"></span>Users</h3></a>
 					</li>
 				<% end %>
+<!-- 				<li>
+	      	<a title="Settings" href="%=edit_user_registration_path(current_user)%>"><h3><span class="glyphicon glyphicon-wrench"></span>Settings</h3></a>
+	      </li> -->
+	      <li>
+	      	<a title="Sign out" href="/users/sign_out" data-method="delete" rel="nofollow"><h3><span class="glyphicon glyphicon-log-out"></span>Sign out</h3></a>
+	      </li>
 			</ul>
 		</div>
 	</div>
