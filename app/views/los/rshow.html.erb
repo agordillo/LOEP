@@ -1,0 +1,25 @@
+<div class="show_wrapper loep_form_wrapper">
+
+  <h2><%=@lo.name%></h2>
+  </br>
+  </br>
+
+  <p class="show_legend">URL</p>
+  <p class="show_legend">URL</p>
+  <a target="_blank" href="<%=@lo.url%>"><p class="show_value"><%=@lo.url%></p></a>
+ 
+
+  </br>
+  <% if iamAdmin? %>
+    <%= link_to 'Back to LOs', los_path %>
+  <% else %>
+    <%= link_to "Home", home_path %>
+  <% end %>
+  
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+
+  });
+</script>

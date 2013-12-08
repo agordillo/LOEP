@@ -3,15 +3,15 @@
   <p class="form_before_button">&nbsp;</p>
 
   <%= form_for(@lo) do |f| %>
+
+    <p class="form_legend">* Name</p>
+    <%= f.text_field :name, :class=>'loep_input' %>
     
     <p class="form_legend">* URL</p>
     <%= f.text_field :url, :class=>'loep_input' %>
 
     <p class="form_legend">Repository</p>
     <%= f.text_field :repository, :class=>'loep_input' %>
-
-    <p class="form_legend">* Name</p>
-    <%= f.text_field :name, :class=>'loep_input' %>
 
     <p class="form_legend">Description</p>
     <%= f.text_area :description, :class=>'loep_input' %>
@@ -60,9 +60,11 @@
 </div>
 
 <script type="text/javascript">
-  $('#tags').tagsInput({ 
-    autocomplete_url:'http://localhost:3000/tags',
-    'minChars' : 2,
-    'maxChars' : 25 //if not provided there is no limit,
+  $(document).ready(function(){
+    $('#tags').tagsInput({ 
+      autocomplete_url:'http://localhost:3000/tags',
+      'minChars' : 2,
+      'maxChars' : 25 //if not provided there is no limit,
+    });
   });
 </script>

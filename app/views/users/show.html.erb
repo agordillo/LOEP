@@ -1,7 +1,4 @@
-<div class="profile_wrapper loep_form_wrapper">
-  <% if flash[:alert] %>
-    <div class="alert alert-danger"><%= flash[:alert] %></div>
-  <% end %>
+<div class="show_wrapper loep_form_wrapper">
 
   <h2><%=@user.name%></h2>
   <% if current_user == @user || iamAdmin? %>
@@ -9,32 +6,32 @@
   <% end %>
   </br>
 
-  <p class="profile_legend">Username</p>
-  <p class="profile_value"><%=@user.name%></p>
+  <p class="show_legend">Username</p>
+  <p class="show_value"><%=@user.name%></p>
 
-  <p class="profile_legend">Role</p>
-  <p class="profile_value"><%=@user.role%></p>
+  <p class="show_legend">Role</p>
+  <p class="show_value"><%=@user.role%></p>
 
-  <p class="profile_legend">Email</p>
-  <p class="profile_value"><%=@user.email%></p>
+  <p class="show_legend">Email</p>
+  <p class="show_value"><%=@user.email%></p>
 
-  <p class="profile_legend">Birthday</p>
-  <p class="profile_value"><%=@user.readable_birthday%></p>
+  <p class="show_legend">Birthday</p>
+  <p class="show_value"><%=@user.readable_birthday%></p>
 
-  <p class="profile_legend">Age</p>
-  <p class="profile_value"><%=@user.age%></p>
+  <p class="show_legend">Age</p>
+  <p class="show_value"><%=@user.age%></p>
 
-  <p class="profile_legend">Gender</p>
+  <p class="show_legend">Gender</p>
   <% if @user.gender == 1 %>
-    <p class="profile_value"><%="Male"%></p>
+    <p class="show_value"><%="Male"%></p>
   <% elsif @user.gender == 2 %>
-    <p class="profile_value"><%="Female"%></p>
+    <p class="show_value"><%="Female"%></p>
   <% end %>
   
-  <p class="profile_legend">Areas of interest</p>
+  <p class="show_legend">Areas of interest</p>
   <div class="tagsinput">
     <% @user.tag_list.each do |tag| %>
-      <p class="profile_value"><span class='tag'><%=tag%></span></p>
+      <p class="show_value"><span class='tag'><%=tag%></span></p>
     <% end %>
   </div> 
  

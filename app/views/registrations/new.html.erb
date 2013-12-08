@@ -46,8 +46,8 @@
 </div>
 
 <script type="text/javascript">
-  jQuery(document).ready(function($) {
-    $('#birthday_datepicker').datepicker({ 
+  jQuery(document).ready(function($){
+    $('#birthday_datepicker').datepicker({
       yearRange: "-100:+0", // this is the option you're looking for
       showOn: "both", 
       dateFormat : 'dd/mm/yy',
@@ -57,11 +57,11 @@
       buttonImage: "/assets/calendar_icon.png", 
       buttonImageOnly: true 
     });
-  });
 
-  $('#tags').tagsInput({ 
-    autocomplete_url:'http://localhost:3000/tags',
-    'minChars' : 2,
-    'maxChars' : 25 //if not provided there is no limit,
+    $('#tags').tagsInput({
+      autocomplete_url:'http://localhost:3000/tags',
+      'minChars' : 2,
+      'maxChars' : 25 //if not provided there is no limit,
+    });
   });
 </script>

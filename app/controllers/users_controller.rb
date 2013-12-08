@@ -65,8 +65,18 @@ class UsersController < ApplicationController
   			redirect_to session.delete(:return_to)
   		else
   			flash[:alert] = @user.errors.full_messages.to_sentence
-  			render :action => "edit"
+  			render :action => "edit", layout: "application_with_menu"
   		end
 	end
+
+	def destroy
+	    @user = User.find(params[:id])
+	    @user.destroy
+
+	    respond_to do |format|
+	      format.html { redirect_to users_url }
+	      format.json { head :no_content }
+	    end
+  	end
 
 end

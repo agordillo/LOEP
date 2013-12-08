@@ -17,6 +17,20 @@ class LosController < ApplicationController
   # GET /los/1
   # GET /los/1.json
   def show
+    unless current_user.isAdmin?
+      redirect_to "/rlos/" + params[:id]
+    end
+
+    @lo = Lo.find(params[:id])
+    @options_select = getOptionsForSelect
+    respond_to do |format|
+      format.html { render layout: "application_with_menu" }
+      format.json { render json: @lo }
+    end
+  end
+
+  #Reviewer show
+  def rshow
     @lo = Lo.find(params[:id])
     @options_select = getOptionsForSelect
     respond_to do |format|

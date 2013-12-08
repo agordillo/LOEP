@@ -59,6 +59,10 @@ class User < ActiveRecord::Base
     return !!self.roles.find_by_name(role.to_s.camelize)
   end
 
+  def isAdmin?
+    return self.role?("Admin") || self.role?("SuperAdmin")
+  end
+
   def readable_birthday
     unless self.birthday.nil?
       self.birthday.strftime("%d/%m/%Y")
