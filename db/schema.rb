@@ -11,7 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131208102823) do
+ActiveRecord::Schema.define(:version => 20131208200130) do
+
+  create_table "assignments", :force => true do |t|
+    t.integer  "author_id"
+    t.integer  "user_id"
+    t.integer  "lo_id"
+    t.string   "status"
+    t.datetime "deadline"
+    t.datetime "completed_at"
+    t.text     "description"
+    t.text     "emethods"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "los", :force => true do |t|
     t.text     "url"

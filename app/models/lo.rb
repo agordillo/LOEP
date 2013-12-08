@@ -24,6 +24,9 @@ class Lo < ActiveRecord::Base
 
   acts_as_taggable
 
+  has_many :assignments
+  has_many :users, through: :assignments
+
   def getCategories
   	unless self.categories.nil?
   		begin

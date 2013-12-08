@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :birthday, :gender, :tag_list
 
   has_and_belongs_to_many :roles
+  has_many :assignments
+  has_many :los, through: :assignments
 
   validates :name,
   :allow_nil => false,
