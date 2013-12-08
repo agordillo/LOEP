@@ -16,7 +16,13 @@
 		<%= render :partial => '/home/menu' %>
 		<div id="homepagecontent">
 			<% if flash[:alert] %>
-				<div class="alert alert-danger"><%= flash[:alert] %></div>
+				<% if flash[:alert].is_a? Array %>
+					<% flash[:alert].each do |msg| %>
+						<div class="alert alert-danger"><%= msg %></div>
+					<% end %>
+				<% else %>
+					<div class="alert alert-danger"><%= flash[:alert] %></div>
+				<% end %>
 			<% elsif flash[:notice] %>
 				<div class="alert alert-success"><%= flash[:notice] %></div>
 			<% end %>

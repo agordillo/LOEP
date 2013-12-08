@@ -1,12 +1,13 @@
 class LosController < ApplicationController
   before_filter :authenticate_user!
   before_filter :filterCategories
+  before_filter :getOptionsForSelect
 
   # GET /los
   # GET /los.json
   def index
     @los = Lo.all
-
+    @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
       format.json { render json: @los }
@@ -17,7 +18,7 @@ class LosController < ApplicationController
   # GET /los/1.json
   def show
     @lo = Lo.find(params[:id])
-
+    @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
       format.json { render json: @lo }
@@ -49,12 +50,16 @@ class LosController < ApplicationController
   # POST /los.json
   def create
     @lo = Lo.new(params[:lo])
+    @options_select = getOptionsForSelect
     respond_to do |format|
       if @lo.save
         format.html { redirect_to @lo, notice: 'Lo was successfully created.' }
         format.json { render json: @lo, status: :created, location: @lo }
       else
-        format.html { render action: "new" }
+        format.html { 
+          flash[:alert] = @lo.errors.full_messages
+          render action: "new", :layout => "application_with_menu"
+        }
         format.json { render json: @lo.errors, status: :unprocessable_entity }
       end
     end
@@ -64,7 +69,7 @@ class LosController < ApplicationController
   # PUT /los/1.json
   def update
     @lo = Lo.find(params[:id])
-
+    @options_select = getOptionsForSelect
     respond_to do |format|
       if @lo.update_attributes(params[:lo])
         format.html { redirect_to @lo, notice: 'Lo was successfully updated.' }

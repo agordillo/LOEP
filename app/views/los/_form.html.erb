@@ -2,70 +2,56 @@
   
   <p class="form_before_button">&nbsp;</p>
 
-  <% if flash[:alert] %>
-    <div class="alert alert-danger"><%= flash[:alert] %></div>
-  <% end %>
+  <%= form_for(@lo) do |f| %>
+    
+    <p class="form_legend">* URL</p>
+    <%= f.text_field :url, :class=>'loep_input' %>
 
-<%= form_for(@lo) do |f| %>
-  
-  <% if @lo.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@lo.errors.count, "error") %> prohibited this lo from being saved:</h2>
-      <ul>
-      <% @lo.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+    <p class="form_legend">Repository</p>
+    <%= f.text_field :repository, :class=>'loep_input' %>
+
+    <p class="form_legend">* Name</p>
+    <%= f.text_field :name, :class=>'loep_input' %>
+
+    <p class="form_legend">Description</p>
+    <%= f.text_area :description, :class=>'loep_input' %>
+
+    <p class="form_legend">Categories</p>
+    <%= f.select :categories, options_for_select(@options_select["categories"],@lo.getCategories), {} ,{ :multiple => true, :size => 10, :class=>'loep_input' } %>
+
+    <p class="form_legend">* Type</p>
+    <%= f.select :lotype, options_for_select(@options_select["lotype"],@lo.lotype || "Unspecified"), {} ,{ :class=>'loep_input' } %>
+
+    <p class="form_legend">* Technology or Format</p>
+    <%= f.select :technology, options_for_select(@options_select["technology"], @lo.technology || "Unspecified"), {} ,{ :class=>'loep_input' } %>
+
+    <div class="form_checkbox_wrapper">
+      <p class="form_legend">Select the elements included in this Learning Object:</p>
+      <table class="loep_table_form">
+      <tr>
+        <td><%= f.check_box :hasText %><span>Text</span></td>
+        <td><%= f.check_box :hasImages %><span>Images</span></td>
+        <td><%= f.check_box :hasVideos %><span>Videos</span></td>
+        <td><%= f.check_box :hasAudios %><span>Audios</span></td>
+      </tr>
+      <tr>
+        <td><%= f.check_box :hasQuizzes %><span>Quizzes</span></td>
+        <td><%= f.check_box :hasWebs %><span>Webs</span></td>
+        <td><%= f.check_box :hasFlashObjects %><span>FlashObjects</span></td>
+        <td><%= f.check_box :hasApplets %><span>Applets</span></td>
+      </tr>
+      <tr>
+        <td><%= f.check_box :hasDocuments %><span>Documents</span></td>
+        <td><%= f.check_box :hasFlashcards %><span>Flashcards</span></td>
+        <td><%= f.check_box :hasVirtualTours %><span>Virtual Tours</span></td>
+        <td><%= f.check_box :hasEnrichedVideos %><span>Enriched Videos</span></td>
+      </tr>
+      </table>
     </div>
+
+    <p class="form_before_button">&nbsp;</p>
+    <p class="form_before_button">&nbsp;</p>
+    <%= f.submit :class => 'loep_button' %>
+
   <% end %>
-
-  <p class="form_legend">* URL</p>
-  <%= f.text_field :url, :class=>'loep_input' %>
-
-  <p class="form_legend">Repository</p>
-  <%= f.text_field :repository, :class=>'loep_input' %>
-
-  <p class="form_legend">* Name</p>
-  <%= f.text_field :name, :class=>'loep_input' %>
-
-  <p class="form_legend">Description</p>
-  <%= f.text_area :description, :class=>'loep_input' %>
-
-  <p class="form_legend">Categories</p>
-  <%= f.select :categories, options_for_select(@options_select["categories"],@lo.getCategories), {} ,{ :multiple => true, :size => 10, :class=>'loep_input' } %>
-
-  <p class="form_legend">* Type</p>
-  <%= f.select :lotype, options_for_select(@options_select["lotype"],@lo.lotype), {} ,{ :class=>'loep_input' } %>
-
-  <p class="form_legend">* Technology or Format</p>
-  <%= f.select :technology, options_for_select(@options_select["technology"], @lo.technology), {} ,{ :class=>'loep_input' } %>
-
-  <div class="form_checkbox_wrapper">
-    <p class="form_legend">Select the elements included in this Learning Object:</p>
-    <table class="loep_table_form">
-    <tr>
-      <td><%= f.check_box :hasText %><span>Text</span></td>
-      <td><%= f.check_box :hasImages %><span>Images</span></td>
-      <td><%= f.check_box :hasVideos %><span>Videos</span></td>
-      <td><%= f.check_box :hasAudios %><span>Audios</span></td>
-    </tr>
-    <tr>
-      <td><%= f.check_box :hasQuizzes %><span>Quizzes</span></td>
-      <td><%= f.check_box :hasWebs %><span>Webs</span></td>
-      <td><%= f.check_box :hasFlashObjects %><span>FlashObjects</span></td>
-      <td><%= f.check_box :hasApplets %><span>Applets</span></td>
-    </tr>
-    <tr>
-      <td><%= f.check_box :hasDocuments %><span>Documents</span></td>
-      <td><%= f.check_box :hasFlashcards %><span>Flashcards</span></td>
-      <td><%= f.check_box :hasVirtualTours %><span>Virtual Tours</span></td>
-      <td><%= f.check_box :hasEnrichedVideos %><span>Enriched Videos</span></td>
-    </tr>
-    </table>
-  </div>
-
-  <p class="form_before_button">&nbsp;</p>
-  <p class="form_before_button">&nbsp;</p>
-  <%= f.submit :class => 'loep_button' %>
-
-<% end %>
+</div>

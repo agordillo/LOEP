@@ -1,5 +1,26 @@
 class Lo < ActiveRecord::Base
-  attr_accessible :callback, :categories, :description, :hasQuizzes, :name, :repository, :technology, :lotype, :url, :hasText, :hasImages, :hasVideos, :hasAudios, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos
+  attr_accessible :callback, :categories, :description, :name, :repository, :technology, :lotype, :url, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos
+
+  validates :url,
+  :presence => true,
+  :uniqueness => {
+    :case_sensitive => false
+  }
+
+  validates :name,
+  :presence => true,
+  :length => { :in => 3..255 },
+  :uniqueness => {
+    :case_sensitive => false
+  }
+
+  validates :lotype,
+  :presence => true,
+  :exclusion => { in: "Unspecified", message: "has to be specified" }
+
+  validates :technology,
+  :presence => true,
+  :exclusion => { in: "Unspecified", message: "has to be specified" }
 
   def getCategories
   	unless self.categories.nil?

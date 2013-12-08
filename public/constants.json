@@ -42,6 +42,7 @@
       "Learning Objects"
     ],
     "lotype": [
+      "Unspecified",
       "text",
       "image",
       "video",
@@ -60,12 +61,13 @@
       "Other static LO"
     ],
     "technology": [
+      "Unspecified",
       "HTML",
       "Flash",
-      "video",
       "Java Applet",
       "File (pdf,doc,jpg,etc.)",
-      "analog"
+      "analog",
+      "other"
     ],
     "eltype": [
       "Text",
