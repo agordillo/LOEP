@@ -1,5 +1,5 @@
 class Lo < ActiveRecord::Base
-  attr_accessible :callback, :categories, :description, :name, :repository, :technology, :lotype, :url, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos
+  attr_accessible :callback, :categories, :description, :name, :repository, :technology, :lotype, :url, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list
 
   validates :url,
   :presence => true,
@@ -22,9 +22,15 @@ class Lo < ActiveRecord::Base
   :presence => true,
   :exclusion => { in: "Unspecified", message: "has to be specified" }
 
+  acts_as_taggable
+
   def getCategories
   	unless self.categories.nil?
-  		JSON(self.categories)
+  		begin
+  			JSON(self.categories)
+  		rescue
+  			[]
+  		end
   	end
   end
 

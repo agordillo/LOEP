@@ -75,7 +75,10 @@ class LosController < ApplicationController
         format.html { redirect_to @lo, notice: 'Lo was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { 
+          flash[:alert] = @lo.errors.full_messages
+          render action: "edit", :layout => "application_with_menu"
+        }
         format.json { render json: @lo.errors, status: :unprocessable_entity }
       end
     end

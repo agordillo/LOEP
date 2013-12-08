@@ -10,3 +10,7 @@
 .new_lo_form select.loep_input {
 	width: 80% !important;
 }
+
+.new_lo_form #tags_tagsinput {
+	width: 80% !important;
+}

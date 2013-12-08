@@ -231,22 +231,15 @@ table.loep_table {
 	box-shadow: 0 1px 2px #d1d1d1;
 }
 
-table.loep_table a:link {
+table.loep_table a:link, table.loep_table a:visited {
 	color: #666;
 	font-weight: bold;
-	text-decoration:none;
-}
-
-table.loep_table a:visited {
-	color: #999999;
-	font-weight:bold;
-	text-decoration:none;
+	text-decoration: none;
 }
 
 table.loep_table a:active,
 table.loep_table a:hover {
 	color: #bd5a35;
-	text-decoration:underline;
 }
 
 table.loep_table th {
@@ -330,4 +323,12 @@ table.loep_table .glyphicon {
 
 table.loep_table td.tdcenter {
 	text-align: center;
+}
+
+table.loep_table td.tdedit {
+	min-width: 85px;
+}
+
+table.loep_table td.tddestroy {
+	min-width: 108px;
 }

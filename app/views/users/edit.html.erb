@@ -43,7 +43,11 @@
   <% end %>
 
   </br>
-  <%= link_to "Back", :back %>
+  <% if iamAdmin? %>
+    <%= link_to "Back to users", users_path %>
+  <% else %>
+    <%= link_to "Home", home_path %>
+  <% end %>
 </div>
 
 <script type="text/javascript">
