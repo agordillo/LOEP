@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  author_id: 1
+  user_id: 1
+  lo_id: 1
+  status: MyString
+  deadline: 2013-12-08 21:01:30
+  completed_at: 2013-12-08 21:01:30
+  description: MyText
+  emethods: MyText
+
+two:
+  author_id: 1
+  user_id: 1
+  lo_id: 1
+  status: MyString
+  deadline: 2013-12-08 21:01:30
+  completed_at: 2013-12-08 21:01:30
+  description: MyText
+  emethods: MyText
