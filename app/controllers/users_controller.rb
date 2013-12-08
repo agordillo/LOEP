@@ -4,17 +4,32 @@ class UsersController < ApplicationController
 	def index
 		@users = User.all.sort_by {|user| user.compareRole }.reverse
 		authorize! :index, @users
+
+	    respond_to do |format|
+	      format.html { render layout: "application_with_menu" }
+	      format.json { render json: @users }
+	    end
 	end
 
 	def show
 		@user = User.find(params[:id])
 		authorize! :show, @user
+
+	    respond_to do |format|
+	      format.html { render layout: "application_with_menu" }
+	      format.json { render json: @user }
+	    end
 	end
 
 	def edit
 		@user = User.find(params[:id])
 		authorize! :edit, @user
 		session[:return_to] ||= request.referer
+
+	    respond_to do |format|
+	      format.html { render layout: "application_with_menu" }
+	      format.json { render json: @user }
+	    end
 	end
 
 	# Users are created only by the registrations controller
@@ -41,8 +56,6 @@ class UsersController < ApplicationController
 				@user.assignRole(params["role"])
 			end
 		end
-
-
 
 		@user.assign_attributes(params[:user])
 		@user.valid?

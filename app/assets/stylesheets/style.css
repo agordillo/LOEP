@@ -104,7 +104,7 @@ li.userbox img {
 	display: block;
 	width: auto;
 	margin-top: 20px;
-	margin-left: 250px;
+	margin-left: 275px;
 	/*border: 1px solid red;*/
 }
 
@@ -148,6 +148,32 @@ li.userbox img {
 	color: white;
 }
 
+.loep_input {
+	width: 50%;
+}
+
+.loep_form_wrapper {
+	padding: 0% 10% 0% 10%;
+}
+
+p.form_legend {
+	margin-top: 5px;
+	margin-bottom: 1px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.loep_form_wrapper p.form_legend {
+	margin-top: 8px;
+}
+
+p.form_before_button {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 10px;
+}
+
 /* loep table */
 
 table.loep_table {
@@ -157,7 +183,8 @@ table.loep_table {
 	font-size: 13px;
 	text-shadow: 1px 1px 0px #fff;
 	background:#eaebec;
-	margin:20px;
+	margin: 20px;
+	margin-left: 0px;
 	border:#ccc 1px solid;
 
 	-moz-border-radius:3px;

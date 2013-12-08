@@ -104,22 +104,39 @@ class User < ActiveRecord::Base
   end
 
   def check_permissions_to_change_role(current_user, newRole)
-    if current_user.role?("SuperAdmin") || current_user.role?("Admin")
-      if self.role?("SuperAdmin")
-        return false
-      elsif self.role?("Admin")
-        return current_user.role?("SuperAdmin")
-      else
-        if current_user.role?("SuperAdmin")
-          return true
-        else
-          #Admin can't change a Role to SuperAdmin
-          return newRole!="SuperAdmin"
-        end
-      end
-    else
+    unless current_user.role?("SuperAdmin") || current_user.role?("Admin")
       return false
     end
+
+    if self.role?("SuperAdmin")
+      return false
+    end
+
+    #SuperAdmin can change any role to any user (unless other SuperAdmins)
+    if current_user.role?("SuperAdmin")
+      return true
+    end
+
+    #current_user is Admin and self is not SuperAdmin
+
+    if newRole=="SuperAdmin"
+      return false
+    end
+
+    #Admins can change the role of other users that aren't admins
+    #Admins cannot create SuperAdmins
+    unless self.role?("Admin")
+      return true
+    end 
+
+    #current_user is Admin and self is Admin too, newRole is not SuperAdmin
+
+    #Admin can change its own role
+    if current_user.id == self.id
+      return true
+    end
+
+    return false
   end
 
 end

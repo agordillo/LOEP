@@ -1,4 +1,4 @@
-<div class="registration_wrapper">
+<div class="loep_form_wrapper">
   <% if flash[:alert] %>
     <div class="alert alert-danger"><%= flash[:alert] %></div>
   <% end %>
@@ -11,7 +11,7 @@
 
   <%= form_for @user do |f| %>
       <p class="form_legend">Username</p>
-      <%= f.text_field :name, :class=>'register_input' %>
+      <%= f.text_field :name, :class=>'loep_input' %>
 
       <% if iamSuperAdmin? || (iamAdmin? and !isAdmin?(@user)) %>
         <p class="form_legend">Role</p>
@@ -24,10 +24,10 @@
       <% end %>
 
       <p class="form_legend">Email</p>
-      <%= f.email_field :email, :class=>'register_input' %>
+      <%= f.email_field :email, :class=>'loep_input' %>
 
       <p class="form_legend">Birthday</p>
-      <%=text_field_tag "user[birthday]",@user.readable_birthday, :class=>'register_input', :id=>"birthday_datepicker" %>
+      <%=text_field_tag "user[birthday]",@user.readable_birthday, :class=>'loep_input', :id=>"birthday_datepicker" %>
 
       <p class="form_legend">Gender</p>
       <div class="gender_buttons">

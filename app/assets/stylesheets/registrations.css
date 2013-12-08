@@ -1,13 +1,5 @@
 /* Registrations: new and edit */
 
-.registration_wrapper {
-	padding: 0% 10% 0% 10%;
-}
-
-.register_input {
-	width: 50%;
-}
-
 .captcha_wrapper {
 	padding: 15px 0px 18px 0px;
 	margin-left: -3px;

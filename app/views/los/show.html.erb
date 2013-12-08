@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Url:</b>
+  <%= @lo.url %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @lo.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @lo.description %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%= @lo.type %>
+</p>
+
+<p>
+  <b>Repository:</b>
+  <%= @lo.repository %>
+</p>
+
+<p>
+  <b>Callback:</b>
+  <%= @lo.callback %>
+</p>
+
+<p>
+  <b>Technology:</b>
+  <%= @lo.technology %>
+</p>
+
+<p>
+  <b>Hasquizzes:</b>
+  <%= @lo.hasQuizzes %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @lo.category %>
+</p>
+
+
+<%= link_to 'Edit', edit_lo_path(@lo) %> |
+<%= link_to 'Back', los_path %>

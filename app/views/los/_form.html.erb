@@ -1,0 +1,54 @@
+<%= form_for(@lo) do |f| %>
+  <% if @lo.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@lo.errors.count, "error") %> prohibited this lo from being saved:</h2>
+
+      <ul>
+      <% @lo.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+    <p class="form_legend">* URL</p>
+    <%= f.label :url %><br />
+    <%= f.text_field :url, :class=>'loep_input' %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :type %><br />
+    <%= f.text_field :type %>
+  </div>
+  <div class="field">
+    <%= f.label :repository %><br />
+    <%= f.text_field :repository %>
+  </div>
+  <div class="field">
+    <%= f.label :callback %><br />
+    <%= f.text_field :callback %>
+  </div>
+  <div class="field">
+    <%= f.label :technology %><br />
+    <%= f.text_field :technology %>
+  </div>
+  <div class="field">
+    <%= f.label :hasQuizzes %><br />
+    <%= f.check_box :hasQuizzes %>
+  </div>
+  <div class="field">
+    <%= f.label :category %><br />
+    <%= f.text_field :category %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

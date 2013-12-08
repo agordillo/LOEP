@@ -23,24 +23,6 @@
 .cancel_button {
 }
 
-p.form_legend {
-	margin-top: 5px;
-	margin-bottom: 1px;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 14px;
-	font-weight: normal;
-}
-
-.registration_wrapper p.form_legend {
-	margin-top: 8px;
-}
-
-p.form_before_button {
-	margin-top: 0px;
-	margin-bottom: 0px;
-	font-size: 10px;
-}
-
 .sign_up_button {
 	text-decoration: none;
 }

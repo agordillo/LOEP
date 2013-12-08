@@ -1,4 +1,4 @@
-<div class="registration_wrapper">
+<div class="loep_form_wrapper">
 	<h2>Forgot your password?</h2>
 
 	<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
@@ -10,7 +10,7 @@
   	<% end %>
 
 	  <p class="form_legend">Email</p>
-	  <%= f.email_field :email, :autofocus => true, :class=>'register_input' %>
+	  <%= f.email_field :email, :autofocus => true, :class=>'loep_input' %>
 
     <p class="form_before_button">&nbsp;</p>
 	  <div><%= f.submit "Send me reset password instructions", :class => 'loep_button update_button' %></div>

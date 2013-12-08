@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  url: MyString
+  name: MyString
+  description: MyString
+  type: 
+  repository: MyString
+  callback: MyString
+  technology: MyString
+  hasQuizzes: false
+  category: MyString
+
+two:
+  url: MyString
+  name: MyString
+  description: MyString
+  type: 
+  repository: MyString
+  callback: MyString
+  technology: MyString
+  hasQuizzes: false
+  category: MyString

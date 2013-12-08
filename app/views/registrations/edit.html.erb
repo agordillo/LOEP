@@ -1,4 +1,4 @@
-<div class="registration_wrapper">
+<div class="loep_form_wrapper">
   <h2>Settings</h2>
 
   <% if flash[:alert] %>
@@ -14,14 +14,14 @@
   <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
 
       <p class="form_legend">Username</p>
-      <%=text_field_tag "user[name]",@user.name, :class=>'register_input' %>
+      <%=text_field_tag "user[name]",@user.name, :class=>'loep_input' %>
 
       <p class="form_legend">Email</p>
-      <%= f.email_field :email, :class=>'register_input' %>
+      <%= f.email_field :email, :class=>'loep_input' %>
 
       <p class="form_legend">Birthday</p>
 
-      <%=text_field_tag "user[birthday]",@user.readable_birthday, :class=>'register_input', :id=>"birthday_datepicker" %>
+      <%=text_field_tag "user[birthday]",@user.readable_birthday, :class=>'loep_input', :id=>"birthday_datepicker" %>
 
       <p class="form_legend">Gender</p>
       <div class="gender_buttons">
@@ -33,13 +33,13 @@
       <input name="user[tag_list]" id="tags" value="<%=@user.tag_list.join(",")%>"/>
 
       <p class="form_legend">Password (leave blank if you don't want to change it)</p>
-      <%= f.password_field :password, :autocomplete => "off", :class=>'register_input' %>
+      <%= f.password_field :password, :autocomplete => "off", :class=>'loep_input' %>
 
       <p class="form_legend">Password confirmation</p>
-      <%= f.password_field :password_confirmation, :class=>'register_input' %>
+      <%= f.password_field :password_confirmation, :class=>'loep_input' %>
 
       <p class="form_legend">Current password (we need your current password to confirm your changes)</p>
-      <%= f.password_field :current_password, :class=>'register_input' %>
+      <%= f.password_field :current_password, :class=>'loep_input' %>
 
       <p class="form_before_button">&nbsp;</p>
       <%= f.submit "Update", :class => 'loep_button update_button' %>

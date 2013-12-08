@@ -1,4 +1,7 @@
 NewLOEP::Application.routes.draw do
+  resources :los
+
+
   devise_for :users, :controllers => { :registrations => "registrations" }
   as :user do
     get 'signin' => 'home#frontpage', :as => :new_user_session

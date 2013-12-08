@@ -8,14 +8,14 @@ class Ability
         if user.role? :SuperAdmin 
             #SuperAdmin
             can [:update, :destroy], User do |u|
-               user.compareRole > u.compareRole
+               user.compareRole > u.compareRole || user.id == u.id
             end
             can :read, :all
 
         elsif user.role? :Admin
             #Admin
             can [:update, :destroy], User do |u|
-               user.compareRole > u.compareRole
+               user.compareRole > u.compareRole || user.id == u.id
             end
             can :read, :all
         elsif !user.role.nil?

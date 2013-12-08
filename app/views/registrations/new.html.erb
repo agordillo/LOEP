@@ -1,4 +1,4 @@
-<div class="registration_wrapper">
+<div class="loep_form_wrapper">
   <% if flash[:alert] %>
     <div class="alert alert-danger"><%= flash[:alert] %></div>
   <% end %>
@@ -12,13 +12,13 @@
   <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
 
     <p class="form_legend">* Username</p>
-    <%=f.text_field :name, :class=>'register_input' %>
+    <%=f.text_field :name, :class=>'loep_input' %>
 
     <p class="form_legend">* Email</p>
-    <%= f.email_field :email, :class=>'register_input' %>
+    <%= f.email_field :email, :class=>'loep_input' %>
 
     <p class="form_legend">* Birthday</p>
-    <%=f.text_field :birthday, :class=>'register_input', :id=>"birthday_datepicker" %>
+    <%=f.text_field :birthday, :class=>'loep_input', :id=>"birthday_datepicker" %>
 
     <p class="form_legend">* Gender</p>
     <div class="gender_buttons">
@@ -30,10 +30,10 @@
     <input name="user[tag_list]" id="tags" value="<%=resource.tag_list.join(",")%>"/>
 
     <p class="form_legend">* Password</p>
-    <%= f.password_field :password, :class=>'register_input' %>
+    <%= f.password_field :password, :class=>'loep_input' %>
 
     <p class="form_legend">* Password confirmation</p>
-    <%= f.password_field :password_confirmation, :class=>'register_input' %>
+    <%= f.password_field :password_confirmation, :class=>'loep_input' %>
 
     <div class="captcha_wrapper">
       <%= recaptcha_tags %>

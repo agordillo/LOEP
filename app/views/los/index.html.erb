@@ -1,0 +1,39 @@
+<h1>Listing los</h1>
+
+<table>
+  <tr>
+    <th>Url</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Type</th>
+    <th>Repository</th>
+    <th>Callback</th>
+    <th>Technology</th>
+    <th>Hasquizzes</th>
+    <th>Category</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @los.each do |lo| %>
+  <tr>
+    <td><%= lo.url %></td>
+    <td><%= lo.name %></td>
+    <td><%= lo.description %></td>
+    <td><%= lo.type %></td>
+    <td><%= lo.repository %></td>
+    <td><%= lo.callback %></td>
+    <td><%= lo.technology %></td>
+    <td><%= lo.hasQuizzes %></td>
+    <td><%= lo.category %></td>
+    <td><%= link_to 'Show', lo %></td>
+    <td><%= link_to 'Edit', edit_lo_path(lo) %></td>
+    <td><%= link_to 'Destroy', lo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Lo', new_lo_path %>
