@@ -14,17 +14,28 @@
 ActiveRecord::Schema.define(:version => 20131208102823) do
 
   create_table "los", :force => true do |t|
-    t.string   "url"
+    t.text     "url"
     t.string   "name"
-    t.string   "description"
-    t.string   "type"
+    t.text     "description"
+    t.string   "lotype"
     t.string   "repository"
-    t.string   "callback"
+    t.text     "callback"
     t.string   "technology"
+    t.text     "categories"
+    t.boolean  "hasText"
+    t.boolean  "hasImages"
+    t.boolean  "hasVideos"
+    t.boolean  "hasAudios"
     t.boolean  "hasQuizzes"
-    t.string   "category"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.boolean  "hasWebs"
+    t.boolean  "hasFlashObjects"
+    t.boolean  "hasApplets"
+    t.boolean  "hasDocuments"
+    t.boolean  "hasFlashcards"
+    t.boolean  "hasVirtualTours"
+    t.boolean  "hasEnrichedVideos"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "roles", :force => true do |t|

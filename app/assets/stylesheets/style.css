@@ -148,8 +148,19 @@ li.userbox img {
 	color: white;
 }
 
-.loep_input {
+input.loep_input {
 	width: 50%;
+}
+
+textarea.loep_input {
+	width: 50%;
+	max-height: 200px;
+}
+
+select.loep_input {
+	width: 50%;
+	margin-top: 2px;
+	margin-bottom: 3px;
 }
 
 .loep_form_wrapper {
@@ -164,6 +175,14 @@ p.form_legend {
 	font-weight: normal;
 }
 
+p.form_legend_inline {
+	display: inline;
+}
+
+div.form_checkbox_wrapper {
+	margin-top: 8px;
+}
+
 .loep_form_wrapper p.form_legend {
 	margin-top: 8px;
 }
@@ -173,6 +192,22 @@ p.form_before_button {
 	margin-bottom: 0px;
 	font-size: 10px;
 }
+
+
+/* loep table for forms */
+
+table.loep_table_form {
+}
+
+table.loep_table_form td {
+	padding: 5px 10px 5px 10px;
+}
+
+table.loep_table_form td span {
+	margin-left: 8px;
+	margin-right: 5px;
+}
+
 
 /* loep table */
 

@@ -24,9 +24,11 @@ class ApplicationController < ActionController::Base
   private
 
   def _getTags
-    staticTags = JSON(File.read("public/tag_list.json"))
+    constants = JSON(File.read("public/constants.json"))
+    staticTags = constants["tags"]
+    categoriesTags = constants["categories"]
     popularTags = _getPopularTags.map { |tag| tag.name }
-    tags = (staticTags + popularTags).uniq
+    tags = (staticTags + categoriesTags + popularTags).uniq
     tags.sort_by!{ |tag| tag.downcase } #sort it alphabetically
   end
 

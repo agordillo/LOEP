@@ -1,11 +1,14 @@
 class LosController < ApplicationController
+  before_filter :authenticate_user!
+  before_filter :filterCategories
+
   # GET /los
   # GET /los.json
   def index
     @los = Lo.all
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render layout: "application_with_menu" }
       format.json { render json: @los }
     end
   end
@@ -16,7 +19,7 @@ class LosController < ApplicationController
     @lo = Lo.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render layout: "application_with_menu" }
       format.json { render json: @lo }
     end
   end
@@ -25,7 +28,7 @@ class LosController < ApplicationController
   # GET /los/new.json
   def new
     @lo = Lo.new
-
+    @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
       format.json { render json: @lo }
@@ -35,7 +38,7 @@ class LosController < ApplicationController
   # GET /los/1/edit
   def edit
     @lo = Lo.find(params[:id])
-
+    @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
       format.json { render json: @lo }
@@ -46,7 +49,6 @@ class LosController < ApplicationController
   # POST /los.json
   def create
     @lo = Lo.new(params[:lo])
-
     respond_to do |format|
       if @lo.save
         format.html { redirect_to @lo, notice: 'Lo was successfully created.' }
@@ -85,4 +87,31 @@ class LosController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+
+  def getOptionsForSelect
+    optionsForSelect = Hash.new
+    constants = JSON(File.read("public/constants.json"))
+    optionsForSelect["categories"] = getOptionsForSelectFromArray(constants["categories"].uniq.sort_by!{ |tag| tag.downcase })
+    optionsForSelect["lotype"] = getOptionsForSelectFromArray(constants["lotype"].uniq)
+    optionsForSelect["technology"] = getOptionsForSelectFromArray(constants["technology"].uniq)
+    optionsForSelect["eltype"] = constants["eltype"].uniq
+    optionsForSelect
+  end
+
+  def getOptionsForSelectFromArray(array)
+    options_select = [];
+    array.each do |e|
+      options_select.push([e,e])
+    end
+    options_select
+  end
+
+  def filterCategories
+    if params[:lo] and params[:lo][:categories]
+      params[:lo][:categories] = params[:lo][:categories].reject{|c| c.empty? }.to_json
+    end
+  end
+
 end
