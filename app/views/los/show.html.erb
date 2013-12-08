@@ -2,6 +2,7 @@
 
   <h2><%=@lo.name%></h2>
   <% if iamAdmin? %>
+    <%= link_to 'View as Reviewer', rlo_path(@lo) %> |
     <%= link_to 'Edit', edit_lo_path(@lo) %>
   <% end %>
   </br>

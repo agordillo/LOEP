@@ -168,6 +168,10 @@ select.loep_input {
 	padding: 0% 10% 0% 10%;
 }
 
+#homepagecontent .loep_form_wrapper {
+	padding: 0% 4% 0% 4% !important;
+}
+
 p.form_legend {
 	margin-top: 5px;
 	margin-bottom: 1px;
@@ -358,6 +362,13 @@ p.show_legend {
 	margin-top: 10px;
 	font-size: 15px;
 	font-weight: bold;
+}
+
+p.show_sublegend {
+	margin-top: 5px;
+	font-size: 14px;
+	color: #ccc;
+	font-weight: normal;
 }
 
 p.show_value {

@@ -1,0 +1,9 @@
+.rshow_wrapper {
+	height: auto;
+	min-height: 500px;
+}
+
+.evaluation_title {
+	margin-top: 30px !important;
+	margin-bottom: 10px !important;
+}

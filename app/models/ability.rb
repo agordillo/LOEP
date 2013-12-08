@@ -10,18 +10,22 @@ class Ability
             can [:update, :destroy], User do |u|
                user.compareRole > u.compareRole || user.id == u.id
             end
+            can [:update, :destroy], Lo
             can :read, :all
-
+            can :rshow, :all
         elsif user.role? :Admin
             #Admin
             can [:update, :destroy], User do |u|
                user.compareRole > u.compareRole || user.id == u.id
             end
+            can [:update, :destroy], Lo
             can :read, :all
+            can :rshow, :all
         elsif !user.role.nil?
             #Reviewers and Users
             can :show, User, :id => user.id
             can :update, User, :id => user.id
+            can :rshow, Lo
         else
             #Not loggued users
         end

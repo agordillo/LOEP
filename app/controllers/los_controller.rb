@@ -7,6 +7,7 @@ class LosController < ApplicationController
   # GET /los.json
   def index
     @los = Lo.all
+    authorize! :index, @los
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -20,8 +21,8 @@ class LosController < ApplicationController
     unless current_user.isAdmin?
       redirect_to "/rlos/" + params[:id]
     end
-
     @lo = Lo.find(params[:id])
+    authorize! :show, @lo
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -32,6 +33,7 @@ class LosController < ApplicationController
   #Reviewer show
   def rshow
     @lo = Lo.find(params[:id])
+    authorize! :rshow, @lo
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -42,6 +44,7 @@ class LosController < ApplicationController
   # GET /los/new
   # GET /los/new.json
   def new
+    authorize! :create, nil
     @lo = Lo.new
     @options_select = getOptionsForSelect
     respond_to do |format|
@@ -53,6 +56,7 @@ class LosController < ApplicationController
   # GET /los/1/edit
   def edit
     @lo = Lo.find(params[:id])
+    authorize! :edit, @lo
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -63,6 +67,7 @@ class LosController < ApplicationController
   # POST /los
   # POST /los.json
   def create
+    authorize! :create, nil
     @lo = Lo.new(params[:lo])
     @options_select = getOptionsForSelect
     respond_to do |format|
@@ -83,6 +88,7 @@ class LosController < ApplicationController
   # PUT /los/1.json
   def update
     @lo = Lo.find(params[:id])
+    authorize! :update, @lo
     @options_select = getOptionsForSelect
     respond_to do |format|
       if @lo.update_attributes(params[:lo])
@@ -102,6 +108,7 @@ class LosController < ApplicationController
   # DELETE /los/1.json
   def destroy
     @lo = Lo.find(params[:id])
+    authorize! :destroy, @lo
     @lo.destroy
 
     respond_to do |format|
