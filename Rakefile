@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-NewLOEP::Application.load_tasks
+LOEP::Application.load_tasks
