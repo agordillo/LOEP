@@ -44,8 +44,8 @@ class LosController < ApplicationController
   # GET /los/new
   # GET /los/new.json
   def new
-    authorize! :create, nil
     @lo = Lo.new
+    authorize! :create, @lo
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -67,8 +67,8 @@ class LosController < ApplicationController
   # POST /los
   # POST /los.json
   def create
-    authorize! :create, nil
     @lo = Lo.new(params[:lo])
+    authorize! :create, @lo
     @options_select = getOptionsForSelect
     respond_to do |format|
       if @lo.save

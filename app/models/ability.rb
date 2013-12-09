@@ -10,7 +10,7 @@ class Ability
             can [:update, :destroy], User do |u|
                user.compareRole > u.compareRole || user.id == u.id
             end
-            can [:update, :destroy], Lo
+            can [:create, :update, :destroy], Lo
             can :read, :all
             can :rshow, :all
         elsif user.role? :Admin
@@ -18,7 +18,7 @@ class Ability
             can [:update, :destroy], User do |u|
                user.compareRole > u.compareRole || user.id == u.id
             end
-            can [:update, :destroy], Lo
+            can [:create, :update, :destroy], Lo
             can :read, :all
             can :rshow, :all
         elsif !user.role.nil?
