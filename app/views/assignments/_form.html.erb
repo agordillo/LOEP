@@ -1,49 +1,78 @@
-<%= form_for(@assignment) do |f| %>
-  <% if @assignment.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@assignment.errors.count, "error") %> prohibited this assignment from being saved:</h2>
+<div class="loep_form_wrapper new_assignment_form">
+  <p class="form_before_button">&nbsp;</p>
 
-      <ul>
-      <% @assignment.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+  <%= form_for(@assignment) do |f| %>
+    
+    <div class="field">
+      <%= f.label :lo_id %><br />
+      <%= f.number_field :lo_id %>
     </div>
-  <% end %>
 
-  <div class="field">
-    <%= f.label :author_id %><br />
-    <%= f.number_field :author_id %>
-  </div>
-  <div class="field">
-    <%= f.label :user_id %><br />
-    <%= f.number_field :user_id %>
-  </div>
-  <div class="field">
-    <%= f.label :lo_id %><br />
-    <%= f.number_field :lo_id %>
-  </div>
-  <div class="field">
-    <%= f.label :status %><br />
-    <%= f.text_field :status %>
-  </div>
-  <div class="field">
-    <%= f.label :deadline %><br />
-    <%= f.datetime_select :deadline %>
-  </div>
-  <div class="field">
-    <%= f.label :completed_at %><br />
-    <%= f.datetime_select :completed_at %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
-  </div>
-  <div class="field">
-    <%= f.label :emethods %><br />
-    <%= f.text_area :emethods %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+    <div class="field">
+      <%= f.label :user_id %><br />
+      <%= f.number_field :user_id %>
+    </div>
+
+    <p class="form_legend">Evaluation Methods</p>
+    <%= f.select :emethods, options_for_select(@options_select["eMethods"],@assignment.getEMethods), {} ,{ :multiple => true, :size => 2, :class=>'loep_input' } %>
+
+    <p class="form_legend">Description</p>
+    <%= f.text_area :description, :class=>'loep_input' %>
+
+    <% if !@assignment.status.nil? %>
+      <p class="form_legend">Status</p>
+      <%= f.select :status, options_for_select(@options_select["status"],@assignment.status || "Pending"), {} ,{ :class=>'loep_input' } %>
+    <% end %>
+
+    <% if !@assignment.completed_at.nil? %>
+      <p class="form_legend">Completion Date</p>
+      <%=text_field_tag "assignment[completed_at]",@assignment.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker" %>
+    <% end %>
+
+    <p class="form_legend">Deadline</p>
+    <%=text_field_tag "assignment[deadline]",@assignment.readable_deadline, :class=>'loep_input', :id=>"deadline_datepicker" %>
+
+    <input id="assignment_author_id" name="assignment[author_id]" type="hidden" value="<%=current_user.id%>">
+
+    <p class="form_before_button">&nbsp;</p>
+    <p class="form_before_button">&nbsp;</p>
+    <%= f.submit :class => 'loep_button' %>
+
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    //Datetimepicker Addon: http://trentrichardson.com/examples/timepicker/#basic_examples
+    $('#deadline_datepicker').datetimepicker({
+      yearRange: "-1:+10",
+      showOn: "both",
+      dateFormat : 'dd/mm/yy',
+      changeMonth : true,
+      changeYear : true,
+      minDate: '0d',
+      buttonImage: "/assets/calendar_icon.png", 
+      buttonImageOnly: true,
+      timeFormat: "HH:mm tt",
+      stepHour: 1,
+      stepMinute: 15
+    });
+
+    if ($("#completed_at_datepicker").length > 0){
+      $('#completed_at_datepicker').datetimepicker({
+        yearRange: "-1:+10",
+        showOn: "both",
+        dateFormat : 'dd/mm/yy',
+        changeMonth : true,
+        changeYear : true,
+        minDate: '0d',
+        buttonImage: "/assets/calendar_icon.png", 
+        buttonImageOnly: true,
+        timeFormat: "HH:mm tt",
+        stepHour: 1,
+        stepMinute: 15
+      });
+    }
+
+  });
+</script>

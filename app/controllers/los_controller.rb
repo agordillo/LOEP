@@ -1,7 +1,6 @@
 class LosController < ApplicationController
   before_filter :authenticate_user!
   before_filter :filterCategories
-  before_filter :getOptionsForSelect
 
   # GET /los
   # GET /los.json

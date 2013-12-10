@@ -63,7 +63,7 @@ namespace :db do
     asA.author_id = user_admin.id
     asA.user_id = user_reviewer.id
     asA.lo_id = loA.id
-	asA.status = "pending"
+	asA.status = "Pending"
 	#Deadline in one week
 	asA.deadline = DateTime.now + 7
 	asA.description = "Please, evaluate the following flashcard using LORI (Learning Object Review Instrument)."
@@ -76,7 +76,7 @@ namespace :db do
     asB.author_id = user_admin.id
     asB.user_id = user_reviewer.id
     asB.lo_id = loB.id
-	asB.status = "pending"
+	asB.status = "Pending"
 	#Deadline in two weeks
 	asB.deadline = DateTime.now + 14
 	asB.description = "Please, evaluate the following LO using LORI (Learning Object Review Instrument)."

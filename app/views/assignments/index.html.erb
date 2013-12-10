@@ -1,37 +1,56 @@
-<h1>Listing assignments</h1>
-
-<table>
+<table cellspacing='0' class="loep_table">
   <tr>
-    <th>Author</th>
-    <th>User</th>
-    <th>Lo</th>
+    <th>Learning Object</th>
+    <th>Reviewer</th>
     <th>Status</th>
-    <th>Deadline</th>
     <th>Completed at</th>
-    <th>Description</th>
-    <th>Emethods</th>
+    <th>Deadline</th>
+    <th>Author</th>
     <th></th>
     <th></th>
     <th></th>
   </tr>
-
-<% @assignments.each do |assignment| %>
-  <tr>
-    <td><%= assignment.author_id %></td>
-    <td><%= assignment.user_id %></td>
-    <td><%= assignment.lo_id %></td>
-    <td><%= assignment.status %></td>
-    <td><%= assignment.deadline %></td>
-    <td><%= assignment.completed_at %></td>
-    <td><%= assignment.description %></td>
-    <td><%= assignment.emethods %></td>
-    <td><%= link_to 'Show', assignment %></td>
-    <td><%= link_to 'Edit', edit_assignment_path(assignment) %></td>
-    <td><%= link_to 'Destroy', assignment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+  <% @assignments.each do |assignment| %>
+    <tr>
+       <td>
+        <a href="<%=lo_path(assignment.lo)%>"><span><%= assignment.lo.name %></span></a>
+      </td>
+      <td>
+        <a href="<%=user_path(assignment.user)%>"><span><%= assignment.user.name %></span></a>
+      </td>
+      <% case assignment.status %>
+      <% when "Pending" %>
+        <td class="assignment_pending">
+          <span class="glyphicon glyphicon-time"></span>
+      <% when "Completed" %>
+        <td class="assignment_completed">
+          <span class="glyphicon glyphicon-ok"></span>
+      <% when "Rejected" %>
+        <td class="assignment_rejected">
+          <span class="glyphicon glyphicon-remove"></span>
+      <% else %>
+        <td class="assignment_nil">
+      <%end%>
+          <%= assignment.status %></span>
+      </td>
+      <td>
+        <span><%= assignment.readable_completed_at %></span>
+      </td>
+      <td>
+        <span><%= assignment.readable_deadline %></span>
+      </td>
+      <td>
+        <a href="<%=user_path(assignment.author)%>"><%= assignment.author.name %></a>
+      </td>
+      <td class="tdcenter tdedit">
+        <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
+      </td>
+      <td class="tdcenter tdedit">
+          <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+      </td>
+      <td class="tdcenter tddestroy">
+        <a href="<%=assignment_path(assignment)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> Remove</a>
+      </td>
+    </tr>
+  <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New Assignment', new_assignment_path %>

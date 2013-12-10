@@ -2,6 +2,7 @@
   <tr>
     <th>Name</th>
     <th>Url</th>
+    <th>Assign</th>
     <th class="longhead">View as reviewer</th>
     <th></th>
     <th></th>
@@ -11,6 +12,9 @@
       <td><a href="<%=lo_path(lo)%>"><%= lo.name %></a></td>
       <td class="tdcenter">
         <a target="_blank" href="<%=lo.url%>"><span class="glyphicon glyphicon-share"></span></a>
+      </td>
+       <td class="tdcenter tdrshow">
+        <a href="<%=new_assignment_path_for(lo.id,nil)%>"><span class="glyphicon glyphicon-time"></span></a>
       </td>
       <td class="tdcenter tdrshow">
         <a href="<%=rlo_path(lo)%>"><span class="glyphicon glyphicon-eye-open"></span></a>
