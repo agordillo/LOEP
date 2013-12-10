@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
   before_filter :authenticate_user!
-
+  before_filter :filterEMethods
 
   # GET /assignments
   # GET /assignments.json
@@ -41,6 +41,13 @@ class AssignmentsController < ApplicationController
   def new
     @assignment = Assignment.new
 
+    unless params[:lo_ids].nil?
+
+    end
+
+    @los = Lo.all
+    @users = User.reviewers
+
     @options_select = getOptionsForSelect
     session[:return_to] ||= request.referer
     respond_to do |format|
@@ -64,19 +71,69 @@ class AssignmentsController < ApplicationController
   # POST /assignments.json
   def create
     @assignment = Assignment.new(params[:assignment])
-
     @options_select = getOptionsForSelect
-    respond_to do |format|
-      if @assignment.save
-        format.html { redirect_to @assignment, notice: 'Assignment was successfully created.' }
-        format.json { render json: @assignment, status: :created, location: @assignment }
-      else
-        format.html { 
-          flash[:alert] = @lo.errors.full_messages
-          render action: "new", :layout => "application_with_menu" 
-        }
-        format.json { render json: @assignment.errors, status: :unprocessable_entity }
+
+    if params[:selected_los].blank?
+      flash[:alert] = "You must select at least one Learning Object to create an assignment."
+      @los = Lo.all
+      @users = User.reviewers
+      render action: "new", :layout => "application_with_menu" 
+    end
+
+    if params[:selected_users].blank?
+      flash[:alert] = "You must select at least one Reviewer to create an assignment."
+      @los = Lo.all
+      @users = User.reviewers
+      render action: "new", :layout => "application_with_menu" 
+    end
+
+    assignments = []
+    params[:selected_los].each do |lo_id|
+      params[:selected_users].each do |user_id|
+        #Create assignment for Lo with id lo_id and reviewer with id user_id
+        as = Assignment.new
+        as.assign_attributes(params[:assignment])
+        as.author_id = current_user.id
+        as.user_id = user_id
+        as.lo_id = lo_id
+        as.status = "Pending"
+        assignments << as
       end
+    end
+
+    errors = []
+    assignments.each do |as|
+      as.valid?
+      if !as.errors.blank?
+        errors << as.errors
+      end
+    end
+    
+    respond_to do |format|
+      if errors.empty?
+        #Save assignments
+        assignments.each do |as|
+          unless as.save
+            format.html { 
+              flash[:alert] = as.errors.full_messages
+              render action: "new", :layout => "application_with_menu"
+            }
+            format.json { render json: as.errors, status: :unprocessable_entity }
+          end
+        end
+        format.html { redirect_to assignments_path, notice: 'Assignment was successfully created.' }
+        format.json { render json: "Process completed", status: :created, location: assignments_path }
+      else
+        format.html {
+            #Create dummy assigment to refill format fields
+            @assignment = Assignment.new
+            @assignment.assign_attributes(params[:assignment])
+            flash[:alert] = @errors[0].full_messages
+            render action: "new", :layout => "application_with_menu" 
+          }
+        format.json { render json: @errors[0], status: :unprocessable_entity }
+      end
+
     end
   end
 
@@ -122,6 +179,12 @@ class AssignmentsController < ApplicationController
     #TODO, fill evMethods based on evMethod model
     optionsForSelect["eMethods"] = [["LORI v1.5","1"]]
     optionsForSelect
+  end
+
+  def filterEMethods
+    if params[:assignment] and params[:assignment][:emethods]
+      params[:assignment][:emethods] = params[:assignment][:emethods].reject{|m| m.empty? }.to_json
+    end
   end
 
 end

@@ -13,10 +13,10 @@
   <% @assignments.each do |assignment| %>
     <tr>
        <td>
-        <a href="<%=lo_path(assignment.lo)%>"><span><%= assignment.lo.name %></span></a>
+        <a href="<%=lo_path(assignment.lo) unless assignment.lo.nil?%>"><span><%= assignment.lo.name unless assignment.lo.nil? %></span></a>
       </td>
       <td>
-        <a href="<%=user_path(assignment.user)%>"><span><%= assignment.user.name %></span></a>
+        <a href="<%=user_path(assignment.user) unless assignment.user.nil?%>"><span><%= assignment.user.name unless assignment.user.nil? %></span></a>
       </td>
       <% case assignment.status %>
       <% when "Pending" %>

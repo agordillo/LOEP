@@ -145,4 +145,14 @@ class User < ActiveRecord::Base
     return false
   end
 
+  def self.reviewers
+    reviewers = []
+    User.find_each do |user|
+      if user.role?("Reviewer")
+        reviewers << user
+      end
+    end
+    reviewers
+  end
+
 end

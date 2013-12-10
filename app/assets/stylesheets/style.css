@@ -168,6 +168,50 @@ select.loep_input {
 	padding: 0% 10% 0% 10%;
 }
 
+.loep_form_wrapper select.loep_input[multiple='true'] {
+	width: 50%;
+}
+
+.multiselect2search {
+	position: absolute;
+	right: 9px;
+	z-index: 9999;
+	top: 7px;
+	cursor: pointer;
+	pointer-events: none;
+}
+
+/* Same tag css for the whole application */
+span.tag {
+	border: 1px solid #a5d24a;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	display: block;
+	float: left;
+	padding: 5px;
+	text-decoration: none;
+	background: #cde69c;
+	color: #638421;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	font-family: helvetica;
+	font-size: 13px;
+}
+
+.select2-search-choice {
+	border: 1px solid #a5d24a !important;
+	-moz-border-radius: 2px !important;
+	-webkit-border-radius: 2px !important;
+	text-decoration: none !important;
+	background: #cde69c !important;
+	color: #638421 !important;
+	margin-right: 5px !important;
+	margin-bottom: 5px !important;
+	font-family: helvetica !important;
+	font-size: 13px !important;
+	padding: 5px 5px 5px 18px !important;
+}
+
 #homepagecontent .loep_form_wrapper {
 	padding: 0% 4% 0% 4% !important;
 }

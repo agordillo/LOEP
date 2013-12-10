@@ -3,15 +3,19 @@
 
   <%= form_for(@assignment) do |f| %>
     
-    <div class="field">
-      <%= f.label :lo_id %><br />
-      <%= f.number_field :lo_id %>
-    </div>
+    <p class="form_legend">Learning Objects</p>
+    <select name="selected_los[]" multiple="true" id="select_los" class="loep_input">
+      <% @los.each do |lo| %>
+        <option value="<%=lo.id%>"><%=lo.name%></option>
+      <% end %>
+    </select>
 
-    <div class="field">
-      <%= f.label :user_id %><br />
-      <%= f.number_field :user_id %>
-    </div>
+    <p class="form_legend">Reviewers</p>
+    <select name="selected_users[]" multiple="true" id="select_users" class="loep_input">
+      <% @users.each do |user| %>
+        <option value="<%=user.id%>"><%=user.name%></option>
+      <% end %>
+    </select>
 
     <p class="form_legend">Evaluation Methods</p>
     <%= f.select :emethods, options_for_select(@options_select["eMethods"],@assignment.getEMethods), {} ,{ :multiple => true, :size => 2, :class=>'loep_input' } %>
@@ -74,5 +78,14 @@
       });
     }
 
+    //Little fix for select input
+    $("#select_los").attr("style","width:" + $("#select_los").width() + "px");
+    $("#select_los").select2();
+
+    $("#select_users").attr("style","width:" + $("#select_users").width() + "px");
+    $("#select_users").select2();
+
+    //Add search icon
+    $(".select2-container-multi").prepend($("<div class='multiselect2search'><span class='glyphicon glyphicon-search'></span></div>"));
   });
 </script>
