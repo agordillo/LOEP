@@ -42,13 +42,17 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.new
 
     unless params[:lo_ids].nil?
-
+      @plos = Lo.find(params[:lo_ids].split(","));
     end
 
-    @los = Lo.all
-    @users = User.reviewers
+    unless params[:user_ids].nil?
+      @pusers = User.find(params[:user_ids].split(","));
+    end
 
+    @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
+    @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
     @options_select = getOptionsForSelect
+
     session[:return_to] ||= request.referer
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -60,6 +64,10 @@ class AssignmentsController < ApplicationController
   def edit
     @assignment = Assignment.find(params[:id])
 
+    @plos = [@assignment.lo]
+    @pusers = [@assignment.user]
+    @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
+    @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -71,19 +79,19 @@ class AssignmentsController < ApplicationController
   # POST /assignments.json
   def create
     @assignment = Assignment.new(params[:assignment])
+    
+    #For render actions...
+    @los = Lo.all
+    @users = User.reviewers
     @options_select = getOptionsForSelect
 
     if params[:selected_los].blank?
       flash[:alert] = "You must select at least one Learning Object to create an assignment."
-      @los = Lo.all
-      @users = User.reviewers
       render action: "new", :layout => "application_with_menu" 
     end
 
     if params[:selected_users].blank?
       flash[:alert] = "You must select at least one Reviewer to create an assignment."
-      @los = Lo.all
-      @users = User.reviewers
       render action: "new", :layout => "application_with_menu" 
     end
 
@@ -115,6 +123,7 @@ class AssignmentsController < ApplicationController
         assignments.each do |as|
           unless as.save
             format.html { 
+
               flash[:alert] = as.errors.full_messages
               render action: "new", :layout => "application_with_menu"
             }
@@ -142,7 +151,10 @@ class AssignmentsController < ApplicationController
   def update
     @assignment = Assignment.find(params[:id])
 
+    @los = Lo.all
+    @users = User.reviewers
     @options_select = getOptionsForSelect
+
     respond_to do |format|
       if @assignment.update_attributes(params[:assignment])
         format.html { redirect_to @assignment, notice: 'Assignment was successfully updated.' }
@@ -171,8 +183,6 @@ class AssignmentsController < ApplicationController
 
   private
 
-  private
-
   def getOptionsForSelect
     optionsForSelect = Hash.new
     optionsForSelect["status"] = [["Pending","Pending"],["Completed","Completed"],["Rejected","Rejected"]]
@@ -180,6 +190,20 @@ class AssignmentsController < ApplicationController
     optionsForSelect["eMethods"] = [["LORI v1.5","1"]]
     optionsForSelect
   end
+
+  # def getOptionsForSelectWithLosAndUsers(los,users)
+  #   optionsForSelect = getOptionsForSelect
+  #   optionsForSelect["los"] = getOptionsForSelectFromRecord(los)
+  #   optionsForSelect["users"] = getOptionsForSelectFromRecord(los)
+  # end
+
+  # def getOptionsForSelectFromRecord(record)
+  #   options_select = [];
+  #   record.each do |e|
+  #     options_select.push([e.name,e.id])
+  #   end
+  #   options_select
+  # end
 
   def filterEMethods
     if params[:assignment] and params[:assignment][:emethods]

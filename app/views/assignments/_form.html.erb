@@ -5,6 +5,11 @@
     
     <p class="form_legend">Learning Objects</p>
     <select name="selected_los[]" multiple="true" id="select_los" class="loep_input">
+      <% unless @plos.nil? %>
+        <% @plos.each do |lo| %>
+          <option value="<%=lo.id%>" selected="selected"><%=lo.name%></option>
+        <% end %>
+      <% end %>
       <% @los.each do |lo| %>
         <option value="<%=lo.id%>"><%=lo.name%></option>
       <% end %>
@@ -12,6 +17,11 @@
 
     <p class="form_legend">Reviewers</p>
     <select name="selected_users[]" multiple="true" id="select_users" class="loep_input">
+      <% unless @pusers.nil? %>
+        <% @pusers.each do |user| %>
+          <option value="<%=user.id%>" selected="selected"><%=user.name%></option>
+        <% end %>
+      <% end %>
       <% @users.each do |user| %>
         <option value="<%=user.id%>"><%=user.name%></option>
       <% end %>
