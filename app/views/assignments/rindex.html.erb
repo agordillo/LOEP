@@ -1,0 +1,39 @@
+<table cellspacing='0' class="loep_table">
+  <tr>
+    <th>Learning Object</th>
+    <th>Reviewer</th>
+    <th>Status</th>
+    <th>Deadline</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+  <% @assignments.each do |assignment| %>
+    <tr>
+       <td>
+        <a href="<%=lo_path(assignment.lo) unless assignment.lo.nil?%>"><span><%= assignment.lo.name unless assignment.lo.nil? %></span></a>
+      </td>
+      <td>
+        <a href="<%=user_path(assignment.user) unless assignment.user.nil?%>"><span><%= assignment.user.name unless assignment.user.nil? %></span></a>
+      </td>
+      <td class="tdcenter">
+        <%=assignment.readable_status%>
+      </td>
+      <td>
+        <span><%= assignment.readable_deadline %></span>
+      </td>
+      <td class="tdcenter">
+        <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> Details</a>
+      </td>
+      <td class="tdcenter">
+          <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+      </td>
+      <td class="tdcenter">
+        <a href="<%=assignment_path(assignment)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> Remove</a>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= link_to 'Add new', new_assignment_path %>
+
