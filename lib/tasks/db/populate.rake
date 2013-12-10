@@ -67,7 +67,7 @@ namespace :db do
 	#Deadline in one week
 	asA.deadline = DateTime.now + 7
 	asA.description = "Please, evaluate the following flashcard using LORI (Learning Object Review Instrument)."
-	asA.emethods = ["1"].to_json #just LORI (evMethodLORI.id==1)
+	asA.emethods = ["LORI"].to_json
 	asA.save(:validate => false)
 
 	#Also evaluate the LO titled: Chess: The Art of Learning
@@ -80,7 +80,7 @@ namespace :db do
 	#Deadline in two weeks
 	asB.deadline = DateTime.now + 14
 	asB.description = "Please, evaluate the following LO using LORI (Learning Object Review Instrument)."
-	asB.emethods = ["1"].to_json
+	asB.emethods = ["LORI"].to_json
 	asB.save(:validate => false)
 
 	puts "Populate finish"

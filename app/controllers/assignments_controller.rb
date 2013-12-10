@@ -6,6 +6,7 @@ class AssignmentsController < ApplicationController
   # GET /assignments.json
   def index
     @assignments = Assignment.all
+    authorize! :index, @assignments
 
     @options_select = getOptionsForSelect
     respond_to do |format|
@@ -16,6 +17,7 @@ class AssignmentsController < ApplicationController
 
   def rindex
     @assignments = current_user.assignments
+    authorize! :rshow, @assignments
 
     @options_select = getOptionsForSelect
     respond_to do |format|
@@ -28,6 +30,7 @@ class AssignmentsController < ApplicationController
   # GET /assignments/1.json
   def show
     @assignment = Assignment.find(params[:id])
+    authorize! :show, @assignment
 
     @options_select = getOptionsForSelect
     respond_to do |format|
@@ -40,6 +43,7 @@ class AssignmentsController < ApplicationController
   # GET /assignments/new.json
   def new
     @assignment = Assignment.new
+    authorize! :new, @assignment
 
     unless params[:lo_ids].nil?
       @plos = Lo.find(params[:lo_ids].split(","));
@@ -63,6 +67,7 @@ class AssignmentsController < ApplicationController
   # GET /assignments/1/edit
   def edit
     @assignment = Assignment.find(params[:id])
+    authorize! :edit, @assignment
 
     @plos = [@assignment.lo]
     @pusers = [@assignment.user]
@@ -79,20 +84,14 @@ class AssignmentsController < ApplicationController
   # POST /assignments.json
   def create
     @assignment = Assignment.new(params[:assignment])
+    authorize! :create, @assignment
     
-    #For render actions...
-    @los = Lo.all
-    @users = User.reviewers
-    @options_select = getOptionsForSelect
-
     if params[:selected_los].blank?
-      flash[:alert] = "You must select at least one Learning Object to create an assignment."
-      render action: "new", :layout => "application_with_menu" 
+      return renderError("You must select at least one Learning Object to create an assignment.","new")
     end
 
     if params[:selected_users].blank?
-      flash[:alert] = "You must select at least one Reviewer to create an assignment."
-      render action: "new", :layout => "application_with_menu" 
+      return renderError("You must select at least one Reviewer to create an assignment.","new")
     end
 
     assignments = []
@@ -122,27 +121,23 @@ class AssignmentsController < ApplicationController
         #Save assignments
         assignments.each do |as|
           unless as.save
-            format.html { 
-
-              flash[:alert] = as.errors.full_messages
-              render action: "new", :layout => "application_with_menu"
+            format.html {
+              return renderError(as.errors.full_messages,"new")
             }
-            format.json { render json: as.errors, status: :unprocessable_entity }
+            format.json { 
+              render json: as.errors, status: :unprocessable_entity
+              return
+            }
           end
         end
         format.html { redirect_to assignments_path, notice: 'Assignment was successfully created.' }
         format.json { render json: "Process completed", status: :created, location: assignments_path }
       else
         format.html {
-            #Create dummy assigment to refill format fields
-            @assignment = Assignment.new
-            @assignment.assign_attributes(params[:assignment])
-            flash[:alert] = @errors[0].full_messages
-            render action: "new", :layout => "application_with_menu" 
+            return renderError(errors[0].full_messages,"new") 
           }
-        format.json { render json: @errors[0], status: :unprocessable_entity }
+        format.json { render json: errors[0], status: :unprocessable_entity }
       end
-
     end
   end
 
@@ -150,6 +145,15 @@ class AssignmentsController < ApplicationController
   # PUT /assignments/1.json
   def update
     @assignment = Assignment.find(params[:id])
+    authorize! :update, @assignment
+
+    #Adapt params
+    unless params[:selected_los].blank?
+      params[:assignment][:lo_id] = params[:selected_los][0]
+    end
+    unless params[:selected_users].blank?
+      params[:assignment][:user_id] = params[:selected_users][0]
+    end
 
     @los = Lo.all
     @users = User.reviewers
@@ -157,7 +161,10 @@ class AssignmentsController < ApplicationController
 
     respond_to do |format|
       if @assignment.update_attributes(params[:assignment])
-        format.html { redirect_to @assignment, notice: 'Assignment was successfully updated.' }
+        format.html { 
+          redirect_to @assignment, 
+          notice: 'Assignment was successfully updated.' 
+        }
         format.json { head :no_content }
       else
         format.html {
@@ -173,6 +180,8 @@ class AssignmentsController < ApplicationController
   # DELETE /assignments/1.json
   def destroy
     @assignment = Assignment.find(params[:id])
+    authorize! :destroy, @assignment
+
     @assignment.destroy
 
     respond_to do |format|
@@ -183,27 +192,33 @@ class AssignmentsController < ApplicationController
 
   private
 
+  def renderError(msg,action)
+    buildViewParamsBeforeRenderError
+    flash[:alert] = msg
+    render action: action, :layout => "application_with_menu"
+  end
+
+  def buildViewParamsBeforeRenderError
+    unless params[:selected_los].nil?
+      @plos = Lo.find(params[:selected_los])
+    end
+
+    unless params[:selected_users].nil?
+      @pusers = User.find(params[:selected_users])
+    end
+
+    @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
+    @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
+    @options_select = getOptionsForSelect
+  end
+
   def getOptionsForSelect
     optionsForSelect = Hash.new
     optionsForSelect["status"] = [["Pending","Pending"],["Completed","Completed"],["Rejected","Rejected"]]
     #TODO, fill evMethods based on evMethod model
-    optionsForSelect["eMethods"] = [["LORI v1.5","1"]]
+    optionsForSelect["eMethods"] = [["LORI v1.5","LORI"]]
     optionsForSelect
   end
-
-  # def getOptionsForSelectWithLosAndUsers(los,users)
-  #   optionsForSelect = getOptionsForSelect
-  #   optionsForSelect["los"] = getOptionsForSelectFromRecord(los)
-  #   optionsForSelect["users"] = getOptionsForSelectFromRecord(los)
-  # end
-
-  # def getOptionsForSelectFromRecord(record)
-  #   options_select = [];
-  #   record.each do |e|
-  #     options_select.push([e.name,e.id])
-  #   end
-  #   options_select
-  # end
 
   def filterEMethods
     if params[:assignment] and params[:assignment][:emethods]

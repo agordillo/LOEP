@@ -2,9 +2,8 @@
   <p class="form_before_button">&nbsp;</p>
 
   <%= form_for(@assignment) do |f| %>
-    
     <p class="form_legend">Learning Objects</p>
-    <select name="selected_los[]" multiple="true" id="select_los" class="loep_input">
+    <select name="selected_los[]" <%= 'multiple="true"' if controller.action_name == "new" or controller.action_name == "create"%> id="select_los" class="loep_input">
       <% unless @plos.nil? %>
         <% @plos.each do |lo| %>
           <option value="<%=lo.id%>" selected="selected"><%=lo.name%></option>
@@ -16,7 +15,7 @@
     </select>
 
     <p class="form_legend">Reviewers</p>
-    <select name="selected_users[]" multiple="true" id="select_users" class="loep_input">
+    <select name="selected_users[]" <%= 'multiple="true"' if controller.action_name == "new" or controller.action_name == "create"%> id="select_users" class="loep_input">
       <% unless @pusers.nil? %>
         <% @pusers.each do |user| %>
           <option value="<%=user.id%>" selected="selected"><%=user.name%></option>

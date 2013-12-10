@@ -3,9 +3,7 @@
     <th>Learning Object</th>
     <th>Reviewer</th>
     <th>Status</th>
-    <th>Completed at</th>
     <th>Deadline</th>
-    <th>Author</th>
     <th></th>
     <th></th>
     <th></th>
@@ -18,39 +16,24 @@
       <td>
         <a href="<%=user_path(assignment.user) unless assignment.user.nil?%>"><span><%= assignment.user.name unless assignment.user.nil? %></span></a>
       </td>
-      <% case assignment.status %>
-      <% when "Pending" %>
-        <td class="assignment_pending">
-          <span class="glyphicon glyphicon-time"></span>
-      <% when "Completed" %>
-        <td class="assignment_completed">
-          <span class="glyphicon glyphicon-ok"></span>
-      <% when "Rejected" %>
-        <td class="assignment_rejected">
-          <span class="glyphicon glyphicon-remove"></span>
-      <% else %>
-        <td class="assignment_nil">
-      <%end%>
-          <%= assignment.status %></span>
-      </td>
-      <td>
-        <span><%= assignment.readable_completed_at %></span>
+      <td class="tdcenter">
+        <%=assignment.readable_status%>
       </td>
       <td>
         <span><%= assignment.readable_deadline %></span>
       </td>
-      <td>
-        <a href="<%=user_path(assignment.author)%>"><%= assignment.author.name %></a>
+      <td class="tdcenter">
+        <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> Details</a>
       </td>
-      <td class="tdcenter tdedit">
-        <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> Show</a>
-      </td>
-      <td class="tdcenter tdedit">
+      <td class="tdcenter">
           <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
       </td>
-      <td class="tdcenter tddestroy">
+      <td class="tdcenter">
         <a href="<%=assignment_path(assignment)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> Remove</a>
       </td>
     </tr>
   <% end %>
 </table>
+
+<%= link_to 'Add new', new_assignment_path %>
+

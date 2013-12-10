@@ -3,7 +3,8 @@
   <h2><%=@lo.name%></h2>
   <% if iamAdmin? %>
     <%= link_to 'View as Reviewer', rlo_path(@lo) %> |
-    <%= link_to 'Edit', edit_lo_path(@lo) %>
+    <%= link_to 'Edit', edit_lo_path(@lo) %> |
+    <a href="<%=new_assignment_path_for(@lo.id,nil)%>"> Add assignment </a>
   <% end %>
   </br>
   </br>

@@ -13,7 +13,7 @@
       <td class="tdcenter">
         <a target="_blank" href="<%=lo.url%>"><span class="glyphicon glyphicon-share"></span></a>
       </td>
-       <td class="tdcenter tdrshow">
+      <td class="tdcenter tdrshow">
         <a href="<%=new_assignment_path_for(lo.id,nil)%>"><span class="glyphicon glyphicon-time"></span></a>
       </td>
       <td class="tdcenter tdrshow">
@@ -29,5 +29,5 @@
   <% end %>
 </table>
 
-
+<%= link_to 'Add new', new_lo_path %>
 

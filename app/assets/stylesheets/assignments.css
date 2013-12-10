@@ -1,0 +1,12 @@
+.new_assignment_form input.loep_input {
+	width: 80% !important
+}
+
+.new_assignment_form textarea.loep_input {
+	width: 80% !important;
+	max-height: 150px;
+}
+
+.new_assignment_form select.loep_input {
+	width: 80% !important;
+}
