@@ -1,0 +1,15 @@
+<div class="home_block">
+	<h1 class="loep_title"> Assignments </h1>
+	<%= render :partial => '/assignments/index' %>
+	<p class="link_wrapper"><%= link_to "Add new", new_assignment_path %> | <%= link_to "View all", assignments_path %></p>
+</div>
+<div class="home_block">
+	<h1 class="loep_title"> Learning Objects </h1>
+	<%= render :partial => '/los/index' %>
+	<p class="link_wrapper"><%= link_to "Add new", new_lo_path %> | <%= link_to "View all", los_path %></p>
+</div>
+<div class="home_block">
+	<h1 class="loep_title"> Users </h1>
+	<%= render :partial => '/users/index' %>
+	<p class="link_wrapper"><%= link_to "View all", users_path %></p>
+</div>

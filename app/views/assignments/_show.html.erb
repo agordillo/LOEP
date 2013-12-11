@@ -1,0 +1,34 @@
+<div class="show_wrapper loep_form_wrapper">
+
+  <h2>Assignment</h2>
+  <% if iamAdmin? %>
+    <%= link_to 'Edit', edit_assignment_path(@assignment) %>
+  <% end %>
+  </br>
+  </br>
+
+  <p class="show_legend">Assignment created by:</p>
+  <a href="<%=user_path(@assignment.author)%>"><p class="show_value"><%=@assignment.author.name%></p></a>
+
+  <p class="show_legend">Learning Object</p>
+  <a href="<%=lo_path(@assignment.lo)%>"><p class="show_value"><%=@assignment.lo.name%></p></a>
+
+  <p class="show_legend">Reviewer</p>
+  <a href="<%=user_path(@assignment.user)%>"><p class="show_value"><%=@assignment.user.name%></p></a>
+
+  <p class="show_legend">Evaluation Methods</p>
+  <p class="show_value"><%=@assignment.getEMethods%></p>
+
+  <p class="show_legend">Description</p>
+  <p class="show_value"><%=@assignment.description%></p>
+
+  <p class="show_legend">Status</p>
+  <p class="show_value"><%=@assignment.readable_status%></p>
+
+  <p class="show_legend">Deadline</p>
+  <p class="show_value"><%=@assignment.deadline%></p>
+
+  <p class="show_legend">Completed at</p>
+  <p class="show_value"><%=@assignment.readable_completed_at%></p>
+
+</div>

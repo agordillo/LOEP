@@ -1,0 +1,25 @@
+<table cellspacing='0' class="loep_table">
+  <tr>
+    <th>Learning Object</th>
+    <th>Status</th>
+    <th>Deadline</th>
+    <th></th>
+  </tr>
+  <% @assignments.each do |assignment| %>
+    <tr>
+       <td>
+        <a href="<%=rlo_path(assignment.lo) unless assignment.lo.nil?%>"><span><%= assignment.lo.name unless assignment.lo.nil? %></span></a>
+      </td>
+      <td class="tdcenter">
+        <%=assignment.readable_status%>
+      </td>
+      <td>
+        <span><%= assignment.readable_deadline %></span>
+      </td>
+      <td class="tdcenter">
+        <a href="<%=rlo_path(assignment.lo) unless assignment.lo.nil?%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
