@@ -1,8 +1,8 @@
-<h1 class="loep_title"> Assignments </h1>
 <table cellspacing='0' class="loep_table">
   <tr>
     <th>Learning Object</th>
     <th>Reviewer</th>
+    <th>Methods</th>
     <th>Status</th>
     <th>Deadline</th>
     <th></th>
@@ -16,6 +16,9 @@
       </td>
       <td>
         <a href="<%=user_path(assignment.user) unless assignment.user.nil?%>"><span><%= assignment.user.name unless assignment.user.nil? %></span></a>
+      </td>
+      <td class="tdcenter">
+        <%=assignment.readable_evmethods%>
       </td>
       <td class="tdcenter">
         <%=assignment.readable_status%>

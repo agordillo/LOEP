@@ -1,12 +1,8 @@
 LOEP::Application.routes.draw do
   resources :evaluations
-
-
+  resources :lori_evaluations
   resources :evmethods
-
-
   resources :assignments
-
 
   devise_for :users, :controllers => { :registrations => "registrations" }
   as :user do

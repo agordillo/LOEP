@@ -5,6 +5,10 @@ class HomeController < ApplicationController
 		if user_signed_in?
 			redirect_to :controller=>'home', :action => 'index'
 		end
+		respond_to do |format|
+      		format.html { render layout: "application_without_menu" }
+    	end
+		
 	end
 
 	def index
@@ -23,7 +27,7 @@ class HomeController < ApplicationController
 		session.delete(:return_to)
 		session[:return_to_afterDestroy] = request.url
 		respond_to do |format|
-      		format.html { render layout: "application_with_menu" }
+      		format.html
     	end
 	end
 

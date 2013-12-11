@@ -1,3 +1,10 @@
+/* General */
+
+a:focus { 
+    outline: none; 
+}
+
+
 /* Layout */
 
 html, body {
@@ -252,6 +259,10 @@ p.form_before_button {
 	padding-left: 5px;
 }
 
+.loep_title_min {
+	font-size: 25px !important;
+}
+
 p.link_wrapper {
 	text-align: right;
 	padding-right: 5px;
@@ -407,6 +418,13 @@ table.loep_table td.tddestroy {
 
 table.loep_table th.longhead {
 	padding: 2px 2px 2px 2px;
+}
+
+table.loep_table td.tdseparator {
+	background: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+	padding: 2px !important;
 }
 
 

@@ -2,16 +2,23 @@
   <div class="rshow_wrapper">
     <h2><%=@lo.name%></h2>
     </br>
-    </br>
 
     <p class="show_legend">URL</p>
     <p class="show_sublegend">Click on the URL shown below to access the Learning Object</p>
     <a target="_blank" href="<%=@lo.url%>"><p class="show_value"><%=@lo.url%></p></a>
 
-
-    <p class="show_legend evaluation_title">Evaluation Methods</p>
-    <button class="loep_button"  data-confirm="Not implemented yet" promptokalertdialog="true"><span class="glyphicon glyphicon-star-empty"></span> Evaluate with LORI</button>
-
+    <% nAssignments = @assignments.length %>
+    <% if nAssignments > 0 %>
+      </br>
+      </br>
+      <h1 class="loep_title loep_title_min">Your Assignment<%="s" if @assignments.length > 1%></h1>
+      <%= render '/assignments/rindex', :removeEvColumn => true, :showDescription => true %>
+    <% end %>
+    <% if @evmethods.length > 0 %>
+      <p class="show_legend evaluation_title">Evaluation Methods</p>
+      <%= render '/evmethods/rindex' %>
+      </br>
+    <% end %>
   </div>
 </div>
 

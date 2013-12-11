@@ -1,15 +1,24 @@
-<h1 class="loep_title"> My Assignments </h1>
+<% removeEvColumn ||= false %>
+<% showDescription ||= false %>
+
 <table cellspacing='0' class="loep_table">
   <tr>
     <th>Learning Object</th>
+    <th>Methods</th>
     <th>Status</th>
     <th>Deadline</th>
-    <th></th>
+    <% unless removeEvColumn %>
+      <th></th>
+    <% end %>
   </tr>
-  <% @assignments.each do |assignment| %>
+  <% aL = @assignments.length %>
+  <% @assignments.each_with_index do |assignment,i| %>
     <tr>
        <td>
         <a href="<%=rlo_path(assignment.lo) unless assignment.lo.nil?%>"><span><%= assignment.lo.name unless assignment.lo.nil? %></span></a>
+      </td>
+      <td class="tdcenter">
+        <%=assignment.readable_evmethods%>
       </td>
       <td class="tdcenter">
         <%=assignment.readable_status%>
@@ -17,10 +26,24 @@
       <td>
         <span><%= assignment.readable_deadline %></span>
       </td>
-      <td class="tdcenter">
-        <a href="<%=rlo_path(assignment.lo) unless assignment.lo.nil?%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
+      <% unless removeEvColumn %>
+        <td class="tdcenter">
+          <a href="<%=rlo_path(assignment.lo) unless assignment.lo.nil?%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
+        </td>
+      <% end %>
+    </tr>
+    <% if showDescription %>
+    <tr>
+      <td colspan="100%">
+        <span><%= assignment.description %></span>
       </td>
     </tr>
+    <% unless i==aL-1 %>
+      <tr>
+        <td class="tdseparator" colspan="100%"></td>
+      </tr>
+    <% end %>
+    <% end %>
   <% end %>
 </table>
 

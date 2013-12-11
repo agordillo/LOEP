@@ -34,6 +34,9 @@ class Ability
             can :rshow, Array do |arr|
                 arr.all? { |el| can?(:rshow, el) }
             end
+            can :rshow, ActiveRecord::Relation do |arr|
+                arr.all? { |el| can?(:rshow, el) }
+            end
         else
             #Not loggued users
         end

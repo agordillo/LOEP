@@ -17,7 +17,7 @@ class AssignmentsController < ApplicationController
     session[:return_to_afterDestroy] = request.url
     @options_select = getOptionsForSelect
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @assignments }
     end
   end
@@ -29,7 +29,7 @@ class AssignmentsController < ApplicationController
     session.delete(:return_to)
     @options_select = getOptionsForSelect
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @assignments }
     end
   end
@@ -44,7 +44,7 @@ class AssignmentsController < ApplicationController
     session[:return_to_afterDestroy] = assignments_path
     @options_select = getOptionsForSelect
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @assignment }
     end
   end
@@ -69,7 +69,7 @@ class AssignmentsController < ApplicationController
     @options_select = getOptionsForSelect
     
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @assignment }
     end
   end
@@ -88,7 +88,7 @@ class AssignmentsController < ApplicationController
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
     @options_select = getOptionsForSelect
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @assignment }
     end
   end
@@ -182,7 +182,7 @@ class AssignmentsController < ApplicationController
       else
         format.html {
           flash[:alert] = @assignment.errors.full_messages
-          render action: "edit", :layout => "application_with_menu"
+          render action: "edit"
         }
         format.json { render json: @assignment.errors, status: :unprocessable_entity }
       end
@@ -208,7 +208,7 @@ class AssignmentsController < ApplicationController
   def renderError(msg,action)
     buildViewParamsBeforeRenderError
     flash[:alert] = msg
-    render action: action, :layout => "application_with_menu"
+    render action: action
   end
 
   def buildViewParamsBeforeRenderError

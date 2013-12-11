@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20131211143248) do
 
   create_table "evmethods", :force => true do |t|
     t.string   "name"
+    t.string   "module"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

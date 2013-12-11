@@ -8,7 +8,7 @@ class UsersController < ApplicationController
 		session.delete(:return_to)
     	session[:return_to_afterDestroy] = request.url
 	    respond_to do |format|
-	      format.html { render layout: "application_with_menu" }
+	      format.html
 	      format.json { render json: @users }
 	    end
 	end
@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
 		session.delete(:return_to)
 	    respond_to do |format|
-	      format.html { render layout: "application_with_menu" }
+	      format.html
 	      format.json { render json: @user }
 	    end
 	end
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
 		session[:return_to] ||= request.referer
 	    respond_to do |format|
-	      format.html { render layout: "application_with_menu" }
+	      format.html
 	      format.json { render json: @user }
 	    end
 	end
@@ -68,7 +68,7 @@ class UsersController < ApplicationController
   			redirect_to session.delete(:return_to)
   		else
   			flash[:alert] = @user.errors.full_messages.to_sentence
-  			render :action => "edit", layout: "application_with_menu"
+  			render :action => "edit"
   		end
 	end
 

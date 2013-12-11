@@ -1,0 +1,45 @@
+<div class="loep_form_wrapper">
+  <p class="form_before_button">&nbsp;</p>
+
+  <%= form_for(@evaluation) do |f| %>
+
+    <input type="hidden" name="lori_evaluation[user_id]" id="lori_evaluation_user_id" value="<%=current_user.id%>">
+    <% if !@assignment.nil? %>
+      <input type="hidden" name="lori_evaluation[assignment_id]" id="lori_evaluation_assignment_id" value="<%=@assignment.id%>">
+    <% end %>
+    <input type="hidden" name="lori_evaluation[lo_id]" id="lori_evaluation_lo_id" value="<%=@lo.id%>">
+    <input type="hidden" name="lori_evaluation[evmethod_id]" id="lori_evaluation_evmethod_id" value="<%=@evmethod.id%>">
+
+    <%= render 'lori_survey' %>
+
+    <% if !@evaluation.completed_at.nil? %>
+      <p class="form_legend">Completion Date</p>
+      <%=text_field_tag "lori_evaluation[completed_at]",@evaluation.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker" %>
+    <% end %>
+
+    <p class="form_before_button">&nbsp;</p>
+    <p class="form_before_button">&nbsp;</p>
+    <%= f.submit :class => 'loep_button' %>
+
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    if ($("#completed_at_datepicker").length > 0){
+      $('#completed_at_datepicker').datetimepicker({
+        yearRange: "-1:+10",
+        showOn: "both",
+        dateFormat : 'dd/mm/yy',
+        changeMonth : true,
+        changeYear : true,
+        minDate: '0d',
+        buttonImage: "/assets/calendar_icon.png", 
+        buttonImageOnly: true,
+        timeFormat: "HH:mm tt",
+        stepHour: 1,
+        stepMinute: 15
+      });
+    }
+  });
+</script>

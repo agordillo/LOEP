@@ -12,7 +12,7 @@ class LosController < ApplicationController
     session[:return_to_afterDestroy] = request.url
     @options_select = getOptionsForSelect
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @los }
     end
   end
@@ -32,7 +32,7 @@ class LosController < ApplicationController
     session[:return_to_afterDestroy] = los_path
     @options_select = getOptionsForSelect
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @lo }
     end
   end
@@ -42,9 +42,16 @@ class LosController < ApplicationController
     @lo = Lo.find(params[:id])
     authorize! :rshow, @lo
 
+    @assignments = @lo.assignments.where(:user_id => current_user.id)
+    authorize! :rshow, @assignments
+    
+    evmethods = []
+    @assignments.map { |as| evmethods = evmethods + as.evmethods }
+    @evmethods = evmethods.uniq
+
     @options_select = getOptionsForSelect
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @lo }
     end
   end
@@ -58,7 +65,7 @@ class LosController < ApplicationController
     session[:return_to] ||= request.referer
     @options_select = getOptionsForSelect
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @lo }
     end
   end
@@ -71,7 +78,7 @@ class LosController < ApplicationController
     session[:return_to] ||= request.referer
     @options_select = getOptionsForSelect
     respond_to do |format|
-      format.html { render layout: "application_with_menu" }
+      format.html
       format.json { render json: @lo }
     end
   end
@@ -90,7 +97,7 @@ class LosController < ApplicationController
       else
         format.html { 
           flash[:alert] = @lo.errors.full_messages
-          render action: "new", :layout => "application_with_menu"
+          render action: "new"
         }
         format.json { render json: @lo.errors, status: :unprocessable_entity }
       end
@@ -110,7 +117,7 @@ class LosController < ApplicationController
       else
         format.html { 
           flash[:alert] = @lo.errors.full_messages
-          render action: "edit", :layout => "application_with_menu"
+          render action: "edit"
         }
         format.json { render json: @lo.errors, status: :unprocessable_entity }
       end

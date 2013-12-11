@@ -1,0 +1,12 @@
+<div class="loep_form_wrapper">
+	<h2>Evaluating <%=@lo.name%> with <%=@evmethod.name%></h1>
+	<p class="form_legend">Learning Object URL</p>
+	<a target="_blank" href="<%=@lo.url%>"><p class="show_value"><%=@lo.url%></p></a>
+</div>
+
+<%= render 'form' %>
+
+</br>
+<div class="loep_form_wrapper">
+	<%= link_to 'Back', rlo_path(@lo) %>
+</div>

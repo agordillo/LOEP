@@ -14,5 +14,23 @@ class Evaluation < ActiveRecord::Base
 
   validates :evmethod_id,
   :presence => true
+
+
+  def readable_completed_at
+    readable_date(self.completed_at)
+  end
+
+
+  private
+
+  def readable_date(date)
+    unless date.nil?
+      date.strftime("%d/%m/%Y %H:%M %P")
+      #For Ruby < 1.9
+      # date.strftime("%d/%m/%Y %H:%M %p").sub(' AM', ' am').sub(' PM', ' pm')
+    else
+      ""
+    end
+  end
   
 end

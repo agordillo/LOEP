@@ -1,5 +1,5 @@
 class Evmethod < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :name, :module
   has_and_belongs_to_many :assignments
   has_many :evaluations
 
@@ -9,4 +9,26 @@ class Evmethod < ActiveRecord::Base
   :uniqueness => {
     :case_sensitive => false
   }
+  validates :module,
+  :presence => true,
+  :length => { :in => 2..255 },
+  :uniqueness => {
+    :case_sensitive => false
+  }
+
+  def new_evaluation_path(lo)
+    klass = self.module
+    evaluationModule = klass.singularize.classify.constantize
+    # controller_name = klass.underscore + "s"
+    helper_method_name = "new_" + klass.underscore + "_path"
+    new_evaluation_path = Rails.application.routes.url_helpers.send(helper_method_name)
+
+    #Add params
+    new_evaluation_path + "?lo_id=" + lo.id.to_s
+  end
+
+  def new_evaluation_path_with_assignment(assignment)
+    new_evaluation_path(assignment.lo) + "&assignment_id=" + assignment.id.to_s
+  end
+
 end

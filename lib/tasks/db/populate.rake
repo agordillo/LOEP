@@ -65,6 +65,7 @@ namespace :db do
 	#Create Evaluation Methods
 	LORI = Evmethod.new
 	LORI.name = "LORI v1.5"
+	LORI.module = "LoriEvaluation"
 	LORI.save(:validate => false)
 
 	#Create Assignments

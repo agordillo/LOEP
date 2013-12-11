@@ -5,7 +5,6 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 </head>
 <body>
 
@@ -13,9 +12,22 @@
 	<div id='header'>
 		<%= render 'layouts/header' %>
 	</div>
-	
 	<div id='container'>
-		<%= yield %>
+		<%= render :partial => '/home/menu' %>
+		<div id="homepagecontent">
+			<% if flash[:alert] %>
+				<% if flash[:alert].is_a? Array %>
+					<% flash[:alert].each do |msg| %>
+						<div class="alert alert-danger"><%= msg %></div>
+					<% end %>
+				<% else %>
+					<div class="alert alert-danger"><%= flash[:alert] %></div>
+				<% end %>
+			<% elsif flash[:notice] %>
+				<div class="alert alert-success"><%= flash[:notice] %></div>
+			<% end %>
+			<%= yield %>
+		</div>
 	</div>
 
 	<div id='footer'>
