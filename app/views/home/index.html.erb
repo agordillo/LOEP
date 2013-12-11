@@ -1,11 +1,10 @@
-<%= render :partial => '/home/menu' %>
-<div id="homepagecontent">
-	<% if flash[:alert] %>
-    	<div class="alert alert-danger"><%= flash[:alert] %></div>
-	<% end %>
-	<div id="home_header">
-		<h1> Welcome to the Learning Object Evaluation Platform</h1>
-		<p> This platform aims to provide teachers and educators with a set of tools to facilitate the evaluation of small and self-contained web educational resources, known as Learning Objects. LOEP provides user and Learning Object management functionality, review assignments, a suite of evaluation tools (web and downloadable surveys, peer review mechanisms, ...) to evaluate Learning Objects according to several formal evaluation models, and training material for reviewers and educators. </p>
-	</div>
+<div id="home_header">
+	<h1> Welcome to the Learning Object Evaluation Platform</h1>
+	<p> This platform aims to provide teachers and educators with a set of tools to facilitate the evaluation of small and self-contained web educational resources, known as Learning Objects. LOEP provides user and Learning Object management functionality, review assignments, a suite of evaluation tools (web and downloadable surveys, peer review mechanisms, ...) to evaluate Learning Objects according to several formal evaluation models, and training material for reviewers and educators. </p>
 </div>
+<% if iamAdmin? %>
+	<%= render 'home/homeadmin' %>
+<% else %>
+	<%= render 'home/homereviewer' %>
+<% end %>
 

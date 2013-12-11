@@ -2,9 +2,10 @@ class UsersController < ApplicationController
 	before_filter :authenticate_user!
 
 	def index
-		@users = User.all.sort_by {|user| user.compareRole }.reverse
+		@users = User.all(:order => 'updated_at DESC').sort_by {|user| user.compareRole }.reverse
 		authorize! :index, @users
 
+    	session[:return_to_afterDestroy] = request.url
 	    respond_to do |format|
 	      format.html { render layout: "application_with_menu" }
 	      format.json { render json: @users }
@@ -24,8 +25,8 @@ class UsersController < ApplicationController
 	def edit
 		@user = User.find(params[:id])
 		authorize! :edit, @user
-		session[:return_to] ||= request.referer
 
+		session[:return_to] ||= request.referer
 	    respond_to do |format|
 	      format.html { render layout: "application_with_menu" }
 	      format.json { render json: @user }
@@ -72,10 +73,10 @@ class UsersController < ApplicationController
 	def destroy
 	    @user = User.find(params[:id])
 	    authorize! :destroy, @user
-	    @user.destroy
 
+	    @user.destroy
 	    respond_to do |format|
-	      format.html { redirect_to users_url }
+	      format.html { redirect_to session.delete(:return_to_afterDestroy) }
 	      format.json { head :no_content }
 	    end
   	end

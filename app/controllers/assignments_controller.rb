@@ -5,9 +5,10 @@ class AssignmentsController < ApplicationController
   # GET /assignments
   # GET /assignments.json
   def index
-    @assignments = Assignment.all
+    @assignments = Assignment.all(:order => 'updated_at DESC')
     authorize! :index, @assignments
 
+    session[:return_to_afterDestroy] = request.url
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -16,7 +17,7 @@ class AssignmentsController < ApplicationController
   end
 
   def rindex
-    @assignments = current_user.assignments
+    @assignments = current_user.assignments(:order => 'updated_at DESC')
     authorize! :rshow, @assignments
 
     @options_select = getOptionsForSelect
@@ -32,6 +33,7 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     authorize! :show, @assignment
 
+    session[:return_to_afterDestroy] = assignments_path
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -53,11 +55,11 @@ class AssignmentsController < ApplicationController
       @pusers = User.find(params[:user_ids].split(","));
     end
 
+    session[:return_to] ||= request.referer
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
     @options_select = getOptionsForSelect
-
-    session[:return_to] ||= request.referer
+    
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
       format.json { render json: @assignment }
@@ -68,6 +70,9 @@ class AssignmentsController < ApplicationController
   def edit
     @assignment = Assignment.find(params[:id])
     authorize! :edit, @assignment
+
+    session[:return_to] ||= request.referer
+    session[:return_to_afterDestroy] = assignments_path
 
     @plos = [@assignment.lo]
     @pusers = [@assignment.user]
@@ -130,7 +135,7 @@ class AssignmentsController < ApplicationController
             }
           end
         end
-        format.html { redirect_to assignments_path, notice: 'Assignment was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), notice: 'Assignment was successfully created.' }
         format.json { render json: "Process completed", status: :created, location: assignments_path }
       else
         format.html {
@@ -162,7 +167,7 @@ class AssignmentsController < ApplicationController
     respond_to do |format|
       if @assignment.update_attributes(params[:assignment])
         format.html { 
-          redirect_to @assignment, 
+          redirect_to session.delete(:return_to),
           notice: 'Assignment was successfully updated.' 
         }
         format.json { head :no_content }
@@ -185,7 +190,7 @@ class AssignmentsController < ApplicationController
     @assignment.destroy
 
     respond_to do |format|
-      format.html { redirect_to assignments_url }
+      format.html { redirect_to session.delete(:return_to_afterDestroy) }
       format.json { head :no_content }
     end
   end

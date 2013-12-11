@@ -5,8 +5,10 @@ class LosController < ApplicationController
   # GET /los
   # GET /los.json
   def index
-    @los = Lo.all
+    @los = Lo.all(:order => 'updated_at DESC')
     authorize! :index, @los
+
+    session[:return_to_afterDestroy] = request.url
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -22,6 +24,8 @@ class LosController < ApplicationController
     end
     @lo = Lo.find(params[:id])
     authorize! :show, @lo
+
+    session[:return_to_afterDestroy] = los_path
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -33,6 +37,7 @@ class LosController < ApplicationController
   def rshow
     @lo = Lo.find(params[:id])
     authorize! :rshow, @lo
+
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -45,6 +50,8 @@ class LosController < ApplicationController
   def new
     @lo = Lo.new
     authorize! :create, @lo
+
+    session[:return_to] ||= request.referer
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -56,6 +63,8 @@ class LosController < ApplicationController
   def edit
     @lo = Lo.find(params[:id])
     authorize! :edit, @lo
+
+    session[:return_to] ||= request.referer
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -68,10 +77,11 @@ class LosController < ApplicationController
   def create
     @lo = Lo.new(params[:lo])
     authorize! :create, @lo
+
     @options_select = getOptionsForSelect
     respond_to do |format|
       if @lo.save
-        format.html { redirect_to @lo, notice: 'Lo was successfully created.' }
+        format.html { redirect_to session.delete(:return_to), notice: 'Lo was successfully created.' }
         format.json { render json: @lo, status: :created, location: @lo }
       else
         format.html { 
@@ -91,7 +101,7 @@ class LosController < ApplicationController
     @options_select = getOptionsForSelect
     respond_to do |format|
       if @lo.update_attributes(params[:lo])
-        format.html { redirect_to @lo, notice: 'Lo was successfully updated.' }
+        format.html { redirect_to session.delete(:return_to), notice: 'Lo was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { 
@@ -111,7 +121,7 @@ class LosController < ApplicationController
     @lo.destroy
 
     respond_to do |format|
-      format.html { redirect_to los_url }
+      format.html { redirect_to session.delete(:return_to_afterDestroy) }
       format.json { head :no_content }
     end
   end

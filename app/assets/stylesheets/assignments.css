@@ -10,3 +10,8 @@
 .new_assignment_form select.loep_input {
 	width: 80% !important;
 }
+
+span.status_in_completed_at {
+	color: #ccc;
+	cursor: default;
+}

@@ -10,3 +10,28 @@
 	color: #999;
 	font-size: 16px;
 }
+
+div.home_block {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.loep_title {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	font-size: 32px;
+	line-height: 1;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-left: 5px;
+}
+
+.home_block table.loep_table {
+	margin-top: 6px !important;
+	margin-bottom: 8px !important;
+}
+
+.home_block > p.link_wrapper {
+	text-align: right;
+	padding-right: 5px;
+}
