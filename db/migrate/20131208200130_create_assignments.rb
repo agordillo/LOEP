@@ -8,7 +8,6 @@ class CreateAssignments < ActiveRecord::Migration
       t.datetime :deadline
       t.datetime :completed_at
       t.text :description
-      t.text :emethods
 
       t.timestamps
     end

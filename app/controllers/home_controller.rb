@@ -20,6 +20,7 @@ class HomeController < ApplicationController
     		authorize! :rshow, @assignments
 		end
 
+		session.delete(:return_to)
 		session[:return_to_afterDestroy] = request.url
 		respond_to do |format|
       		format.html { render layout: "application_with_menu" }

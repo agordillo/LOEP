@@ -1,0 +1,2 @@
+class EvmethodsController < ApplicationController
+end

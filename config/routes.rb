@@ -1,4 +1,7 @@
 LOEP::Application.routes.draw do
+  resources :evmethods
+
+
   resources :assignments
 
 

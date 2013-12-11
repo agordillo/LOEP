@@ -5,6 +5,7 @@ class UsersController < ApplicationController
 		@users = User.all(:order => 'updated_at DESC').sort_by {|user| user.compareRole }.reverse
 		authorize! :index, @users
 
+		session.delete(:return_to)
     	session[:return_to_afterDestroy] = request.url
 	    respond_to do |format|
 	      format.html { render layout: "application_with_menu" }
@@ -16,6 +17,7 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 		authorize! :show, @user
 
+		session.delete(:return_to)
 	    respond_to do |format|
 	      format.html { render layout: "application_with_menu" }
 	      format.json { render json: @user }

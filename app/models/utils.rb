@@ -21,4 +21,8 @@ class Utils < ActiveRecord::Base
     "Unspecified"
   end
 
+  def self.getEvMethods
+    Evmethod.all.map { |evmethod| [evmethod.name,evmethod.id] }
+  end
+
 end

@@ -1,8 +1,9 @@
 class Assignment < ActiveRecord::Base
-  attr_accessible :author_id, :completed_at, :deadline, :description, :emethods, :lo_id, :status, :user_id
+  attr_accessible :author_id, :completed_at, :deadline, :description, :lo_id, :status, :user_id, :evmethods
 
   belongs_to :user
   belongs_to :lo
+  has_and_belongs_to_many :evmethods
 
   validates :author_id,
   :presence => true
@@ -13,21 +14,16 @@ class Assignment < ActiveRecord::Base
   validates :lo_id,
   :presence => true
 
-  validates :emethods,
-  :presence => true
-
   validates :status,
   :presence => true
 
-  validate :emethods_blank
+  validate :evmethods_blank
 
-  def emethods_blank
-    begin
-      if self.emethods.blank? || JSON(self.emethods).empty?
-        raise 'You should choose at least one evaluation method'
-      end
-    rescue
+  def evmethods_blank
+    if self.evmethods.blank?
       errors.add(:emethods, 'You should choose at least one evaluation method')
+    else
+      true
     end
   end
 
@@ -39,14 +35,16 @@ class Assignment < ActiveRecord::Base
   	end
   end
 
-  def getEMethods
-  	unless self.emethods.nil?
-  		begin
-  			JSON(self.emethods)
-  		rescue
-  			[]
-  		end
+  def getEvMethods
+  	unless self.evmethods.empty?
+  		self.evmethods.map { |evmethod| evmethod.id }
   	end
+  end
+
+  def readable_evmethods
+    unless self.evmethods.empty?
+      self.evmethods.map { |evmethod| evmethod.name }.join(",")
+    end
   end
 
   def readable_deadline

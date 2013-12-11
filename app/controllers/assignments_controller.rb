@@ -13,6 +13,7 @@ class AssignmentsController < ApplicationController
     @assignments = Assignment.all(:order => 'updated_at DESC')
     authorize! :index, @assignments
 
+    session.delete(:return_to)
     session[:return_to_afterDestroy] = request.url
     @options_select = getOptionsForSelect
     respond_to do |format|
@@ -25,6 +26,7 @@ class AssignmentsController < ApplicationController
     @assignments = current_user.assignments(:order => 'updated_at DESC')
     authorize! :rshow, @assignments
 
+    session.delete(:return_to)
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html { render layout: "application_with_menu" }
@@ -38,6 +40,7 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     authorize! :show, @assignment
 
+    session.delete(:return_to)
     session[:return_to_afterDestroy] = assignments_path
     @options_select = getOptionsForSelect
     respond_to do |format|
@@ -178,8 +181,8 @@ class AssignmentsController < ApplicationController
         format.json { head :no_content }
       else
         format.html {
-          flash[:alert] = @lo.errors.full_messages
-          redirect_to session.delete(:return_to)
+          flash[:alert] = @assignment.errors.full_messages
+          render action: "edit", :layout => "application_with_menu"
         }
         format.json { render json: @assignment.errors, status: :unprocessable_entity }
       end
@@ -225,14 +228,18 @@ class AssignmentsController < ApplicationController
   def getOptionsForSelect
     optionsForSelect = Hash.new
     optionsForSelect["status"] = [["Pending","Pending"],["Completed","Completed"],["Rejected","Rejected"]]
-    #TODO, fill evMethods based on evMethod model
-    optionsForSelect["eMethods"] = [["LORI v1.5","LORI"]]
+    optionsForSelect["evMethods"] = Utils.getEvMethods
     optionsForSelect
   end
 
   def filterEMethods
-    if params[:assignment] and params[:assignment][:emethods]
-      params[:assignment][:emethods] = params[:assignment][:emethods].reject{|m| m.empty? }.to_json
+    if params[:assignment] and params[:assignment][:evmethods]
+      begin
+        params[:assignment][:evmethods] = params[:assignment][:evmethods].reject{|m| m.empty? }
+        params[:assignment][:evmethods] = params[:assignment][:evmethods].map{|m| Evmethod.find(m) }
+      rescue
+        params[:assignment][:evmethods] = []
+      end
     end
   end
 

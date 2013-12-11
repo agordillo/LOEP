@@ -8,6 +8,7 @@ class LosController < ApplicationController
     @los = Lo.all(:order => 'updated_at DESC')
     authorize! :index, @los
 
+    session.delete(:return_to)
     session[:return_to_afterDestroy] = request.url
     @options_select = getOptionsForSelect
     respond_to do |format|
@@ -27,6 +28,7 @@ class LosController < ApplicationController
     @lo = Lo.find(params[:id])
     authorize! :show, @lo
 
+    session.delete(:return_to)
     session[:return_to_afterDestroy] = los_path
     @options_select = getOptionsForSelect
     respond_to do |format|
