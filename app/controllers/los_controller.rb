@@ -21,7 +21,9 @@ class LosController < ApplicationController
   def show
     unless current_user.isAdmin?
       redirect_to "/rlos/" + params[:id]
+      return
     end
+    
     @lo = Lo.find(params[:id])
     authorize! :show, @lo
 

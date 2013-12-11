@@ -16,6 +16,7 @@ LOEP::Application.routes.draw do
   match '/tags' => 'application#serve_tags'
 
   match '/rlos/:id' => 'los#rshow'
+  match '/rassignments' => 'assignments#rindex'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

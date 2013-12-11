@@ -5,6 +5,11 @@ class AssignmentsController < ApplicationController
   # GET /assignments
   # GET /assignments.json
   def index
+    unless current_user.isAdmin?
+      redirect_to "/rassignments"
+      return
+    end
+
     @assignments = Assignment.all(:order => 'updated_at DESC')
     authorize! :index, @assignments
 

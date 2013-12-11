@@ -28,9 +28,12 @@ class Ability
             can :show, User, :id => user.id
             can :update, User, :id => user.id
             can :rshow, Lo do |lo|
-                lo.users.where(:id => user.id).empty?
+                !lo.users.where(:id => user.id).empty?
             end
             can :rshow, Assignment, :user_id => user.id
+            can :rshow, Array do |arr|
+                arr.all? { |el| can?(:rshow, el) }
+            end
         else
             #Not loggued users
         end

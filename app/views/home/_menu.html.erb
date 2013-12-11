@@ -7,7 +7,7 @@
 					<a href="/home"><h3><span class="glyphicon glyphicon-home"></span>Home</h3></a>
 				</li>
 				<li class="<%='menu_option_selected' if params[:controller] == 'assignments'%>">
-					<a href="/assignments"><h3><span class="glyphicon glyphicon-time"></span>Assignments</h3></a>
+					<a href="<%=loep_asignments_path%>"><h3><span class="glyphicon glyphicon-time"></span>Assignments</h3></a>
 				</li>
 				<li class="<%='menu_option_selected' if params[:controller] == 'documentation'%>">
 					<h3><span class="glyphicon glyphicon-book"></span>Documentation</h3>

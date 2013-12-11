@@ -34,5 +34,13 @@ module AssignmentsHelper
 		end
 		path
 	end
+
+	def loep_asignments_path
+		if current_user.role?("Admin")
+			assignments_path
+		else
+			"/rassignments"
+		end
+	end
 	
 end

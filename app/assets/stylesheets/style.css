@@ -242,6 +242,21 @@ p.form_before_button {
 	font-size: 10px;
 }
 
+.loep_title {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	font-size: 32px;
+	line-height: 1;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-left: 5px;
+}
+
+p.link_wrapper {
+	text-align: right;
+	padding-right: 5px;
+}
+
 
 /* loep table for forms */
 
@@ -274,7 +289,8 @@ table.loep_table {
 	font-size: 13px;
 	text-shadow: 1px 1px 0px #fff;
 	background:#eaebec;
-	margin: 20px;
+	margin-top: 6px;
+	margin-bottom: 8px;
 	margin-left: 0px;
 	border:#ccc 1px solid;
 
