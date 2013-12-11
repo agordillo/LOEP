@@ -4,6 +4,7 @@ class Assignment < ActiveRecord::Base
   belongs_to :user
   belongs_to :lo
   has_and_belongs_to_many :evmethods
+  has_many :evaluations
 
   validates :author_id,
   :presence => true

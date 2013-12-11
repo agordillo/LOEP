@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles
   has_many :assignments
   has_many :los, through: :assignments
+  has_many :evaluations
 
   validates :name,
   :allow_nil => false,

@@ -10,6 +10,7 @@ namespace :db do
   	Lo.delete_all
   	Evmethod.delete_all
   	Assignment.delete_all
+  	Evaluation.delete_all
 
   	#Create Roles
   	role_sadmin = Role.create!  :name  => "SuperAdmin"
@@ -92,6 +93,15 @@ namespace :db do
 	asB.description = "Please, evaluate the following LO using LORI (Learning Object Review Instrument)."
 	asB.evmethods.push(LORI)
 	asB.save(:validate => false)
+
+	#Create evaluations
+	#Reviewer evaluate the Curiosity Flashcard using LORI (Evaluation requested in the assignment)
+	evA = Evaluation.new
+	evA.user_id = user_reviewer.id
+	evA.lo_id = loA.id
+	evA.evmethod_id = LORI.id
+	evA.assignment_id = asA.id #not mandatory
+	evA.save(:validate => false)
 
 	puts "Populate finish"
   end

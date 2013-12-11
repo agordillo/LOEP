@@ -30,6 +30,7 @@ class Lo < ActiveRecord::Base
 
   has_many :assignments
   has_many :users, through: :assignments
+  has_many :evaluations
 
   def getCategories
   	unless self.categories.nil?

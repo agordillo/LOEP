@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131211132819) do
+ActiveRecord::Schema.define(:version => 20131211143248) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "author_id"
@@ -28,6 +28,16 @@ ActiveRecord::Schema.define(:version => 20131211132819) do
   create_table "assignments_evmethods", :id => false, :force => true do |t|
     t.integer "assignment_id"
     t.integer "evmethod_id"
+  end
+
+  create_table "evaluations", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "assignment_id"
+    t.integer  "lo_id"
+    t.integer  "evmethod_id"
+    t.datetime "completed_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "evmethods", :force => true do |t|
