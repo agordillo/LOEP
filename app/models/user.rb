@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :birthday, :gender, :tag_list
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :birthday, :gender, :tag_list, :lan
 
   has_and_belongs_to_many :roles
   has_many :assignments
@@ -20,6 +20,10 @@ class User < ActiveRecord::Base
   validates :birthday, :presence => { :message => "can't be blank" }
   validates :gender, :presence => { :message => "can't be blank" }
   validates :roles, :presence => { :message => "can't be blank" }
+
+  validates :lan,
+  :presence => true,
+  :exclusion => { in: "Unspecified", message: "has to be specified" }
 
 
   # Virtual attribute for authenticating by either username or email

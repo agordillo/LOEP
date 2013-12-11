@@ -11,6 +11,7 @@ class RegistrationsController < Devise::RegistrationsController
     @user.email = params[:user][:email]
     @user.birthday = params[:user][:birthday]
   	@user.gender = params[:user][:gender]
+    @user.lan = params[:user][:lan]
     @user.tag_list = params[:user][:tag_list]
   	@user.password = params[:user][:password]
   	@user.password_confirmation =params[:user][:password_confirmation]

@@ -31,6 +31,9 @@
         <%= f.radio_button :gender, 2 %><span class="gender_label">Female</span>
       </div>
 
+      <p class="form_legend">* Language</p>
+      <%= f.select :lan, options_for_select(Utils.getOptionsForSelectLan(nil),@user.lan || "Unspecified"), {} ,{ :class=>'loep_input' } %>
+
       <p class="form_legend">Areas of interest</p>
       <input name="user[tag_list]" id="tags" value="<%=@user.tag_list.join(",")%>"/>
 

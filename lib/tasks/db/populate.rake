@@ -22,6 +22,7 @@ namespace :db do
 	user_admin.email = "admin@loep.com"
 	user_admin.password = "admin"
 	user_admin.password_confirmation = "admin"
+	user_admin.lan = "es"
 	user_admin.roles.push(role_sadmin)
 	user_admin.roles.push(role_admin)
 	user_admin.save(:validate => false)
@@ -31,6 +32,7 @@ namespace :db do
 	user_reviewer.email = "reviewer@loep.com"
 	user_reviewer.password = "reviewer"
 	user_reviewer.password_confirmation = "reviewer"
+	user_reviewer.lan = "es"
 	user_reviewer.roles.push(role_reviewer)
 	user_reviewer.save(:validate => false)
 
@@ -42,6 +44,7 @@ namespace :db do
 	loA.lotype = "VE slideshow"
 	loA.repository = "ViSH"
 	loA.technology = "HTML"
+	loA.lan = "en"
 	loA.hasQuizzes = true
 	loA.save(:validate => false)
 
@@ -52,6 +55,7 @@ namespace :db do
 	loB.lotype = "VE slideshow"
 	loB.repository = "ViSH"
 	loB.technology = "HTML"
+	loB.lan = "es"
 	loB.hasQuizzes = false
 	loB.hasWebs = true
 	loB.save(:validate => false)

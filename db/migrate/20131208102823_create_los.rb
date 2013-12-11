@@ -9,6 +9,7 @@ class CreateLos < ActiveRecord::Migration
       t.text :callback
       t.string :technology
       t.text :categories
+      t.string :lan
 
       t.boolean :hasText
       t.boolean :hasImages

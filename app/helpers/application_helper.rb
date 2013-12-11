@@ -49,5 +49,4 @@ module ApplicationHelper
 		!user.nil? and user.role?(role)
 	end
 
-
 end

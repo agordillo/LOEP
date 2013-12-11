@@ -22,6 +22,9 @@
     <p class="form_legend">Tags</p>
     <input name="lo[tag_list]" id="tags" value="<%=@lo.tag_list.join(",") unless @lo.nil? %>"/>
 
+    <p class="form_legend">* Language</p>
+    <%= f.select :lan, options_for_select(Utils.getOptionsForSelectLan(controller.action_name),@lo.lan || "Unspecified"), {} ,{ :class=>'loep_input' } %>
+
     <p class="form_legend">* Type</p>
     <%= f.select :lotype, options_for_select(@options_select["lotype"],@lo.lotype || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 

@@ -2,8 +2,10 @@
 
   <h2><%=@user.name%></h2>
   <% if current_user == @user || iamAdmin? %>
-    <a href="<%=edit_user_path(@user)%>">Edit profile</a> |
-    <a href="<%=new_assignment_path_for(nil,@user.id)%>"> Add assignment </a>
+    <a href="<%=edit_user_path(@user)%>">Edit profile</a>
+  <% end %>
+  <% if iamAdmin? %>
+    | <a href="<%=new_assignment_path_for(nil,@user.id)%>"> Add assignment </a>
   <% end %>
   </br>
 
@@ -28,6 +30,9 @@
   <% elsif @user.gender == 2 %>
     <p class="show_value"><%="Female"%></p>
   <% end %>
+
+  <p class="show_legend">Language</p>
+  <p class="show_value"><%=Utils.readable_lan(@user.lan)%></p>
   
   <p class="show_legend">Areas of interest</p>
   <div class="tagsinput">

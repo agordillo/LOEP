@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20131208200130) do
     t.text     "callback"
     t.string   "technology"
     t.text     "categories"
+    t.string   "lan"
     t.boolean  "hasText"
     t.boolean  "hasImages"
     t.boolean  "hasVideos"
@@ -95,6 +96,7 @@ ActiveRecord::Schema.define(:version => 20131208200130) do
     t.string   "name"
     t.datetime "birthday"
     t.integer  "gender"
+    t.string   "lan"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
