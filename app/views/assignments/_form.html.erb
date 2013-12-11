@@ -34,7 +34,7 @@
 
     <% if !@assignment.status.nil? %>
       <p class="form_legend">Status</p>
-      <%= f.select :status, options_for_select(@options_select["status"],@assignment.status || "Pending"), {} ,{ :class=>'loep_input' } %>
+      <%= f.select :status, options_for_select(Utils.getOptionsForSelectAssignmentStatus,@assignment.status || "Pending"), {} ,{ :class=>'loep_input' } %>
     <% end %>
 
     <% if !@assignment.completed_at.nil? %>

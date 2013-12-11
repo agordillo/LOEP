@@ -13,14 +13,14 @@ class HomeController < ApplicationController
 
 	def index
 		if current_user.role?("Admin")
-			@assignments =Assignment.limit(10).all(:order => 'updated_at DESC')
+			@assignments =Assignment.limit(10).all(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForAdmins }.reverse
     		authorize! :index, @assignments
     		@los = Lo.limit(10).all(:order => 'updated_at DESC')
     		authorize! :index, @los
     		@users = User.limit(5).all(:order => 'updated_at DESC')
     		authorize! :index, @users
 		else
-			@assignments = current_user.assignments.limit(10).all(:order => 'updated_at DESC')
+			@assignments = current_user.assignments.limit(10).all(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForReviewers }.reverse
     		authorize! :rshow, @assignments
 		end
 

@@ -25,4 +25,8 @@ class Utils < ActiveRecord::Base
     Evmethod.all.map { |evmethod| [evmethod.name,evmethod.id] }
   end
 
+  def self.getOptionsForSelectAssignmentStatus
+    [["Pending","Pending"],["Completed","Completed"],["Rejected","Rejected"]]
+  end
+
 end

@@ -10,12 +10,13 @@
     <% unless removeEvColumn %>
       <th></th>
     <% end %>
+      <th></th>
   </tr>
   <% aL = @assignments.length %>
   <% @assignments.each_with_index do |assignment,i| %>
     <tr>
        <td>
-        <a href="<%=rlo_path(assignment.lo) unless assignment.lo.nil?%>"><span><%= assignment.lo.name unless assignment.lo.nil? %></span></a>
+        <a href="<%=rlo_path(assignment.lo)%>"><span><%= assignment.lo.name %></span></a>
       </td>
       <td class="tdcenter">
         <%=assignment.readable_evmethods%>
@@ -28,9 +29,18 @@
       </td>
       <% unless removeEvColumn %>
         <td class="tdcenter">
-          <a href="<%=rlo_path(assignment.lo) unless assignment.lo.nil?%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
+          <% if assignment.status == "Pending" %>
+            <a href="<%=rlo_path(assignment.lo)%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
+          <% end %>
         </td>
       <% end %>
+      <td class="tdcenter">
+          <%if assignment.status == "Pending" %>
+            <%= link_to reject_path(assignment), :data => { :confirm => "Are you sure?" }, :method => :reject do %>
+                <span class="glyphicon glyphicon glyphicon-remove"></span> Reject
+            <% end %>
+          <% end %>
+      </td>
     </tr>
     <% if showDescription %>
     <tr>

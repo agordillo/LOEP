@@ -11,7 +11,7 @@
     <% if nAssignments > 0 %>
       </br>
       </br>
-      <h1 class="loep_title loep_title_min">Your Assignment<%="s" if @assignments.length > 1%></h1>
+      <h1 class="loep_title loep_title_min">Your Pending Assignment<%="s" if @assignments.length > 1%></h1>
       <%= render '/assignments/rindex', :removeEvColumn => true, :showDescription => true %>
     <% end %>
     <% if @evmethods.length > 0 %>

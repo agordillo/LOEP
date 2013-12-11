@@ -10,12 +10,11 @@ class AssignmentsController < ApplicationController
       return
     end
 
-    @assignments = Assignment.all(:order => 'updated_at DESC')
+    @assignments = Assignment.all(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForAdmins }.reverse
     authorize! :index, @assignments
 
     session.delete(:return_to)
     session[:return_to_afterDestroy] = request.url
-    @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
       format.json { render json: @assignments }
@@ -23,11 +22,10 @@ class AssignmentsController < ApplicationController
   end
 
   def rindex
-    @assignments = current_user.assignments(:order => 'updated_at DESC')
+    @assignments = current_user.assignments(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForReviewers }.reverse
     authorize! :rshow, @assignments
 
     session.delete(:return_to)
-    @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
       format.json { render json: @assignments }
@@ -42,7 +40,6 @@ class AssignmentsController < ApplicationController
 
     session.delete(:return_to)
     session[:return_to_afterDestroy] = assignments_path
-    @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
       format.json { render json: @assignment }
@@ -66,7 +63,6 @@ class AssignmentsController < ApplicationController
     session[:return_to] ||= request.referer
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
-    @options_select = getOptionsForSelect
     
     respond_to do |format|
       format.html
@@ -86,7 +82,6 @@ class AssignmentsController < ApplicationController
     @pusers = [@assignment.user]
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
-    @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
       format.json { render json: @assignment }
@@ -170,7 +165,6 @@ class AssignmentsController < ApplicationController
 
     @los = Lo.all
     @users = User.reviewers
-    @options_select = getOptionsForSelect
 
     respond_to do |format|
       if @assignment.update_attributes(params[:assignment])
@@ -203,6 +197,19 @@ class AssignmentsController < ApplicationController
     end
   end
 
+  def reject
+    @assignment = Assignment.find(params[:id])
+    authorize! :reject, @assignment
+
+    @assignment.status = "Rejected"
+    @assignment.save!
+
+    respond_to do |format|
+      format.html { redirect_to session.delete(:return_to_afterDestroy) }
+      format.json { head :no_content }
+    end
+  end
+
   private
 
   def renderError(msg,action)
@@ -222,14 +229,6 @@ class AssignmentsController < ApplicationController
 
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
-    @options_select = getOptionsForSelect
-  end
-
-  def getOptionsForSelect
-    optionsForSelect = Hash.new
-    optionsForSelect["status"] = [["Pending","Pending"],["Completed","Completed"],["Rejected","Rejected"]]
-    optionsForSelect["evMethods"] = Utils.getEvMethods
-    optionsForSelect
   end
 
   def filterEMethods

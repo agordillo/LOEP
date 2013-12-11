@@ -19,6 +19,7 @@ LOEP::Application.routes.draw do
 
   match '/rlos/:id' => 'los#rshow'
   match '/rassignments' => 'assignments#rindex'
+   match '/assignments/:id/reject' => 'assignments#reject'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

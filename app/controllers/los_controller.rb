@@ -42,7 +42,7 @@ class LosController < ApplicationController
     @lo = Lo.find(params[:id])
     authorize! :rshow, @lo
 
-    @assignments = @lo.assignments.where(:user_id => current_user.id)
+    @assignments = @lo.assignments.where(:user_id => current_user.id, :status => "Pending")
     authorize! :rshow, @assignments
     
     evmethods = []

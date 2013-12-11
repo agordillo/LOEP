@@ -12,6 +12,7 @@ class Ability
             end
             can [:create, :update, :destroy], Lo
             can [:create, :update, :destroy], Assignment
+            can :reject, :all
             can :read, :all
             can :rshow, :all
         elsif user.role? :Admin
@@ -21,6 +22,7 @@ class Ability
             end
             can [:create, :update, :destroy], Lo
             can [:create, :update, :destroy], Assignment
+            can :reject, :all
             can :read, :all
             can :rshow, :all
         elsif !user.role.nil?
@@ -37,6 +39,7 @@ class Ability
             can :rshow, ActiveRecord::Relation do |arr|
                 arr.all? { |el| can?(:rshow, el) }
             end
+            can :reject, Assignment, :user_id => user.id
         else
             #Not loggued users
         end

@@ -73,6 +73,32 @@ class Assignment < ActiveRecord::Base
       end
   end
 
+  def compareAssignmentForReviewers
+    case self.status
+      when "Pending"
+        3
+      when "Rejected"
+        2
+      when "Completed"
+        1
+      else
+        0
+      end
+  end
+
+  def compareAssignmentForAdmins
+    case self.status
+      when "Pending"
+        1
+      when "Rejected"
+        2
+      when "Completed"
+        1
+      else
+        0
+      end
+  end
+
   private
 
   def readable_date(date)
