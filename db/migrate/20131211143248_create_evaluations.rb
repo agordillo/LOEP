@@ -6,6 +6,7 @@ class CreateEvaluations < ActiveRecord::Migration
       t.integer :lo_id
       t.integer :evmethod_id
       t.datetime :completed_at
+      t.string :type
 
       t.timestamps
     end

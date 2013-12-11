@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20131211143248) do
     t.integer  "lo_id"
     t.integer  "evmethod_id"
     t.datetime "completed_at"
+    t.string   "type"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end

@@ -96,7 +96,7 @@ namespace :db do
 
 	#Create evaluations
 	#Reviewer evaluate the Curiosity Flashcard using LORI (Evaluation requested in the assignment)
-	evA = Evaluation.new
+	evA = LoriEvaluation.new #Evaluation.new
 	evA.user_id = user_reviewer.id
 	evA.lo_id = loA.id
 	evA.evmethod_id = LORI.id
