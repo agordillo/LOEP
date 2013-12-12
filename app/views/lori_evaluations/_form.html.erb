@@ -26,6 +26,7 @@
 
 <script type="text/javascript">
   jQuery(document).ready(function($){
+
     if ($("#completed_at_datepicker").length > 0){
       $('#completed_at_datepicker').datetimepicker({
         yearRange: "-1:+10",
@@ -41,5 +42,98 @@
         stepMinute: 15
       });
     }
+
+
+    var validateForm = true;
+
+    $('form').submit(function(event){
+      if(validateForm==true){
+        event.preventDefault();
+        _beforeSubmit($(this), function(error){
+          if(typeof error != "undefined"){
+            //onError or Cancel
+            return false;
+          } else {
+            //onSuccess or Ok
+            validateForm = false;
+            $('form').trigger("submit");
+            return true;
+          }
+        });
+      }
+    });
+
+    var _beforeSubmit = function(form, callback) {
+      if(typeof callback != "function"){
+          return;
+      }
+
+      var fields = _getFieldsOfForm(form);
+      var unfilledFields = _getUnfilledFields(form,fields);
+      var numberOfFilledFields = fields.length - unfilledFields.length;
+
+      if(numberOfFilledFields == 0){
+        var error = {};
+        error.msg = "The evaluation survey is blank. It cannot be sent.";
+        _showLOEPDialog(error.msg,false);
+        callback(error);
+      } else if (unfilledFields.length > 0){
+        //Warning
+
+        var warningDialogMsg;
+        if(unfilledFields.length == 1){
+          warningDialogMsg = "There is one question that has not been answered.";
+        } else {
+          warningDialogMsg = "There are " + unfilledFields.length + " questions that have not been answered.";
+        }
+        warningDialogMsg += " Are you sure you want to submit the evaluation survey?"
+
+        _showLOEPDialog(warningDialogMsg, true, function(result){
+          if(result==true){
+            //Ok
+            callback();
+          } else {
+            //Cancel
+            callback({"msg":"Incompleted survey"});
+          }
+        })
+      } else {
+          callback();
+      }
+    }
+
+    var _getFieldsOfForm = function(form){
+      //Ignore submit and hidden fields
+      var inputs = $(form).find(':input[type!="submit"][type!="hidden"]');
+      var fields = [];
+
+      $(inputs).each(function(index,input){
+        var fieldName = $(input).attr("name");
+        if(fields.indexOf(fieldName) == -1){
+          fields.push(fieldName);
+        }
+      });
+
+      return fields;
+    };
+
+    var _getUnfilledFields = function(form,fields){
+      var unfilledFields = [];
+      $(fields).each(function(index,field){
+        var fieldValue;
+        var input = $(form).find('input[name="'+field+'"]');
+        if($(input).is(":radio")){
+          fieldValue = $(form).find('input[name="'+field+'"]:checked', form).val();
+        } else {
+          //hidden, text
+          fieldValue = $(input).val();
+        }
+        if((typeof fieldValue != "string")||(fieldValue.trim()=="")){
+          unfilledFields.push(field);
+        }
+      });
+      return unfilledFields;
+    }
+
   });
 </script>

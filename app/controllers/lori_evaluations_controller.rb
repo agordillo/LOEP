@@ -28,7 +28,7 @@ class LoriEvaluationsController < ApplicationController
     @evaluation.completed_at = Time.now
     respond_to do |format|
       if @evaluation.save
-        format.html { redirect_to home_path, notice: 'Evaluation was successfully submitted.' }
+        format.html { redirect_to home_path, notice: 'The evaluation was successfully submitted.' }
       else
         format.html { render action: "new" }
       end

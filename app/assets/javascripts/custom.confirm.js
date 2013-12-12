@@ -12,49 +12,62 @@ $.rails.confirmed = function(link) {
 };
 
 $.rails.showConfirmDialog = function(link){
-  var html, message;
-  message = link.attr('data-confirm');
-  html = '<div id="dialog" title="Basic dialog"><p>'+message+'</p></div>';
-  $(html).dialog({
-      resizable: false,
-      // Not specified height = height auto
-      // height: 300,
-      modal: true,
-      dialogClass: 'noTitleStuff',
-      open: function() {
-        //Fix bug introduced on JQuery UI 1.10.3
-        $(this).closest(".ui-dialog")
-        .find(".ui-dialog-titlebar-close")
-        .removeClass("ui-dialog-titlebar-close")
-        .addClass("ui-icon-closethick-wrapper")
-        .html("<span class='ui-button-icon-primary ui-icon ui-icon-closethick'></span>");
-      },
-      buttons: {
-        "Ok": function() {
-          $( this ).dialog( "close" );
-          return $.rails.confirmed(link);
-        },
-        Cancel: function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
+  _showLOEPDialog(link.attr('data-confirm'), true, function(result){
+    if(result==true){
+      //Ok
+      return $.rails.confirmed(link);
+    } else {
+      //Cancel
+    }
+  })
 };
+
+var _showLOEPDialog = function(msg, showCancelButton, callback){
+  var html = '<div id="dialog" title="Basic dialog"><p>'+msg+'</p></div>';
+
+  var dialogButtons = {
+    "Ok": function() {
+      $(this).dialog("close");
+      if(typeof callback == "function"){
+        callback(true);
+      }
+    }
+  };
+
+  if(showCancelButton===true){
+    dialogButtons["Cancel"] = function(){
+      $(this).dialog("close");
+      if(typeof callback == "function"){
+        callback(false);
+      }
+    }
+  }
+
+  $(html).dialog({
+    resizable: false,
+    // Not specified height = height auto
+    // height: 300,
+    modal: true,
+    dialogClass: 'noTitleStuff',
+    open: function() {
+      //Fix bug introduced on JQuery UI 1.10.3
+      $(this).closest(".ui-dialog")
+      .find(".ui-dialog-titlebar-close")
+      .removeClass("ui-dialog-titlebar-close")
+      .addClass("ui-icon-closethick-wrapper")
+      .html("<span class='ui-button-icon-primary ui-icon ui-icon-closethick'></span>");
+    },
+    buttons: dialogButtons
+  });
+}
 
 $(document).on('click', '[promptOkAlertDialog="true"]', function(event){
   var link = $(event.target);
-  var message = $(link).attr('data-confirm');
-  html = '<div id="dialog" title="Basic dialog"><p>'+message+'</p></div>';
-   $(html).dialog({
-      resizable: false,
-      modal: true,
-      dialogClass: 'noTitleStuff',
-      buttons: {
-        "Ok": function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
+  _showLOEPDialog(link.attr('data-confirm'), false);
 });
+
+
+
+
       
 
