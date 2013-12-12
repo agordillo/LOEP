@@ -1,0 +1,41 @@
+.documentation_container {
+	width: 100%
+}
+
+.documentation_container h1 {
+	font-size: 25px;
+}
+
+.documentation_container h2 {
+	font-size: 23px;
+}
+
+.documentation_container p.grey {
+	color: #666;
+	font-size: 16px;
+}
+
+.documentation_container ul {
+	list-style-type: none;
+	padding: 5px 5px 5px 5px;
+}
+
+.documentation_container ul li {
+	margin-bottom: 10px;
+}
+
+.doc_entry {
+	margin-right: 10px;
+	font-size: 16px;
+	color: #333;
+	font-weight: bold;
+}
+
+img.download_file {
+	height: 40px;
+}
+
+table.loep_table td.download_file {
+	max-width: 45px;
+	text-align: center;
+}

@@ -436,6 +436,10 @@ table.loep_table td.tdseparator {
 	padding: 2px !important;
 }
 
+table.loep_table tr.trpointer {
+	cursor: pointer;
+}
+
 
 
 /* Show views */

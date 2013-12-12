@@ -12,10 +12,9 @@
 				<li class="<%='menu_option_selected' if params[:controller] == 'documentation'%>">
 					<h3><span class="glyphicon glyphicon-book"></span>Documentation</h3>
 					<ul>
-						<li><a href="#">LORI</a></li>
-						<li><a href="#">LOEM</a></li>
-						<li><a href="#">LOES-T</a></li>
-						<li><a href="#">LOES-S</a></li>
+						<% Evmethod.all.each do |evmethod| %>
+							<li><a href="<%=evmethod.documentation_path%>"><%=evmethod.name%></a></li>
+						<% end %>
 					</ul>
 				</li>
 				<% if iamAdmin? %>

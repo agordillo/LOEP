@@ -1,0 +1,88 @@
+<div class="documentation_container">
+	<!-- <h1> <=@evmethod.name%> </h1> -->
+	<h1>Learning Object Review Instrument (LORI) v1.5</h1>
+	<p class="grey"> The Learning Object Review Instrument (LORI) is used to evaluate the quality of e-learning resources. LORI is an online form consisting of rubrics, rating scales and comment fields. LORI 1.5 is the last version of the instrument.</p>
+
+	<br/>
+
+  <h2>Materials</h2>
+
+  <table cellspacing='0' class="loep_table">
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+    <% if current_user.lan == "es" %>
+      <tr class="trpointer">
+        <td class="download_file">
+          <a href="/LORI1.5_Manual_es.pdf">
+            <img src='/assets/filetype_pdf.png' class="download_file"/>
+          </a>
+        </td>
+        <td>
+          <a href="/LORI1.5_Manual_es.pdf">
+            <span class="doc_entry">LORI &nbsp; Manual de Usuario (Español)</span><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/>
+          </a>
+        </td>
+      </tr>
+      <tr class="trpointer">
+        <td class="download_file">
+          <a href="/LORI1.5_ScoringSheet_es.pdf">
+            <img src='/assets/filetype_pdf.png' class="download_file"/>
+          </a>
+        </td>
+        <td>
+          <a href="/LORI1.5_ScoringSheet_es.pdf">
+            <span class="doc_entry">LORI &nbsp; Hoja de Puntuación (Español)</span><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/>
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td class="tdseparator" colspan="100%"></td>
+      </tr>
+    <% end %>
+    <tr class="trpointer">
+        <td class="download_file">
+          <a href="/LORI1.5_Manual_en.pdf"><img src='/assets/filetype_pdf.png' class="download_file"/></a>
+        </td>
+        <td>
+          <a href="/LORI1.5_Manual_en.pdf">
+            <span class="doc_entry">LORI &nbsp; User Manual (English)</span><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-gb"/>
+          </a>
+        </td>
+    </tr>
+    <tr class="trpointer">
+      <td class="download_file">
+        <a href="/LORI1.5_ScoringSheet_en.pdf">
+          <img src='/assets/filetype_pdf.png' class="download_file"/>
+        </a>
+      </td>
+      <td>
+        <a href="/LORI1.5_ScoringSheet_en.pdf">
+          <span class="doc_entry">LORI &nbsp; Scoring Sheet (English)</span><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-gb"/>
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<br/>
+<%= link_to 'Back', :back %>
+
+
+<iframe id="hiddenIframeForDownloads" style="display:none"></iframe>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    //Download file when click on a tr.trpointer
+     $(document).on('click', 'tr.trpointer', function(event){
+        if (event.target.tagName === "TD") {
+          var link = $(event.target).find("a")[0];
+          $("#hiddenIframeForDownloads").attr("src",$(link).attr("href"))
+        }
+    });
+  });
+</script>
+
+
+
