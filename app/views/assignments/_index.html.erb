@@ -12,10 +12,10 @@
   <% @assignments.each do |assignment| %>
     <tr>
        <td>
-        <a href="<%=rlo_path(assignment.lo) unless assignment.lo.nil?%>"><span><%= assignment.lo.name unless assignment.lo.nil? %></span></a>
+        <a href="<%=rlo_path(assignment.lo) + "?as_user_id=" + assignment.user.id.to_s %>"><span><%= assignment.lo.name %></span></a>
       </td>
       <td>
-        <a href="<%=user_path(assignment.user) unless assignment.user.nil?%>"><span><%= assignment.user.name unless assignment.user.nil? %></span></a>
+        <a href="<%=user_path(assignment.user)%>"><span><%= assignment.user.name %></span></a>
       </td>
       <td class="tdcenter">
         <%=assignment.readable_evmethods%>

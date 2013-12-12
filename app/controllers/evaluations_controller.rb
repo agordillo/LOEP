@@ -41,10 +41,11 @@ class EvaluationsController < ApplicationController
   # POST /evaluations.json
   def create
     @evaluation = Evaluation.new(params[:evaluation])
+    @evaluation.completed_at = Time.now
 
     respond_to do |format|
       if @evaluation.save
-        format.html { redirect_to @evaluation, notice: 'Evaluation was successfully created.' }
+        format.html { redirect_to home_path, notice: 'Evaluation was successfully submitted.' }
         format.json { render json: @evaluation, status: :created, location: @evaluation }
       else
         format.html { render action: "new" }

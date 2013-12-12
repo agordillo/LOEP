@@ -1,1 +1,73 @@
-<p> LORI Survey </p>
+<p class="survey_title"> LORI 1.5 Evaluation Survey </p>
+
+<% @LORIitems.each_with_index do |item,i| %>
+  <%nItem = i+1%>
+  <div class="survey_block">
+    <p class="survey_question_title"><%=nItem%>. <%=item[0]%></p>
+    <p class="survey_question_subtitle"><%=item[1]%></p>
+    <div class="rating_wrapper">
+      <div class="stars_wrapper">
+        <span  class="hover-star_legend_left">Low</span>
+        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="1" title="1"/>
+        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="2" title="2"/>
+        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="3" title="3"/>
+        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="4" title="4"/>
+        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="5" title="5"/>
+        <span  class="hover-star_legend_right">High</span>
+      </div>
+      <div class="hover-start_text"></div>
+      <div class="remove_hover-start-value"><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.hover-star').rating({
+        focus: function(value, link){
+            var tip = $(this).parent().parent().find("div.hover-start_text");
+            var title = $(link).attr("ititle");
+            if(typeof title == "undefined"){
+              title = $(link).attr("title");
+              $(link).removeAttr("title");
+              $(link).attr("ititle",title);
+            }
+            var text = "<div class='numberCircle'>"+title+"</div>";
+            tip.html(text);
+        },
+        blur: function(value, link){
+            var tip = $(this).parent().parent().find("div.hover-start_text");
+            var selectedValue = $(tip).attr("selectedValue");
+            if(selectedValue){
+              var text = "<div class='numberCircle'>"+selectedValue+"</div>";
+            }
+            $(tip).html(text || '');
+        },
+        callback: function(value, link){
+          var tip = $(this).parent().parent().find("div.hover-start_text");
+          var remove = $(tip).parent().find("div.remove_hover-start-value");
+          $(tip).attr("selectedValue",value);
+          $(remove).fadeIn().css("display","inline-block");
+        }
+    });
+
+    $(document).on('click', 'div.remove_hover-start-value', function(event){
+        var removeDiv = event.target;
+        if(!$(removeDiv).hasClass("remove_hover-start-value")){
+          removeDiv = $(event.target).parent();
+        }
+        var tip = $(removeDiv).parent().find("div.hover-start_text");
+        $(tip).removeAttr("selectedValue");
+
+        var ratingCancelButton = $(removeDiv).parent().find("div.rating-cancel > a");
+        $(ratingCancelButton).trigger("click")
+
+        $(tip).fadeOut(function(){
+          $(tip).html("");
+          $(tip).css("display","inline-block");
+        });
+        $(removeDiv).fadeOut();
+    });
+
+  });
+</script>

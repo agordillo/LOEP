@@ -39,15 +39,25 @@ class LosController < ApplicationController
 
   #Reviewer show
   def rshow
+    user = view_as_user
+
     @lo = Lo.find(params[:id])
     authorize! :rshow, @lo
 
-    @assignments = @lo.assignments.where(:user_id => current_user.id, :status => "Pending")
+    unless user.role?("Admin")
+      @assignments = @lo.assignments.where(:user_id => user.id, :status => "Pending")
+    else
+      @assignments = @lo.assignments
+    end
     authorize! :rshow, @assignments
     
-    evmethods = []
-    @assignments.map { |as| evmethods = evmethods + as.evmethods }
-    @evmethods = evmethods.uniq
+    unless user.role?("Admin")
+      evmethods = []
+      @assignments.map { |as| evmethods = evmethods + as.evmethods }
+      @evmethods = evmethods.uniq
+    else
+      @evmethods = Evmethod.all
+    end
 
     @options_select = getOptionsForSelect
     respond_to do |format|
@@ -160,6 +170,14 @@ class LosController < ApplicationController
   def filterCategories
     if params[:lo] and params[:lo][:categories]
       params[:lo][:categories] = params[:lo][:categories].reject{|c| c.empty? }.to_json
+    end
+  end
+
+  def view_as_user
+    if current_user.role?("Admin") and params[:as_user_id]
+      @represented = User.find(params[:as_user_id])
+    else
+      current_user
     end
   end
 

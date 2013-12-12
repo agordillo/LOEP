@@ -11,6 +11,9 @@ html, body {
 	margin:0;
 	padding:0;
 	height:100%
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	color: black;
 }
 
 body > iframe {
@@ -20,7 +23,8 @@ body > iframe {
 #wrapper{
 	width: 100%;
 	min-height:100%;
-	position: relative;
+	position: absolute;
+	overflow: hidden;
 }
 
 
@@ -129,6 +133,11 @@ li.userbox img {
   background-color: #eee;
   text-align: center;
   font-size: 12px;
+}
+
+#footer p {
+	margin: 0px;
+	padding: 0px;
 }
 
 
