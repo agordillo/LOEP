@@ -18,6 +18,8 @@ class Evaluation < ActiveRecord::Base
   validates :evmethod_id,
   :presence => true
 
+  after_save :update_assignments
+
 
   def readable_completed_at
     readable_date(self.completed_at)
@@ -34,6 +36,36 @@ class Evaluation < ActiveRecord::Base
     else
       ""
     end
+  end
+
+
+  def update_assignments
+    # Look assignments that can be considered completed after this evaluation
+    # Pending assignments of the user, with the same Lo and the same evaluation method
+    candidate_assignments = self.user.assignments.where(:status => "Pending", :lo_id=>self.lo.id).reject{ |as| !as.evmethods.include? Evmethod.find(self.evmethod.id) }
+    candidate_assignments.each do |as|
+      #Add the evaluation to the assignment, if its not included
+      if !as.evaluations.include? self
+        as.evaluations.push(self)
+      end
+      check_assignment_status(as)
+    end
+  end
+
+  def check_assignment_status(assignment)
+      assignment.evmethods.each do |evmethod|
+        if !check_evmethod(assignment,evmethod)
+          return
+        end
+      end
+      #All evmethods completed
+      assignment.status = "Completed"
+      assignment.save
+  end
+
+  #Determine if this assignment has been completed with the following evmethod
+  def check_evmethod(assignment,evmethod)
+    !assignment.evaluations.where(:evmethod_id => evmethod.id).blank?
   end
   
 end
