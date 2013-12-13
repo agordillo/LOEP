@@ -29,4 +29,45 @@ class Utils < ActiveRecord::Base
     [["Pending","Pending"],["Completed","Completed"],["Rejected","Rejected"]]
   end
 
+
+  #Session redirects
+
+  def self.update_return_to(session,request)
+    session[:return_to] ||= request.referer
+  end
+
+  def self.update_sessions_paths(session, afterDestroy, afterDestroyDependence)
+    session.delete(:return_to)
+    if !afterDestroy.nil?
+      session[:return_to_afterDestroy] = afterDestroy
+    else
+      session.delete(:return_to_afterDestroy)
+    end
+    if !afterDestroyDependence.nil?
+      session[:return_to_afterDestroyDependence] = afterDestroyDependence
+    else
+      session.delete(:return_to_afterDestroyDependence)
+    end
+  end
+
+  def self.return_after_create_or_update(session)
+    if session[:return_to]
+      session.delete(:return_to)
+    else
+      Rails.application.routes.url_helpers.home_path
+    end
+  end
+
+  def self.return_after_destroy_path(session)
+    if session[:return_to_afterDestroyDependence]
+      session.delete(:return_to_afterDestroy)
+      return session.delete(:return_to_afterDestroyDependence)
+    elsif session[:return_to_afterDestroy]
+      session.delete(:return_to_afterDestroyDependence)
+      return session.delete(:return_to_afterDestroy)
+    else
+      Rails.application.routes.url_helpers.home_path
+    end
+  end
+
 end

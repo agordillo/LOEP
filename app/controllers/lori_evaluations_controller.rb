@@ -1,5 +1,6 @@
 class LoriEvaluationsController < ApplicationController
-
+  before_filter :authenticate_user!
+  
   def new
     @lo = Lo.find(params[:lo_id])
     authorize! :rshow, @lo
@@ -16,6 +17,15 @@ class LoriEvaluationsController < ApplicationController
     authorize! :rshow, @assignment
 
     @evaluation = LoriEvaluation.new
+    authorize! :new, @evaluation
+
+    Utils.update_return_to(session,request)
+
+    #Reviewers go to Home after create new evaluation
+    if !current_user.role?("Admin")
+      session[:return_to] = Rails.application.routes.url_helpers.home_path
+    end
+
     @LORIitems = getLoriItems
     respond_to do |format|
       format.html
@@ -26,14 +36,60 @@ class LoriEvaluationsController < ApplicationController
   def create
     @evaluation = LoriEvaluation.new(params[:lori_evaluation])
     @evaluation.completed_at = Time.now
+    authorize! :create, @evaluation
+
     respond_to do |format|
       if @evaluation.save
-        format.html { redirect_to home_path, notice: 'The evaluation was successfully submitted.' }
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully submitted.' }
       else
-        format.html { render action: "new" }
+        format.html { renderError("An error occurred and the evaluation could not be created. Check all the fields and try again.","new") }
       end
     end
   end
+
+  def show
+    @evaluation = Evaluation.find(params[:id])
+    authorize! :show, @evaluation
+
+    buildViewParamsBeforeRender
+  end
+
+  def edit
+    @evaluation = Evaluation.find(params[:id])
+    authorize! :edit, @evaluation
+
+    Utils.update_sessions_paths(session, evaluations_path, nil)
+    Utils.update_return_to(session,request)
+    buildViewParamsBeforeRender
+  end
+
+  def update
+    @evaluation = Evaluation.find(params[:id])
+    authorize! :update, @evaluation
+
+    respond_to do |format|
+      if @evaluation.update_attributes(params[:lori_evaluation])
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully updated.' }
+      else
+        format.html { renderError("Evaluation cannot be updated. Wrong params.","new") }
+      end
+    end
+  end
+
+  def destroy
+    @evaluation = Evaluation.find(params[:id])
+    authorize! :destroy, @evaluation
+
+    @evaluation.destroy
+
+    respond_to do |format|
+      format.html { redirect_to Utils.return_after_destroy_path(session) }
+      format.json { head :no_content }
+    end
+  end
+
+
+  private
 
   def getLoriItems
     [
@@ -48,5 +104,21 @@ class LoriEvaluationsController < ApplicationController
       ["Standards Compliance","Adherence to international standards and specifications"]
     ]
   end
+
+  private
+
+  def renderError(msg,action)
+    buildViewParamsBeforeRender
+    flash[:alert] = msg
+    render action: action
+  end
+
+  def buildViewParamsBeforeRender
+    @lo = @evaluation.lo
+    authorize! :rshow, @lo
+    @evmethod = @evaluation.evmethod
+    @LORIitems = getLoriItems
+  end
+
 
 end

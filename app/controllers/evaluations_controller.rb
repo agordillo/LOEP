@@ -1,11 +1,30 @@
 class EvaluationsController < ApplicationController
+  before_filter :authenticate_user!
+  
   # GET /evaluations
   # GET /evaluations.json
   def index
+    unless current_user.isAdmin?
+      redirect_to "/revaluations"
+      return
+    end
+
     @evaluations = Evaluation.all
+    authorize! :show, @evaluations
 
     respond_to do |format|
       format.html # index.html.erb
+      format.json { render json: @evaluations }
+    end
+  end
+
+  def rindex
+    @evaluations = current_user.evaluations(:order => 'updated_at DESC')
+    authorize! :rshow, @evaluations
+
+    Utils.update_sessions_paths(session, nil, nil)
+    respond_to do |format|
+      format.html 
       format.json { render json: @evaluations }
     end
   end
@@ -14,6 +33,7 @@ class EvaluationsController < ApplicationController
   # GET /evaluations/1.json
   def show
     @evaluation = Evaluation.find(params[:id])
+    authorize! :show, @evaluation
 
     respond_to do |format|
       format.html # show.html.erb
@@ -25,6 +45,7 @@ class EvaluationsController < ApplicationController
   # GET /evaluations/new.json
   def new
     @evaluation = Evaluation.new
+    authorize! :create, @evaluation
 
     respond_to do |format|
       format.html # new.html.erb
@@ -35,6 +56,7 @@ class EvaluationsController < ApplicationController
   # GET /evaluations/1/edit
   def edit
     @evaluation = Evaluation.find(params[:id])
+    authorize! :edit, @evaluation
   end
 
   # POST /evaluations
@@ -42,6 +64,7 @@ class EvaluationsController < ApplicationController
   def create
     @evaluation = Evaluation.new(params[:evaluation])
     @evaluation.completed_at = Time.now
+    authorize! :create, @evaluation
 
     respond_to do |format|
       if @evaluation.save
@@ -58,6 +81,7 @@ class EvaluationsController < ApplicationController
   # PUT /evaluations/1.json
   def update
     @evaluation = Evaluation.find(params[:id])
+    authorize! :update, @evaluation
 
     respond_to do |format|
       if @evaluation.update_attributes(params[:evaluation])
@@ -74,8 +98,9 @@ class EvaluationsController < ApplicationController
   # DELETE /evaluations/1.json
   def destroy
     @evaluation = Evaluation.find(params[:id])
-    @evaluation.destroy
+    authorize! :destroy, @evaluation
 
+    @evaluation.destroy
     respond_to do |format|
       format.html { redirect_to evaluations_url }
       format.json { head :no_content }

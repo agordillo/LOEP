@@ -28,9 +28,9 @@ class Lo < ActiveRecord::Base
 
   acts_as_taggable
 
-  has_many :assignments
+  has_many :assignments, :dependent => :destroy
   has_many :users, through: :assignments
-  has_many :evaluations
+  has_many :evaluations, :dependent => :destroy
 
   def getCategories
   	unless self.categories.nil?

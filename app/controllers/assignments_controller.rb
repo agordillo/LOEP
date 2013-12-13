@@ -13,8 +13,7 @@ class AssignmentsController < ApplicationController
     @assignments = Assignment.all(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForAdmins }.reverse
     authorize! :index, @assignments
 
-    session.delete(:return_to)
-    session[:return_to_afterDestroy] = request.url
+    Utils.update_sessions_paths(session, request.url, nil)
     respond_to do |format|
       format.html
       format.json { render json: @assignments }
@@ -25,7 +24,7 @@ class AssignmentsController < ApplicationController
     @assignments = current_user.assignments(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForReviewers }.reverse
     authorize! :rshow, @assignments
 
-    session.delete(:return_to)
+    Utils.update_sessions_paths(session, nil, nil)
     respond_to do |format|
       format.html
       format.json { render json: @assignments }
@@ -38,8 +37,7 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     authorize! :show, @assignment
 
-    session.delete(:return_to)
-    session[:return_to_afterDestroy] = assignments_path
+    Utils.update_sessions_paths(session, assignments_path, nil)
     respond_to do |format|
       format.html
       format.json { render json: @assignment }
@@ -60,7 +58,7 @@ class AssignmentsController < ApplicationController
       @pusers = User.find(params[:user_ids].split(","));
     end
 
-    session[:return_to] ||= request.referer
+    Utils.update_return_to(session,request)
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
     
@@ -75,8 +73,8 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     authorize! :edit, @assignment
 
-    session[:return_to] ||= request.referer
-    session[:return_to_afterDestroy] = assignments_path
+    Utils.update_sessions_paths(session, assignments_path, nil)
+    Utils.update_return_to(session,request)
 
     @plos = [@assignment.lo]
     @pusers = [@assignment.user]
@@ -138,7 +136,7 @@ class AssignmentsController < ApplicationController
             }
           end
         end
-        format.html { redirect_to session.delete(:return_to), notice: 'Assignment was successfully created.' }
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Assignment was successfully created.' }
         format.json { render json: "Process completed", status: :created, location: assignments_path }
       else
         format.html {
@@ -169,7 +167,7 @@ class AssignmentsController < ApplicationController
     respond_to do |format|
       if @assignment.update_attributes(params[:assignment])
         format.html { 
-          redirect_to session.delete(:return_to),
+          redirect_to Utils.return_after_create_or_update(session),
           notice: 'Assignment was successfully updated.' 
         }
         format.json { head :no_content }
@@ -192,7 +190,7 @@ class AssignmentsController < ApplicationController
     @assignment.destroy
 
     respond_to do |format|
-      format.html { redirect_to session.delete(:return_to_afterDestroy) }
+      format.html { redirect_to Utils.return_after_destroy_path(session) }
       format.json { head :no_content }
     end
   end
@@ -205,7 +203,7 @@ class AssignmentsController < ApplicationController
     @assignment.save!
 
     respond_to do |format|
-      format.html { redirect_to session.delete(:return_to_afterDestroy) }
+      format.html { redirect_to Utils.return_after_destroy_path(session) }
       format.json { head :no_content }
     end
   end

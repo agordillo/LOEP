@@ -1,3 +1,5 @@
+<% readonly ||= false %>
+
 <div class="loep_form_wrapper">
   <p class="form_before_button">&nbsp;</p>
 
@@ -10,16 +12,16 @@
     <input type="hidden" name="lori_evaluation[lo_id]" id="lori_evaluation_lo_id" value="<%=@lo.id%>">
     <input type="hidden" name="lori_evaluation[evmethod_id]" id="lori_evaluation_evmethod_id" value="<%=@evmethod.id%>">
 
-    <%= render 'lori_survey' %>
+    <%= render 'lori_survey', :f => f , :readonly => readonly %>
 
     <% if !@evaluation.completed_at.nil? %>
       <p class="form_legend">Completion Date</p>
-      <%=text_field_tag "lori_evaluation[completed_at]",@evaluation.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker" %>
+      <%=text_field_tag "lori_evaluation[completed_at]",@evaluation.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker", :readonly => readonly ? "true" : nil %>
     <% end %>
 
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
-    <%= f.submit "Submit  #{@evmethod.name}  Evaluation", :class => 'loep_button' %>
+    <%= f.submit "Submit  #{@evmethod.name}  Evaluation", :class => 'loep_button' if !readonly %>
 
   <% end %>
 </div>
@@ -27,7 +29,7 @@
 <script type="text/javascript">
   jQuery(document).ready(function($){
 
-    if ($("#completed_at_datepicker").length > 0){
+    if (($("#completed_at_datepicker").length > 0)&&(typeof $("#completed_at_datepicker").attr("readonly") == "undefined")){
       $('#completed_at_datepicker').datetimepicker({
         yearRange: "-1:+10",
         showOn: "both",
@@ -103,8 +105,8 @@
     }
 
     var _getFieldsOfForm = function(form){
-      //Ignore submit and hidden fields
-      var inputs = $(form).find(':input[type!="submit"][type!="hidden"]');
+      //Ignore submit and hidden fields, and also inputs with 'optionalInput' class
+      var inputs = $(form).find(':input:not(.optionalInput)[type!="submit"][type!="hidden"]');
       var fields = [];
 
       $(inputs).each(function(index,input){

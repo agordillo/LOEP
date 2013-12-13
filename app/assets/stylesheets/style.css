@@ -440,7 +440,12 @@ table.loep_table tr.trpointer {
 	cursor: pointer;
 }
 
-
+div.empty_table {
+	font-size: 23px;
+	padding: 25px 25px 25px 25px;
+	text-align: center;
+	color: #666;
+}
 
 /* Show views */
 

@@ -5,8 +5,7 @@ class UsersController < ApplicationController
 		@users = User.all(:order => 'updated_at DESC').sort_by {|user| user.compareRole }.reverse
 		authorize! :index, @users
 
-		session.delete(:return_to)
-    	session[:return_to_afterDestroy] = request.url
+    	Utils.update_sessions_paths(session, request.url, nil)
 	    respond_to do |format|
 	      format.html
 	      format.json { render json: @users }
@@ -17,7 +16,13 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 		authorize! :show, @user
 
-		session.delete(:return_to)
+		@assignments = @user.assignments(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForAdmins }.reverse
+    	authorize! :rshow, @assignments
+
+    	@evaluations = @user.evaluations(:order => 'updated_at DESC')
+    	authorize! :rshow, @evaluations
+
+		Utils.update_sessions_paths(session, nil, nil)
 	    respond_to do |format|
 	      format.html
 	      format.json { render json: @user }
@@ -28,7 +33,7 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 		authorize! :edit, @user
 
-		session[:return_to] ||= request.referer
+		Utils.update_return_to(session,request)
 	    respond_to do |format|
 	      format.html
 	      format.json { render json: @user }
@@ -65,7 +70,8 @@ class UsersController < ApplicationController
 
   		if @user.errors.blank?
   			@user.save
-  			redirect_to session.delete(:return_to)
+  			flash[:notice] = "User updated succesfully"
+  			redirect_to Utils.return_after_create_or_update(session)
   		else
   			flash[:alert] = @user.errors.full_messages.to_sentence
   			render :action => "edit"
@@ -78,7 +84,7 @@ class UsersController < ApplicationController
 
 	    @user.destroy
 	    respond_to do |format|
-	      format.html { redirect_to session.delete(:return_to_afterDestroy) }
+	      format.html { redirect_to Utils.return_after_destroy_path(session) }
 	      format.json { head :no_content }
 	    end
   	end

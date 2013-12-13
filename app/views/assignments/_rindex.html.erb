@@ -1,5 +1,10 @@
 <% removeEvColumn ||= false %>
 <% showDescription ||= false %>
+<% aL = @assignments.length %>
+
+<% if aL === 0 %>
+  <div class="empty_table"> <p>You don't have any assignments yet.</p><p> When the administrator requests you an evaluation assignment, it will appear in this panel.</p></div>
+<% else %>
 
 <table cellspacing='0' class="loep_table">
   <tr>
@@ -12,8 +17,7 @@
     <% end %>
       <th></th>
   </tr>
-  <% aL = @assignments.length %>
-  <% @assignments.each_with_index do |assignment,i| %>
+   <% @assignments.each_with_index do |assignment,i| %>
     <tr>
        <td>
         <a href="<%=rlo_path(assignment.lo)%>"><span><%= assignment.lo.name %></span></a>
@@ -57,3 +61,4 @@
   <% end %>
 </table>
 
+<% end %>

@@ -1,7 +1,7 @@
 class Evmethod < ActiveRecord::Base
   attr_accessible :name, :module
   has_and_belongs_to_many :assignments
-  has_many :evaluations
+  has_many :evaluations, :dependent => :destroy
 
   validates :name,
   :presence => true,
@@ -42,8 +42,6 @@ class Evmethod < ActiveRecord::Base
     name = nickname.gsub(/\-/, ".").split("_").join(" ")
     Evmethod.find_by_name(name);
   end
-
-  private
 
   def getEvaluationModule
     klass = self.module

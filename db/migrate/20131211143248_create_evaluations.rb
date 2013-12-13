@@ -35,6 +35,7 @@ class CreateEvaluations < ActiveRecord::Migration
       t.integer :item24
       t.integer :item25
 
+      t.text    :comments
       t.text    :titem1
       t.text    :titem2
       t.text    :titem3

@@ -8,66 +8,87 @@
     <div class="rating_wrapper">
       <div class="stars_wrapper">
         <span  class="hover-star_legend_left">Low</span>
-        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="1" title="1"/>
-        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="2" title="2"/>
-        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="3" title="3"/>
-        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="4" title="4"/>
-        <input class="hover-star" type="radio" name="lori_evaluation[item<%=nItem%>]" value="5" title="5"/>
+        <%= f.radio_button "item" + nItem.to_s, "1", :class=>'hover-star', :title => "1", :readonly => readonly ? "true" : nil %>
+        <%= f.radio_button "item" + nItem.to_s, "2", :class=>'hover-star', :title => "2", :readonly => readonly ? "true" : nil %>
+        <%= f.radio_button "item" + nItem.to_s, "3", :class=>'hover-star', :title => "3", :readonly => readonly ? "true" : nil %>
+        <%= f.radio_button "item" + nItem.to_s, "4", :class=>'hover-star', :title => "4", :readonly => readonly ? "true" : nil %>
+        <%= f.radio_button "item" + nItem.to_s, "5", :class=>'hover-star', :title => "5", :readonly => readonly ? "true" : nil %>
         <span  class="hover-star_legend_right">High</span>
       </div>
-      <div class="hover-start_text"></div>
+      <div class="hover-start_text">
+        <% if readonly %>
+          <div class='numberCircle'>
+            <%= @evaluation.send("item" + nItem.to_s)%>
+          </div>
+        <% end %>
+      </div>
       <div class="remove_hover-start-value"><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
     </div>
   </div>
 <% end %>
 
+<div class="survey_block">
+  <p class="survey_question_title">Additional Comments</p>
+  <p class="survey_question_subtitle">Please, write here any further comments that you consider relevant and/or necessary for this evaluation</p>
+  <%= f.text_area :comments, :class=>'loep_input optionalInput', :readonly => readonly ? "true" : nil %>
+</div>
+
 <script type="text/javascript">
   $(document).ready(function(){
-    $('.hover-star').rating({
-        focus: function(value, link){
+    <% if !readonly %>
+
+      $('.hover-star').rating({
+          focus: function(value, link){
+              var tip = $(this).parent().parent().find("div.hover-start_text");
+              var title = $(link).attr("ititle");
+              if(typeof title == "undefined"){
+                title = $(link).attr("title");
+                $(link).removeAttr("title");
+                $(link).attr("ititle",title);
+              }
+              var text = "<div class='numberCircle'>"+title+"</div>";
+              tip.html(text);
+          },
+          blur: function(value, link){
+              var tip = $(this).parent().parent().find("div.hover-start_text");
+              var selectedValue = $(tip).attr("selectedValue");
+              if(selectedValue){
+                var text = "<div class='numberCircle'>"+selectedValue+"</div>";
+              }
+              $(tip).html(text || '');
+          },
+          callback: function(value, link){
             var tip = $(this).parent().parent().find("div.hover-start_text");
-            var title = $(link).attr("ititle");
-            if(typeof title == "undefined"){
-              title = $(link).attr("title");
-              $(link).removeAttr("title");
-              $(link).attr("ititle",title);
-            }
-            var text = "<div class='numberCircle'>"+title+"</div>";
-            tip.html(text);
-        },
-        blur: function(value, link){
-            var tip = $(this).parent().parent().find("div.hover-start_text");
-            var selectedValue = $(tip).attr("selectedValue");
-            if(selectedValue){
-              var text = "<div class='numberCircle'>"+selectedValue+"</div>";
-            }
-            $(tip).html(text || '');
-        },
-        callback: function(value, link){
-          var tip = $(this).parent().parent().find("div.hover-start_text");
-          var remove = $(tip).parent().find("div.remove_hover-start-value");
-          $(tip).attr("selectedValue",value);
-          $(remove).fadeIn().css("display","inline-block");
-        }
-    });
+            var remove = $(tip).parent().find("div.remove_hover-start-value");
+            $(tip).attr("selectedValue",value);
+            $(remove).fadeIn().css("display","inline-block");
+          }
+      });
+  
+      $(document).on('click', 'div.remove_hover-start-value', function(event){
+          var removeDiv = event.target;
+          if(!$(removeDiv).hasClass("remove_hover-start-value")){
+            removeDiv = $(event.target).parent();
+          }
+          var tip = $(removeDiv).parent().find("div.hover-start_text");
+          $(tip).removeAttr("selectedValue");
 
-    $(document).on('click', 'div.remove_hover-start-value', function(event){
-        var removeDiv = event.target;
-        if(!$(removeDiv).hasClass("remove_hover-start-value")){
-          removeDiv = $(event.target).parent();
-        }
-        var tip = $(removeDiv).parent().find("div.hover-start_text");
-        $(tip).removeAttr("selectedValue");
+          var ratingCancelButton = $(removeDiv).parent().find("div.rating-cancel > a");
+          $(ratingCancelButton).trigger("click")
 
-        var ratingCancelButton = $(removeDiv).parent().find("div.rating-cancel > a");
-        $(ratingCancelButton).trigger("click")
+          $(tip).fadeOut(function(){
+            $(tip).html("");
+            $(tip).css("display","inline-block");
+          });
+          $(removeDiv).fadeOut();
+      });
 
-        $(tip).fadeOut(function(){
-          $(tip).html("");
-          $(tip).css("display","inline-block");
-        });
-        $(removeDiv).fadeOut();
-    });
+    <% else %>
+      $('.hover-star').rating();
+      $('.hover-star').rating(
+        'readOnly'
+      );
+    <% end %>
 
   });
 </script>

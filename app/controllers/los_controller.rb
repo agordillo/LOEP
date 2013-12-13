@@ -8,8 +8,7 @@ class LosController < ApplicationController
     @los = Lo.all(:order => 'updated_at DESC')
     authorize! :index, @los
 
-    session.delete(:return_to)
-    session[:return_to_afterDestroy] = request.url
+    Utils.update_sessions_paths(session, request.url, nil)
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
@@ -28,8 +27,13 @@ class LosController < ApplicationController
     @lo = Lo.find(params[:id])
     authorize! :show, @lo
 
-    session.delete(:return_to)
-    session[:return_to_afterDestroy] = los_path
+    @assignments = @lo.assignments(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForAdmins }.reverse
+    authorize! :index, @assignments
+
+    @evaluations = @lo.evaluations(:order => 'updated_at DESC')
+    authorize! :index, @evaluations
+
+    Utils.update_sessions_paths(session, los_path, request.url)
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
@@ -59,6 +63,9 @@ class LosController < ApplicationController
       @evmethods = Evmethod.all
     end
 
+    #After reject -> after destroy dependence
+    Utils.update_sessions_paths(session, nil, request.url)
+    
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
@@ -72,7 +79,7 @@ class LosController < ApplicationController
     @lo = Lo.new
     authorize! :create, @lo
 
-    session[:return_to] ||= request.referer
+    Utils.update_return_to(session,request)
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
@@ -85,7 +92,7 @@ class LosController < ApplicationController
     @lo = Lo.find(params[:id])
     authorize! :edit, @lo
 
-    session[:return_to] ||= request.referer
+    Utils.update_return_to(session,request)
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
@@ -101,8 +108,8 @@ class LosController < ApplicationController
 
     @options_select = getOptionsForSelect
     respond_to do |format|
-      if @lo.save
-        format.html { redirect_to session.delete(:return_to), notice: 'Lo was successfully created.' }
+      if @lo.save 
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully created.' }
         format.json { render json: @lo, status: :created, location: @lo }
       else
         format.html { 
@@ -122,7 +129,7 @@ class LosController < ApplicationController
     @options_select = getOptionsForSelect
     respond_to do |format|
       if @lo.update_attributes(params[:lo])
-        format.html { redirect_to session.delete(:return_to), notice: 'Lo was successfully updated.' }
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { 
@@ -142,7 +149,7 @@ class LosController < ApplicationController
     @lo.destroy
 
     respond_to do |format|
-      format.html { redirect_to session.delete(:return_to_afterDestroy) }
+      format.html { redirect_to Utils.return_after_destroy_path(session) }
       format.json { head :no_content }
     end
   end

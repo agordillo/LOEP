@@ -9,6 +9,11 @@
 	<p class="link_wrapper"><%= link_to "Add new", new_lo_path %> | <%= link_to "View all", los_path %></p>
 </div>
 <div class="home_block">
+	<h1 class="loep_title"> Evaluations </h1>
+	<%= render :partial => '/evaluations/index' %>
+	<p class="link_wrapper"><%= link_to "View all", evaluations_path %></p>
+</div>
+<div class="home_block">
 	<h1 class="loep_title"> Users </h1>
 	<%= render :partial => '/users/index' %>
 	<p class="link_wrapper"><%= link_to "View all", users_path %></p>

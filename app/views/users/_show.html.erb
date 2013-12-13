@@ -41,7 +41,25 @@
     <% end %>
   </div> 
  
-  </br>
+  <br/>
+  <br/>
+  <h1 class="loep_title"> Assignments </h1>
+  <% if iamAdmin? %>
+    <%= render '/assignments/index' %>
+  <% else %>
+    <%= render '/assignments/rindex' %>
+  <% end %>
+
+  <br/>
+  <br/>
+  <h1 class="loep_title"> Evaluations </h1>
+  <% if iamAdmin? %>
+    <%= render '/evaluations/index' %>
+  <% else %>
+    <%= render '/evaluations/rindex' %>
+  <% end %>
+
+  <br/>
 </div>
 
 <script type="text/javascript">
