@@ -30,5 +30,7 @@ gem 'capistrano'
 gem 'acts-as-taggable-on'
 
 gem 'activerecord-mysql2-adapter'
+gem 'therubyracer'
+gem 'execjs'
 
 gem 'pry-rails', :group => :development
