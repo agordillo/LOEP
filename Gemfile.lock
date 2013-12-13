@@ -22,6 +22,8 @@ GEM
       activesupport (= 3.2.12)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-mysql2-adapter (0.0.3)
+      mysql2
     activeresource (3.2.12)
       activemodel (= 3.2.12)
       activesupport (= 3.2.12)
@@ -73,6 +75,7 @@ GEM
     method_source (0.8.2)
     mime-types (1.25)
     multi_json (1.8.2)
+    mysql2 (0.3.14)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -145,6 +148,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-mysql2-adapter
   acts-as-taggable-on
   cancan
   capistrano
