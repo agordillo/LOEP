@@ -16,9 +16,9 @@ rails s and enjoy!
 
 #Production
 Create symbolik links
-ln -s /home/loep/LOEP/loepConfFiles/secret_token.rb /home/loep/LOEP/current/config/initializers/secret_token.rb
-ln -s /home/loep/LOEP/loepConfFiles/secret_token.rb /home/loep/LOEP/current/config/initializers/session_store.rb
-ln -s /home/loep/LOEP/loepConfFiles/recaptcha.rb /home/loep/LOEP/current/config/initializers/recaptcha.rb
-ln -s /home/loep/LOEP/loepConfFiles/database.yml /home/loep/LOEP/current/config/database.yml
+ln -s /home/loep/LOEP/shared/secret_token.rb /home/loep/LOEP/current/config/initializers/secret_token.rb
+ln -s /home/loep/LOEP/shared/secret_token.rb /home/loep/LOEP/current/config/initializers/session_store.rb
+ln -s /home/loep/LOEP/shared/recaptcha.rb /home/loep/LOEP/current/config/initializers/recaptcha.rb
+ln -s /home/loep/LOEP/shared/database.yml /home/loep/LOEP/current/config/database.yml
 
 

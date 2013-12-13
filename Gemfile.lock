@@ -161,6 +161,7 @@ DEPENDENCIES
   devise
   execjs
   jquery-rails
+  mysql2
   pry-rails
   rails (= 3.2.12)
   recaptcha
