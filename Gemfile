@@ -30,7 +30,7 @@ gem 'capistrano'
 gem 'acts-as-taggable-on'
 
 gem 'mysql2'
-gem 'activerecord-mysql2-adapter'
+
 gem 'therubyracer'
 gem 'execjs'
 
