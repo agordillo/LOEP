@@ -21,6 +21,9 @@ LOEP::Application.routes.draw do
   match '/rassignments' => 'assignments#rindex'
   match '/revaluations' => 'evaluations#rindex'
   match '/assignments/:id/reject' => 'assignments#reject'
+
+  #Wildcard route
+  match '*path' => 'application#page_not_found'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

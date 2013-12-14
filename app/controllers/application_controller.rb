@@ -15,11 +15,19 @@ class ApplicationController < ActionController::Base
   	render :json => @tags.reject{|tag| _rejectTag(tag,term) }
   end
 
+
   #CanCan Rescue
   rescue_from CanCan::AccessDenied do |exception|
     flash[:alert] = exception.message
     redirect_to home_path, alert: exception.message
   end
+
+  #Wildcard route rescue
+  def page_not_found
+    flash[:alert] = "This page does not exists"
+    redirect_to home_path, alert: flash[:alert]
+  end
+
 
   private
 
