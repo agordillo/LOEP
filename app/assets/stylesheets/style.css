@@ -157,6 +157,7 @@ li.userbox img {
 	text-align: center;
 	min-width: 70px;
 	margin-bottom: 6px;
+	cursor: pointer;
 }
 
 .loep_button:hover {
@@ -250,6 +251,16 @@ div.form_checkbox_wrapper {
 
 .loep_form_wrapper p.form_legend {
 	margin-top: 8px;
+}
+
+.loep_form_wrapper h3 {
+	color: #999;
+	font-size: 16px;
+}
+
+.loep_form_wrapper h4 {
+	margin-top: 20px;
+	font-size: 22px;
 }
 
 p.form_before_button {
@@ -403,6 +414,7 @@ table.loep_table tr:last-child td:last-child {
 	-webkit-border-bottom-right-radius:3px;
 	border-bottom-right-radius:3px;
 }
+
 table.loep_table tr:hover td {
 	background: #f2f2f2;
 	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
@@ -439,6 +451,64 @@ table.loep_table td.tdseparator {
 table.loep_table tr.trpointer {
 	cursor: pointer;
 }
+
+table.loep_table tr.loeprowselected {
+}
+table.loep_table tr.loeprowselected td {
+	background: #ffc;
+}
+
+div.loep_table_tools {
+	width: 100%;
+	background: #f2f2f2;
+	height: 40px;
+	margin-bottom: -6px;
+	padding-bottom: 0px;
+	margin-top: 10px;
+	border: #ccc 1px solid;
+	text-align: right;
+	/*display: none;*/
+}
+
+div.loep_table_tools a {
+	text-decoration: none;
+}
+
+div.loep_table_tool {
+
+}
+
+div.loep_tool_button {
+	cursor: pointer;
+	background-color: rgba(247, 247, 247, 0.86);
+	color: #444;
+	border: 1px solid rgba(0,0,0,0.1);
+	border-radius: 4px;
+	text-align: center;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	font-size: 15px;
+	opacity: 0.9;
+	display: inline-block;
+	min-width: 70px;
+	padding: 1px 6px;
+	margin: 5px 20px 5px 20px;
+}
+
+div.loep_tool_button:hover {
+	background-color: rgba(247, 247, 247, 0.86);
+	color: #222;
+	border: 1px solid rgba(0,0,0,0.2);
+	opacity: 1;
+}
+
+span.loep_tool_text {
+	margin-left: 5px;
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+/* Emtpy table style */
 
 div.empty_table {
 	font-size: 23px;
@@ -478,3 +548,4 @@ p.show_value {
 	border: none;
 	padding-left: 0px;
 }
+

@@ -1,17 +1,22 @@
 LOEP::Application.routes.draw do
-  resources :evaluations
-  resources :lori_evaluations
-  resources :evmethods
-  resources :assignments
+
 
   devise_for :users, :controllers => { :registrations => "registrations" }
   as :user do
     get 'signin' => 'home#frontpage', :as => :new_user_session
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
+
+  match '/los/remove' => 'los#removelist'
+  match '/automatic_assignments/new' => 'assignments#new_automatic', via: [:get]
+  match '/automatic_assignments' => 'assignments#create_automatic', via: [:post]
   
   resources :users
   resources :los
+  resources :evaluations
+  resources :lori_evaluations
+  resources :evmethods
+  resources :assignments
 
   root :to =>'home#frontpage'
   match '/home' => 'home#index'
@@ -23,7 +28,7 @@ LOEP::Application.routes.draw do
   match '/assignments/:id/reject' => 'assignments#reject'
 
   #Wildcard route
-  match '*path' => 'application#page_not_found'
+  # match '*path' => 'application#page_not_found'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -2,8 +2,27 @@
 <% if rL === 0 %>
   <%= render '/layouts/emptytable', :resources => "learning objects" %>
 <% else %>
+  <div class="loep_table_tools">
+    <a id="automatic_assign_los">
+      <div class="loep_tool_button">
+        <span class="glyphicon glyphicon-time"></span><span class="glyphicon glyphicon-user"></span>
+        <span class="loep_tool_text">Automatic Assignments</span>
+      </div>
+    </a>
+    <a id="assign_los">
+      <div class="loep_tool_button">
+        <span class="glyphicon glyphicon-time"></span>
+      </div>
+    </a>
+    <a id="remove_los">
+      <div class="loep_tool_button">
+        <span class="glyphicon glyphicon-trash"></span>
+      </div>
+    </a>
+  </div>
   <table cellspacing='0' class="loep_table">
     <tr>
+      <th></th>
       <th>Name</th>
       <th>Url</th>
       <th>Assign</th>
@@ -13,7 +32,12 @@
     </tr>
     <% @los.each do |lo| %>
       <tr>
-        <td><a href="<%=lo_path(lo)%>"><%= lo.name %></a></td>
+        <td>
+          <input type="checkbox" class="checklo" value="<%=lo.id%>" />
+        </td>
+        <td>
+          <a href="<%=lo_path(lo)%>"><%= lo.name %></a>
+        </td>
         <td class="tdcenter">
           <a target="_blank" href="<%=lo.url%>"><span class="glyphicon glyphicon-share"></span></a>
         </td>
@@ -33,3 +57,110 @@
     <% end %>
   </table>
 <% end %>
+
+<script type="text/javascript">
+
+  var checkedLos = 0;
+
+  $(document).ready(function(){
+
+    $("input:checkbox.checklo").change(function(){
+        var lotr = $(this).parent().parent();
+        if(this.checked) {
+          checkedLos++;
+          $(lotr).addClass("loeprowselected");
+        } else {
+          checkedLos--;
+          $(lotr).removeClass("loeprowselected");
+        }
+
+        if(checkedLos===1){
+          //First... show toolbar
+          // $("div.loep_table_tools").slideDown();
+        } else if(checkedLos===0){
+          //Hide toolbar
+          // $("div.loep_table_tools").slideUp();
+        }
+    });
+
+    //Toolbar actions
+
+    $("#assign_los").click(function(){
+      var lo_ids = getSelectedLos();
+      if(lo_ids.length===0){
+        _showLOEPDialog("You have not selected any item.", false);
+        return;
+      }
+      var url = _createURL("/assignments/new",[["lo_ids", lo_ids]]);
+      window.top.location= url;
+    });
+
+     $("#automatic_assign_los").click(function(){
+      var lo_ids = getSelectedLos();
+      if(lo_ids.length===0){
+        _showLOEPDialog("You have not selected any item.", false);
+        return;
+      }
+      var url = _createURL("/automatic_assignments/new",[["lo_ids", lo_ids]]);
+      window.top.location= url;
+    });
+
+    $("#remove_los").click(function(){
+      var lo_ids = getSelectedLos();
+      if(lo_ids.length===0){
+        _showLOEPDialog("You have not selected any item.", false);
+        return;
+      }
+
+     _showLOEPDialog("Are you sure?", true, function(result){
+        if(result==true){
+          var lo_ids = getSelectedLos();
+          if(lo_ids.length===0){
+            return;
+          }
+          var url = _createURL("/los/remove",[["lo_ids", lo_ids]]);
+          window.top.location= url;
+        }
+      });
+    });
+
+  });
+
+  var getSelectedLos = function(){
+    var lo_ids = [];
+    $("input:checkbox.checklo:checked").each(function(index,input){
+      lo_ids.push($(input).attr("value"));
+    });
+    return lo_ids;
+  }
+
+  var _createURL = function(base,objects){
+    var url = base;
+    $(objects).each(function(index,obj){
+
+      if((typeof obj != "object")||(typeof obj.length != "number")){
+        return;
+      }
+
+      if (index==0) {
+        url = url + "?"
+      } else {
+        url = url + "&"
+      }
+
+      url = url + obj[0] + "="
+
+      $(obj[1]).each(function(index,value){
+        if (index!=0) {
+          url = url + ","
+        }
+        url = url + value
+      });
+    });
+
+    return url;
+  }
+
+
+
+</script>

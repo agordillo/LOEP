@@ -1,0 +1,87 @@
+<div class="loep_form_wrapper new_assignment_form">
+
+  <h2>Automatic Assignments Generation</h2>
+  <h3>The selected Learning Objects will be assigned among the selected reviewers, taking into consideration the criteria chosen in the form, the type of Learning Object and the profile of the reviewer.</h3>
+
+  <p class="form_before_button">&nbsp;</p>
+
+  <form accept-charset="UTF-8" action="/automatic_assignments" method="post">
+    <p class="form_legend">Learning Objects</p>
+    <select name="selected_los[]" multiple="true" id="select_los" class="loep_input">
+      <% unless @plos.nil? %>
+        <% @plos.each do |lo| %>
+          <option value="<%=lo.id%>" selected="selected"><%=lo.name%></option>
+        <% end %>
+      <% end %>
+      <% @los.each do |lo| %>
+        <option value="<%=lo.id%>"><%=lo.name%></option>
+      <% end %>
+    </select>
+
+    <p class="form_legend">Reviewers</p>
+    <select name="selected_users[]" multiple="true" id="select_users" class="loep_input">
+      <% unless @pusers.nil? %>
+        <% @pusers.each do |user| %>
+          <option value="<%=user.id%>" selected="selected"><%=user.name%></option>
+        <% end %>
+      <% end %>
+      <% @users.each do |user| %>
+        <option value="<%=user.id%>"><%=user.name%></option>
+      <% end %>
+    </select>
+
+    <p class="form_legend">Evaluation Methods</p>
+    <%= select_tag :evmethods, options_for_select(Utils.getEvMethods,@assignment.getEvMethods), { :multiple => true, :size => 2, :class=>'loep_input' }  %>
+
+    <p class="form_legend">Description</p>
+    <textarea class="loep_input" cols="40" id="assignment_description" name="assignment[description]" rows="20"></textarea>
+
+    <p class="form_legend">Deadline</p>
+    <%=text_field_tag "assignment[deadline]",@assignment.readable_deadline, :class=>'loep_input', :id=>"deadline_datepicker" %>
+
+    <input id="assignment_author_id" name="assignment[author_id]" type="hidden" value="<%=current_user.id%>">
+
+
+    <h4>Criteria</h4>
+    <!-- TODO -->
+
+    <p class="form_before_button">&nbsp;</p>
+    <p class="form_before_button">&nbsp;</p>
+    <input class="loep_button" name="commit" type="submit" value="Generate Assignments Automatically">
+
+  </form>
+
+  </br>
+  <%= generic_back_link %>
+
+</div>
+
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+    //Datetimepicker Addon: http://trentrichardson.com/examples/timepicker/#basic_examples
+    $('#deadline_datepicker').datetimepicker({
+      yearRange: "-1:+10",
+      showOn: "both",
+      dateFormat : 'dd/mm/yy',
+      changeMonth : true,
+      changeYear : true,
+      minDate: '0d',
+      buttonImage: "/assets/calendar_icon.png", 
+      buttonImageOnly: true,
+      timeFormat: "HH:mm tt",
+      stepHour: 1,
+      stepMinute: 15
+    });
+
+    //Little fix for select input
+    $("#select_los").attr("style","width:" + $("#select_los").width() + "px");
+    $("#select_los").select2();
+
+    $("#select_users").attr("style","width:" + $("#select_users").width() + "px");
+    $("#select_users").select2();
+
+    //Add search icon
+    $(".select2-container-multi").prepend($("<div class='multiselect2search'><span class='glyphicon glyphicon-search'></span></div>"));
+  });
+</script>
+

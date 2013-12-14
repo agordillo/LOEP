@@ -16,6 +16,15 @@ class Ability
             can :reject, :all
             can :read, :all
             can :rshow, :all
+
+            #Helpers
+            can :destroy, Array do |arr|
+                arr.all? { |el| can?(:destroy, el) }
+            end
+            can :destroy, ActiveRecord::Relation do |arr|
+                arr.all? { |el| can?(:destroy, el) }
+            end
+
         elsif user.role? :Admin
             #Admin
             can [:update, :destroy], User do |u|
@@ -27,6 +36,15 @@ class Ability
             can :reject, :all
             can :read, :all
             can :rshow, :all
+
+             #Helpers
+            can :destroy, Array do |arr|
+                arr.all? { |el| can?(:rshow, el) }
+            end
+            can :destroy, ActiveRecord::Relation do |arr|
+                arr.all? { |el| can?(:rshow, el) }
+            end
+
         elsif !user.role.nil?
             #Reviewers and Users
             can :show, User, :id => user.id

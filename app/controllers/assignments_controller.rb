@@ -68,6 +68,28 @@ class AssignmentsController < ApplicationController
     end
   end
 
+  def new_automatic
+    @assignment = Assignment.new
+    authorize! :new, @assignment
+
+    unless params[:lo_ids].nil?
+      @plos = Lo.find(params[:lo_ids].split(","));
+    end
+
+    unless params[:user_ids].nil?
+      @pusers = User.find(params[:user_ids].split(","));
+    end
+
+    Utils.update_return_to(session,request)
+    @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
+    @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @assignment }
+    end
+  end
+
   # GET /assignments/1/edit
   def edit
     @assignment = Assignment.find(params[:id])
@@ -141,6 +163,69 @@ class AssignmentsController < ApplicationController
       else
         format.html {
             return renderError(errors[0].full_messages,"new") 
+          }
+        format.json { render json: errors[0], status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def create_automatic
+    binding.pry
+
+    @assignment = Assignment.new(params[:assignment])
+    authorize! :create, @assignment
+    
+    if params[:selected_los].blank?
+      return renderError("You must select at least one Learning Object to create an assignment.","new_automatic")
+    end
+
+    if params[:selected_users].blank?
+      return renderError("You must select at least one Reviewer to create an assignment.","new_automatic")
+    end
+
+    return renderError("Not implemented yet","new_automatic")
+
+    assignments = []
+    params[:selected_los].each do |lo_id|
+      params[:selected_users].each do |user_id|
+        #Create assignment for Lo with id lo_id and reviewer with id user_id
+        as = Assignment.new
+        as.assign_attributes(params[:assignment])
+        as.author_id = current_user.id
+        as.user_id = user_id
+        as.lo_id = lo_id
+        as.status = "Pending"
+        assignments << as
+      end
+    end
+
+    errors = []
+    assignments.each do |as|
+      as.valid?
+      if !as.errors.blank?
+        errors << as.errors
+      end
+    end
+    
+    respond_to do |format|
+      if errors.empty?
+        #Save assignments
+        assignments.each do |as|
+          unless as.save
+            format.html {
+              return renderError(as.errors.full_messages,"new_automatic")
+            }
+            format.json { 
+              render json: as.errors, status: :unprocessable_entity
+              return
+            }
+          end
+        end
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Assignment was successfully created.' }
+        format.json { render json: "Process completed", status: :created, location: assignments_path }
+      else
+        format.html {
+            return renderError(errors[0].full_messages,"new_automatic") 
           }
         format.json { render json: errors[0], status: :unprocessable_entity }
       end

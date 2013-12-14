@@ -154,6 +154,24 @@ class LosController < ApplicationController
     end
   end
 
+  def removelist
+    @los = Lo.find(params[:lo_ids].split(","));
+    authorize! :destroy, @los
+
+    @los.each do |lo|
+      lo.destroy
+    end
+
+    respond_to do |format|
+      format.html { redirect_to Utils.return_after_destroy_path(session) }
+      format.json { head :no_content }
+    end
+  end
+
+  def assignlist
+    binding.pry
+  end
+
   private
 
   def getOptionsForSelect
