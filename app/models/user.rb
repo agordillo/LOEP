@@ -17,7 +17,9 @@ class User < ActiveRecord::Base
   :length => { :in => 3..255 },
   :uniqueness => {
     :case_sensitive => false
-  }
+  },
+  :exclusion => { in: "all", message: "is a reserved word" }
+
   validates :birthday, :presence => { :message => "can't be blank" }
   validates :gender, :presence => { :message => "can't be blank" }
   validates :roles, :presence => { :message => "can't be blank" }

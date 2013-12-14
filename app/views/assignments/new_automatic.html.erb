@@ -6,6 +6,11 @@
   <p class="form_before_button">&nbsp;</p>
 
   <form accept-charset="UTF-8" action="/automatic_assignments" method="post">
+
+    <!-- Rails authenticity token and charset fields -->
+    <input name="utf8" type="hidden" value="✓">
+    <%= token_tag form_authenticity_token %>
+
     <p class="form_legend">Learning Objects</p>
     <select name="selected_los[]" multiple="true" id="select_los" class="loep_input">
       <% unless @plos.nil? %>
@@ -24,6 +29,8 @@
         <% @pusers.each do |user| %>
           <option value="<%=user.id%>" selected="selected"><%=user.name%></option>
         <% end %>
+      <% else %>
+        <option value="all" selected="selected">All Reviewers</option>
       <% end %>
       <% @users.each do |user| %>
         <option value="<%=user.id%>"><%=user.name%></option>
@@ -45,6 +52,25 @@
     <h4>Criteria</h4>
     <!-- TODO -->
 
+    <p class="form_legend">Number of evaluations per Learning Object</p>
+    <div id="select_NEPL_wrapper">
+      <select name="NEPL" id="select_NEPL" class="loep_input">
+        <% 5.times do |i| %>
+          <option value="<%=i+1%>" <%="selected='selected'" if i+1==3%>><%=i+1%></option>
+        <% end %>
+        <option value="other">Other</option>
+      </select>
+      <input id="select_NEPL_other" name="NEPL_other" type="text" class="loep_input"></input>
+    </div>
+
+    <p class="form_legend">Assignation Criteria</p>
+    <select name="acriteria" id="select_acriteria" class="loep_input">
+        <option value="1" selected='selected'>Prioritize workload balancing</option>
+        <option value="2">Balanced random</option>
+        <option value="3">Prioritize reviewer appropriateness</option>
+    </select>
+
+    <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
     <input class="loep_button" name="commit" type="submit" value="Generate Assignments Automatically">
@@ -79,6 +105,51 @@
 
     $("#select_users").attr("style","width:" + $("#select_users").width() + "px");
     $("#select_users").select2();
+
+    // $("#select_users").on("change", function(event) {
+    //    if(typeof event.added != "undefined"){
+    //       //Add object
+    //       var objectValue = event.added.id;
+    //    } else if(typeof event.removed != "undefined"){
+    //       var objectValue = event.removed.id;;
+    //    }
+    // });
+
+    $("#select_users").on("select2-selecting", function(event) {
+      var valueSelected = event.val;
+      if(valueSelected === "all"){
+        //When add All Reviewers, remove the rest of the fields
+        event.preventDefault();
+        $("#select_users").val(valueSelected).trigger("change");
+      } else {
+        var selectUsersVal = $("#select_users").val();
+        if ((selectUsersVal != null)&&(selectUsersVal.indexOf("all")!=-1)){
+          event.preventDefault();
+          $("#select_users").val(selectUsersVal).trigger("change");
+        }
+      }
+    });
+
+    $("#select_NEPL").attr("style","width:" + $("#select_NEPL").width() + "px");
+    $("#select_NEPL").select2({
+        minimumResultsForSearch: -1
+      }
+    );
+
+    $("#select_NEPL").on("select2-selecting", function(event) {
+      var valueSelected = event.val;
+      if(valueSelected === "other"){
+        $("#select_NEPL_other").show();
+      } else {
+        $("#select_NEPL_other").hide();
+      }
+    });
+
+    $("#select_acriteria").attr("style","width:" + $("#select_acriteria").width() + "px");
+    $("#select_acriteria").select2({
+        minimumResultsForSearch: -1
+      }
+    );
 
     //Add search icon
     $(".select2-container-multi").prepend($("<div class='multiselect2search'><span class='glyphicon glyphicon-search'></span></div>"));
