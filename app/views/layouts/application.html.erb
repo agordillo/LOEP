@@ -13,7 +13,7 @@
 		<%= render 'layouts/header' %>
 	</div>
 	<div id='container'>
-		<%= render :partial => '/home/menu' %>
+		<%= render '/layouts/menu' %>
 		<div id="homepagecontent">
 			<% if flash[:alert] %>
 				<% if flash[:alert].is_a? Array %>

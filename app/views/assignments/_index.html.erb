@@ -1,40 +1,45 @@
-<table cellspacing='0' class="loep_table">
-  <tr>
-    <th>Learning Object</th>
-    <th>Reviewer</th>
-    <th>Methods</th>
-    <th>Status</th>
-    <th>Deadline</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  <% @assignments.each do |assignment| %>
+<% rL = @assignments.length %>
+<% if rL === 0 %>
+  <%= render '/layouts/emptytable', :resources => "assignments" %>
+<% else %>
+  <table cellspacing='0' class="loep_table">
     <tr>
-       <td>
-        <a href="<%=rlo_path(assignment.lo) + "?as_user_id=" + assignment.user.id.to_s %>"><span><%= assignment.lo.name %></span></a>
-      </td>
-      <td>
-        <a href="<%=user_path(assignment.user)%>"><span><%= assignment.user.name %></span></a>
-      </td>
-      <td class="tdcenter">
-        <%=assignment.readable_evmethods%>
-      </td>
-      <td class="tdcenter">
-        <%=assignment.readable_status%>
-      </td>
-      <td>
-        <span><%= assignment.readable_deadline %></span>
-      </td>
-      <td class="tdcenter">
-        <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> Details</a>
-      </td>
-      <td class="tdcenter">
-          <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-      </td>
-      <td class="tdcenter">
-        <a href="<%=assignment_path(assignment)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> Remove</a>
-      </td>
+      <th>Learning Object</th>
+      <th>Reviewer</th>
+      <th>Methods</th>
+      <th>Status</th>
+      <th>Deadline</th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
-  <% end %>
-</table>
+    <% @assignments.each do |assignment| %>
+      <tr>
+         <td>
+          <a href="<%=rlo_path(assignment.lo) + "?as_user_id=" + assignment.user.id.to_s %>"><span><%= assignment.lo.name %></span></a>
+        </td>
+        <td>
+          <a href="<%=user_path(assignment.user)%>"><span><%= assignment.user.name %></span></a>
+        </td>
+        <td class="tdcenter">
+          <%=assignment.readable_evmethods%>
+        </td>
+        <td class="tdcenter">
+          <%=assignment.readable_status%>
+        </td>
+        <td>
+          <span><%= assignment.readable_deadline %></span>
+        </td>
+        <td class="tdcenter">
+          <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> Details</a>
+        </td>
+        <td class="tdcenter">
+            <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+        </td>
+        <td class="tdcenter">
+          <a href="<%=assignment_path(assignment)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> Remove</a>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

@@ -35,11 +35,13 @@ class Evmethod < ActiveRecord::Base
   end
 
   def nickname
-    self.name.split(/\s+/).join("_").gsub(/\./, "-")
+    self.name.split(/\s+/).join("__").gsub(/\./, "_")
+    # URI.encode(self.name)
   end
 
   def self.getEvMethodFromNickname(nickname)
-    name = nickname.gsub(/\-/, ".").split("_").join(" ")
+    name = nickname.gsub(/\_/, ".").split("__").join(" ")
+    # name = URI.decode(nickname)
     Evmethod.find_by_name(name);
   end
 

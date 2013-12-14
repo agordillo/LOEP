@@ -3,62 +3,62 @@
 <% aL = @assignments.length %>
 
 <% if aL === 0 %>
-  <div class="empty_table"> <p>You don't have any assignments yet.</p><p> When the administrator requests you an evaluation assignment, it will appear in this panel.</p></div>
+  <%= render '/layouts/emptytable', :fullHTMLmessage => "<p>You don't have any assignments yet.</p><p> When the administrator requests you an evaluation assignment, it will appear in this panel.</p>" %>
 <% else %>
 
-<table cellspacing='0' class="loep_table">
-  <tr>
-    <th>Learning Object</th>
-    <th>Methods</th>
-    <th>Status</th>
-    <th>Deadline</th>
-    <% unless removeEvColumn %>
-      <th></th>
-    <% end %>
-      <th></th>
-  </tr>
-   <% @assignments.each_with_index do |assignment,i| %>
+  <table cellspacing='0' class="loep_table">
     <tr>
-       <td>
-        <a href="<%=rlo_path(assignment.lo)%>"><span><%= assignment.lo.name %></span></a>
-      </td>
-      <td class="tdcenter">
-        <%=assignment.readable_evmethods%>
-      </td>
-      <td class="tdcenter">
-        <%=assignment.readable_status%>
-      </td>
-      <td>
-        <span><%= assignment.readable_deadline %></span>
-      </td>
+      <th>Learning Object</th>
+      <th>Methods</th>
+      <th>Status</th>
+      <th>Deadline</th>
       <% unless removeEvColumn %>
-        <td class="tdcenter">
-          <% if assignment.status == "Pending" %>
-            <a href="<%=rlo_path(assignment.lo)%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
-          <% end %>
-        </td>
+        <th></th>
       <% end %>
-      <td class="tdcenter">
-          <%if assignment.status == "Pending" %>
-            <%= link_to reject_path(assignment), :data => { :confirm => "Are you sure?" }, :method => :reject do %>
-                <span class="glyphicon glyphicon glyphicon-remove"></span> Reject
-            <% end %>
-          <% end %>
-      </td>
+        <th></th>
     </tr>
-    <% if showDescription %>
-    <tr>
-      <td colspan="100%">
-        <span><%= assignment.description %></span>
-      </td>
-    </tr>
-    <% unless i==aL-1 %>
+     <% @assignments.each_with_index do |assignment,i| %>
       <tr>
-        <td class="tdseparator" colspan="100%"></td>
+         <td>
+          <a href="<%=rlo_path(assignment.lo)%>"><span><%= assignment.lo.name %></span></a>
+        </td>
+        <td class="tdcenter">
+          <%=assignment.readable_evmethods%>
+        </td>
+        <td class="tdcenter">
+          <%=assignment.readable_status%>
+        </td>
+        <td>
+          <span><%= assignment.readable_deadline %></span>
+        </td>
+        <% unless removeEvColumn %>
+          <td class="tdcenter">
+            <% if assignment.status == "Pending" %>
+              <a href="<%=rlo_path(assignment.lo)%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
+            <% end %>
+          </td>
+        <% end %>
+        <td class="tdcenter">
+            <%if assignment.status == "Pending" %>
+              <%= link_to reject_path(assignment), :data => { :confirm => "Are you sure?" }, :method => :reject do %>
+                  <span class="glyphicon glyphicon glyphicon-remove"></span> Reject
+              <% end %>
+            <% end %>
+        </td>
       </tr>
+      <% if showDescription %>
+      <tr>
+        <td colspan="100%">
+          <span><%= assignment.description %></span>
+        </td>
+      </tr>
+      <% unless i==aL-1 %>
+        <tr>
+          <td class="tdseparator" colspan="100%"></td>
+        </tr>
+      <% end %>
+      <% end %>
     <% end %>
-    <% end %>
-  <% end %>
-</table>
+  </table>
 
 <% end %>
