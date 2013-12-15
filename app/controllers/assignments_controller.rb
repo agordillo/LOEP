@@ -111,6 +111,7 @@ class AssignmentsController < ApplicationController
   # POST /assignments
   # POST /assignments.json
   def create
+    binding.pry
     @assignment = Assignment.new(params[:assignment])
     authorize! :create, @assignment
     
@@ -170,33 +171,38 @@ class AssignmentsController < ApplicationController
   end
 
   def create_automatic
-    binding.pry
-
     @assignment = Assignment.new(params[:assignment])
     authorize! :create, @assignment
-    
+
     if params[:selected_los].blank?
       return renderError("You must select at least one Learning Object to create an assignment.","new_automatic")
     end
 
     if params[:selected_users].blank?
       return renderError("You must select at least one Reviewer to create an assignment.","new_automatic")
+    elsif params[:selected_users].is_a? Array and params[:selected_users].include? "all"
+      @users = User.reviewers
+    else
+      @users = User.find(params[:selected_users])
     end
 
-    return renderError("Not implemented yet","new_automatic")
+    @los = Lo.find(params[:selected_los])
 
-    assignments = []
-    params[:selected_los].each do |lo_id|
-      params[:selected_users].each do |user_id|
-        #Create assignment for Lo with id lo_id and reviewer with id user_id
-        as = Assignment.new
-        as.assign_attributes(params[:assignment])
-        as.author_id = current_user.id
-        as.user_id = user_id
-        as.lo_id = lo_id
-        as.status = "Pending"
-        assignments << as
-      end
+    nepl = getNEPL
+
+    if nepl.blank?
+      return renderError("You need to specify the number of evaluations per Learning Object","new_automatic")
+    end
+
+    #LO-Reviewer Matching Criteria
+    if params["mcriteria"].blank?
+      return renderError("Invalid LO-Reviewer Matching Criteria","new_automatic")
+    end
+
+    assignments = MatchingSystem.LoReviewerMatching(params["mcriteria"],nepl,@los,@users,params[:assignment])
+
+    if assignments.nil?
+      return renderError("An error ocurred in the automatic assignments generation","new_automatic")
     end
 
     errors = []
@@ -221,7 +227,7 @@ class AssignmentsController < ApplicationController
             }
           end
         end
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Assignment was successfully created.' }
+        format.html { redirect_to assignments_path, notice: 'Assignments were successfully created.' }
         format.json { render json: "Process completed", status: :created, location: assignments_path }
       else
         format.html {
@@ -230,6 +236,33 @@ class AssignmentsController < ApplicationController
         format.json { render json: errors[0], status: :unprocessable_entity }
       end
     end
+  end
+
+  #get Number of Evaluations per Learning Object param
+  def getNEPL
+    if !params["NEPL"].blank? and Utils.is_numeric?(params["NEPL"])
+      return params["NEPL"].to_i
+    elsif params["NEPL"] == "other" and !params["NEPL_other"].blank? and Utils.is_numeric?(params["NEPL_other"])
+      return params["NEPL_other"].to_i
+    end
+  end
+
+  # Prioritize workload balancing: Random Matching
+  # Same LOs for each reviewer, random 
+  def pwlRandom(nepl,los,reviewers)
+
+  end
+
+  # Prioritize workload balancing: Best-effort Matching
+  # Same LOs for each reviewer, try to choose the most appropriate LO for each reviewer
+  def pwlBestEffort
+    
+  end
+
+  # Prioritize reviewer appropriateness
+  # Choose the most appropriate Reviewer for each LO
+  def pReviewerA
+
   end
 
   # PUT /assignments/1
@@ -306,7 +339,7 @@ class AssignmentsController < ApplicationController
       @plos = Lo.find(params[:selected_los])
     end
 
-    unless params[:selected_users].nil?
+    unless params[:selected_users].nil? or params[:selected_users].include? "all"
       @pusers = User.find(params[:selected_users])
     end
 

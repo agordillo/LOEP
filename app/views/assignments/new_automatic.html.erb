@@ -38,7 +38,7 @@
     </select>
 
     <p class="form_legend">Evaluation Methods</p>
-    <%= select_tag :evmethods, options_for_select(Utils.getEvMethods,@assignment.getEvMethods), { :multiple => true, :size => 2, :class=>'loep_input' }  %>
+    <%= select_tag "assignment[evmethods][]", options_for_select(Utils.getEvMethods,@assignment.getEvMethods), { :multiple => true, :size => 2, :class=>'loep_input' }  %>
 
     <p class="form_legend">Description</p>
     <textarea class="loep_input" cols="40" id="assignment_description" name="assignment[description]" rows="20"></textarea>
@@ -63,11 +63,11 @@
       <input id="select_NEPL_other" name="NEPL_other" type="text" class="loep_input"></input>
     </div>
 
-    <p class="form_legend">Assignation Criteria</p>
-    <select name="acriteria" id="select_acriteria" class="loep_input">
-        <option value="1" selected='selected'>Prioritize workload balancing</option>
-        <option value="2">Balanced random</option>
-        <option value="3">Prioritize reviewer appropriateness</option>
+    <p class="form_legend">LO-Reviewer Matching Criteria</p>
+    <select name="mcriteria" id="select_acriteria" class="loep_input">
+        <option value="pwlRandom" selected='selected'>Prioritize workload balancing: Random Matching</option>
+        <option value="pwlBestEffort">Prioritize workload balancing: Best-effort Matching</option>
+        <option value="pReviewerA">Prioritize reviewer appropriateness</option>
     </select>
 
     <p class="form_before_button">&nbsp;</p>

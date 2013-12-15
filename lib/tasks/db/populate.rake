@@ -1,7 +1,6 @@
 namespace :db do
   task :populate => :environment do
   	desc "Populating db"
-
   	puts "Populate start"
 
   	#Removing data
@@ -38,6 +37,19 @@ namespace :db do
 	user_reviewer.roles.push(role_reviewer)
 	user_reviewer.save(:validate => false)
 
+	if Rails.env == "development"
+		10.times do |i|
+			user = User.new
+			user.name = Faker::Name.name
+			user.email = Faker::Internet.free_email
+			user.password = "reviewer"
+			user.password_confirmation = "reviewer"
+			user.lan = "es"
+			user.roles.push(role_reviewer)
+			user.save(:validate => false)
+		end
+	end
+
 	#Create LOs
 	loA = Lo.new
 	loA.url = "http://vishub.org/excursions/83"
@@ -61,6 +73,19 @@ namespace :db do
 	loB.hasQuizzes = false
 	loB.hasWebs = true
 	loB.save(:validate => false)
+
+	if Rails.env == "development"
+		10.times do |i|
+			lo = Lo.new
+			lo.url = "http://vishub.org/excursions/44"
+			lo.name = "LO" + Faker::Name.name.split(" ").pop()
+			lo.lotype = "VE slideshow"
+			lo.repository = "ViSH"
+			lo.technology = "HTML"
+			lo.lan = "es"
+			lo.save(:validate => false)
+		end
+	end
 
 	#Create Evaluation Methods
 	LORI = Evmethod.new
@@ -106,4 +131,5 @@ namespace :db do
 
 	puts "Populate finish"
   end
+
 end

@@ -34,4 +34,6 @@ gem 'mysql2'
 gem 'therubyracer'
 gem 'execjs'
 
+gem 'faker'
+
 gem 'pry-rails', :group => :development
