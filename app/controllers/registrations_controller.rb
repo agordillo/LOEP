@@ -15,7 +15,7 @@ class RegistrationsController < Devise::RegistrationsController
   	@user.valid?
 
   	if @user.errors.blank?
-  		if true || verify_recaptcha
+  		if verify_recaptcha
   			@user.save
   			sign_in @user, :bypass => true
   			redirect_to "/"
