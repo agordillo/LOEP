@@ -31,8 +31,11 @@
     <p class="show_value"><%="Female"%></p>
   <% end %>
 
-  <p class="show_legend">Language</p>
-  <p class="show_value"><%=Utils.readable_lan(@user.lan)%></p>
+  <p class="show_legend">Preferred Language</p>
+  <p class="show_value"><%=@user.language.name%></p>
+
+  <p class="show_legend">All Languages</p>
+  <p class="show_value"><%=@user.languages.map { |l| l.name }.join(", ")%></p>
   
   <p class="show_legend">Areas of interest</p>
   <div class="tagsinput">
@@ -52,11 +55,13 @@
 
   <br/>
   <br/>
-  <h1 class="loep_title"> Evaluations </h1>
-  <% if iamAdmin? %>
-    <%= render '/evaluations/index' %>
-  <% else %>
-    <%= render '/evaluations/rindex' %>
+  <% if @evaluations.length > 0 %>
+    <h1 class="loep_title"> Evaluations </h1>
+    <% if iamAdmin? %>
+      <%= render '/evaluations/index' %>
+    <% else %>
+      <%= render '/evaluations/rindex' %>
+    <% end %>
   <% end %>
 
   <br/>

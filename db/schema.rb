@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131211143248) do
+ActiveRecord::Schema.define(:version => 20131215171151) do
 
   create_table "assignments", :force => true do |t|
     t.integer  "author_id"
@@ -94,6 +94,18 @@ ActiveRecord::Schema.define(:version => 20131211143248) do
     t.integer "assignment_id"
   end
 
+  create_table "languages", :force => true do |t|
+    t.string   "name"
+    t.string   "shortname"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "languages_users", :id => false, :force => true do |t|
+    t.integer "language_id"
+    t.integer "user_id"
+  end
+
   create_table "los", :force => true do |t|
     t.text     "url"
     t.string   "name"
@@ -103,7 +115,7 @@ ActiveRecord::Schema.define(:version => 20131211143248) do
     t.text     "callback"
     t.string   "technology"
     t.text     "categories"
-    t.string   "lan"
+    t.integer  "language_id"
     t.boolean  "hasText"
     t.boolean  "hasImages"
     t.boolean  "hasVideos"
@@ -164,10 +176,15 @@ ActiveRecord::Schema.define(:version => 20131211143248) do
     t.string   "name"
     t.datetime "birthday"
     t.integer  "gender"
-    t.string   "lan"
+    t.integer  "language_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "users_languages", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "language_id"
+  end
 
 end

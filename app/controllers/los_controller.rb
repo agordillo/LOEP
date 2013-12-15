@@ -1,6 +1,7 @@
 class LosController < ApplicationController
   before_filter :authenticate_user!
   before_filter :filterCategories
+  before_filter :filterLanguage
 
   # GET /los
   # GET /los.json
@@ -191,6 +192,12 @@ class LosController < ApplicationController
   def filterCategories
     if params[:lo] and params[:lo][:categories]
       params[:lo][:categories] = params[:lo][:categories].reject{|c| c.empty? }.to_json
+    end
+  end
+
+  def filterLanguage
+    if params[:lo] and params[:lo][:language_id] and !Utils.is_numeric?(params[:lo][:language_id])
+      params[:lo].delete :language_id
     end
   end
 

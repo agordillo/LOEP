@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+
 namespace :db do
   task :populate => :environment do
   	desc "Populating db"
@@ -5,6 +8,7 @@ namespace :db do
 
   	#Removing data
   	Role.delete_all
+  	Language.delete_all
   	User.delete_all
   	Lo.delete_all
   	Evmethod.delete_all
@@ -17,13 +21,46 @@ namespace :db do
   	role_reviewer = Role.create!  :name  => "Reviewer"
 	role_user = Role.create!  :name  => "User"
 
+	#Create Languages
+	english = Language.new
+	english.name = "English"
+	english.shortname = "en"
+	english.save(:validate => false)
+
+	spanish = Language.new
+	spanish.name = "Español"
+	spanish.shortname = "es"
+	spanish.save(:validate => false)
+
+	german = Language.new
+	german.name = "German"
+	german.shortname = "de"
+	german.save(:validate => false)
+
+	nederlands = Language.new
+	nederlands.name = "Nederlands"
+	nederlands.shortname = "nl"
+	nederlands.save(:validate => false)
+
+	magyar = Language.new
+	magyar.name = "Magyar"
+	magyar.shortname = "hu"
+	magyar.save(:validate => false)
+
+	french = Language.new
+	french.name = "Français"
+	french.shortname = "fr"
+	french.save(:validate => false)
+
 	#Create users
 	user_admin = User.new
 	user_admin.name = "admin"
 	user_admin.email = "admin@loep.com"
 	user_admin.password = "admin"
 	user_admin.password_confirmation = "admin"
-	user_admin.lan = "es"
+	user_admin.language_id = spanish.id
+	user_admin.languages.push(spanish)
+	user_admin.languages.push(english)
 	user_admin.roles.push(role_sadmin)
 	user_admin.roles.push(role_admin)
 	user_admin.save(:validate => false)
@@ -33,7 +70,9 @@ namespace :db do
 	user_reviewer.email = "reviewer@loep.com"
 	user_reviewer.password = "reviewer"
 	user_reviewer.password_confirmation = "reviewer"
-	user_reviewer.lan = "es"
+	user_reviewer.language_id = english.id
+	user_reviewer.languages.push(english)
+	user_reviewer.languages.push(spanish)
 	user_reviewer.roles.push(role_reviewer)
 	user_reviewer.save(:validate => false)
 
@@ -44,7 +83,8 @@ namespace :db do
 			user.email = Faker::Internet.free_email
 			user.password = "reviewer"
 			user.password_confirmation = "reviewer"
-			user.lan = "es"
+			user.language_id = spanish.id
+			user.languages.push(spanish)
 			user.roles.push(role_reviewer)
 			user.save(:validate => false)
 		end
@@ -58,7 +98,7 @@ namespace :db do
 	loA.lotype = "VE slideshow"
 	loA.repository = "ViSH"
 	loA.technology = "HTML"
-	loA.lan = "en"
+	loA.language_id = english.id
 	loA.hasQuizzes = true
 	loA.save(:validate => false)
 
@@ -69,7 +109,7 @@ namespace :db do
 	loB.lotype = "VE slideshow"
 	loB.repository = "ViSH"
 	loB.technology = "HTML"
-	loB.lan = "es"
+	loB.language_id = spanish.id
 	loB.hasQuizzes = false
 	loB.hasWebs = true
 	loB.save(:validate => false)
@@ -82,7 +122,7 @@ namespace :db do
 			lo.lotype = "VE slideshow"
 			lo.repository = "ViSH"
 			lo.technology = "HTML"
-			lo.lan = "es"
+			lo.language_id = spanish.id
 			lo.save(:validate => false)
 		end
 	end

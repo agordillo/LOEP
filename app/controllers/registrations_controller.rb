@@ -1,4 +1,5 @@
 class RegistrationsController < Devise::RegistrationsController
+  before_filter :filterULanguages
 
   def edit
     authorize! :edit, resource
@@ -7,17 +8,10 @@ class RegistrationsController < Devise::RegistrationsController
 
   def create
   	@user = User.new
-  	@user.name = params[:user][:name]
-    @user.email = params[:user][:email]
-    @user.birthday = params[:user][:birthday]
-  	@user.gender = params[:user][:gender]
-    @user.lan = params[:user][:lan]
-    @user.tag_list = params[:user][:tag_list]
-  	@user.password = params[:user][:password]
-  	@user.password_confirmation =params[:user][:password_confirmation]
-  	#Add role
-  	@user.roles.push(Role.reviewer)
-
+    @user.assign_attributes(params[:user])
+    #Add role
+    @user.roles.push(Role.reviewer)
+    
   	@user.valid?
 
   	if @user.errors.blank?
@@ -41,6 +35,22 @@ class RegistrationsController < Devise::RegistrationsController
     #params[:user][:roles] access is restricted for security reasons
     #Try to pass this param will trigger a "Can't mass-assign protected attributes: roles" error
     super
+  end
+
+  private
+
+  def filterULanguages
+    if params[:user] and params[:user][:languages]
+      begin
+        params[:user][:languages] = params[:user][:languages].reject{|m| m.empty? }
+        params[:user][:languages] = params[:user][:languages].map{|m| Language.find(m) }
+      rescue
+        params[:user][:languages] = []
+      end
+    end
+    if params[:user] and params[:user][:language_id] and !Utils.is_numeric?(params[:user][:language_id])
+      params[:user].delete :language_id
+    end
   end
 
 end

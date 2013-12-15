@@ -3,6 +3,6 @@ class AddParamsToUsers < ActiveRecord::Migration
     add_column :users, :name, :string
     add_column :users, :birthday, :datetime
     add_column :users, :gender, :integer
-    add_column :users, :lan, :string
+    add_column :users, :language_id, :integer
   end
 end

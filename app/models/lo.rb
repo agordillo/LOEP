@@ -1,5 +1,5 @@
 class Lo < ActiveRecord::Base
-  attr_accessible :callback, :categories, :description, :name, :repository, :technology, :lan, :lotype, :url, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list
+  attr_accessible :callback, :categories, :description, :name, :repository, :technology, :language_id, :lotype, :url, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list
 
   validates :url,
   :presence => true,
@@ -14,9 +14,7 @@ class Lo < ActiveRecord::Base
     :case_sensitive => false
   }
 
-  validates :lan,
-  :presence => true,
-  :exclusion => { in: "Unspecified", message: "has to be specified" }
+  validates :language_id, :presence => { :message => "has to be specified" }
 
   validates :lotype,
   :presence => true,
@@ -31,6 +29,7 @@ class Lo < ActiveRecord::Base
   has_many :assignments, :dependent => :destroy
   has_many :users, through: :assignments
   has_many :evaluations, :dependent => :destroy
+  belongs_to :language
 
   def getCategories
   	unless self.categories.nil?

@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
 	before_filter :authenticate_user!
+	before_filter :filterULanguages
 
 	def index
 		@users = User.all(:order => 'updated_at DESC').sort_by {|user| user.compareRole }.reverse
@@ -88,5 +89,22 @@ class UsersController < ApplicationController
 	      format.json { head :no_content }
 	    end
   	end
+
+
+  private
+
+  def filterULanguages
+    if params[:user] and params[:user][:languages]
+      begin
+        params[:user][:languages] = params[:user][:languages].reject{|m| m.empty? }
+        params[:user][:languages] = params[:user][:languages].map{|m| Language.find(m) }
+      rescue
+        params[:user][:languages] = []
+      end
+    end
+    if params[:user] and params[:user][:language_id] and !Utils.is_numeric?(params[:user][:language_id])
+      params[:user].delete :language_id
+    end
+  end
 
 end

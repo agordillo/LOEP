@@ -5,12 +5,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :birthday, :gender, :tag_list, :lan
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :birthday, :gender, :tag_list, :language_id, :languages
 
   has_and_belongs_to_many :roles
+  has_and_belongs_to_many :languages
+  belongs_to :language
   has_many :assignments, :dependent => :destroy
   has_many :los, through: :assignments
   has_many :evaluations
+
+  before_save :checkLanguages
 
   validates :name,
   :allow_nil => false,
@@ -23,11 +27,7 @@ class User < ActiveRecord::Base
   validates :birthday, :presence => { :message => "can't be blank" }
   validates :gender, :presence => { :message => "can't be blank" }
   validates :roles, :presence => { :message => "can't be blank" }
-
-  validates :lan,
-  :presence => true,
-  :exclusion => { in: "Unspecified", message: "has to be specified" }
-
+  validates :language_id, :presence => { :message => "can't be blank" }
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'
@@ -160,6 +160,18 @@ class User < ActiveRecord::Base
       end
     end
     reviewers
+  end
+
+  def getLanguages
+    unless self.languages.empty?
+      self.languages.map { |l| l.id }
+    end
+  end
+
+  def checkLanguages
+    if !self.languages.include? Language.find(self.language_id)
+      self.languages.push(Language.find(self.language_id))
+    end
   end
 
 end
