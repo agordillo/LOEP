@@ -12,10 +12,10 @@
   <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
 
     <p class="form_legend">* Username</p>
-    <%=f.text_field :name, :class=>'loep_input' %>
+    <%=f.text_field :name, :class=>'loep_input', :autocomplete => "off" %>
 
     <p class="form_legend">* Email</p>
-    <%= f.email_field :email, :class=>'loep_input' %>
+    <%= f.email_field :email, :class=>'loep_input', :autocomplete => "off" %>
 
     <p class="form_legend">* Birthday</p>
     <%=f.text_field :birthday, :class=>'loep_input', :id=>"birthday_datepicker" %>
@@ -33,13 +33,13 @@
     <%= f.select :languages, options_for_select(Utils.getOptionsForSelectLan("edit"),resource.getLanguages), {} ,{ :multiple => 'true' , :size => 6, :class=>'loep_input' } %>
 
     <p class="form_legend">Areas of interest</p>
-    <input name="user[tag_list]" id="tags" value="<%=resource.tag_list.join(",")%>"/>
+    <input name="user[tag_list]" autocomplete="off" id="tags" value="<%=resource.tag_list.join(",")%>"/>
 
     <p class="form_legend">* Password</p>
-    <%= f.password_field :password, :class=>'loep_input' %>
+    <%= f.password_field :password, :class=>'loep_input', :autocomplete => "off" %>
 
     <p class="form_legend">* Password confirmation</p>
-    <%= f.password_field :password_confirmation, :class=>'loep_input' %>
+    <%= f.password_field :password_confirmation, :class=>'loep_input', :autocomplete => "off" %>
 
     <div class="captcha_wrapper">
       <%= recaptcha_tags %>

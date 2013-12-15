@@ -22,7 +22,7 @@
   </div>
   <table cellspacing='0' class="loep_table">
     <tr>
-      <th></th>
+      <th><input type="checkbox" class="checkalllos" value="all"/></th>
       <th>Name</th>
       <th>Url</th>
       <th>Assign</th>
@@ -33,7 +33,7 @@
     <% @los.each do |lo| %>
       <tr>
         <td>
-          <input type="checkbox" class="checklo" value="<%=lo.id%>" />
+          <input type="checkbox" class="checklo" value="<%=lo.id%>"/>
         </td>
         <td>
           <a href="<%=lo_path(lo)%>"><%= lo.name %></a>
@@ -72,6 +72,7 @@
         } else {
           checkedLos--;
           $(lotr).removeClass("loeprowselected");
+           $("input:checkbox.checkalllos").prop("checked",false);
         }
 
         if(checkedLos===1){
@@ -81,6 +82,16 @@
           //Hide toolbar
           // $("div.loep_table_tools").slideUp();
         }
+    });
+
+    $("input:checkbox.checkalllos").change(function(){
+      if(this.checked) {
+        $("input:checkbox.checklo").prop("checked",true);
+        $("input:checkbox.checklo").parent().parent().addClass("loeprowselected");
+      } else {
+        $("input:checkbox.checklo").prop("checked",false);
+        $("input:checkbox.checklo").parent().parent().removeClass("loeprowselected");
+      }
     });
 
     //Toolbar actions
