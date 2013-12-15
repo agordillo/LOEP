@@ -111,7 +111,6 @@ class AssignmentsController < ApplicationController
   # POST /assignments
   # POST /assignments.json
   def create
-    binding.pry
     @assignment = Assignment.new(params[:assignment])
     authorize! :create, @assignment
     

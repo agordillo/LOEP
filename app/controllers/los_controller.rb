@@ -168,10 +168,6 @@ class LosController < ApplicationController
     end
   end
 
-  def assignlist
-    binding.pry
-  end
-
   private
 
   def getOptionsForSelect
