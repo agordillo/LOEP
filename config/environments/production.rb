@@ -56,8 +56,11 @@ LOEP::Application.configure do
   config.action_mailer.smtp_settings = {
     :address => "127.0.0.1",
     :port    => "25",
-    :domain  => 'loep.global.dit.upm.es'
+    :domain  => 'loep.global.dit.upm.es',
+    :enable_starttls_auto => true,
+    :openssl_verify_mode  => 'none'
   }
+  
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 
