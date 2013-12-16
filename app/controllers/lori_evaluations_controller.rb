@@ -1,4 +1,4 @@
-class LoriEvaluationsController < ApplicationController
+class LoriEvaluationsController < EvaluationsController
   before_filter :authenticate_user!
   
   def new

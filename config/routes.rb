@@ -1,6 +1,5 @@
 LOEP::Application.routes.draw do
 
-
   devise_for :users, :controllers => { :registrations => "registrations" }
   as :user do
     get 'signin' => 'home#frontpage', :as => :new_user_session
@@ -27,8 +26,16 @@ LOEP::Application.routes.draw do
   match '/revaluations' => 'evaluations#rindex'
   match '/assignments/:id/reject' => 'assignments#reject'
 
+  #LOEP API
+  namespace :api do
+    namespace :v1 do
+      #/api/v1/addLo
+      match '/addLo' => 'base#addLo', via: [:post]
+    end
+  end
+
   #Wildcard route
-  # match '*path' => 'application#page_not_found'
+  match '*path' => 'application#page_not_found'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.
