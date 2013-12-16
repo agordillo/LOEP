@@ -14,3 +14,11 @@ Installation:
 rails s and enjoy!
 
 
+* Register an Application to use the LOEP API:
+rake app:register[AppName]
+
+* Other functions
+rake app:remove[AppName] #remove App
+rake app:refreshToken[AppName] #refresh App Token
+
+

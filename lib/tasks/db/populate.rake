@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-
 namespace :db do
   task :populate => :environment do
   	desc "Populating db"
@@ -14,6 +13,7 @@ namespace :db do
   	Evmethod.delete_all
   	Assignment.delete_all
   	Evaluation.delete_all
+  	App.delete_all
 
   	#Create Roles
   	role_sadmin = Role.create!  :name  => "SuperAdmin"

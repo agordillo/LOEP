@@ -17,6 +17,7 @@ class Api::V1::BaseController < ActionController::Base
     end
   end
 
+
   private
 
   def filterLOCategories
