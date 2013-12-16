@@ -31,8 +31,10 @@ gem 'acts-as-taggable-on'
 
 gem 'mysql2'
 
-gem 'therubyracer'
-gem 'execjs'
+group :production do
+  gem 'therubyracer'
+  gem 'execjs'
+end
 
 gem 'faker'
 
