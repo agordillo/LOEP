@@ -51,7 +51,7 @@ LOEP::Application.configure do
   #Config action mailer
   #(supposing you have a SMTP server on localhost:25)
   # TODO. Configure SMTP server
-  config.action_mailer.default_url_options = {:host => 'localhost'}
+  config.action_mailer.default_url_options = {:host => 'loep.global.dit.upm.es'}
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     :address => "127.0.0.1",
