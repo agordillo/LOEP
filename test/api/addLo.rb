@@ -28,6 +28,9 @@ params["utf8"] = "✓"
 # Authentication
 # params["authentication"] = 'Basic ' + Base64.encode64("name" + ':' + "password")
 # params["authenticity_token"] = '';
+params["name"] = "ViSH"
+params["auth_token"] = "twCDn123Me84GH4sCDxkMg"
+#LO
 params["lo"] = Hash.new
 params["lo"]["name"] = "Curiosity Flashcard"
 params["lo"]["url"] = "http://vishub.org/excursions/83"
@@ -54,11 +57,11 @@ params["lo"]["hasEnrichedVideos"] = "0"
 
 invokeApiMethod('http://localhost:3000/api/v1/addLo/',params){ |response,code|
 	if(code >= 400 and code <=500)
-		# puts "Error"
-		# puts "Response code: " + code.to_s
+		puts "Error"
+		puts "Response code: " + code.to_s
+	else
+		puts "Success"
 	end
-	# puts response
+	
+	puts response
 }
-
-
-
