@@ -6,7 +6,7 @@ class LosController < ApplicationController
   # GET /los
   # GET /los.json
   def index
-    @los = Lo.all(:order => 'updated_at DESC')
+    @los = Lo.all(:order => 'name ASC')
     authorize! :index, @los
 
     Utils.update_sessions_paths(session, request.url, nil)
