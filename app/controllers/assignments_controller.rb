@@ -21,7 +21,7 @@ class AssignmentsController < ApplicationController
   end
 
   def rindex
-    @assignments = current_user.assignments(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForReviewers }.reverse
+    @assignments = current_user.assignments(:order => 'updated_at ASC').sort_by {|as| as.compareAssignmentForReviewers }.reverse
     authorize! :rshow, @assignments
 
     Utils.update_sessions_paths(session, nil, nil)
