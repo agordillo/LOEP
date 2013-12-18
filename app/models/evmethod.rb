@@ -1,6 +1,7 @@
 class Evmethod < ActiveRecord::Base
   attr_accessible :name, :module
   has_and_belongs_to_many :assignments
+  has_and_belongs_to_many :metrics
   has_many :evaluations, :dependent => :destroy
 
   validates :name,

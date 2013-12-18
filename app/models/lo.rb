@@ -30,6 +30,7 @@ class Lo < ActiveRecord::Base
   has_many :users, through: :assignments
   has_many :evaluations, :dependent => :destroy
   belongs_to :language
+  has_many :scores, :dependent => :destroy
 
   def getCategories
   	unless self.categories.nil?

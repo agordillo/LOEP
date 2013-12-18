@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131216182118) do
+ActiveRecord::Schema.define(:version => 20131218144248) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -101,6 +101,11 @@ ActiveRecord::Schema.define(:version => 20131216182118) do
     t.integer "assignment_id"
   end
 
+  create_table "evmethods_metrics", :id => false, :force => true do |t|
+    t.integer "evmethod_id"
+    t.integer "metric_id"
+  end
+
   create_table "languages", :force => true do |t|
     t.string   "name"
     t.string   "shortname"
@@ -139,6 +144,17 @@ ActiveRecord::Schema.define(:version => 20131216182118) do
     t.datetime "updated_at",        :null => false
   end
 
+  create_table "metrics", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "metrics_evmethods", :id => false, :force => true do |t|
+    t.integer "metric_id"
+    t.integer "evmethod_id"
+  end
+
   create_table "roles", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -148,6 +164,14 @@ ActiveRecord::Schema.define(:version => 20131216182118) do
   create_table "roles_users", :id => false, :force => true do |t|
     t.integer "role_id"
     t.integer "user_id"
+  end
+
+  create_table "scores", :force => true do |t|
+    t.integer  "value"
+    t.integer  "metric_id"
+    t.integer  "lo_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "taggings", :force => true do |t|
