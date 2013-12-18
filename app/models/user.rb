@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :assignments, :dependent => :destroy
   has_many :los, through: :assignments
   has_many :evaluations
+  belongs_to :loric
 
   before_save :checkLanguages
 

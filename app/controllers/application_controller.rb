@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  def surveys
+    :authenticate_user!
+    render "surveys"
+  end
+
   def after_sign_in_path_for(resource)
 	  sign_in_url = "/home"
   end
@@ -14,7 +19,6 @@ class ApplicationController < ActionController::Base
     @tags = _getTags
   	render :json => @tags.reject{|tag| _rejectTag(tag,term) }
   end
-
 
   #CanCan Rescue
   rescue_from CanCan::AccessDenied do |exception|

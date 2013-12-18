@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  value: 1
+  metric_id: 1
+  lo_id: 1
+
+two:
+  value: 1
+  metric_id: 1
+  lo_id: 1

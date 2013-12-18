@@ -5,15 +5,21 @@ namespace :db do
   	desc "Populating db"
   	puts "Populate start"
 
-  	#Removing data
-  	Role.delete_all
-  	Language.delete_all
-  	User.delete_all
-  	Lo.delete_all
-  	Evmethod.delete_all
-  	Assignment.delete_all
-  	Evaluation.delete_all
-  	App.delete_all
+  	unless Rails.env == "development" or User.all.length === 0
+  		fail "Prevent populate in production without empty database"
+  	end
+
+  	if Rails.env == "development"
+		#Removing data
+		Role.delete_all
+		Language.delete_all
+		User.delete_all
+		Lo.delete_all
+		Evmethod.delete_all
+		Assignment.delete_all
+		Evaluation.delete_all
+		App.delete_all
+	end
 
   	#Create Roles
   	role_sadmin = Role.create!  :name  => "SuperAdmin"
@@ -168,6 +174,11 @@ namespace :db do
 	evA.evmethod_id = LORI.id
 	evA.assignment_id = asA.id #not mandatory
 	evA.save(:validate => false)
+
+	#New Metric
+	LoriM = LoriMetric.new
+	LoriM.evmethods.push(LORI);
+	LoriM.save(:validate => false)
 
 	puts "Populate finish"
   end

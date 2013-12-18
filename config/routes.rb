@@ -16,6 +16,7 @@ LOEP::Application.routes.draw do
   resources :lori_evaluations
   resources :evmethods
   resources :assignments
+  resources :lorics
 
   root :to =>'home#frontpage'
   match '/home' => 'home#index'
@@ -25,6 +26,8 @@ LOEP::Application.routes.draw do
   match '/rassignments' => 'assignments#rindex'
   match '/revaluations' => 'evaluations#rindex'
   match '/assignments/:id/reject' => 'assignments#reject'
+
+  match '/surveys' => 'application#surveys'
 
   #LOEP API
   namespace :api do

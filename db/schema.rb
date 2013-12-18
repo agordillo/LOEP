@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131218144248) do
+ActiveRecord::Schema.define(:version => 20131218160548) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -118,6 +118,22 @@ ActiveRecord::Schema.define(:version => 20131218144248) do
     t.integer "user_id"
   end
 
+  create_table "lorics", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "item1"
+    t.integer  "item2"
+    t.integer  "item3"
+    t.integer  "item4"
+    t.integer  "item5"
+    t.integer  "item6"
+    t.integer  "item7"
+    t.integer  "item8"
+    t.integer  "item9"
+    t.text     "comments"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "los", :force => true do |t|
     t.text     "url"
     t.string   "name"
@@ -146,6 +162,7 @@ ActiveRecord::Schema.define(:version => 20131218144248) do
 
   create_table "metrics", :force => true do |t|
     t.string   "name"
+    t.string   "type"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -208,6 +225,7 @@ ActiveRecord::Schema.define(:version => 20131218144248) do
     t.datetime "birthday"
     t.integer  "gender"
     t.integer  "language_id"
+    t.integer  "loric_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

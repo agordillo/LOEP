@@ -549,3 +549,8 @@ p.show_value {
 	padding-left: 0px;
 }
 
+/* Rails Errors */
+
+.field_with_errors {
+	display: inline;
+}

@@ -21,4 +21,3 @@ rake app:register[AppName]
 rake app:remove[AppName] #remove App
 rake app:refreshToken[AppName] #refresh App Token
 
-
