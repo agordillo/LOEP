@@ -6,6 +6,7 @@
     <tr>
       <th>Name</th>
       <th>Url</th>
+      <th>Categories</th>
       <th>LORI Score</th>
     </tr>
     <% @los.each do |lo| %>
@@ -15,6 +16,9 @@
         </td>
         <td class="tdcenter">
           <a target="_blank" href="<%=lo.url%>"><span class="glyphicon glyphicon-share"></span></a>
+        </td>
+         <td class="tdcenter">
+          <p> <%=lo.tag_list.join(", ")%> </p>
         </td>
         <td class="tdcenter">
           <p> <%=@scores[lo.id.to_s].nil? ? "No evaluated" : @scores[lo.id.to_s]%> </p>

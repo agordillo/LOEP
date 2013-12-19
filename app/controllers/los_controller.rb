@@ -39,7 +39,18 @@ class LosController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @los }
+      format.json {
+        @vishData = @los.map { |lo| 
+          info = Hash.new
+          if lo.url.match("http://vishub.org/excursions/")
+            info["vishId"] = lo.url.split("http://vishub.org/excursions/")[1]
+          end
+          info["loepId"] = lo.id.to_s
+          info["score"] = @scores[lo.id.to_s]
+          info
+        }
+        render json: @vishData 
+      }
     end
   end
 
