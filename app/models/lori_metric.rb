@@ -3,6 +3,10 @@ class LoriMetric < Metric
   #Override methods here
 
   def self.getItemWeights
+    if Loric.count == 0
+      return nil
+    end
+
   	itemWs = []
   	9.times do |i|
   		itemWs.push(Loric.average("item"+(i+1).to_s).to_f.round(2))
@@ -32,6 +36,9 @@ class LoriMetric < Metric
   end
 
   def self._getScoreForLo(lo,itemWs)
+    if itemWs.nil?
+      return nil
+    end
   	evaluations = lo.evaluations.where(:evmethod_id => Evmethod.find_by_name("LORI v1.5").id)
   	if evaluations.length === 0
   		return nil
