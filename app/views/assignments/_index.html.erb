@@ -16,7 +16,8 @@
     <% @assignments.each do |assignment| %>
       <tr>
          <td>
-          <a href="<%=rlo_path(assignment.lo) + "?as_user_id=" + assignment.user.id.to_s %>"><span><%= assignment.lo.name %></span></a>
+          <!--#rlo_path(assignment.lo) + "?as_user_id=" + assignment.user.id.to_s-->
+          <a href="<%=lo_path(assignment.lo) %>"><span><%= assignment.lo.name %></span></a>
         </td>
         <td>
           <a href="<%=user_path(assignment.user)%>"><span><%= assignment.user.name %></span></a>

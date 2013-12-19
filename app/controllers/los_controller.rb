@@ -17,6 +17,32 @@ class LosController < ApplicationController
     end
   end
 
+  def rankedIndex
+    @los = Lo.all
+    authorize! :index, @los
+
+    @scores = LoriMetric.getScoreForLos(@los)
+    @los.sort! { |a, b| 
+      scoreA = @scores[a.id.to_s]
+      scoreB = @scores[b.id.to_s]
+
+      if scoreA.nil? and scoreB.nil?
+        0
+      elsif scoreA.nil?
+        +1
+      elsif scoreB.nil?
+        -1
+      else
+        scoreB <=> scoreA
+      end
+    }
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @los }
+    end
+  end
+
   # GET /los/1
   # GET /los/1.json
   def show

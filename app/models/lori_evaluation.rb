@@ -1,5 +1,5 @@
 class LoriEvaluation < Evaluation
-  # this is for Evaluations with evMethod=LORI (type=LORI)
+  # this is for Evaluations with evMethod=LORI (type=LoriEvaluation)
   #Override methods here
 
   def create

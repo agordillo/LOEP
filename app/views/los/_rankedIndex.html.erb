@@ -1,0 +1,25 @@
+<% rL = @los.length %>
+<% if rL === 0 %>
+  <%= render '/layouts/emptytable', :resources => "learning objects" %>
+<% else %>
+  <table cellspacing='0' class="loep_table">
+    <tr>
+      <th>Name</th>
+      <th>Url</th>
+      <th>LORI Score</th>
+    </tr>
+    <% @los.each do |lo| %>
+      <tr>
+        <td>
+          <a href="<%=lo_path(lo)%>"><%= lo.name %></a>
+        </td>
+        <td class="tdcenter">
+          <a target="_blank" href="<%=lo.url%>"><span class="glyphicon glyphicon-share"></span></a>
+        </td>
+        <td class="tdcenter">
+          <p> <%=@scores[lo.id.to_s].nil? ? "No evaluated" : @scores[lo.id.to_s]%> </p>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
