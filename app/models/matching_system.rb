@@ -48,7 +48,7 @@ class MatchingSystem
           loToReview = los.first[0]
 
           if !matchings[reviewer.id].include?(loToReview.id)
-            assignments << match(loToReview,reviewer,assignmentParams)
+            assignments << createMatch(loToReview,reviewer,assignmentParams,nil)
 
             matchings[reviewer.id].push(loToReview.id);
             los.first[1] = los.first[1] + 1
@@ -77,7 +77,7 @@ class MatchingSystem
     # loNassignments["loId"] = nAssignments
 
     amatrix = Hash.new;
-    # Appropriateness Matrix amatrix["reviewerId"]["loId"] = MatchingScore(lo,reviewer)
+    # Suitability Matrix amatrix["reviewerId"]["loId"] = MatchingScore(lo,reviewer)
 
     reviewers.each do |reviewer|
       reviewer_matrix = Hash.new;
@@ -109,7 +109,7 @@ class MatchingSystem
           amatrix[reviewer.id].delete loToReview.id
 
           if !reviewerLOmatchings[reviewer.id].include?(loToReview.id)
-            assignments << match(loToReview,reviewer,assignmentParams)
+            assignments << createMatch(loToReview,reviewer,assignmentParams,amatrix[reviewer.id][loToReview.id])
 
             reviewerLOmatchings[reviewer.id].push(loToReview.id);
             if loNassignments[loToReview.id].nil?
@@ -134,18 +134,23 @@ class MatchingSystem
     return assignments
   end
 
-  # Prioritize reviewer appropriateness
+  # Prioritize reviewer suitability
   # Choose the most appropriate Reviewer for each LO
   def self.pReviewerA(nepl,los,reviewers,assignmentParams)
     return nil
   end
 
-  def self.match(lo,reviewer,assignmentParams)
+  def self.createMatch(lo,reviewer,assignmentParams,suitability)
     as = Assignment.new
     as.assign_attributes(assignmentParams)
     as.user_id = reviewer.id
     as.lo_id = lo.id
     as.status = "Pending"
+    if suitability.nil?
+      as.suitability = getMatchingScore(lo,reviewer)
+    else
+      as.suitability = suitability
+    end
     return as
   end
 

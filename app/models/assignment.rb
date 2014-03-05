@@ -4,7 +4,7 @@ class Assignment < ActiveRecord::Base
   belongs_to :user
   belongs_to :lo
   belongs_to :evmethod
-  belongs_to :evaluation #optional
+  has_one :evaluation #optional
 
   validates :author_id,
   :presence => true
@@ -31,6 +31,8 @@ class Assignment < ActiveRecord::Base
     end
   end
 
+  before_save :add_suitability
+
 #-------------------------------------------------------------------------------------
 
   def author
@@ -39,8 +41,8 @@ class Assignment < ActiveRecord::Base
   	end
   end
 
-  def evaluation
-    Evaluation.find_by_assignment_id(self.id)
+  def reviewer
+    self.user
   end
 
   def readable_evmethod
@@ -48,12 +50,12 @@ class Assignment < ActiveRecord::Base
   end
 
   def readable_deadline
-  	readable_date(self.deadline)
+  	Utils.getReadableDate(self.deadline)
   end
 
   def readable_completed_at
-  	if !readable_date(self.completed_at).blank?
-      readable_date(self.completed_at)
+  	if !Utils.getReadableDate(self.completed_at).blank?
+      Utils.getReadableDate(self.completed_at)
     else
       ("Uncompleted <span class='status_in_completed_at'>(" + readable_status + ")</span>").html_safe
     end
@@ -72,41 +74,46 @@ class Assignment < ActiveRecord::Base
       end
   end
 
-  def compareAssignmentForReviewers
-    case self.status
-      when "Pending"
-        3
-      when "Rejected"
-        2
-      when "Completed"
-        1
+  def compareAssignmentForReviewers(assignment)
+    if self.status=="Pending"
+      if assignment.status != "Pending"
+        return 1
       else
-        0
+        return self.suitability <=> assignment.suitability
       end
+    end
+
+    if assignment.status=="Pending"
+      return -1
+    end
+
+    #No pending assignments at this point
+
+    if self.status=="Completed"
+      if assignment.status != "Completed"
+        return 1
+      else
+        return self.updated_at <=> assignment.updated_at
+      end
+    end
+
+    if assignment.status=="Completed"
+      return -1
+    end
+
+    return self.updated_at <=> assignment.updated_at
   end
 
-  def compareAssignmentForAdmins
-    case self.status
-      when "Pending"
-        1
-      when "Rejected"
-        2
-      when "Completed"
-        1
-      else
-        0
-      end
+  def compareAssignmentForAdmins(assignment)
+    return self.updated_at <=> assignment.updated_at
   end
+
 
   private
 
-  def readable_date(date)
-    unless date.nil?
-      date.strftime("%d/%m/%Y %H:%M %P")
-      #For Ruby < 1.9
-      # date.strftime("%d/%m/%Y %H:%M %p").sub(' AM', ' am').sub(' PM', ' pm')
-    else
-      ""
+  def add_suitability
+    if self.suitability.nil?
+      self.suitability = MatchingSystem.getMatchingScore(self.lo,self.user)
     end
   end
 

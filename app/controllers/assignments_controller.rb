@@ -1,6 +1,5 @@
 class AssignmentsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :filterEMethods
 
   # GET /assignments
   # GET /assignments.json
@@ -10,10 +9,11 @@ class AssignmentsController < ApplicationController
       return
     end
 
-    @assignments = Assignment.all(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForAdmins }.reverse
+    @assignments = Assignment.all.sort{|b,a| a.compareAssignmentForAdmins(b)}
     authorize! :index, @assignments
 
     Utils.update_sessions_paths(session, request.url, nil)
+
     respond_to do |format|
       format.html
       format.json { render json: @assignments }
@@ -21,8 +21,7 @@ class AssignmentsController < ApplicationController
   end
 
   def rindex
-    # @assignments = current_user.assignments(:order => 'updated_at ASC').sort_by {|as| as.compareAssignmentForReviewers }.reverse
-    @assignments = current_user.assignments.all(:order => 'updated_at ASC')
+    @assignments = current_user.assignments.all.sort{|b,a| a.compareAssignmentForReviewers(b)}
     authorize! :rshow, @assignments
 
     Utils.update_sessions_paths(session, nil, nil)
@@ -262,24 +261,6 @@ class AssignmentsController < ApplicationController
     end
   end
 
-  # Prioritize workload balancing: Random Matching
-  # Same LOs for each reviewer, random 
-  def pwlRandom(nepl,los,reviewers)
-
-  end
-
-  # Prioritize workload balancing: Best-effort Matching
-  # Same LOs for each reviewer, try to choose the most appropriate LO for each reviewer
-  def pwlBestEffort
-    
-  end
-
-  # Prioritize reviewer appropriateness
-  # Choose the most appropriate Reviewer for each LO
-  def pReviewerA
-
-  end
-
   # PUT /assignments/1
   # PUT /assignments/1.json
   def update
@@ -292,6 +273,9 @@ class AssignmentsController < ApplicationController
     end
     unless params[:selected_users].blank?
       params[:assignment][:user_id] = params[:selected_users][0]
+    end
+    unless params[:selected_evmethods].blank?
+      params[:assignment][:evmethod_id] = params[:selected_evmethods][0]
     end
 
     @los = Lo.all
@@ -360,17 +344,6 @@ class AssignmentsController < ApplicationController
 
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
-  end
-
-  def filterEMethods
-    if params[:assignment] and params[:assignment][:evmethods]
-      begin
-        params[:assignment][:evmethods] = params[:assignment][:evmethods].reject{|m| m.empty? }
-        params[:assignment][:evmethods] = params[:assignment][:evmethods].map{|m| Evmethod.find(m) }
-      rescue
-        params[:assignment][:evmethods] = []
-      end
-    end
   end
 
 end

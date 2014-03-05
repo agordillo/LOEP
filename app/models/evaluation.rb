@@ -56,7 +56,7 @@ class Evaluation < ActiveRecord::Base
   def update_assignments
     # Look assignments that can be considered completed after this evaluation
     # Pending assignments of the user, with the same Lo and the same evaluation method
-    candidate_assignments = self.user.assignments.where(:status => "Pending", :lo_id=>self.lo.id).reject{ |as| as.evmethod.id != self.evmethod.id }
+    candidate_assignments = self.user.assignments.where(:status => "Pending", :lo_id=>self.lo.id, :evmethod_id=>self.evmethod.id)
     candidate_assignments.each do |as|
       #Add the evaluation to the assignment, if its not included
       if as.evaluation.nil?

@@ -2,6 +2,8 @@
 
 class Utils < ActiveRecord::Base
 
+  #Constants
+
   def self.getOptionsForSelectLan(action)
     languages = Language.all.map { |l| [l.name,l.id] }
 
@@ -18,6 +20,19 @@ class Utils < ActiveRecord::Base
 
   def self.getOptionsForSelectAssignmentStatus
     [["Pending","Pending"],["Completed","Completed"],["Rejected","Rejected"]]
+  end
+
+
+  #Dates
+
+  def self.getReadableDate(date)
+    unless date.nil?
+      date.strftime("%d/%m/%Y %H:%M %P")
+      #For Ruby < 1.9
+      # date.strftime("%d/%m/%Y %H:%M %p").sub(' AM', ' am').sub(' PM', ' pm')
+    else
+      ""
+    end
   end
 
 
@@ -60,6 +75,7 @@ class Utils < ActiveRecord::Base
       Rails.application.routes.url_helpers.home_path
     end
   end
+
 
   #More Utils
 
