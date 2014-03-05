@@ -1,10 +1,10 @@
 class Assignment < ActiveRecord::Base
-  attr_accessible :author_id, :completed_at, :deadline, :description, :lo_id, :status, :user_id, :evmethods
+  attr_accessible :author_id, :user_id, :lo_id, :evmethod_id, :completed_at, :deadline, :description, :status
 
   belongs_to :user
   belongs_to :lo
-  has_and_belongs_to_many :evmethods
-  has_many :evaluations
+  belongs_to :evmethod
+  belongs_to :evaluation #optional
 
   validates :author_id,
   :presence => true
@@ -15,13 +15,16 @@ class Assignment < ActiveRecord::Base
   validates :lo_id,
   :presence => true
 
+  validates :evmethod_id,
+  :presence => true
+
   validates :status,
   :presence => true
 
   validate :evmethods_blank
 
   def evmethods_blank
-    if self.evmethods.blank?
+    if self.evmethod_id.blank?
       errors.add(:emethods, 'You should choose at least one evaluation method')
     else
       true
@@ -36,16 +39,12 @@ class Assignment < ActiveRecord::Base
   	end
   end
 
-  def getEvMethods
-  	unless self.evmethods.empty?
-  		self.evmethods.map { |evmethod| evmethod.id }
-  	end
+  def evaluation
+    Evaluation.find_by_assignment_id(self.id)
   end
 
-  def readable_evmethods
-    unless self.evmethods.empty?
-      self.evmethods.map { |evmethod| evmethod.name }.join(",")
-    end
+  def readable_evmethod
+    evmethod.name
   end
 
   def readable_deadline

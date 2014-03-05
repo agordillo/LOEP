@@ -186,10 +186,11 @@ class AssignmentsController < ApplicationController
       @users = User.find(params[:selected_users])
     end
 
-    @los = Lo.find(params[:selected_los])
+    if params[:selected_evmethods].blank?
+      return renderError("You must select at least one Evaluation Method to create an assignment.","new_automatic")
+    end
 
     nepl = getNEPL
-
     if nepl.blank?
       return renderError("You need to specify the number of evaluations per Learning Object","new_automatic")
     end
@@ -199,7 +200,21 @@ class AssignmentsController < ApplicationController
       return renderError("Invalid LO-Reviewer Matching Criteria","new_automatic")
     end
 
-    assignments = MatchingSystem.LoReviewerMatching(params["mcriteria"],nepl,@los,@users,params[:assignment])
+    @los = Lo.find(params[:selected_los])
+    @evMethods = Evmethod.find(params[:selected_evmethods]);
+
+    #Lo-Reviewer Matching
+    matchedAssignments = MatchingSystem.LoReviewerMatching(params["mcriteria"],nepl,@los,@users,params[:assignment])
+
+    #Create one assignment per EvMethod
+    assignments = [];
+    @evMethods.each do |evMethod|
+      matchedAssignments.each do |as|
+        cAs = as.dup
+        cAs.evmethod_id = evMethod.id
+        assignments.push(cAs)
+      end
+    end
 
     if assignments.nil?
       return renderError("An error ocurred in the automatic assignments generation","new_automatic")

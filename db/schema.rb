@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131218160548) do
+ActiveRecord::Schema.define(:version => 20140305111918) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -30,11 +30,7 @@ ActiveRecord::Schema.define(:version => 20131218160548) do
     t.text     "description"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
-  end
-
-  create_table "assignments_evmethods", :id => false, :force => true do |t|
-    t.integer "assignment_id"
-    t.integer "evmethod_id"
+    t.integer  "evmethod_id"
   end
 
   create_table "evaluations", :force => true do |t|
@@ -96,11 +92,6 @@ ActiveRecord::Schema.define(:version => 20131218160548) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "evmethods_assignments", :id => false, :force => true do |t|
-    t.integer "evmethod_id"
-    t.integer "assignment_id"
-  end
-
   create_table "evmethods_metrics", :id => false, :force => true do |t|
     t.integer "evmethod_id"
     t.integer "metric_id"
@@ -135,14 +126,14 @@ ActiveRecord::Schema.define(:version => 20131218160548) do
   end
 
   create_table "los", :force => true do |t|
-    t.text     "url"
+    t.text     "url",               :limit => 16777215
     t.string   "name"
-    t.text     "description"
+    t.text     "description",       :limit => 16777215
     t.string   "lotype"
     t.string   "repository"
-    t.text     "callback"
+    t.text     "callback",          :limit => 16777215
     t.string   "technology"
-    t.text     "categories"
+    t.text     "categories",        :limit => 16777215
     t.integer  "language_id"
     t.boolean  "hasText"
     t.boolean  "hasImages"
@@ -156,8 +147,8 @@ ActiveRecord::Schema.define(:version => 20131218160548) do
     t.boolean  "hasFlashcards"
     t.boolean  "hasVirtualTours"
     t.boolean  "hasEnrichedVideos"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
   end
 
   create_table "metrics", :force => true do |t|

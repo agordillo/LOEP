@@ -26,8 +26,8 @@
       <% end %>
     </select>
 
-    <p class="form_legend">Evaluation Methods</p>
-    <%= f.select :evmethods, options_for_select(Utils.getEvMethods,@assignment.getEvMethods), {} ,{ :multiple => true, :size => 2, :class=>'loep_input' } %>
+    <p class="form_legend">Evaluation Method</p>
+    <%= f.select :evmethod_id, options_for_select(Utils.getEvMethods,@assignment.evmethod_id), {} ,{ :class=>'loep_input' } %>
 
     <p class="form_legend">Description</p>
     <%= f.text_area :description, :class=>'loep_input' %>

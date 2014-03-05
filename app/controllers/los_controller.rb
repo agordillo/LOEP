@@ -95,7 +95,7 @@ class LosController < ApplicationController
     
     unless user.role?("Admin")
       evmethods = []
-      @assignments.map { |as| evmethods = evmethods + as.evmethods }
+      @assignments.map { |as| evmethods.push(as.evmethod) }
       @evmethods = evmethods.uniq
     else
       @evmethods = Evmethod.all

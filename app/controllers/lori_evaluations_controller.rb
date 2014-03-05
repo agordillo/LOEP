@@ -12,7 +12,7 @@ class LoriEvaluationsController < EvaluationsController
       @assignment = Assignment.find(params[:assignment_id])
     else
       #Inferred
-      @assignment = (@lo.assignments.where(:user_id => current_user.id).reject { |as| !as.evmethods.include? @evmethod }).first
+      @assignment = (@lo.assignments.where(:user_id => current_user.id, :status=> "Pending").reject { |as| as.evmethod.id != @evmethod.id }).first
     end
     authorize! :rshow, @assignment
 

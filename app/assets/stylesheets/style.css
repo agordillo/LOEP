@@ -179,6 +179,7 @@ select.loep_input {
 	width: 50%;
 	margin-top: 2px;
 	margin-bottom: 3px;
+	padding: 5px;
 }
 
 .loep_form_wrapper {

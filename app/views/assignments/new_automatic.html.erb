@@ -38,7 +38,7 @@
     </select>
 
     <p class="form_legend">Evaluation Methods</p>
-    <%= select_tag "assignment[evmethods][]", options_for_select(Utils.getEvMethods,@assignment.getEvMethods), { :multiple => true, :size => 2, :class=>'loep_input' }  %>
+    <%= select_tag "selected_evmethods", options_for_select(Utils.getEvMethods), { :multiple => true, :size => 2, :class=>'loep_input' }  %>
 
     <p class="form_legend">Description</p>
     <textarea class="loep_input" cols="40" id="assignment_description" name="assignment[description]" rows="20"></textarea>

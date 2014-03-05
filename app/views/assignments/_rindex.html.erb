@@ -9,7 +9,7 @@
   <table cellspacing='0' class="loep_table">
     <tr>
       <th>Learning Object</th>
-      <th>Methods</th>
+      <th>Method</th>
       <th>Status</th>
       <th>Deadline</th>
       <% unless removeEvColumn %>
@@ -23,7 +23,7 @@
           <a href="<%=rlo_path(assignment.lo)%>"><span><%= assignment.lo.name %></span></a>
         </td>
         <td class="tdcenter">
-          <%=assignment.readable_evmethods%>
+          <%=assignment.readable_evmethod%>
         </td>
         <td class="tdcenter">
           <%=assignment.readable_status%>
@@ -34,7 +34,7 @@
         <% unless removeEvColumn %>
           <td class="tdcenter">
             <% if assignment.status == "Pending" %>
-              <a href="<%=rlo_path(assignment.lo)%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
+              <a href="<%=assignment.evmethod.new_evaluation_path(assignment.lo)%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
             <% end %>
           </td>
         <% end %>

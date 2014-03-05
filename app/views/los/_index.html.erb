@@ -109,10 +109,10 @@
      $("#automatic_assign_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog("You have not selected any item.", false);
-        return;
+        var url = "/automatic_assignments/new";
+      } else {
+        var url = _createURL("/automatic_assignments/new",[["lo_ids", lo_ids]]);
       }
-      var url = _createURL("/automatic_assignments/new",[["lo_ids", lo_ids]]);
       window.top.location= url;
     });
 

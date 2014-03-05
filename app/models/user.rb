@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :languages
   belongs_to :language
   has_many :assignments, :dependent => :destroy
-  has_many :los, through: :assignments
+  has_many :los, through: :assignments #and through evaluations...
   has_many :evaluations
   belongs_to :loric
 
