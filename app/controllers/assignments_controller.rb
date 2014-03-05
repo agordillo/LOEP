@@ -136,11 +136,19 @@ class AssignmentsController < ApplicationController
       end
     end
 
+    #Include an error on the errors Array will cause the massive assignment creation to fail
     errors = []
+    warnings = []
+
     assignments.each do |as|
       as.valid?
       if !as.errors.blank?
-        errors << as.errors
+        #Duplicated assignments are not allowed but this error only triggers a warning (to allow to create the rest of the assignments)
+        unless as.errors.messages.length===1 and !as.errors.messages[:duplicated_assignments].nil?
+          errors << as.errors
+        else
+          warnings << as.errors.full_messages[0]
+        end
       end
     end
     
@@ -148,17 +156,21 @@ class AssignmentsController < ApplicationController
       if errors.empty?
         #Save assignments
         assignments.each do |as|
-          unless as.save
-            format.html {
-              return renderError(as.errors.full_messages,"new")
-            }
-            format.json { 
-              render json: as.errors, status: :unprocessable_entity
-              return
-            }
+          if as.errors.blank?
+            unless as.save
+              format.html {
+                return renderError(as.errors.full_messages,"new")
+              }
+              format.json { 
+                render json: as.errors, status: :unprocessable_entity
+                return
+              }
+            end
           end
         end
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Assignment was successfully created.' }
+        flash[:notice] = 'Assignment was successfully created.'
+        flash[:warning] = warnings.uniq
+        format.html { redirect_to Utils.return_after_create_or_update(session)}
         format.json { render json: "Process completed", status: :created, location: assignments_path }
       else
         format.html {
@@ -219,11 +231,19 @@ class AssignmentsController < ApplicationController
       return renderError("An error ocurred in the automatic assignments generation","new_automatic")
     end
 
+    #Include an error on the errors Array will cause the massive assignment creation to fail
     errors = []
+    warnings = []
+
     assignments.each do |as|
       as.valid?
       if !as.errors.blank?
-        errors << as.errors
+        #Duplicated assignments are not allowed but this error only triggers a warning (to allow to create the rest of the assignments)
+        unless as.errors.messages.length===1 and !as.errors.messages[:duplicated_assignments].nil?
+          errors << as.errors
+        else
+          warnings << as.errors.full_messages[0]
+        end
       end
     end
     
@@ -231,17 +251,21 @@ class AssignmentsController < ApplicationController
       if errors.empty?
         #Save assignments
         assignments.each do |as|
-          unless as.save
-            format.html {
-              return renderError(as.errors.full_messages,"new_automatic")
-            }
-            format.json { 
-              render json: as.errors, status: :unprocessable_entity
-              return
-            }
+          if as.errors.blank?
+            unless as.save
+              format.html {
+                return renderError(as.errors.full_messages,"new_automatic")
+              }
+              format.json { 
+                render json: as.errors, status: :unprocessable_entity
+                return
+              }
+            end
           end
         end
-        format.html { redirect_to assignments_path, notice: 'Assignments were successfully created.' }
+        flash[:notice] = 'Assignments were successfully created.'
+        flash[:warning] = warnings.uniq
+        format.html { redirect_to assignments_path }
         format.json { render json: "Process completed", status: :created, location: assignments_path }
       else
         format.html {
@@ -340,6 +364,10 @@ class AssignmentsController < ApplicationController
 
     unless params[:selected_users].nil? or params[:selected_users].include? "all"
       @pusers = User.find(params[:selected_users])
+    end
+
+    unless params[:selected_evmethods].blank?
+      @evmethodids = params[:selected_evmethods]
     end
 
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}

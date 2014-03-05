@@ -65,7 +65,7 @@ class LosController < ApplicationController
     @lo = Lo.find(params[:id])
     authorize! :show, @lo
 
-    @assignments = @lo.assignments(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForAdmins }.reverse
+    @assignments = @lo.assignments.sort{|b,a| a.compareAssignmentForAdmins(b)}
     authorize! :index, @assignments
 
     @evaluations = @lo.evaluations(:order => 'updated_at DESC')
