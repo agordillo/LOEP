@@ -25,6 +25,7 @@ class AssignmentsController < ApplicationController
     authorize! :rshow, @assignments
 
     Utils.update_sessions_paths(session, nil, nil)
+
     respond_to do |format|
       format.html
       format.json { render json: @assignments }
@@ -38,6 +39,7 @@ class AssignmentsController < ApplicationController
     authorize! :show, @assignment
 
     Utils.update_sessions_paths(session, assignments_path, nil)
+
     respond_to do |format|
       format.html
       format.json { render json: @assignment }
@@ -59,6 +61,7 @@ class AssignmentsController < ApplicationController
     end
 
     Utils.update_return_to(session,request)
+
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
     
@@ -69,25 +72,7 @@ class AssignmentsController < ApplicationController
   end
 
   def new_automatic
-    @assignment = Assignment.new
-    authorize! :new, @assignment
-
-    unless params[:lo_ids].nil?
-      @plos = Lo.find(params[:lo_ids].split(","));
-    end
-
-    unless params[:user_ids].nil?
-      @pusers = User.find(params[:user_ids].split(","));
-    end
-
-    Utils.update_return_to(session,request)
-    @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
-    @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @assignment }
-    end
+    new
   end
 
   # GET /assignments/1/edit
@@ -102,6 +87,7 @@ class AssignmentsController < ApplicationController
     @pusers = [@assignment.user]
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
+    
     respond_to do |format|
       format.html
       format.json { render json: @assignment }
@@ -111,124 +97,91 @@ class AssignmentsController < ApplicationController
   # POST /assignments
   # POST /assignments.json
   def create
-    @assignment = Assignment.new(params[:assignment])
-    authorize! :create, @assignment
-    
-    if params[:selected_los].blank?
-      return renderError("You must select at least one Learning Object to create an assignment.","new")
-    end
-
-    if params[:selected_users].blank?
-      return renderError("You must select at least one Reviewer to create an assignment.","new")
-    end
-
-    assignments = []
-    params[:selected_los].each do |lo_id|
-      params[:selected_users].each do |user_id|
-        #Create assignment for Lo with id lo_id and reviewer with id user_id
-        as = Assignment.new
-        as.assign_attributes(params[:assignment])
-        as.author_id = current_user.id
-        as.user_id = user_id
-        as.lo_id = lo_id
-        as.status = "Pending"
-        assignments << as
-      end
-    end
-
-    #Include an error on the errors Array will cause the massive assignment creation to fail
-    errors = []
-    warnings = []
-
-    assignments.each do |as|
-      as.valid?
-      if !as.errors.blank?
-        #Duplicated assignments are not allowed but this error only triggers a warning (to allow to create the rest of the assignments)
-        unless as.errors.messages.length===1 and !as.errors.messages[:duplicated_assignments].nil?
-          errors << as.errors
-        else
-          warnings << as.errors.full_messages[0]
-        end
-      end
-    end
-    
-    respond_to do |format|
-      if errors.empty?
-        #Save assignments
-        assignments.each do |as|
-          if as.errors.blank?
-            unless as.save
-              format.html {
-                return renderError(as.errors.full_messages,"new")
-              }
-              format.json { 
-                render json: as.errors, status: :unprocessable_entity
-                return
-              }
-            end
-          end
-        end
-        flash[:notice] = 'Assignment was successfully created.'
-        flash[:warning] = warnings.uniq
-        format.html { redirect_to Utils.return_after_create_or_update(session)}
-        format.json { render json: "Process completed", status: :created, location: assignments_path }
-      else
-        format.html {
-            return renderError(errors[0].full_messages,"new") 
-          }
-        format.json { render json: errors[0], status: :unprocessable_entity }
-      end
-    end
+    create_assignments("new")
   end
 
   def create_automatic
+    create_assignments("new_automatic")
+  end
+
+  def create_assignments(action)
+    action = action.nil? ? "new" : action
+
     @assignment = Assignment.new(params[:assignment])
     authorize! :create, @assignment
-
+    
     if params[:selected_los].blank?
-      return renderError("You must select at least one Learning Object to create an assignment.","new_automatic")
+      return renderError("You must select at least one Learning Object to create an assignment.",action)
     end
 
     if params[:selected_users].blank?
-      return renderError("You must select at least one Reviewer to create an assignment.","new_automatic")
-    elsif params[:selected_users].is_a? Array and params[:selected_users].include? "all"
-      @users = User.reviewers
-    else
-      @users = User.find(params[:selected_users])
+      return renderError("You must select at least one Reviewer to create an assignment.",action)
     end
 
     if params[:selected_evmethods].blank?
-      return renderError("You must select at least one Evaluation Method to create an assignment.","new_automatic")
+      return renderError("You must select at least one Evaluation Method to create an assignment.",action)
     end
 
-    nepl = getNEPL
-    if nepl.blank?
-      return renderError("You need to specify the number of evaluations per Learning Object","new_automatic")
-    end
-
-    #LO-Reviewer Matching Criteria
-    if params["mcriteria"].blank?
-      return renderError("Invalid LO-Reviewer Matching Criteria","new_automatic")
-    end
-
-    @los = Lo.find(params[:selected_los])
-    @evMethods = Evmethod.find(params[:selected_evmethods]);
-
-    #Lo-Reviewer Matching
-    matchedAssignments = MatchingSystem.LoReviewerMatching(params["mcriteria"],nepl,@los,@users,params[:assignment])
-
-    #Create one assignment per EvMethod
     assignments = [];
-    @evMethods.each do |evMethod|
-      matchedAssignments.each do |as|
-        cAs = as.dup
-        cAs.evmethod_id = evMethod.id
-        assignments.push(cAs)
+
+    if action == "new_automatic"
+      ##############
+      # Automatic assignment generation
+      ##############
+
+      if params[:selected_users].is_a? Array and params[:selected_users].include? "all"
+        @users = User.reviewers
+      else
+        @users = User.find(params[:selected_users])
+      end
+
+      nepl = getNEPL
+      if nepl.blank?
+        return renderError("You need to specify the number of evaluations per Learning Object","new_automatic")
+      end
+
+      #LO-Reviewer Matching Criteria
+      if params["mcriteria"].blank?
+        return renderError("Invalid LO-Reviewer Matching Criteria","new_automatic")
+      end
+
+      @los = Lo.find(params[:selected_los])
+      @evMethods = Evmethod.find(params[:selected_evmethods]);
+
+      #Lo-Reviewer Matching
+      matchedAssignments = MatchingSystem.LoReviewerMatching(params["mcriteria"],nepl,@los,@users,params[:assignment])
+
+      #Create one assignment per EvMethod
+      @evMethods.each do |evMethod|
+        matchedAssignments.each do |as|
+          cAs = as.dup
+          cAs.evmethod_id = evMethod.id
+          assignments.push(cAs)
+        end
+      end
+    else
+      ##############
+      # Manual assignment generation
+      ##############
+      params[:selected_los].each do |lo_id|
+        params[:selected_users].each do |user_id|
+          params[:selected_evmethods].each do |evmethod_id|
+            #Create assignment for Lo with id lo_id, reviewer with id user_id and evmethod evmethod_id
+            as = Assignment.new
+            as.assign_attributes(params[:assignment])
+            as.author_id = current_user.id
+            as.user_id = user_id
+            as.lo_id = lo_id
+            as.evmethod_id = evmethod_id
+            as.status = "Pending"
+            assignments << as
+          end
+        end
       end
     end
 
-    if assignments.nil?
-      return renderError("An error ocurred in the automatic assignments generation","new_automatic")
+    if assignments.blank?
+      return renderError("An error ocurred in the automatic assignments generation",action)
     end
 
     #Include an error on the errors Array will cause the massive assignment creation to fail
@@ -254,7 +207,7 @@ class AssignmentsController < ApplicationController
           if as.errors.blank?
             unless as.save
               format.html {
-                return renderError(as.errors.full_messages,"new_automatic")
+                return renderError(as.errors.full_messages,action)
               }
               format.json { 
                 render json: as.errors, status: :unprocessable_entity
@@ -263,14 +216,13 @@ class AssignmentsController < ApplicationController
             end
           end
         end
+        returnPath = (action=="new_automatic") ? Utils.return_after_create_or_update(session) : assignments_path
         flash[:notice] = 'Assignments were successfully created.'
         flash[:warning] = warnings.uniq
-        format.html { redirect_to assignments_path }
-        format.json { render json: "Process completed", status: :created, location: assignments_path }
+        format.html { redirect_to returnPath }
+        format.json { render json: "Process completed", status: :created, location: returnPath }
       else
-        format.html {
-            return renderError(errors[0].full_messages,"new_automatic") 
-          }
+        format.html { return renderError(errors[0].full_messages,action) }
         format.json { render json: errors[0], status: :unprocessable_entity }
       end
     end
