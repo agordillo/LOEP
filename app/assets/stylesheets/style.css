@@ -321,7 +321,7 @@ table.loep_table {
 	font-size: 13px;
 	text-shadow: 1px 1px 0px #fff;
 	background:#eaebec;
-	margin-top: 6px;
+	margin-top: 0px;
 	margin-bottom: 8px;
 	margin-left: 0px;
 	border:#ccc 1px solid;
@@ -333,6 +333,10 @@ table.loep_table {
 	-moz-box-shadow: 0 1px 2px #d1d1d1;
 	-webkit-box-shadow: 0 1px 2px #d1d1d1;
 	box-shadow: 0 1px 2px #d1d1d1;
+}
+
+table.loep_table:not(.dataTable) {
+	margin-top: 8px;
 }
 
 table.loep_table a:link, table.loep_table a:visited {
@@ -356,6 +360,10 @@ table.loep_table th {
 	background: #ededed;
 	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
 	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+}
+
+table.loep_table th:active {
+	outline: none;
 }
 
 table.loep_table th:first-child {
@@ -439,7 +447,7 @@ table.loep_table td.tddestroy {
 }
 
 table.loep_table th.longhead {
-	padding: 2px 2px 2px 2px;
+	padding: 8px 8px 8px 8px;
 }
 
 table.loep_table td.tdseparator {
@@ -508,6 +516,98 @@ span.loep_tool_text {
 	margin-right: 5px;
 	cursor: pointer;
 }
+
+/* Sorting and Pager of Tables */
+
+div.dataTables_wrapper .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix, div.dataTables_wrapper .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-bl.ui-corner-br.ui-helper-clearfix {
+	background: #f6f6f6;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	font-size: 15px;
+	height: 44px;
+}
+
+div.dataTables_wrapper .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {
+	-moz-border-radius-topright: 0px;
+	-webkit-border-top-right-radius: 0px;
+	-khtml-border-top-right-radius: 0px;
+	border-top-right-radius: 0px;
+	-moz-border-radius-topleft: 0px;
+	-webkit-border-top-left-radius: 0px;
+	-khtml-border-top-left-radius: 0px;
+	border-top-left-radius: 0px;
+}
+
+div.dataTables_wrapper .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-bl.ui-corner-br.ui-helper-clearfix {
+	margin-bottom: 0px;
+	-moz-border-radius-bottomright: 0px;
+	-webkit-border-bottom-right-radius: 0px;
+	-khtml-border-bottom-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	-webkit-border-bottom-left-radius: 0px;
+	-khtml-border-bottom-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	border-top: none;
+}
+
+.dataTables_length {
+	width: 40%;
+	float: left;
+	margin-top: 5px;
+}
+
+.dataTables_filter {
+	width: 50%;
+	float: right;
+	text-align: right;
+}
+
+.dataTables_wrapper .ui-toolbar {
+	padding: 5px;
+}
+
+.dataTables_info {
+	width: 50%;
+	float: left;
+	margin-top: 5px;
+}
+
+.dataTables_paginate {
+	float: right;
+	text-align: right;
+	width: auto;
+	margin-top: 3px;
+	margin-right: 0px;
+}
+
+.paging_full_numbers .ui-button {
+	padding: 2px 6px;
+	margin: 0;
+	cursor: pointer;
+	color: #333 !important;
+}
+
+table.loep_table thead th div.DataTables_sort_wrapper {
+	position: relative;
+}
+
+/* Do with JS, if required */
+table.loep_table thead th div.DataTables_sort_wrapper:has(span.DataTables_sort_icon.ui-icon){
+	padding-right: 20px;
+}
+
+table.loep_table thead th div.DataTables_sort_wrapper span {
+	position: absolute;
+	top: 50%;
+	margin-top: -8px;
+	right: 0;
+}
+
+.dataTables_filter input {
+	padding: 3px;
+}
+
 
 /* Emtpy table style */
 

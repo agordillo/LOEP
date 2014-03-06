@@ -20,20 +20,23 @@
       </div>
     </a>
   </div>
-  <table cellspacing='0' class="loep_table">
-    <tr>
-      <th><input type="checkbox" class="checkalllos" value="all"/></th>
-      <th>Name</th>
-      <th>Url</th>
-      <th>Assign</th>
-      <th class="longhead">View as reviewer</th>
-      <th></th>
-      <th></th>
-    </tr>
+  <table id="los_table" cellspacing='0' class="loep_table">
+    <thead>
+      <tr>
+        <th><input type="checkbox" class="checkalllos" autocomplete="off" value="all"/></th>
+        <th>Name</th>
+        <th>Url</th>
+        <th>Assign</th>
+        <th class="longhead">View as reviewer</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
     <% @los.each do |lo| %>
       <tr>
         <td class="tdcenter">
-          <input type="checkbox" class="checklo" value="<%=lo.id%>"/>
+          <input type="checkbox" class="checklo" autocomplete="off" value="<%=lo.id%>"/>
         </td>
         <td>
           <a href="<%=lo_path(lo)%>"><%= lo.name %></a>
@@ -55,46 +58,54 @@
         </td>
       </tr>
     <% end %>
+    <tbody>
   </table>
 <% end %>
 
 <script type="text/javascript">
 
-  var checkedLos = 0;
+  //Store the ids
+  //selectedLOs[lo_id] = lo_id
+  var selectedLOs = {};
 
   $(document).ready(function(){
 
+    //////////////////
+    // Table Basics
+    //////////////////
+
     $("input:checkbox.checklo").change(function(){
         var lotr = $(this).parent().parent();
+        var loId = $(this).attr("value");
+
         if(this.checked) {
-          checkedLos++;
+          selectedLOs[loId] = loId;
           $(lotr).addClass("loeprowselected");
         } else {
-          checkedLos--;
+          delete selectedLOs[loId];
           $(lotr).removeClass("loeprowselected");
-           $("input:checkbox.checkalllos").prop("checked",false);
-        }
-
-        if(checkedLos===1){
-          //First... show toolbar
-          // $("div.loep_table_tools").slideDown();
-        } else if(checkedLos===0){
-          //Hide toolbar
-          // $("div.loep_table_tools").slideUp();
+          $("input:checkbox.checkalllos").prop("checked",false);
         }
     });
 
     $("input:checkbox.checkalllos").change(function(){
-      if(this.checked) {
+      if(this.checked){
         $("input:checkbox.checklo").prop("checked",true);
         $("input:checkbox.checklo").parent().parent().addClass("loeprowselected");
+        $("input:checkbox.checklo").each(function(index,input){
+          var loId = $(input).attr("value");
+          selectedLOs[loId] = loId;
+        });
       } else {
         $("input:checkbox.checklo").prop("checked",false);
         $("input:checkbox.checklo").parent().parent().removeClass("loeprowselected");
+        selectedLOs = {};
       }
     });
 
-    //Toolbar actions
+    //////////////////
+    //Toolbar Actions
+    //////////////////
 
     $("#assign_los").click(function(){
       var lo_ids = getSelectedLos();
@@ -135,15 +146,46 @@
       });
     });
 
+    //////////////////
+    // Table Sorter
+    //////////////////
+
+    //DOC: http://datatables.net
+    $("#los_table").dataTable({
+      "bJQueryUI": true,
+      "sPaginationType": "full_numbers",
+      "aaSorting": [[ 1, "asc" ]],
+      "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [ 0,2,3,4,5,6 ] }
+      ],
+      "sDom": '<"H"lfr><"F"ip>t',
+      "iDisplayLength": 50,
+      "oLanguage": {
+        "sLengthMenu": 'Display <select>'+
+          '<option value="5">5</option>'+
+          '<option value="10">10</option>'+
+          '<option value="25">25</option>'+
+          '<option value="50">50</option>'+
+          '<option value="100">100</option>'+
+          '<option value="-1">All</option>'+
+          '</select> records'
+      }
+    });
+
   });
 
+  /* Select only visible elements */
   var getSelectedLos = function(){
     var lo_ids = [];
     $("input:checkbox.checklo:checked").each(function(index,input){
       lo_ids.push($(input).attr("value"));
     });
     return lo_ids;
-  }
+  };
+
+  // var getSelectedLos = function(){
+  //   return Object.keys(selectedLOs);
+  // };
 
   var _createURL = function(base,objects){
     var url = base;
