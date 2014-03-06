@@ -10,11 +10,11 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles
   has_and_belongs_to_many :languages
   belongs_to :language
-  has_many :assignments, :dependent => :destroy
-  has_many :los, through: :assignments #and through evaluations...
-  has_many :evaluations
   belongs_to :loric
-
+  has_many :assignments, :dependent => :destroy
+  has_many :evaluations
+  has_many :los, through: :evaluations
+  
   before_save :checkLanguages
 
   validates :name,
@@ -57,6 +57,8 @@ class User < ActiveRecord::Base
 
   #---------------------------------------------------------------------------------
 
+  #Extra Attrs
+
   def role
     if self.role?("SuperAdmin")
       "SuperAdmin"
@@ -65,12 +67,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def role?(role)
-    return !!self.roles.find_by_name(role.to_s.camelize)
-  end
-
-  def isAdmin?
-    return self.role?("Admin") || self.role?("SuperAdmin")
+  def age
+    unless self.birthday.nil?
+      age = Date.today.year - self.birthday.year
+      age -= 1 if Date.today < self.birthday.to_date + age.years #for days before birthday
+      return age
+    end
   end
 
   def readable_birthday
@@ -81,12 +83,45 @@ class User < ActiveRecord::Base
     end
   end
 
-  def age
-    unless self.birthday.nil?
-      age = Date.today.year - self.birthday.year
-      age -= 1 if Date.today < self.birthday.to_date + age.years #for days before birthday
-      return age
+  #Get Learning Objects evaluated by this user
+  def evLos
+    self.los.uniq
+  end
+
+  #Get Learning Objects assigned to this user
+  def asLos
+    self.assignments.map{ |as| as.lo }.uniq
+  end
+
+  #Get Learning Objects both evaluated ny and assigned to this user
+  def allLos
+    (evLos+asLos).uniq
+  end
+
+  #Extra Getters
+  def getLanguages
+    unless self.languages.empty?
+      self.languages.map { |l| l.id }
     end
+  end
+
+
+  #Methods
+  def checkLanguages
+    if !self.languages.include? Language.find(self.language_id)
+      self.languages.push(Language.find(self.language_id))
+    end
+  end
+
+
+  #Role Management
+
+  def role?(role)
+    return !!self.roles.find_by_name(role.to_s.camelize)
+  end
+
+  def isAdmin?
+    return self.role?("Admin") || self.role?("SuperAdmin")
   end
 
   def assignRole(newRoleName)
@@ -153,6 +188,8 @@ class User < ActiveRecord::Base
     return false
   end
 
+
+  #Class extra attrs and methods
   def self.reviewers
     reviewers = []
     User.find_each do |user|
@@ -161,18 +198,6 @@ class User < ActiveRecord::Base
       end
     end
     reviewers
-  end
-
-  def getLanguages
-    unless self.languages.empty?
-      self.languages.map { |l| l.id }
-    end
-  end
-
-  def checkLanguages
-    if !self.languages.include? Language.find(self.language_id)
-      self.languages.push(Language.find(self.language_id))
-    end
   end
 
 end

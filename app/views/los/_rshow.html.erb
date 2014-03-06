@@ -1,16 +1,14 @@
 <div class="show_wrapper">
   <div class="rshow_wrapper">
     <h2><%=@lo.name%></h2>
-    </br>
+    <p class="space_medium"></p>
 
-    <p class="show_legend">URL</p>
     <p class="show_sublegend">Click on the URL shown below to access the Learning Object</p>
-    <a target="_blank" href="<%=@lo.url%>"><p class="show_value"><%=@lo.url%></p></a>
+    <p class="show_legend"><span class="show_legend">URL: </span> <a target="_blank" href="<%=@lo.url%>"><span class="show_value"><%=@lo.url%></span></a></p>
 
     <% nAssignments = @assignments.length %>
     <% if nAssignments > 0 %>
-      </br>
-      </br>
+      <p class="space_medium"></p>
       <h1 class="loep_title loep_title_min">
         <% if @represented.nil? and iamAdmin? %>
           All Assignments
@@ -20,6 +18,13 @@
       </h1>
       <%= render '/assignments/rindex', :showDescription => true, :showBigEvaluateButton => true %>
     <% end %>
+
+    <p class="space_medium"></p>
+    <h2>Learning Object Information</h2>
+    <p class="space_small"></p>
+    <%= render 'info' %>
+    <p class="space_medium"></p>
+
   </div>
 </div>
 
