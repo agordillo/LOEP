@@ -1,3 +1,5 @@
+<% adminMode = (@represented.nil? and iamAdmin?) %>
+
 <div class="show_wrapper">
   <div class="rshow_wrapper">
     <h2><%=@lo.name%></h2>
@@ -10,13 +12,13 @@
     <% if nAssignments > 0 %>
       <p class="space_medium"></p>
       <h1 class="loep_title loep_title_min">
-        <% if @represented.nil? and iamAdmin? %>
+        <% if adminMode %>
           All Assignments
         <% else %>
           <%= @represented.nil? ? "Your" : @represented.name %> Pending Assignment<%="s" if @assignments.length > 1%>
         <% end %>
       </h1>
-      <%= render '/assignments/rindex', :showDescription => true, :showBigEvaluateButton => true %>
+      <%= render '/assignments/rindex', :showReviewer => adminMode, :showEvaluationButton => !adminMode, :showDescription => true %>
     <% end %>
 
     <p class="space_medium"></p>

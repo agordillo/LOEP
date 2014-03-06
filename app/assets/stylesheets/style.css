@@ -446,7 +446,7 @@ table.loep_table td.tdseparator {
 	background: #ededed;
 	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
 	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
-	padding: 2px !important;
+	padding: 3px !important;
 }
 
 table.loep_table tr.trpointer {
