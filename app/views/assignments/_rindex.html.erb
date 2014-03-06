@@ -1,5 +1,6 @@
 <% removeEvColumn ||= false %>
 <% showDescription ||= false %>
+<% showBigEvaluateButton ||= false %>
 <% aL = @assignments.length %>
 
 <% if aL === 0 %>
@@ -17,13 +18,13 @@
       <% end %>
         <th></th>
     </tr>
-     <% @assignments.each_with_index do |assignment,i| %>
+    <% @assignments.each_with_index do |assignment,i| %>
       <tr>
          <td>
           <a href="<%=rlo_path(assignment.lo)%>"><span><%= assignment.lo.name %></span></a>
         </td>
         <td class="tdcenter">
-          <%=assignment.readable_evmethod%>
+          <a href="<%=assignment.evmethod.documentation_path%>"><%=assignment.readable_evmethod%></a>
         </td>
         <td class="tdcenter">
           <%=assignment.readable_status%>
@@ -50,6 +51,18 @@
       <tr>
         <td colspan="100%">
           <span><%= assignment.description %></span>
+        </td>
+      </tr>
+      <% unless i==aL-1 %>
+        <tr>
+          <td class="tdseparator" colspan="100%"></td>
+        </tr>
+      <% end %>
+      <% end %>
+      <% if showBigEvaluateButton %>
+      <tr>
+        <td colspan="100%">
+          <span><a href="<%=assignment.evmethod.new_evaluation_path(assignment.lo)%>"><button class="loep_button"><span class="glyphicon glyphicon-star-empty"></span> Evaluate with <%= assignment.evmethod.name %></button></a></span>
         </td>
       </tr>
       <% unless i==aL-1 %>

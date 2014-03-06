@@ -18,12 +18,7 @@
           <%= @represented.nil? ? "Your" : @represented.name %> Pending Assignment<%="s" if @assignments.length > 1%>
         <% end %>
       </h1>
-      <%= render '/assignments/rindex', :removeEvColumn => true, :showDescription => true %>
-    <% end %>
-    <% if @evmethods.length > 0 %>
-      <p class="show_legend evaluation_title">Evaluation Methods</p>
-      <%= render '/evmethods/rindex' %>
-      </br>
+      <%= render '/assignments/rindex', :showDescription => true, :showBigEvaluateButton => true %>
     <% end %>
   </div>
 </div>
