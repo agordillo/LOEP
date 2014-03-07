@@ -22,7 +22,7 @@ class Evaluation < ActiveRecord::Base
 
 
   def readable_completed_at
-    readable_date(self.completed_at)
+    Utils.getReadableDate(self.completed_at)
   end
 
 
@@ -30,28 +30,18 @@ class Evaluation < ActiveRecord::Base
 
   def evaluation_path
     evaluationModule = self.evmethod.getEvaluationModule
-    helper_method_name = self.evmethod.module.underscore + "_path"
+    helper_method_name = self.evmethod.module.gsub(":","").underscore + "_path"
     evaluation_path = Rails.application.routes.url_helpers.send(helper_method_name,self)
   end
 
   def edit_evaluation_path
     evaluationModule = self.evmethod.getEvaluationModule
-    helper_method_name = "edit_" + self.evmethod.module.underscore + "_path"
+    helper_method_name = "edit_" + self.evmethod.module.gsub(":","").underscore + "_path"
     evaluation_path = Rails.application.routes.url_helpers.send(helper_method_name,self)
   end
 
 
   private
-
-  def readable_date(date)
-    unless date.nil?
-      date.strftime("%d/%m/%Y %H:%M %P")
-      #For Ruby < 1.9
-      # date.strftime("%d/%m/%Y %H:%M %p").sub(' AM', ' am').sub(' PM', ' pm')
-    else
-      ""
-    end
-  end
 
   def update_assignments
     # Look assignments that can be considered completed after this evaluation

@@ -175,10 +175,10 @@ namespace :db do
 	evA.assignment_id = asA.id #not mandatory
 	evA.save(:validate => false)
 
-	#New Metric
-	LoriM = LoriMetric.new
-	LoriM.evmethods.push(LORI);
-	LoriM.save(:validate => false)
+	# #New Metric
+	# LoriM = LoriMetric.new
+	# LoriM.evmethods.push(LORI);
+	# LoriM.save(:validate => false)
 
 	puts "Populate finish"
   end

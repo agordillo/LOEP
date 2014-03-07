@@ -102,7 +102,7 @@ li.userbox img {
 	width: 100%;
 	height: auto;
 	margin: 0 auto;
-	padding: 3% 5% 0% 5%;
+	padding: 3% 3% 0% 3%;
 	padding-bottom: 40px !important;
 	display: block;
 	overflow: hidden;
@@ -115,7 +115,7 @@ li.userbox img {
 	display: block;
 	width: auto;
 	margin-top: 20px;
-	margin-left: 275px;
+	margin-left: 260px;
 	overflow: auto;
 	/*border: 1px solid red;*/
 }
@@ -525,6 +525,7 @@ div.dataTables_wrapper .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-c
 	font-weight: normal;
 	font-size: 15px;
 	height: 44px;
+	border: #ccc 1px solid;
 }
 
 div.dataTables_wrapper .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {

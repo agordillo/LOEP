@@ -1,4 +1,4 @@
-class LoriEvaluation < Evaluation
+class Evaluations::Lori < Evaluation
   # this is for Evaluations with evMethod=LORI (type=LoriEvaluation)
   #Override methods here
 

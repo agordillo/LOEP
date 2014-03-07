@@ -12,10 +12,14 @@ LOEP::Application.routes.draw do
   match '/automatic_assignments/new' => 'assignments#new_automatic', via: [:get]
   match '/automatic_assignments' => 'assignments#create_automatic', via: [:post]
   
+  #EvMethods
+  namespace :evaluations do
+    resources :lori
+  end
+
   resources :users
   resources :los
   resources :evaluations
-  resources :lori_evaluations
   resources :evmethods
   resources :assignments
   resources :lorics

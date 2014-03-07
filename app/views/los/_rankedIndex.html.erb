@@ -21,7 +21,7 @@
           <p> <%=lo.tag_list.join(", ")%> </p>
         </td>
         <td class="tdcenter">
-          <p> <%=@scores[lo.id.to_s].nil? ? "No evaluated" : @scores[lo.id.to_s]%> </p>
+          <p> <%=@scoresLORIWAM[lo.id.to_s].nil? ? "No evaluated" : @scoresLORIWAM[lo.id.to_s]%> </p>
         </td>
       </tr>
     <% end %>

@@ -21,10 +21,12 @@ class LosController < ApplicationController
     @los = Lo.all
     authorize! :index, @los
 
-    @scores = LoriMetric.getScoreForLos(@los)
-    @los.sort! { |a, b| 
-      scoreA = @scores[a.id.to_s]
-      scoreB = @scores[b.id.to_s]
+    @scoresLORIWAM = Metrics::LORIWAM.getScoreForLos(@los)
+    @scoresLORIAM = Metrics::LORIAM.getScoreForLos(@los)
+    
+    @los.sort! { |a, b|
+      scoreA = @scoresLORIWAM[a.id.to_s]
+      scoreB = @scoresLORIWAM[b.id.to_s]
 
       if scoreA.nil? and scoreB.nil?
         0
@@ -40,16 +42,7 @@ class LosController < ApplicationController
     respond_to do |format|
       format.html
       format.json {
-        @vishData = @los.map { |lo| 
-          info = Hash.new
-          if lo.url.match("http://vishub.org/excursions/")
-            info["vishId"] = lo.url.split("http://vishub.org/excursions/")[1]
-          end
-          info["loepId"] = lo.id.to_s
-          info["score"] = @scores[lo.id.to_s]
-          info
-        }
-        render json: @vishData 
+        render json: @los 
       }
     end
   end

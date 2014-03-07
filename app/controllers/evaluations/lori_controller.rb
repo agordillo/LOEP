@@ -1,4 +1,4 @@
-class LoriEvaluationsController < EvaluationsController
+class Evaluations::LoriController < EvaluationsController
   before_filter :authenticate_user!
   
   def new
@@ -16,7 +16,7 @@ class LoriEvaluationsController < EvaluationsController
     end
     authorize! :rshow, @assignment
 
-    @evaluation = LoriEvaluation.new
+    @evaluation = Evaluations::Lori.new
     authorize! :new, @evaluation
 
     Utils.update_return_to(session,request)
@@ -34,7 +34,7 @@ class LoriEvaluationsController < EvaluationsController
   end
 
   def create
-    @evaluation = LoriEvaluation.new(params[:lori_evaluation])
+    @evaluation = Evaluations::Lori.new(params[:evaluations_lori])
     @evaluation.completed_at = Time.now
     authorize! :create, @evaluation
 
@@ -68,7 +68,7 @@ class LoriEvaluationsController < EvaluationsController
     authorize! :update, @evaluation
 
     respond_to do |format|
-      if @evaluation.update_attributes(params[:lori_evaluation])
+      if @evaluation.update_attributes(params[:evaluations_lori])
         format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully updated.' }
       else
         format.html { renderError("Evaluation cannot be updated. Wrong params.","new") }
