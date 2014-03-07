@@ -8,6 +8,7 @@ LOEP::Application.routes.draw do
 
   match '/los/remove' => 'los#removelist'
   match '/los/rankedIndex' => 'los#rankedIndex'
+  match '/assignments/remove' => 'assignments#removelist'
   match '/automatic_assignments/new' => 'assignments#new_automatic', via: [:get]
   match '/automatic_assignments' => 'assignments#create_automatic', via: [:post]
   

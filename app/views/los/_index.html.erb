@@ -1,12 +1,15 @@
+<% showTools ||= false %>
+
 <% rL = @los.length %>
 <% if rL === 0 %>
   <%= render '/layouts/emptytable', :resources => "learning objects" %>
 <% else %>
+  <% if showTools %>
   <div class="loep_table_tools">
     <a id="automatic_assign_los">
       <div class="loep_tool_button">
         <span class="glyphicon glyphicon-time"></span><span class="glyphicon glyphicon-user"></span>
-        <span class="loep_tool_text">Automatic Assignments</span>
+        <span class="loep_tool_text">Automatic Matching</span>
       </div>
     </a>
     <a id="assign_los">
@@ -20,10 +23,13 @@
       </div>
     </a>
   </div>
+  <% end %>
   <table id="los_table" cellspacing='0' class="loep_table">
     <thead>
       <tr>
+        <% if showTools %>
         <th><input type="checkbox" class="checkalllos" autocomplete="off" value="all"/></th>
+        <% end %>
         <th>Name</th>
         <th>Url</th>
         <th>Assign</th>
@@ -35,9 +41,11 @@
     <tbody>
     <% @los.each do |lo| %>
       <tr>
+        <% if showTools %>
         <td class="tdcenter">
           <input type="checkbox" class="checklo" autocomplete="off" value="<%=lo.id%>"/>
         </td>
+        <% end %>
         <td>
           <a href="<%=lo_path(lo)%>"><%= lo.name %></a>
         </td>
@@ -58,9 +66,12 @@
         </td>
       </tr>
     <% end %>
-    <tbody>
+    </tbody>
   </table>
 <% end %>
+
+
+<% if showTools %>
 
 <script type="text/javascript">
 
@@ -113,7 +124,7 @@
         _showLOEPDialog("You have not selected any item.", false);
         return;
       }
-      var url = _createURL("/assignments/new",[["lo_ids", lo_ids]]);
+      var url = LOEP.Main.createURL("/assignments/new",[["lo_ids", lo_ids]]);
       window.top.location= url;
     });
 
@@ -122,7 +133,7 @@
       if(lo_ids.length===0){
         var url = "/automatic_assignments/new";
       } else {
-        var url = _createURL("/automatic_assignments/new",[["lo_ids", lo_ids]]);
+        var url = LOEP.Main.createURL("/automatic_assignments/new",[["lo_ids", lo_ids]]);
       }
       window.top.location= url;
     });
@@ -140,7 +151,7 @@
           if(lo_ids.length===0){
             return;
           }
-          var url = _createURL("/los/remove",[["lo_ids", lo_ids]]);
+          var url = LOEP.Main.createURL("/los/remove",[["lo_ids", lo_ids]]);
           window.top.location= url;
         }
       });
@@ -150,16 +161,19 @@
     // Table Sorter
     //////////////////
 
+    var iDisplayLength = LOEP.Storage.get("LosTable_iDisplayLength") || -1;
+
     //DOC: http://datatables.net
-    $("#los_table").dataTable({
+    var losTable = $("#los_table").dataTable({
       "bJQueryUI": true,
       "sPaginationType": "full_numbers",
       "aaSorting": [[ 1, "asc" ]],
       "aoColumnDefs": [
-          { 'bSortable': false, 'aTargets': [ 0,2,3,4,5,6 ] }
+          { 'bSortable': false, 'aTargets': [ 0,2,3,4,5,6 ] },
+          { "bSearchable": false, "aTargets": [ 0,2,3,4,5,6 ] }
       ],
       "sDom": '<"H"lfr><"F"ip>t',
-      "iDisplayLength": 50,
+      "iDisplayLength": iDisplayLength,
       "oLanguage": {
         "sLengthMenu": 'Display <select>'+
           '<option value="5">5</option>'+
@@ -170,6 +184,19 @@
           '<option value="-1">All</option>'+
           '</select> records'
       }
+    });
+
+    //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page
+
+    //Draw event, fired whenever the table is redrawn on the page, at the same point as fnDrawCallback. This may be useful for binding events or performing calculations when the table is altered at all.
+    $(losTable).on('draw', function(e){
+      $("input:checkbox.checkalllos").prop("checked",false);
+      $("input:checkbox.checkalllos").trigger("change");
+    });
+
+    $('#los_table_length').on('change', function(e){
+      var iDisplayLength = parseInt($(this).find("select").val());
+      LOEP.Storage.add("LosTable_iDisplayLength",iDisplayLength);
     });
 
   });
@@ -187,33 +214,6 @@
   //   return Object.keys(selectedLOs);
   // };
 
-  var _createURL = function(base,objects){
-    var url = base;
-    $(objects).each(function(index,obj){
-
-      if((typeof obj != "object")||(typeof obj.length != "number")){
-        return;
-      }
-
-      if (index==0) {
-        url = url + "?"
-      } else {
-        url = url + "&"
-      }
-
-      url = url + obj[0] + "="
-
-      $(obj[1]).each(function(index,value){
-        if (index!=0) {
-          url = url + ","
-        }
-        url = url + value
-      });
-    });
-
-    return url;
-  }
-
-
-
 </script>
+
+<% end %>

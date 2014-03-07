@@ -7,7 +7,16 @@
 					<a href="/home"><h3><span class="glyphicon glyphicon-home"></span>Home</h3></a>
 				</li>
 				<li class="<%='menu_option_selected' if params[:controller] == 'assignments'%>">
-					<a href="<%=loep_asignments_path%>"><h3><span class="glyphicon glyphicon-time"></span>Assignments</h3></a>
+					<% if iamAdmin? %>
+						<h3><span class="glyphicon glyphicon-time"></span>Assignments</h3>
+						<ul>
+							<li><a href="/assignments">List</a></li>
+							<li><a href="/assignments/new">Add New</a></li>
+							<li><a href="/automatic_assignments/new">Automatic Matching</a></li>
+						</ul>
+					<% else %>
+						<a href="<%=loep_asignments_path%>"><h3><span class="glyphicon glyphicon-time"></span>Assignments</h3></a>
+					<% end %>
 				</li>
 				<li class="<%='menu_option_selected' if params[:controller] == 'documentation'%>">
 					<h3><span class="glyphicon glyphicon-book"></span>Documentation</h3>

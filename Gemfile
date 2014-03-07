@@ -25,7 +25,7 @@ gem 'cancan'
 # gem 'unicorn'
 
 # Deploy with Capistrano
-gem 'capistrano'
+gem 'capistrano', :group => :development
 
 gem 'acts-as-taggable-on'
 

@@ -592,8 +592,7 @@ table.loep_table thead th div.DataTables_sort_wrapper {
 	position: relative;
 }
 
-/* Do with JS, if required */
-table.loep_table thead th div.DataTables_sort_wrapper:has(span.DataTables_sort_icon.ui-icon){
+table.loep_table thead th[role='columnheader'][aria-controls] div.DataTables_sort_wrapper {
 	padding-right: 20px;
 }
 

@@ -17,7 +17,7 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 		authorize! :show, @user
 
-		@assignments = @user.assignments(:order => 'updated_at DESC').sort_by {|as| as.compareAssignmentForAdmins }.reverse
+		@assignments = @user.assignments.sort{|b,a| a.compareAssignmentForAdmins(b)}
     	authorize! :rshow, @assignments
 
     	@evaluations = @user.evaluations(:order => 'updated_at DESC')

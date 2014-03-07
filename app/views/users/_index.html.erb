@@ -1,17 +1,39 @@
+<% showTools ||= false %>
+
 <% rL = @users.length %>
 <% if rL === 0 %>
   <%= render '/layouts/emptytable', :fullmessage => "There are no users in the platform." %>
 <% else %>
-  <table cellspacing='0' class="loep_table">
+  <% if showTools %>
+  <div class="loep_table_tools">
+    <a id="remove_resources">
+      <div class="loep_tool_button">
+        <span class="glyphicon glyphicon-trash"></span>
+      </div>
+    </a>
+  </div>
+  <% end %>
+  <table id="res_table" cellspacing='0' class="loep_table">
+    <thead>
     <tr>
+      <% if showTools %>
+        <th><input type="checkbox" class="checkallresources" autocomplete="off" value="all"/></th>
+      <% end %>
       <th>Username</th>
       <th>Role</th>
       <th>Assign</th>
       <th></th>
       <th></th>
     </tr>
+    </thead>
+    <tbody>
     <% @users.each do |user| %>
       <tr>
+        <% if showTools %>
+        <td class="tdcenter">
+          <input type="checkbox" class="checkresource" autocomplete="off" value="<%=user.id%>"/>
+        </td>
+        <% end %>
         <td><a href="<%=user_path(user)%>"><%=user.name%></a></td>
         <td><%=user.role%></td>
         <td class="tdcenter tdrshow">
@@ -29,5 +51,133 @@
         </td>
       </tr>
     <% end %>
+    </tbody>
   </table>
+<% end %>
+
+<% if showTools %>
+
+<script type="text/javascript">
+
+  //Store the ids
+  //selectedResources[res_id] = res_id
+  var selectedResources = {};
+
+  $(document).ready(function(){
+
+    //////////////////
+    // Table Basics
+    //////////////////
+
+    $("input:checkbox.checkresource").change(function(){
+        var restr = $(this).parent().parent();
+        var resId = $(this).attr("value");
+
+        if(this.checked) {
+          selectedResources[resId] = resId;
+          $(restr).addClass("loeprowselected");
+        } else {
+          delete selectedResources[resId];
+          $(restr).removeClass("loeprowselected");
+          $("input:checkbox.checkallresources").prop("checked",false);
+        }
+    });
+
+    $("input:checkbox.checkallresources").change(function(){
+      if(this.checked){
+        $("input:checkbox.checkresource").prop("checked",true);
+        $("input:checkbox.checkresource").parent().parent().addClass("loeprowselected");
+        $("input:checkbox.checkresource").each(function(index,input){
+          var resId = $(input).attr("value");
+          selectedResources[resId] = resId;
+        });
+      } else {
+        $("input:checkbox.checkresource").prop("checked",false);
+        $("input:checkbox.checkresource").parent().parent().removeClass("loeprowselected");
+        selectedResources = {};
+      }
+    });
+
+    //////////////////
+    //Toolbar Actions
+    //////////////////
+
+    $("#remove_resources").click(function(){
+      var res_ids = getSelectedResources();
+      if(res_ids.length===0){
+        _showLOEPDialog("You have not selected any item.", false);
+        return;
+      }
+
+     _showLOEPDialog("Are you sure?", true, function(result){
+        if(result==true){
+          var res_ids = getSelectedResources();
+          if(res_ids.length===0){
+            return;
+          }
+          var url = LOEP.Main.createURL("/users/remove",[["users_ids", res_ids]]);
+          window.top.location= url;
+        }
+      });
+    });
+
+    //////////////////
+    // Table Sorter
+    //////////////////
+
+    var iDisplayLength = LOEP.Storage.get("UsersTable_iDisplayLength") || -1;
+
+    //DOC: http://datatables.net
+    var resTable = $("#res_table").dataTable({
+      "bJQueryUI": true,
+      "sPaginationType": "full_numbers",
+      "aaSorting": [[ 2, "asc" ]],
+      "aoColumnDefs": [
+        { 'bSortable': false, 'aTargets': [ 0,3,4,5 ] },
+        { "bSearchable": false, "aTargets": [ 0,3,4,5 ] }
+      ],
+      "sDom": '<"H"lfr><"F"ip>t',
+      "iDisplayLength": iDisplayLength,
+      "oLanguage": {
+        "sLengthMenu": 'Display <select>'+
+          '<option value="5">5</option>'+
+          '<option value="10">10</option>'+
+          '<option value="25">25</option>'+
+          '<option value="50">50</option>'+
+          '<option value="100">100</option>'+
+          '<option value="-1">All</option>'+
+          '</select> records'
+      }
+    });
+
+    //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page
+
+    //Draw event, fired whenever the table is redrawn on the page, at the same point as fnDrawCallback. This may be useful for binding events or performing calculations when the table is altered at all.
+    $(resTable).on('draw', function(e){
+      $("input:checkbox.checkallresources").prop("checked",false);
+      $("input:checkbox.checkallresources").trigger("change");
+    });
+
+    $('#res_table_length').on('change', function(e){
+      var iDisplayLength = parseInt($(this).find("select").val());
+      LOEP.Storage.add("UsersTable_iDisplayLength",iDisplayLength);
+    });
+
+  });
+
+  /* Select only visible elements */
+  var getSelectedResources = function(){
+    var res_ids = [];
+    $("input:checkbox.checkresource:checked").each(function(index,input){
+      res_ids.push($(input).attr("value"));
+    });
+    return res_ids;
+  };
+
+  // var getSelectedResources = function(){
+  //   return Object.keys(selectedResources);
+  // };
+
+</script>
+
 <% end %>

@@ -288,6 +288,20 @@ class AssignmentsController < ApplicationController
     end
   end
 
+  def removelist
+    @assignments = Assignment.find(params[:assignment_ids].split(","))
+    authorize! :destroy, @assignments
+
+    @assignments.each do |as|
+      as.destroy
+    end
+
+    respond_to do |format|
+      format.html { redirect_to Utils.return_after_destroy_path(session) }
+      format.json { head :no_content }
+    end
+  end
+
   def reject
     @assignment = Assignment.find(params[:id])
     authorize! :reject, @assignment

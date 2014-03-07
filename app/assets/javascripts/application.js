@@ -18,5 +18,7 @@
 //= require jquery_ujs
 //= require custom.confirm.js
 //= require bootstrap.min.js
+//= require LOEP.js
+//= require LOEP.Main.js
 //= require_tree .
 
