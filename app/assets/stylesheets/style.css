@@ -284,6 +284,10 @@ p.form_before_button {
 	font-size: 25px !important;
 }
 
+h1.rankedLOTitle {
+	margin-bottom: 10px !important;
+}
+
 p.link_wrapper {
 	text-align: right;
 	padding-right: 5px;

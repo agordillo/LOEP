@@ -1,14 +1,21 @@
+<% showTools ||= false %>
+
 <% rL = @los.length %>
 <% if rL === 0 %>
   <%= render '/layouts/emptytable', :resources => "learning objects" %>
 <% else %>
-  <table cellspacing='0' class="loep_table">
-    <tr>
-      <th>Name</th>
-      <th>Url</th>
-      <th>Categories</th>
-      <th>LORI Score</th>
-    </tr>
+  <table id="rankedLosTable" cellspacing='0' class="loep_table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Url</th>
+        <th>Tags</th>
+        <% @scores.each do |key, value| %>
+        <th><%=value[0]=%></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
     <% @los.each do |lo| %>
       <tr>
         <td>
@@ -20,10 +27,76 @@
          <td class="tdcenter">
           <p> <%=lo.tag_list.join(", ")%> </p>
         </td>
+        <% @scores.each do |key, value| %>
+        <% metricScores = value[1] %>
         <td class="tdcenter">
-          <p> <%=@scoresLORIWAM[lo.id.to_s].nil? ? "No evaluated" : @scoresLORIWAM[lo.id.to_s]%> </p>
+          <p> <%=metricScores[lo.id.to_s].nil? ? "No evaluated" : metricScores[lo.id.to_s]%></p>
         </td>
+        <%end%>
       </tr>
     <% end %>
+    </tbody>
   </table>
+<% end %>
+
+
+<% if showTools %>
+
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+
+    //////////////////
+    // Table Sorter
+    //////////////////
+
+    var iDisplayLength = LOEP.Storage.get("RankedLosTable_iDisplayLength") || -1;
+    
+    var metricsLength = parseInt('<%=@scores.length%>');
+    var bSearchableArray = [1];
+    for(var i=3; i<(metricsLength+3); i++){
+        bSearchableArray.push(i);
+    }
+
+    //DOC: http://datatables.net
+    var losTable = $("#rankedLosTable").dataTable({
+      "bJQueryUI": true,
+      "sPaginationType": "full_numbers",
+      "aaSorting": [[ 3, "desc" ]],
+      "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [ 1,2 ] },
+          { "bSearchable": false, "aTargets": bSearchableArray }
+      ],
+      "sDom": '<"H"lfr><"F"ip>t',
+      "iDisplayLength": iDisplayLength,
+      "oLanguage": {
+        "sLengthMenu": 'Display <select>'+
+          '<option value="5">5</option>'+
+          '<option value="10">10</option>'+
+          '<option value="25">25</option>'+
+          '<option value="50">50</option>'+
+          '<option value="100">100</option>'+
+          '<option value="-1">All</option>'+
+          '</select> records'
+      }
+    });
+
+    //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page
+
+    //Draw event, fired whenever the table is redrawn on the page, at the same point as fnDrawCallback. This may be useful for binding events or performing calculations when the table is altered at all.
+    $(losTable).on('draw', function(e){
+      $("input:checkbox.checkalllos").prop("checked",false);
+      $("input:checkbox.checkalllos").trigger("change");
+    });
+
+    $('#los_table_length').on('change', function(e){
+      var iDisplayLength = parseInt($(this).find("select").val());
+      LOEP.Storage.add("RankedLosTable_iDisplayLength",iDisplayLength);
+    });
+
+  });
+
+</script>
+
 <% end %>

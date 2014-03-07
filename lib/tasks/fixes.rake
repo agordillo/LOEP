@@ -11,6 +11,21 @@ namespace :fixes do
 		LORI15 = Evmethod.find_by_name("LORI v1.5")
 		LORI15.update_column :module, "Evaluations::Lori"
 
+		puts "Creating metrics"
+		LORI15 = Evmethod.find_by_name("LORI v1.5")
+		
+		LORIAM = Metrics::LORIAM.new
+		LORIAM.name = "LORI Arithmetic Mean"
+		LORIAM.evmethods.push(LORI15);
+		LORIAM.save
+
+		LORIWAM = Metrics::LORIWAM.new
+		LORIWAM.name = "LORI Weighted Arithmetic Mean"
+		LORIWAM.evmethods.push(LORI15);
+		LORIWAM.save
+
+		puts "Creating LO scores"
+
 		puts "Updating finished"
 	end
 

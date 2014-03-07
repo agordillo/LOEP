@@ -19,6 +19,7 @@ namespace :db do
 		Assignment.delete_all
 		Evaluation.delete_all
 		App.delete_all
+		Metric.delete_all
 	end
 
   	#Create Roles

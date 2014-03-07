@@ -21,12 +21,15 @@ class LosController < ApplicationController
     @los = Lo.all
     authorize! :index, @los
 
-    @scoresLORIWAM = Metrics::LORIWAM.getScoreForLos(@los)
-    @scoresLORIAM = Metrics::LORIAM.getScoreForLos(@los)
-    
+    @scores = Hash.new
+
+    Metric.all.each do |metric|
+      @scores[metric.id.to_s] = [metric.name, metric.class.getScoreForLos(@los)]
+    end
+
     @los.sort! { |a, b|
-      scoreA = @scoresLORIWAM[a.id.to_s]
-      scoreB = @scoresLORIWAM[b.id.to_s]
+      scoreA = @scores[Metric.first.id.to_s][1][a.id.to_s]
+      scoreB = @scores[Metric.first.id.to_s][1][b.id.to_s]
 
       if scoreA.nil? and scoreB.nil?
         0
