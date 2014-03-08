@@ -14,7 +14,7 @@ LOEP::Application.routes.draw do
   
   #EvMethods
   namespace :evaluations do
-    resources :lori
+    resources :loris
   end
 
   resources :users

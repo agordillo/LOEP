@@ -1,11 +1,11 @@
-class Evaluations::LoriController < EvaluationsController
+class Evaluations::LorisController < EvaluationsController
   before_filter :authenticate_user!
   
   def new
     @lo = Lo.find(params[:lo_id])
     authorize! :rshow, @lo
 
-    moduleName = self.controller_name.camelcase[0..self.controller_name.camelcase.length-2]
+    moduleName = "Evaluations::" + self.controller_name[0..-2].camelcase
     @evmethod = Evmethod.find_by_module(moduleName)
 
     if params[:assignment_id]

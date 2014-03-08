@@ -5,18 +5,18 @@
 
   <%= form_for(@evaluation) do |f| %>
 
-    <input type="hidden" name="lori_evaluation[user_id]" id="lori_evaluation_user_id" value="<%=current_user.id%>">
+    <input type="hidden" name="evaluations_lori[user_id]" id="evaluations_lori_user_id" value="<%=current_user.id%>">
     <% if !@assignment.nil? %>
-      <input type="hidden" name="lori_evaluation[assignment_id]" id="lori_evaluation_assignment_id" value="<%=@assignment.id%>">
+      <input type="hidden" name="evaluations_lori[assignment_id]" id="evaluations_lori_assignment_id" value="<%=@assignment.id%>">
     <% end %>
-    <input type="hidden" name="lori_evaluation[lo_id]" id="lori_evaluation_lo_id" value="<%=@lo.id%>">
-    <input type="hidden" name="lori_evaluation[evmethod_id]" id="lori_evaluation_evmethod_id" value="<%=@evmethod.id%>">
+    <input type="hidden" name="evaluations_lori[lo_id]" id="evaluations_lori_lo_id" value="<%=@lo.id%>">
+    <input type="hidden" name="evaluations_lori[evmethod_id]" id="evaluations_lori_evmethod_id" value="<%=@evmethod.id%>">
 
     <%= render 'lori_survey', :f => f , :readonly => readonly %>
 
     <% if !@evaluation.completed_at.nil? %>
       <p class="form_legend">Completion Date</p>
-      <%=text_field_tag "lori_evaluation[completed_at]",@evaluation.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker", :readonly => readonly ? "true" : nil %>
+      <%=text_field_tag "evaluations_lori[completed_at]",@evaluation.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker", :readonly => readonly ? "true" : nil %>
     <% end %>
 
     <p class="form_before_button">&nbsp;</p>

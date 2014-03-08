@@ -20,8 +20,7 @@ class Evmethod < ActiveRecord::Base
 
   def new_evaluation_path(lo)
     evaluationModule = getEvaluationModule
-    # controller_name = self.module.underscore + "s"
-    helper_method_name = "new_" + self.module.underscore + "_path"
+    helper_method_name = "new_" + self.module.gsub(":","").underscore + "_path"
     new_evaluation_path = Rails.application.routes.url_helpers.send(helper_method_name)
 
     #Add params
