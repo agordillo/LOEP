@@ -34,7 +34,7 @@ class Assignment < ActiveRecord::Base
   validate :duplicated_assignment
 
   def duplicated_assignment
-    if Assignment.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id).length > 0
+    if Assignment.where(:id => !self.id,:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id).length > 0
       errors.add(:duplicated_assignments, ": Some assignments haven't been created because there are assignments already created with the same Learning Object, Evaluation Method and Reviewer.")
     else
       true

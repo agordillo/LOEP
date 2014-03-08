@@ -53,15 +53,19 @@ class Evaluation < ActiveRecord::Base
       if as.evaluation.nil?
         as.evaluation = self
       end
-      assignment.status = "Completed"
-      assignment.completed_at = Time.now
-      assignment.save
+      as.status = "Completed"
+      as.completed_at = Time.now
+      as.save!
     end
   end
 
   def update_scores
     # Look for scores than should be updated or created after this evaluation
-    binding.pry
+
+    #1. Get EvMethod of the Evaluation
+    #2. Get all the Metrics that used this EvMethod
+    #3. For each Metric, get all the scores that used id.
+    #4. Update these scores. 
     
   end
   
