@@ -28,9 +28,9 @@
           <p> <%=lo.tag_list.join(", ")%> </p>
         </td>
         <% @metrics.each do |metric| %>
-        <% loScore = lo.scores.where(:metric_id => metric.id).first.value %>
+        <% loScore = lo.scores.where(:metric_id => metric.id).first %>
         <td class="tdcenter">
-          <p> <%= loScore.nil? ? "No evaluated" : loScore%></p>
+          <p> <%= loScore.nil? ? "No evaluated" : loScore.value %></p>
         </td>
         <%end%>
       </tr>
@@ -55,9 +55,25 @@
     
     var metricsLength = parseInt('<%=@metrics.length%>');
     var bSearchableArray = [1];
+    var scoresArray = [];
     for(var i=3; i<(metricsLength+3); i++){
-        bSearchableArray.push(i);
+        // bSearchableArray.push(i); (Allow to search metric values)
+        scoresArray.push(i);
     }
+
+    //Custom Sorting
+    jQuery.fn.dataTableExt.oSort['scores-asc'] = function(a,b){
+      if(a.indexOf("No")!=-1){
+        return -1;
+      } else if(b.indexOf("No")!=-1){
+        return 1;
+      }
+      return jQuery.fn.dataTableExt.oSort['html-asc'](a,b);
+    };
+
+    jQuery.fn.dataTableExt.oSort['scores-desc'] = function(a,b){
+      return jQuery.fn.dataTableExt.oSort['scores-asc'](a,b)*(-1);
+    };
 
     //DOC: http://datatables.net
     var losTable = $("#rankedLosTable").dataTable({
@@ -66,7 +82,8 @@
       "aaSorting": [[ 3, "desc" ]],
       "aoColumnDefs": [
           { 'bSortable': false, 'aTargets': [ 1,2 ] },
-          { "bSearchable": false, "aTargets": bSearchableArray }
+          { "bSearchable": false, "aTargets": bSearchableArray },
+          { "sType":"scores", "aTargets": scoresArray }
       ],
       "sDom": '<"H"lfr><"F"ip>t',
       "iDisplayLength": iDisplayLength,

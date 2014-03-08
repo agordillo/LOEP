@@ -64,9 +64,22 @@ class Evaluation < ActiveRecord::Base
 
     #1. Get EvMethod of the Evaluation
     #2. Get all the Metrics that used this EvMethod
-    #3. For each Metric, get all the scores that used id.
-    #4. Update these scores. 
-    
+    #3. For each Metric, create/update the scores of the LO.
+    metrics = Metric.all.select { |m| m.evmethods.include? self.evmethod }
+    metrics.each do |m|
+      scores = self.lo.scores.where(:metric_id=>m.id)
+      if (scores.length > 0)
+        #Update Score
+        s = scores.first
+        s.updateScore
+      else
+        #Create score
+        s = Score.new
+        s.metric_id = m.id
+        s.lo_id = self.lo.id
+        s.save!
+      end
+    end
   end
   
 end

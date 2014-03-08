@@ -10,21 +10,26 @@ class Score < ActiveRecord::Base
   validate :duplicated_score
 
   def duplicated_score
-    if Score.where(:metric_id => self.metric.id, :lo_id => self.lo_id).length > 0
+    if Score.where(:id => !self.id, :metric_id => self.metric.id, :lo_id => self.lo_id).length > 0
       errors.add(:duplicated_score, ": This score already exists.")
     else
       true
     end
   end
 
-  before_validation :getScore
+  before_validation :checkScoreBeforeSave
+
+  def updateScore
+    self.value = self.metric.class.getScoreForLo(self.lo)
+    self.save!
+  end
 
 
 #-------------------------------------------------------------------------------------
 
   private
 
-  def getScore
+  def checkScoreBeforeSave
     if self.value.nil?
       self.value = self.metric.class.getScoreForLo(self.lo)
     end

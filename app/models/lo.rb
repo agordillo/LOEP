@@ -46,8 +46,11 @@ class Lo < ActiveRecord::Base
   def self.orderByScore(los,metric)
     metric = metric || Metric.first
     los.sort! { |a, b|
-      scoreA = a.scores.where(:metric_id => metric.id).first.value
-      scoreB = b.scores.where(:metric_id => metric.id).first.value
+      scoreA = a.scores.where(:metric_id => metric.id).first
+      scoreB = b.scores.where(:metric_id => metric.id).first
+
+      scoreA = (scoreA.nil? ? nil : scoreA.value)
+      scoreB = (scoreB.nil? ? nil : scoreB.value)
 
       if scoreA.nil? and scoreB.nil?
         0
@@ -59,6 +62,7 @@ class Lo < ActiveRecord::Base
         scoreB <=> scoreA
       end
     }
+    los
   end
 
 end
