@@ -27,12 +27,13 @@ class Metrics::LORIWAM < Metric
 
     loScore = 0
     9.times do |i|
-      iScore = evaluations.average("item"+(i+1).to_s).to_f
-      if iScore == 0
+      validEvaluations = Evaluation.getValidEvaluationsForItem(evaluations,i+1)
+      if validEvaluations.length == 0
         #Means that this item has not been evaluated in any evaluation
         #All evaluations had leave this item in blank
         return nil
       end
+      iScore = validEvaluations.average("item"+(i+1).to_s).to_f
       loScore = loScore + ((iScore-1) * itemWeights[i])
     end
     loScore = 5/2.to_f * loScore.to_f
@@ -41,15 +42,15 @@ class Metrics::LORIWAM < Metric
 
   def self.itemWeights
     [
-      0.1724,
-      0.1207,
-      0.1138,
-      0.1414,
-      0.1379,
-      0.1034,
-      0.0655,
-      0.0759,
-      0.069
+      BigDecimal(0.1724,4),
+      BigDecimal(0.1207,4),
+      BigDecimal(0.1138,4),
+      BigDecimal(0.1414,4),
+      BigDecimal(0.1379,4),
+      BigDecimal(0.1034,4),
+      BigDecimal(0.0655,4),
+      BigDecimal(0.0759,4),
+      BigDecimal(0.069,4)
     ]
   end
 

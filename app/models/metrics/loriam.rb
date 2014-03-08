@@ -6,15 +6,16 @@ class Metrics::LORIAM < Metrics::LORIWAM
 
   def self.itemWeights
     [
-      1/9.to_f,
-      1/9.to_f,
-      1/9.to_f,
-      1/9.to_f,
-      1/9.to_f,
-      1/9.to_f,
-      1/9.to_f,
-      1/9.to_f,
-      1/9.to_f
+      # BigDecimal('1/9'),
+      BigDecimal(0.111111,6),
+      BigDecimal(0.111111,6),
+      BigDecimal(0.111111,6),
+      BigDecimal(0.111111,6),
+      BigDecimal(0.111111,6),
+      BigDecimal(0.111111,6),
+      BigDecimal(0.111111,6),
+      BigDecimal(0.111111,6),
+      BigDecimal(0.111111,6)
     ]
   end
 

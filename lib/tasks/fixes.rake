@@ -25,14 +25,7 @@ namespace :fixes do
 		LORIWAM.save
 
 		puts "Creating LO scores for each Metric"
-		Metric.all.each do |m|
-			Lo.all.each do |lo|
-				s = Score.new
-				s.metric_id = m.id
-				s.lo_id = lo.id
-				s.save
-			end
-		end
+		Rake::Task["fixes:updateScores"].invoke
 
 		puts "Updating finished"
 	end
@@ -59,6 +52,20 @@ namespace :fixes do
 		end
 
 		puts "Assignments fixed"
+	end
+
+	task :updateScores => :environment do |t, args|
+		puts "Updating scores"
+		Score.delete_all
+		Metric.all.each do |m|
+			Lo.all.each do |lo|
+				s = Score.new
+				s.metric_id = m.id
+				s.lo_id = lo.id
+				s.save
+			end
+		end
+		puts "Updating scores finished"
 	end
 	
 end

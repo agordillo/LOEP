@@ -41,6 +41,12 @@ class Evaluation < ActiveRecord::Base
     evaluation_path = Rails.application.routes.url_helpers.send(helper_method_name,self)
   end
 
+  #Utils
+
+  def self.getValidEvaluationsForItem(evaluations,nItem)
+    evaluations.where('item' + (nItem.to_s) + ' != -1')
+  end
+
 
   private
 
