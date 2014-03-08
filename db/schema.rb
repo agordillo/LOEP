@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140305173204) do
+ActiveRecord::Schema.define(:version => 20140308104716) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -176,11 +176,11 @@ ActiveRecord::Schema.define(:version => 20140305173204) do
   end
 
   create_table "scores", :force => true do |t|
-    t.integer  "value"
+    t.decimal  "value",      :precision => 4, :scale => 2
     t.integer  "metric_id"
     t.integer  "lo_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
   end
 
   create_table "taggings", :force => true do |t|

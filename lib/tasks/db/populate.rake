@@ -20,6 +20,7 @@ namespace :db do
 		Evaluation.delete_all
 		App.delete_all
 		Metric.delete_all
+		Score.delete_all
 	end
 
   	#Create Roles
@@ -169,17 +170,33 @@ namespace :db do
 
 	#Create evaluations
 	#Reviewer evaluate the Curiosity Flashcard using LORI (Evaluation requested in the assignment)
-	evA = LoriEvaluation.new #Evaluation.new
+	evA = Evaluations::Lori.new
 	evA.user_id = user_reviewer.id
 	evA.lo_id = loA.id
 	evA.evmethod_id = LORI.id
 	evA.assignment_id = asA.id #not mandatory
 	evA.save(:validate => false)
 
-	# #New Metric
-	# LoriM = LoriMetric.new
-	# LoriM.evmethods.push(LORI);
-	# LoriM.save(:validate => false)
+	#Create Metrics
+	LORIAM = Metrics::LORIAM.new
+	LORIAM.name = "LORI Arithmetic Mean"
+	LORIAM.evmethods.push(LORI);
+	LORIAM.save(:validate => false)
+
+	LORIWAM = Metrics::LORIWAM.new
+	LORIWAM.name = "LORI Weighted Arithmetic Mean"
+	LORIWAM.evmethods.push(LORI);
+	LORIWAM.save(:validate => false)
+
+	#Create Scores
+	Metric.all.each do |m|
+		Lo.all.each do |lo|
+			s = Score.new
+			s.metric_id = m.id
+			s.lo_id = lo.id
+			s.save
+		end
+	end
 
 	puts "Populate finish"
   end

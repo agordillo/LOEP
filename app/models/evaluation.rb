@@ -19,6 +19,7 @@ class Evaluation < ActiveRecord::Base
   :presence => true
 
   after_save :update_assignments
+  after_save :update_scores
 
 
   def readable_completed_at
@@ -56,6 +57,12 @@ class Evaluation < ActiveRecord::Base
       assignment.completed_at = Time.now
       assignment.save
     end
+  end
+
+  def update_scores
+    # Look for scores than should be updated or created after this evaluation
+    binding.pry
+    
   end
   
 end

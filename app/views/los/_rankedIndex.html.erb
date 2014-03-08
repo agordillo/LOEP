@@ -10,8 +10,8 @@
         <th>Name</th>
         <th>Url</th>
         <th>Tags</th>
-        <% @scores.each do |key, value| %>
-        <th><%=value[0]=%></th>
+        <% @metrics.each do |metric| %>
+        <th><%=metric.name=%></th>
         <% end %>
       </tr>
     </thead>
@@ -27,10 +27,10 @@
          <td class="tdcenter">
           <p> <%=lo.tag_list.join(", ")%> </p>
         </td>
-        <% @scores.each do |key, value| %>
-        <% metricScores = value[1] %>
+        <% @metrics.each do |metric| %>
+        <% loScore = lo.scores.where(:metric_id => metric.id).first.value %>
         <td class="tdcenter">
-          <p> <%=metricScores[lo.id.to_s].nil? ? "No evaluated" : metricScores[lo.id.to_s]%></p>
+          <p> <%= loScore.nil? ? "No evaluated" : loScore%></p>
         </td>
         <%end%>
       </tr>
@@ -53,7 +53,7 @@
 
     var iDisplayLength = LOEP.Storage.get("RankedLosTable_iDisplayLength") || -1;
     
-    var metricsLength = parseInt('<%=@scores.length%>');
+    var metricsLength = parseInt('<%=@metrics.length%>');
     var bSearchableArray = [1];
     for(var i=3; i<(metricsLength+3); i++){
         bSearchableArray.push(i);

@@ -24,7 +24,15 @@ namespace :fixes do
 		LORIWAM.evmethods.push(LORI15);
 		LORIWAM.save
 
-		puts "Creating LO scores"
+		puts "Creating LO scores for each Metric"
+		Metric.all.each do |m|
+			Lo.all.each do |lo|
+				s = Score.new
+				s.metric_id = m.id
+				s.lo_id = lo.id
+				s.save
+			end
+		end
 
 		puts "Updating finished"
 	end

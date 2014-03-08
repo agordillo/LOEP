@@ -21,26 +21,9 @@ class LosController < ApplicationController
     @los = Lo.all
     authorize! :index, @los
 
-    @scores = Hash.new
+    @metrics = Metric.all
 
-    Metric.all.each do |metric|
-      @scores[metric.id.to_s] = [metric.name, metric.class.getScoreForLos(@los)]
-    end
-
-    @los.sort! { |a, b|
-      scoreA = @scores[Metric.first.id.to_s][1][a.id.to_s]
-      scoreB = @scores[Metric.first.id.to_s][1][b.id.to_s]
-
-      if scoreA.nil? and scoreB.nil?
-        0
-      elsif scoreA.nil?
-        +1
-      elsif scoreB.nil?
-        -1
-      else
-        scoreB <=> scoreA
-      end
-    }
+    @los = Lo.orderByScore(@los,Metric.find_by_type("Metrics::LORIAM"))
 
     respond_to do |format|
       format.html
