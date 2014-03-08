@@ -49,7 +49,7 @@ class Evaluation < ActiveRecord::Base
     # Pending assignments of the user, with the same Lo and the same evaluation method
     candidate_assignments = self.user.assignments.where(:status => "Pending", :lo_id=>self.lo.id, :evmethod_id=>self.evmethod.id)
     candidate_assignments.each do |as|
-      #Add the evaluation to the assignment, if its not included
+      # #Add the evaluation to the assignment, if its not included
       if as.evaluation.nil?
         as.evaluation = self
       end
@@ -60,7 +60,7 @@ class Evaluation < ActiveRecord::Base
   end
 
   def update_scores
-    # Look for scores than should be updated or created after this evaluation
+    # Look for scores than should be updated or created after create or remove this evaluation
 
     #1. Get EvMethod of the Evaluation
     #2. Get all the Metrics that used this EvMethod
@@ -71,13 +71,21 @@ class Evaluation < ActiveRecord::Base
       if (scores.length > 0)
         #Update Score
         s = scores.first
-        s.updateScore
+        loScore = s.metric.class.getScoreForLo(s.lo)
+        if loScore.nil?
+          #Remove Score
+          #TODO
+        else
+          #Update score
+          s.value = loScore
+          s.save!
+        end
       else
         #Create score
         s = Score.new
         s.metric_id = m.id
         s.lo_id = self.lo.id
-        s.save!
+        s.save #If the value can't be calculated, the score will not be saved. (Don't use save!)
       end
     end
   end

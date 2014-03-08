@@ -15,10 +15,20 @@
         <%= f.radio_button "item" + nItem.to_s, "5", :class=>'hover-star', :title => "5", :readonly => readonly ? "true" : nil %>
         <span  class="hover-star_legend_right">High</span>
       </div>
+      <div class="na-check">
+        <span>N/A</span>
+        <%= f.radio_button "item" + nItem.to_s, "-1", :class=>'na-input', :title => "N/A", :readonly => readonly ? "true" : nil %>
+      </div>
       <div class="hover-start_text">
         <% if readonly %>
-          <div class='numberCircle'>
-            <%= @evaluation.send("item" + nItem.to_s)%>
+          <% iValue = @evaluation.send("item" + nItem.to_s)%>
+          <% if iValue===-1 %>
+            <div class='numberCircle numberCircleSmall'>
+            <span><%="N/A"%></span>
+          <% else %>
+            <div class='numberCircle'>
+            <span><%=iValue %></span>
+          <% end %>
           </div>
         <% end %>
       </div>
@@ -39,7 +49,9 @@
 
       $('.hover-star').rating({
           focus: function(value, link){
-              var tip = $(this).parent().parent().find("div.hover-start_text");
+              var ratingWrapper = $("div.rating_wrapper").has(this);
+
+              var tip = $(ratingWrapper).find("div.hover-start_text");
               var title = $(link).attr("ititle");
               if(typeof title == "undefined"){
                 title = $(link).attr("title");
@@ -50,37 +62,83 @@
               tip.html(text);
           },
           blur: function(value, link){
-              var tip = $(this).parent().parent().find("div.hover-start_text");
-              var selectedValue = $(tip).attr("selectedValue");
-              if(selectedValue){
-                var text = "<div class='numberCircle'>"+selectedValue+"</div>";
-              }
-              $(tip).html(text || '');
+              var ratingWrapper = $("div.rating_wrapper").has(this);
+              var tip = $(ratingWrapper).find("div.hover-start_text");
+              updateCircle(tip);
           },
           callback: function(value, link){
-            var tip = $(this).parent().parent().find("div.hover-start_text");
-            var remove = $(tip).parent().find("div.remove_hover-start-value");
+            if(typeof value == "undefined"){
+              return;
+            }
+
+            var ratingWrapper = $("div.rating_wrapper").has(this);
+
+            var tip = $(ratingWrapper).find("div.hover-start_text");
             $(tip).attr("selectedValue",value);
+
+            var remove = $(ratingWrapper).find("div.remove_hover-start-value");
             $(remove).fadeIn().css("display","inline-block");
+
+            var naInput = $(ratingWrapper).find("input.na-input");
+            $(naInput)[0].checked = false
+            $(naInput).trigger("change");
           }
       });
   
       $(document).on('click', 'div.remove_hover-start-value', function(event){
-          var removeDiv = event.target;
-          if(!$(removeDiv).hasClass("remove_hover-start-value")){
-            removeDiv = $(event.target).parent();
-          }
-          var tip = $(removeDiv).parent().find("div.hover-start_text");
+          var ratingWrapper = $("div.rating_wrapper").has(this);
+
+          var tip = $(ratingWrapper).find("div.hover-start_text");
           $(tip).removeAttr("selectedValue");
 
-          var ratingCancelButton = $(removeDiv).parent().find("div.rating-cancel > a");
-          $(ratingCancelButton).trigger("click")
+          var ratingCancelButton = $(ratingWrapper).find("div.rating-cancel > a");
+          $(ratingCancelButton).trigger("click");
+
+          var naInput = $(ratingWrapper).find("input.na-input");
+          $(naInput)[0].checked = false
+          $(naInput).trigger("change");
 
           $(tip).fadeOut(function(){
             $(tip).html("");
             $(tip).css("display","inline-block");
           });
-          $(removeDiv).fadeOut();
+
+          $(this).fadeOut();
+      });
+
+      $(document).on('change', 'input.na-input', function(event){
+        if(this.checked){
+          var ratingWrapper = $("div.rating_wrapper").has(this);
+
+          var ratingCancelButton = $(ratingWrapper).find("div.rating-cancel > a");
+          $(ratingCancelButton).trigger("click")
+
+          var tip = $(ratingWrapper).find("div.hover-start_text");
+          $(tip).attr("selectedValue",$(this).attr("title"));
+          updateCircle(tip);
+
+          var remove = $(ratingWrapper).find("div.remove_hover-start-value");
+          $(remove).fadeIn().css("display","inline-block");
+        }
+      });
+
+      var updateCircle = function(starTextDOM){
+        var selectedValue = $(starTextDOM).attr("selectedValue");
+        if(selectedValue){
+          var classes = 'numberCircle';
+          if(selectedValue == "N/A"){
+            classes = classes + " numberCircleSmall";
+          }
+          var text = "<div class='"+ classes +"'><span>"+selectedValue+"</span></div>";
+        }
+        $(starTextDOM).html(text || '');
+      };
+
+      //Load UI when editing evaluations
+      $(".rating_wrapper").each(function(index,ratingWrapper){
+        $(ratingWrapper).find("input:checked").trigger("change");
+        var tip = $(ratingWrapper).find("div.hover-start_text");
+        updateCircle(tip);
       });
 
     <% else %>

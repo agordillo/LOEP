@@ -19,11 +19,6 @@ class Score < ActiveRecord::Base
 
   before_validation :checkScoreBeforeSave
 
-  def updateScore
-    self.value = self.metric.class.getScoreForLo(self.lo)
-    self.save!
-  end
-
 
 #-------------------------------------------------------------------------------------
 
@@ -31,7 +26,10 @@ class Score < ActiveRecord::Base
 
   def checkScoreBeforeSave
     if self.value.nil?
-      self.value = self.metric.class.getScoreForLo(self.lo)
+      loScore = self.metric.class.getScoreForLo(self.lo)
+      if !loScore.nil?
+        self.value = loScore
+      end
     end
   end
 

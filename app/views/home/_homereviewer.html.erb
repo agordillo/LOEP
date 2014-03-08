@@ -1,6 +1,6 @@
 <div class="home_block">
 	<h1 class="loep_title"> My Assignments </h1>
-	<%= render :partial => '/assignments/rindex' %>
+	<%= render '/assignments/rindex', :showEvaluationButton => true %>
 	<% unless @assignments.length === 0 %>
 		<p class="link_wrapper"><%= link_to "View all", assignments_path %></p>
 	<% end %>

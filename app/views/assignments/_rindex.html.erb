@@ -1,6 +1,7 @@
 <% showReviewer ||= false %>
 <% showDescription ||= false %>
-<% showEvaluationButton ||= false %>
+<% showEvaluationBigButton ||= false %>
+<% showEvaluationButton ||= showEvaluationBigButton %>
 <% aL = @assignments.length %>
 
 <% if aL === 0 %>
@@ -61,7 +62,7 @@
           <span><%= assignment.description %></span>
         </td>
       </tr>
-      <% if showEvaluationButton == false %>
+      <% if showEvaluationBigButton == false %>
       <% unless i==aL-1 %>
         <tr>
           <td class="tdseparator" colspan="100%"></td>
@@ -69,7 +70,7 @@
       <% end %>
       <% end %>
       <% end %>
-      <% if showEvaluationButton %>
+      <% if showEvaluationBigButton %>
       <tr>
         <td colspan="100%">
           <span><a href="<%=assignment.evmethod.new_evaluation_path(assignment.lo)%>"><button class="loep_button"><span class="glyphicon glyphicon-star-empty"></span> Evaluate with <%= assignment.evmethod.name %></button></a></span>

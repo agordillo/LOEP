@@ -18,7 +18,7 @@
           <%= @represented.nil? ? "Your" : @represented.name %> Pending Assignment<%="s" if @assignments.length > 1%>
         <% end %>
       </h1>
-      <%= render '/assignments/rindex', :showReviewer => adminMode, :showEvaluationButton => !adminMode, :showDescription => true %>
+      <%= render '/assignments/rindex', :showReviewer => adminMode, :showEvaluationBigButton => !adminMode, :showDescription => true %>
     <% end %>
 
     <p class="space_medium"></p>
