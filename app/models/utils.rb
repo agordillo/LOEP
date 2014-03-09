@@ -80,7 +80,6 @@ class Utils < ActiveRecord::Base
   #More Utils
 
   def self.is_numeric?(str)
-    return true if str =~ /^\d+$/
     true if Float(str) rescue false
   end
 

@@ -43,6 +43,12 @@
   <%= f.text_area :comments, :class=>'loep_input optionalInput', :readonly => readonly ? "true" : nil %>
 </div>
 
+<div class="survey_block">
+  <p class="survey_question_title">Overall Score</p>
+  <p class="survey_question_subtitle">Optionally, you may propose an overall score between 0.0 and 10.0 for this Learning Object.</p>
+  <%= f.number_field :score, :class=>'loep_input optionalInput', :step=> 0.1, :min=>0, :max=>10, :readonly => readonly ? "true" : nil %>
+</div>
+
 <script type="text/javascript">
   $(document).ready(function(){
     <% if !readonly %>

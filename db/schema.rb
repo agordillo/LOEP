@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140308104716) do
+ActiveRecord::Schema.define(:version => 20140309144231) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -82,8 +82,54 @@ ActiveRecord::Schema.define(:version => 20140308104716) do
     t.string   "sitem3"
     t.string   "sitem4"
     t.string   "sitem5"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
+    t.integer  "item26"
+    t.integer  "item27"
+    t.integer  "item28"
+    t.integer  "item29"
+    t.integer  "item30"
+    t.integer  "item31"
+    t.integer  "item32"
+    t.integer  "item33"
+    t.integer  "item34"
+    t.integer  "item35"
+    t.integer  "item36"
+    t.integer  "item37"
+    t.integer  "item38"
+    t.integer  "item39"
+    t.integer  "item40"
+    t.text     "titem11"
+    t.text     "titem12"
+    t.text     "titem13"
+    t.text     "titem14"
+    t.text     "titem15"
+    t.text     "titem16"
+    t.text     "titem17"
+    t.text     "titem18"
+    t.text     "titem19"
+    t.text     "titem20"
+    t.text     "titem21"
+    t.text     "titem22"
+    t.text     "titem23"
+    t.text     "titem24"
+    t.text     "titem25"
+    t.text     "titem26"
+    t.text     "titem27"
+    t.text     "titem28"
+    t.text     "titem29"
+    t.text     "titem30"
+    t.text     "titem31"
+    t.text     "titem32"
+    t.text     "titem33"
+    t.text     "titem34"
+    t.text     "titem35"
+    t.text     "titem36"
+    t.text     "titem37"
+    t.text     "titem38"
+    t.text     "titem39"
+    t.text     "titem40"
+    t.decimal  "score",         :precision => 12, :scale => 6
   end
 
   create_table "evmethods", :force => true do |t|

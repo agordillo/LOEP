@@ -160,6 +160,11 @@ class EvaluationsController < ApplicationController
       end
     end
 
+    #Validate score if present
+    if !evaluationParams["score"].nil? and !Utils.is_numeric?(evaluationParams["score"])
+      evaluationParams.delete("score")
+    end
+
     evaluationParams
   end
 

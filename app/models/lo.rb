@@ -33,6 +33,32 @@ class Lo < ActiveRecord::Base
   has_many :scores, :dependent => :destroy
   has_many :metrics, through: :scores
 
+  #---------------------------------------------------------------------------------
+
+  #Extra Attrs
+
+  #Get Users with assignments for evaluate this LO
+  def assignedReviewers
+    self.users.uniq
+  end
+
+  #Get Users that evaluate this LO
+  def reviewers
+    self.evaluations.map{ |ev| ev.user }.uniq
+  end
+
+  #Get Users that evaluate the LO or habe an assignment for evaluate it
+  def allUsers
+    (assignedReviewers+reviewers).uniq
+  end
+
+  #Extra Getters
+  def getLanguages
+    unless self.languages.empty?
+      self.languages.map { |l| l.id }
+    end
+  end
+
   def getCategories
   	unless self.categories.nil?
   		begin

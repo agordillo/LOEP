@@ -51,7 +51,7 @@ class Ability
             can :update, User, :id => user.id
 
             can :rshow, Lo do |lo|
-                !lo.users.where(:id => user.id).empty?
+                !lo.allUsers.select{|u| u.id == user.id}.empty?
             end
 
             can :rshow, Assignment, :user_id => user.id
