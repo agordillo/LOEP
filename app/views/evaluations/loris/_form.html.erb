@@ -14,7 +14,7 @@
 
     <%= render 'lori_survey', :f => f , :readonly => readonly %>
 
-    <% if !@evaluation.completed_at.nil? %>
+    <% if iamAdmin? and !@evaluation.completed_at.nil? %>
       <p class="form_legend">Completion Date</p>
       <%=text_field_tag "evaluations_lori[completed_at]",@evaluation.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker", :readonly => readonly ? "true" : nil %>
     <% end %>

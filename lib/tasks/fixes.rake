@@ -67,6 +67,13 @@ namespace :fixes do
 		end
 		puts "Updating scores finished"
 	end
+
+	task :setAssignmentsDeadlines => :environment do |t, args|
+		puts "Set deadlines"
+		Assignment.where(:deadline=>nil).each do |assignment|
+			assignment.update_column :deadline, (DateTime.now - 1)
+		end
+	end
 	
 end
 

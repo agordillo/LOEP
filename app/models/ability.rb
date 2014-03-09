@@ -59,6 +59,9 @@ class Ability
 
             can :create, Evaluation
             can [:show, :rshow], Evaluation, :user_id => user.id
+            can :update, Evaluation do |ev|
+               ev.user.id == user.id && (ev.assignment.nil? || ev.assignment.deadline.nil? || (ev.assignment.deadline > Time.now))
+            end
 
             #Helpers
             can :rshow, Array do |arr|

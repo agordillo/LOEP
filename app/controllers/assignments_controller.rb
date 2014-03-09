@@ -87,6 +87,7 @@ class AssignmentsController < ApplicationController
     @pusers = [@assignment.user]
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
+    @evmethodids = [@assignment.evmethod.id]
     
     respond_to do |format|
       format.html
