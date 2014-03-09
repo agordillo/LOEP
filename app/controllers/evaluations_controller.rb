@@ -35,6 +35,8 @@ class EvaluationsController < ApplicationController
     @evaluation = Evaluation.find(params[:id])
     authorize! :show, @evaluation
 
+    buildViewParamsBeforeRender
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @evaluation }
@@ -44,11 +46,35 @@ class EvaluationsController < ApplicationController
   # GET /evaluations/new
   # GET /evaluations/new.json
   def new
-    @evaluation = Evaluation.new
-    authorize! :create, @evaluation
+    new(Evaluation)
+  end
+
+  def new(evModel)
+    @evaluation = evModel.new
+    authorize! :new, @evaluation
+
+    @lo = Lo.find(params[:lo_id])
+    authorize! :rshow, @lo
+
+    @evmethod = @evaluation.evmethod
+
+    if params[:assignment_id]
+      @assignment = Assignment.find(params[:assignment_id])
+    else
+      #Inferred
+      @assignment = @lo.assignments.where(:status=> "Pending", :user_id => current_user.id, :evmethod_id => @evmethod.id).first
+    end
+    authorize! :rshow, @assignment
+
+    Utils.update_return_to(session,request)
+
+    #Reviewers go to Home after create new evaluation
+    if !current_user.role?("Admin")
+      session[:return_to] = Rails.application.routes.url_helpers.home_path
+    end
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html
       format.json { render json: @evaluation }
     end
   end
@@ -57,39 +83,49 @@ class EvaluationsController < ApplicationController
   def edit
     @evaluation = Evaluation.find(params[:id])
     authorize! :edit, @evaluation
+
+    Utils.update_sessions_paths(session, evaluations_path, nil)
+    Utils.update_return_to(session,request)
+
+    buildViewParamsBeforeRender
   end
 
   # POST /evaluations
   # POST /evaluations.json
   def create
-    @evaluation = Evaluation.new(params[:evaluation])
+    create(Evaluation)
+  end
+
+  def create(evModel)
+    evaluationParams = getEvaluationParams
+    @evaluation = evModel.new(evaluationParams)
     @evaluation.completed_at = Time.now
     authorize! :create, @evaluation
 
     respond_to do |format|
       if @evaluation.save
-        format.html { redirect_to home_path, notice: 'Evaluation was successfully submitted.' }
-        format.json { render json: @evaluation, status: :created, location: @evaluation }
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully submitted.' }
       else
-        format.html { render action: "new" }
-        format.json { render json: @evaluation.errors, status: :unprocessable_entity }
+        format.html { renderError("An error occurred and the evaluation could not be created. Check all the fields and try again.","new") }
       end
     end
   end
 
-  # PUT /evaluations/1
-  # PUT /evaluations/1.json
   def update
     @evaluation = Evaluation.find(params[:id])
     authorize! :update, @evaluation
 
+    evaluationParams = getEvaluationParams
+
+    if current_user.isAdmin?
+      evaluationParams.delete("user_id")
+    end
+
     respond_to do |format|
-      if @evaluation.update_attributes(params[:evaluation])
-        format.html { redirect_to @evaluation, notice: 'Evaluation was successfully updated.' }
-        format.json { head :no_content }
+      if @evaluation.update_attributes(evaluationParams)
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully updated.' }
       else
-        format.html { render action: "edit" }
-        format.json { render json: @evaluation.errors, status: :unprocessable_entity }
+        format.html { renderError("Evaluation cannot be updated. Wrong params.","edit") }
       end
     end
   end
@@ -101,9 +137,42 @@ class EvaluationsController < ApplicationController
     authorize! :destroy, @evaluation
 
     @evaluation.destroy
+
     respond_to do |format|
-      format.html { redirect_to evaluations_url }
+      format.html { redirect_to Utils.return_after_destroy_path(session) }
       format.json { head :no_content }
     end
   end
+
+
+  private
+
+  def getEvaluationParams
+    evaluationParams = nil
+    evaluationParamsKey = nil
+    #evaluationParamsKey = evaluation.class.name.gsub("::","_").underscore
+
+    #Look for evaluation params
+    params.each do |key,val|
+      if val.is_a?(Hash)
+        evaluationParamsKey = key
+        evaluationParams = val
+      end
+    end
+
+    evaluationParams
+  end
+
+  def renderError(msg,action)
+    buildViewParamsBeforeRender
+    flash[:alert] = msg
+    render action: action
+  end
+
+  def buildViewParamsBeforeRender
+    @lo = @evaluation.lo
+    authorize! :rshow, @lo
+    @evmethod = @evaluation.evmethod
+  end
+
 end

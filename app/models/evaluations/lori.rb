@@ -2,8 +2,12 @@ class Evaluations::Lori < Evaluation
   # this is for Evaluations with evMethod=LORI (type=LoriEvaluation)
   #Override methods here
 
+  def init
+    self.evmethod_id ||= Evmethod.find_by_name("LORI v1.5").id
+    super
+  end
+
   def create
-    #LORI creator
     super
   end
 

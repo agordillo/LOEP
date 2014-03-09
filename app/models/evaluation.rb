@@ -20,8 +20,11 @@ class Evaluation < ActiveRecord::Base
 
   after_save :update_assignments
   after_save :update_scores
+  after_initialize :init
 
-
+  def init
+  end
+  
   def readable_completed_at
     Utils.getReadableDate(self.completed_at)
   end
