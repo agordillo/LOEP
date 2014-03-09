@@ -64,7 +64,9 @@ class EvaluationsController < ApplicationController
       #Inferred
       @assignment = @lo.assignments.where(:status=> "Pending", :user_id => current_user.id, :evmethod_id => @evmethod.id).first
     end
-    authorize! :rshow, @assignment
+    if !@assignment.nil?
+      authorize! :rshow, @assignment
+    end
 
     Utils.update_return_to(session,request)
 
@@ -102,11 +104,17 @@ class EvaluationsController < ApplicationController
     @evaluation.completed_at = Time.now
     authorize! :create, @evaluation
 
+    @evaluation.valid?
+
     respond_to do |format|
-      if @evaluation.save
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully submitted.' }
+      if @evaluation.errors.blank?
+        if @evaluation.save
+          format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully submitted.' }
+        else
+          format.html { renderError("An error occurred and the evaluation could not be created. Check all the fields and try again.","new") }
+        end
       else
-        format.html { renderError("An error occurred and the evaluation could not be created. Check all the fields and try again.","new") }
+        format.html { renderError(@evaluation.errors.full_messages,"new") }
       end
     end
   end

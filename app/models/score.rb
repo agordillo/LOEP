@@ -10,9 +10,15 @@ class Score < ActiveRecord::Base
   validate :duplicated_score
 
   def duplicated_score
-    if Score.where(:id => !self.id, :metric_id => self.metric.id, :lo_id => self.lo_id).length > 0
-      errors.add(:duplicated_score, ": This score already exists.")
+    if self.id.nil?
+      scores = Score.where(:metric_id => self.metric.id, :lo_id => self.lo_id)
+      if scores.length > 0
+        errors.add(:duplicated_score, ": This score already exists.")
+      else
+        true
+      end
     else
+      #Updating an existing resource
       true
     end
   end

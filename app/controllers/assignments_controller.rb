@@ -64,6 +64,9 @@ class AssignmentsController < ApplicationController
 
     @los = Lo.all.reject{ |lo| @plos.include? lo unless @plos.nil?}
     @users = User.reviewers.reject{ |user| @pusers.include? user unless @pusers.nil? }
+
+    #Default deadline
+    @assignment.deadline = DateTime.now + 1.month
     
     respond_to do |format|
       format.html
