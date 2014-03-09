@@ -20,7 +20,7 @@ class RegistrationsController < Devise::RegistrationsController
   			sign_in @user, :bypass => true
   			redirect_to "/"
   		else
-  			flash[:alert] = "There was an error with the recaptcha code below. Please re-enter the code and click submit."
+  			flash.now[:alert] = "There was an error with the recaptcha code below. Please re-enter the code and click submit."
   			render :action => "new"
   		end
   	else

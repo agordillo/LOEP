@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Glyphicons Regular';
+  src: url('/assets/glyphicons-regular.eot');
+  src: url('/assets/glyphicons-regular.eot?#iefix') format('embedded-opentype'), url('/assets/glyphicons-regular.woff') format('woff'), url('/assets/glyphicons-regular.ttf') format('truetype'), url('/assets/glyphicons-regular.svg#glyphicons_regular') format('svg');
+}
+
+.glyphiconfull {
+	font: 24px/1em 'Glyphicons Regular';
+	font-style: normal;
+	font-weight: normal;
+}
+
+.glyphicon-show_big_thumbnails:before {
+	content: "\E156";
+}

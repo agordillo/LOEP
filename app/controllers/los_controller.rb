@@ -130,7 +130,7 @@ class LosController < ApplicationController
         format.json { render json: @lo, status: :created, location: @lo }
       else
         format.html { 
-          flash[:alert] = @lo.errors.full_messages
+          flash.now[:alert] = @lo.errors.full_messages
           render action: "new"
         }
         format.json { render json: @lo.errors, status: :unprocessable_entity }
@@ -150,7 +150,7 @@ class LosController < ApplicationController
         format.json { head :no_content }
       else
         format.html { 
-          flash[:alert] = @lo.errors.full_messages
+          flash.now[:alert] = @lo.errors.full_messages
           render action: "edit"
         }
         format.json { render json: @lo.errors, status: :unprocessable_entity }

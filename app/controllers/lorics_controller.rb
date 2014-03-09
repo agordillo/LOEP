@@ -22,7 +22,7 @@ class LoricsController < ApplicationController
 	        format.json { render json: @loric, status: :created, location: @loric }
 	      else
 	        format.html { 
-	          flash[:alert] = @loric.errors.full_messages
+	          flash.now[:alert] = @loric.errors.full_messages
 	          render action: "new"
 	        }
 	        format.json { render json: @loric.errors, status: :unprocessable_entity }
@@ -50,7 +50,7 @@ class LoricsController < ApplicationController
 	        format.json { head :no_content }
 	      else
 	        format.html {
-	          flash[:alert] = @loric.errors.full_messages
+	          flash.now[:alert] = @loric.errors.full_messages
 	          render action: "edit"
 	        }
 	        format.json { render json: @lo.errors, status: :unprocessable_entity }

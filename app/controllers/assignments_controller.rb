@@ -270,7 +270,7 @@ class AssignmentsController < ApplicationController
         format.json { head :no_content }
       else
         format.html {
-          flash[:alert] = @assignment.errors.full_messages
+          flash.now[:alert] = @assignment.errors.full_messages
           render action: "edit"
         }
         format.json { render json: @assignment.errors, status: :unprocessable_entity }
@@ -323,7 +323,7 @@ class AssignmentsController < ApplicationController
 
   def renderError(msg,action)
     buildViewParamsBeforeRenderError
-    flash[:alert] = msg
+    flash.now[:alert] = msg
     render action: action
   end
 

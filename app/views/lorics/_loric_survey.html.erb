@@ -1,4 +1,4 @@
-<% LoriEvaluation.getLoriItems.each_with_index do |item,i| %>
+<% Evaluations::Lori.getLoriItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <div class="survey_block">
     <p class="survey_question_title"><%=nItem%>. <%=item[0]%></p>

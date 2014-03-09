@@ -178,7 +178,7 @@ class EvaluationsController < ApplicationController
 
   def renderError(msg,action)
     buildViewParamsBeforeRender
-    flash[:alert] = msg
+    flash.now[:alert] = msg
     render action: action
   end
 
