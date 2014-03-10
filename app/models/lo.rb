@@ -78,6 +78,8 @@ class Lo < ActiveRecord::Base
   	end
   end
 
+  #Class Methods
+
   def self.orderByScore(los,metric)
     metric = metric || Metric.first
     los.sort! { |a, b|
@@ -98,6 +100,10 @@ class Lo < ActiveRecord::Base
       end
     }
     los
+  end
+
+  def self.Public
+    Lo.where("los.scope!='private'")
   end
 
 end

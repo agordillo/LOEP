@@ -21,19 +21,20 @@
       <%= render '/assignments/rindex', :showReviewer => adminMode, :showEvaluationBigButton => !adminMode, :showDescription => true %>
     <% end %>
 
+    <p class="space_medium"></p>
+    <h1 class="loep_title loep_title_min">Learning Object Information</h1>
+    <p class="space_small"></p>
+    <div class="identationNone">
+      <%= render 'info' %>
+    </div>
+    <p class="space_medium"></p>
+
     <% if can?(:evaluate, @lo) %>
-      <p class="space_medium"></p>
       <h1 class="loep_title loep_title_min">
         Available Evaluation Methods
       </h1>
       <%= render '/evmethods/rindex', :showReviewer => adminMode %>
     <% end %>
-
-    <p class="space_medium"></p>
-    <h2>Learning Object Information</h2>
-    <p class="space_small"></p>
-    <%= render 'info' %>
-    <p class="space_medium"></p>
 
   </div>
 </div>

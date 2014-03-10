@@ -10,6 +10,18 @@ class LosController < ApplicationController
     authorize! :index, @los
 
     Utils.update_sessions_paths(session, request.url, nil)
+    
+    @options_select = getOptionsForSelect
+    respond_to do |format|
+      format.html
+      format.json { render json: @los }
+    end
+  end
+
+  def publicIndex
+    @los = Lo.Public.order('created_at DESC')
+    authorize! :rshow, @los
+
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
@@ -72,12 +84,11 @@ class LosController < ApplicationController
     end
     authorize! :rshow, @assignments
     
-    unless user.role?("Admin")
-      evmethods = []
-      @assignments.map { |as| evmethods.push(as.evmethod) }
-      @evmethods = evmethods.uniq
-    else
-      @evmethods = Evmethod.all
+    @evmethods = []
+    Evmethod.all.each do |ev|
+      if can?(:evaluate, @lo, ev)
+        @evmethods << ev
+      end  
     end
 
     #After reject -> after destroy dependence

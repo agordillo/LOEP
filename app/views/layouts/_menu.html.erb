@@ -27,6 +27,12 @@
 							<li><a href="/los/new">Add New</a></li>
 						</ul>
 					</li>
+				<% else %>
+					<%if Lo.Public.length > 0 %>
+					<li class="<%='menu_option_selected' if params[:controller] == 'los'%>">
+						<a href="/los/publicIndex"><h3><span class="glyphicon glyphiconfull glyphicon-show_big_thumbnails"></span>Learning Objects</h3></a>
+					</li>
+					<% end %>
 				<% end %>
 				<li class="<%='menu_option_selected' if params[:controller] == 'evaluations'%>">
 					<a href="<%=evaluations_path%>"><h3><span class="glyphicon glyphicon-star-empty"></span>Evaluations</h3></a>

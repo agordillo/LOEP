@@ -1,0 +1,77 @@
+<% showTools ||= false %>
+
+<% rL = @los.length %>
+<% if rL === 0 %>
+  <%= render '/layouts/emptytable', :resources => "learning objects" %>
+<% else %>
+  <table id="los_table" cellspacing='0' class="loep_table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Url</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @los.each do |lo| %>
+      <tr>
+        <td>
+          <a href="<%=lo_path(lo)%>"><%= lo.name %></a>
+        </td>
+        <td class="tdcenter">
+          <a target="_blank" href="<%=lo.url%>"><span class="glyphicon glyphicon-share"></span></a>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+
+<% if showTools %>
+
+<script type="text/javascript">
+
+
+  $(document).ready(function(){
+
+    //////////////////
+    // Table Sorter
+    //////////////////
+
+    var iDisplayLength = LOEP.Storage.get("PublicLosTable_iDisplayLength") || -1;
+
+    //DOC: http://datatables.net
+    var losTable = $("#los_table").dataTable({
+      "bJQueryUI": true,
+      "sPaginationType": "full_numbers",
+      "aaSorting": [[ 0, "asc" ]],
+      "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [ 1 ] },
+          { "bSearchable": false, "aTargets": [ 1 ] }
+      ],
+      "sDom": '<"H"lfr><"F"ip>t',
+      "iDisplayLength": iDisplayLength,
+      "oLanguage": {
+        "sLengthMenu": 'Display <select>'+
+          '<option value="5">5</option>'+
+          '<option value="10">10</option>'+
+          '<option value="25">25</option>'+
+          '<option value="50">50</option>'+
+          '<option value="100">100</option>'+
+          '<option value="-1">All</option>'+
+          '</select> records'
+      }
+    });
+
+    //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page
+
+    $('#los_table_length').on('change', function(e){
+      var iDisplayLength = parseInt($(this).find("select").val());
+      LOEP.Storage.add("PublicLosTable_iDisplayLength",iDisplayLength);
+    });
+
+  });
+
+</script>
+
+<% end %>

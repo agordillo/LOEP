@@ -284,8 +284,8 @@ p.form_before_button {
 	font-size: 25px !important;
 }
 
-h1.rankedLOTitle {
-	margin-bottom: 10px !important;
+.loep_title_with_bottom_margin {
+	margin-bottom: 10px;
 }
 
 p.link_wrapper {
@@ -671,4 +671,10 @@ p.space_small {
 
 .field_with_errors {
 	display: inline;
+}
+
+/* Identation */
+
+.identationOne {
+	margin-left: 25px;
 }

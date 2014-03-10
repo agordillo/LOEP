@@ -18,14 +18,6 @@ class Ability
             can :read, :all
             can :rshow, :all
 
-            #Helpers
-            can :destroy, Array do |arr|
-                arr.all? { |el| can?(:destroy, el) }
-            end
-            can :destroy, ActiveRecord::Relation do |arr|
-                arr.all? { |el| can?(:destroy, el) }
-            end
-
         elsif user.role? :Admin
             #Admin
             can [:update, :destroy], User do |u|
@@ -38,14 +30,6 @@ class Ability
             can :reject, :all
             can :read, :all
             can :rshow, :all
-
-             #Helpers
-            can :destroy, Array do |arr|
-                arr.all? { |el| can?(:rshow, el) }
-            end
-            can :destroy, ActiveRecord::Relation do |arr|
-                arr.all? { |el| can?(:rshow, el) }
-            end
 
         elsif user.role? :Reviewer
             #Reviewers
@@ -71,21 +55,28 @@ class Ability
                ev.user.id == user.id && (ev.assignment.nil? || ev.assignment.deadline.nil? || (ev.assignment.deadline > Time.now))
             end
 
-            #Helpers
-            can :rshow, Array do |arr|
-                arr.all? { |el| can?(:rshow, el) }
-            end
-
-            can :rshow, ActiveRecord::Relation do |arr|
-                arr.all? { |el| can?(:rshow, el) }
-            end
-            
         elsif user.role? :User
             #Guests
             can :show, User, :id => user.id
             can :update, User, :id => user.id
         else
             #Not loggued users
+        end
+
+        #Helpers
+        can :rshow, Array do |arr|
+            arr.all? { |el| can?(:rshow, el) }
+        end
+
+        can :rshow, ActiveRecord::Relation do |arr|
+            arr.all? { |el| can?(:rshow, el) }
+        end
+
+        can :destroy, Array do |arr|
+            arr.all? { |el| can?(:rshow, el) }
+        end
+        can :destroy, ActiveRecord::Relation do |arr|
+            arr.all? { |el| can?(:rshow, el) }
         end
 
         # The first argument to `can` is the action you are giving the user 
