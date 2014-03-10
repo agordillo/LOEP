@@ -32,6 +32,7 @@ LOEP::Application.routes.draw do
   match '/rlos/:id' => 'los#rshow'
   match '/rassignments' => 'assignments#rindex'
   match '/revaluations' => 'evaluations#rindex'
+  match '/assignments/:id/complete' => 'assignments#complete'
   match '/assignments/:id/reject' => 'assignments#reject'
 
   match '/surveys' => 'application#surveys'

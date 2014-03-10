@@ -70,8 +70,8 @@ class EvaluationsController < ApplicationController
 
     Utils.update_return_to(session,request)
 
-    #Reviewers go to Home after create new evaluation
-    if !current_user.role?("Admin")
+    #Reviewers go to Home after create new evaluation, when the evmethod only allows one evaluation
+    if !current_user.role?("Admin") and !@evmethod.allow_multiple_evaluations
       session[:return_to] = Rails.application.routes.url_helpers.home_path
     end
 

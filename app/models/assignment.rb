@@ -126,6 +126,11 @@ class Assignment < ActiveRecord::Base
     return self.updated_at <=> assignment.updated_at
   end
 
+  def markAsComplete
+    self.status = "Completed"
+    self.completed_at = Time.now
+  end
+
 
   private
 

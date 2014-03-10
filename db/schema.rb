@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140310133426) do
+ActiveRecord::Schema.define(:version => 20140310174636) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -135,8 +135,9 @@ ActiveRecord::Schema.define(:version => 20140310133426) do
   create_table "evmethods", :force => true do |t|
     t.string   "name"
     t.string   "module"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
+    t.boolean  "allow_multiple_evaluations", :default => false
   end
 
   create_table "evmethods_metrics", :id => false, :force => true do |t|

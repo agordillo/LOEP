@@ -31,7 +31,7 @@ class Evaluation < ActiveRecord::Base
   validate :duplicated_evaluation
 
   def duplicated_evaluation
-    if self.id.nil? and !user.isAdmin?
+    if self.id.nil? and !self.evmethod.allow_multiple_evaluations and !user.isAdmin?
       evaluations = Evaluation.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
       if evaluations.length > 0
         errors.add(:duplicated_evaluation, ": The evaluation wasn't been created because this user had already evaluated this Learning Object.")
@@ -39,7 +39,10 @@ class Evaluation < ActiveRecord::Base
         true
       end
     else
-      #!self.id.nil? => Updating an existing resource
+      #No check duplicated evaluations when:
+        #!self.id.nil? => Updating an existing resource
+        #self.evmethod.allow_multiple_evaluations => EvMethod that allows multiple evaluations
+        #user.isAdmin? => The user is an Admin...
       true
     end
   end
@@ -97,8 +100,9 @@ class Evaluation < ActiveRecord::Base
       if self.assignment_id.nil? and !assignment.evaluations.include? self
         assignment.evaluations.push(self)
       end
-      assignment.status = "Completed"
-      assignment.completed_at = Time.now
+      unless self.evmethod.allow_multiple_evaluations
+        assignment.markAsComplete
+      end
       assignment.save!
     end
   end

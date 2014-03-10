@@ -46,5 +46,9 @@ module AssignmentsHelper
 	def reject_path(assignment)
 		assignment_path(assignment) + "/reject"
 	end
+
+	def complete_path(assignment)
+		assignment_path(assignment) + "/complete"
+	end
 	
 end

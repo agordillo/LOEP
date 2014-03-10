@@ -14,6 +14,7 @@ class Ability
             can [:create, :update, :destroy], Assignment
             can [:create, :update, :destroy], Evaluation
             can :evaluate, :all
+            can :complete, :all
             can :reject, :all
             can :read, :all
             can :rshow, :all
@@ -27,6 +28,7 @@ class Ability
             can [:create, :update, :destroy], Assignment
             can :create, Evaluation
             can :evaluate, :all
+            can :complete, :all
             can :reject, :all
             can :read, :all
             can :rshow, :all
@@ -41,10 +43,11 @@ class Ability
                 ["Public","Protected"].include?(lo.scope) or lo.allUsers.include? user
             end
             can :evaluate, Lo do |lo,evmethod|
-               (["Public"].include?(lo.scope) or lo.pendingAssignedReviewers.include? user) and (evmethod.nil? or Evaluation.where(:lo_id => lo.id, :user_id=> user.id, :evmethod_id => evmethod.id).empty?)
+               (["Public"].include?(lo.scope) or lo.pendingAssignedReviewers.include? user) and (evmethod.nil? or evmethod.allow_multiple_evaluations or Evaluation.where(:lo_id => lo.id, :user_id=> user.id, :evmethod_id => evmethod.id).empty?)
             end
 
             can :rshow, Assignment, :user_id => user.id
+            can :complete, Assignment, :user_id => user.id
             can :reject, Assignment, :user_id => user.id
 
             can :create, Evaluation do |ev|

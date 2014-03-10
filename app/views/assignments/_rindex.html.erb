@@ -20,9 +20,13 @@
       <% if showEvaluationButton %>
         <th></th>
         <th></th>
+        <th></th>
       <% end %>
     </tr>
     <% @assignments.each_with_index do |assignment,i| %>
+      <% canEvaluateThisLo = can?(:evaluate, assignment.lo, assignment.evmethod)%>
+      <% showEvaluationBigButtonForAssignment = (showEvaluationBigButton and canEvaluateThisLo) %>
+      <% showEvaluationButtonForAssignment = (showEvaluationButton and canEvaluateThisLo) %>
       <tr>
         <td>
           <a href="<%=rlo_path(assignment.lo)%>"><span><%= assignment.lo.name %></span></a>
@@ -43,14 +47,21 @@
         </td>
         <% if showEvaluationButton %>
           <td class="tdcenter">
-            <% if can?(:evaluate, assignment.lo, assignment.evmethod) %>
+            <% if assignment.status == "Pending" and showEvaluationButtonForAssignment %>
               <a href="<%=assignment.evmethod.new_evaluation_path(assignment.lo)%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
+            <% end %>
+          </td>
+          <td class="tdcenter">
+            <%if assignment.status == "Pending" and can?(:complete, assignment) %>
+              <%= link_to complete_path(assignment), :data => { :confirm => "Are you sure you want to mark as completed this assignment?", :method => :complete } do %>
+                  <span class="glyphicon glyphicon-ok"></span> Check
+              <% end %>
             <% end %>
           </td>
           <td class="tdcenter">
             <%if assignment.status == "Pending" and can?(:reject, assignment) %>
               <%= link_to reject_path(assignment), :data => { :confirm => "Are you sure?" }, :method => :reject do %>
-                  <span class="glyphicon glyphicon glyphicon-remove"></span> Reject
+                  <span class="glyphicon glyphicon-remove"></span> Reject
               <% end %>
             <% end %>
           </td>
@@ -62,7 +73,7 @@
           <span><%= assignment.description %></span>
         </td>
       </tr>
-      <% if showEvaluationBigButton == false %>
+      <% if showEvaluationBigButtonForAssignment == false %>
       <% unless i==aL-1 %>
         <tr>
           <td class="tdseparator" colspan="100%"></td>
@@ -70,7 +81,7 @@
       <% end %>
       <% end %>
       <% end %>
-      <% if showEvaluationBigButton %>
+      <% if showEvaluationBigButtonForAssignment %>
       <tr>
         <td colspan="100%">
           <span><a href="<%=assignment.evmethod.new_evaluation_path(assignment.lo)%>"><button class="loep_button"><span class="glyphicon glyphicon-star-empty"></span> Evaluate with <%= assignment.evmethod.name %></button></a></span>

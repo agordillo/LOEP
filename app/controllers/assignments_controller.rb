@@ -306,6 +306,33 @@ class AssignmentsController < ApplicationController
     end
   end
 
+  def complete
+    @assignment = Assignment.find(params[:id])
+    authorize! :complete, @assignment
+
+    #Check user evaluations for this LO with this evmethod.
+    evaluations = Evaluation.where(:user_id=>@assignment.user.id, :lo_id=>@assignment.lo.id, :evmethod_id=>@assignment.evmethod.id)
+
+    if @assignment.evmethod.allow_multiple_evaluations
+      minEvToComplete = 1
+    else
+      minEvToComplete = 1
+    end
+
+    if evaluations.length >= minEvToComplete
+      #Complete assignment
+      @assignment.markAsComplete
+      @assignment.save!
+    else
+      flash[:alert] = "The assignment cannot be mark as completed. You must evaluate the corresponding Learning Object before that."
+    end
+
+    respond_to do |format|
+      format.html { redirect_to Utils.return_after_destroy_path(session) }
+      format.json { head :no_content }
+    end
+  end
+
   def reject
     @assignment = Assignment.find(params[:id])
     authorize! :reject, @assignment
