@@ -4,7 +4,7 @@ class Assignment < ActiveRecord::Base
   belongs_to :user
   belongs_to :lo
   belongs_to :evmethod
-  has_one :evaluation #optional
+  has_many :evaluations #optional
 
   validates :author_id,
   :presence => true

@@ -53,8 +53,8 @@ namespace :fixes do
 			end
 
 			#Completed_at
-			if assignment.status=="Completed" and assignment.completed_at.nil? and !assignment.evaluation.nil?
-				assignment.update_column :completed_at, assignment.evaluation.created_at
+			if assignment.status=="Completed" and assignment.completed_at.nil? and !assignment.evaluations.empty?
+				assignment.update_column :completed_at, assignment.evaluations.last.created_at
 			end
 
 			#Suitability

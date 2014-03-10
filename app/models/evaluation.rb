@@ -45,7 +45,7 @@ class Evaluation < ActiveRecord::Base
   end
 
   before_validation :checkScoreBeforeSave
-  after_save :update_assignments
+  after_create :checkAssignment
   after_save :update_scores
   after_initialize :init
 
@@ -87,18 +87,19 @@ class Evaluation < ActiveRecord::Base
     end
   end
 
-  def update_assignments
-    # Look assignments that can be considered completed after this evaluation
-    # Pending assignments of the user, with the same Lo and the same evaluation method
-    candidate_assignments = self.user.assignments.where(:status => "Pending", :lo_id=>self.lo.id, :evmethod_id=>self.evmethod.id)
-    candidate_assignments.each do |as|
-      # #Add the evaluation to the assignment, if its not included
-      if as.evaluation.nil?
-        as.evaluation = self
+  def checkAssignment
+    # Look for the related assignment of this evaluation
+    # It should be a pending assignment of the user with the same Lo and the same evaluation method
+    assignment = self.user.assignments.where(:status => "Pending", :lo_id=>self.lo.id, :evmethod_id=>self.evmethod.id).first
+
+    if !assignment.nil?
+      #Add the evaluation to the assignment, if its not included
+      if self.assignment_id.nil? and !assignment.evaluations.include? self
+        assignment.evaluations.push(self)
       end
-      as.status = "Completed"
-      as.completed_at = Time.now
-      as.save!
+      assignment.status = "Completed"
+      assignment.completed_at = Time.now
+      assignment.save!
     end
   end
 
