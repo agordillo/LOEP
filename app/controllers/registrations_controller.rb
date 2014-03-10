@@ -40,16 +40,26 @@ class RegistrationsController < Devise::RegistrationsController
   private
 
   def filterULanguages
-    if params[:user] and params[:user][:languages]
-      begin
-        params[:user][:languages] = params[:user][:languages].reject{|m| m.empty? }
-        params[:user][:languages] = params[:user][:languages].map{|m| Language.find(m) }
-      rescue
-        params[:user][:languages] = []
+    if params[:user]
+
+      #User language
+      if params[:user][:language_id]
+        begin
+          Language.find(params[:user][:language_id])
+        rescue
+          params[:user].delete :language_id
+        end
       end
-    end
-    if params[:user] and params[:user][:language_id] and !Utils.is_numeric?(params[:user][:language_id])
-      params[:user].delete :language_id
+
+      #User preferred languages
+      if params[:user][:languages]
+        begin
+          params[:user][:languages] = params[:user][:languages].reject{|m| m.empty? }
+          params[:user][:languages] = params[:user][:languages].map{|m| Language.find(m) }
+        rescue
+          params[:user][:languages] = []
+        end
+      end
     end
   end
 

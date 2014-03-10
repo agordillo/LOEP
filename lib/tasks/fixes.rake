@@ -27,6 +27,18 @@ namespace :fixes do
 		puts "Creating LO scores for each Metric"
 		Rake::Task["fixes:updateScores"].invoke
 
+		puts "Adding new languages"
+		#Create Languages
+		lindependant = Language.new
+		lindependant.name = "Language independent"
+		lindependant.shortname = "lanin"
+		lindependant.save
+
+		italiano = Language.new
+		italiano.name = "Italiano"
+		italiano.shortname = "it"
+		italiano.save
+
 		puts "Updating finished"
 	end
 

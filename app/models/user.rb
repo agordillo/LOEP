@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
   validates :gender, :presence => { :message => "can't be blank" }
   validates :roles, :presence => { :message => "can't be blank" }
   validates :language_id, :presence => { :message => "can't be blank" }
+  validates :language_id, :exclusion => { :in => [-1], :message => "has to be specified."}
   validates :occupation, :presence => { :message => "can't be blank" }
   validates_inclusion_of :occupation, :in => ["Education", "Technology", "Other"], :allow_nil => false, :message => ": Invalid field of expertise"
 

@@ -15,6 +15,7 @@ class Lo < ActiveRecord::Base
   }
 
   validates :language_id, :presence => { :message => "has to be specified" }
+  validates :language_id, :exclusion => { :in => [-1], :message => "has to be specified."}
 
   validates :lotype,
   :presence => true,

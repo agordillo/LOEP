@@ -26,10 +26,10 @@
     <%= f.select :occupation, options_for_select(Utils.getOptionsForOccupation,resource.occupation || "Education"), {} ,{ :class=>'loep_input' } %>
 
     <p class="form_legend">* Preferred Language</p>
-    <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan("new"),resource.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
+    <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan(resource),resource.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 
     <p class="form_legend">* All Languages</p>
-    <%= f.select :languages, options_for_select(Utils.getOptionsForSelectLan("edit"),resource.getLanguages), {} ,{ :multiple => 'true' , :size => 6, :class=>'loep_input' } %>
+    <%= f.select :languages, options_for_select(Utils.getOptionsForSelectLan(resource,{:multiple => true}),resource.getLanguages), {} ,{ :multiple => 'true' , :size => 6, :class=>'loep_input' } %>
 
     <p class="form_legend">Areas of interest</p>
     <input name="user[tag_list]" autocomplete="off" id="tags" value="<%=resource.tag_list.join(",")%>"/>

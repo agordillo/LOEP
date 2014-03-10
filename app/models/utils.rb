@@ -4,14 +4,41 @@ class Utils < ActiveRecord::Base
 
   #Constants
 
-  def self.getOptionsForSelectLan(action)
-    languages = Language.all.map { |l| [l.name,l.id] }
+  def self.getOptionsForSelectLan(resource,options=nil)
+    addUnespecified = false
+    addLIndependent = false
 
-    if action == "new" or action == "create"
-      return languages.push(["Unspecified","Unspecified"])
-    else
-      return languages
+    if !resource.nil?
+      if resource.class.name == "User"
+        addUnespecified = (resource.language.nil? and (options.nil? or options[:multiple]!=true))
+      elsif resource.class.name == "Lo"
+        addUnespecified = resource.language.nil?
+        addLIndependent = true
+      end
     end
+
+    languages = Language.all.map{ |l| [l.name,l.id] }.sort_by{ |l| l[0].downcase }
+
+    lIndependentId = Language.find_by_shortname("lanin").id
+    if !addLIndependent
+      languages = languages.reject{|l| l[1]==lIndependentId}
+    else
+      languages = languages.sort{ |a,b|
+        if a[1]==lIndependentId
+          1
+        elsif b[1]==lIndependentId
+          -1
+        else
+         0
+        end
+      }
+    end
+
+    if addUnespecified
+      languages.unshift(["Unspecified",-1])
+    end
+
+    languages
   end
 
   def self.getEvMethods

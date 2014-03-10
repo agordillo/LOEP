@@ -30,6 +30,11 @@ namespace :db do
 	role_user = Role.create!  :name  => "User"
 
 	#Create Languages
+	lindependant = Language.new
+	lindependant.name = "Language independent"
+	lindependant.shortname = "lanin"
+	lindependant.save(:validate => false)
+
 	english = Language.new
 	english.name = "English"
 	english.shortname = "en"
@@ -41,10 +46,20 @@ namespace :db do
 	spanish.save(:validate => false)
 
 	german = Language.new
-	german.name = "German"
+	german.name = "Deutsch"
 	german.shortname = "de"
 	german.save(:validate => false)
 
+	french = Language.new
+	french.name = "Français"
+	french.shortname = "fr"
+	french.save(:validate => false)
+
+	italiano = Language.new
+	italiano.name = "Italiano"
+	italiano.shortname = "it"
+	italiano.save(:validate => false)
+	
 	nederlands = Language.new
 	nederlands.name = "Nederlands"
 	nederlands.shortname = "nl"
@@ -54,11 +69,6 @@ namespace :db do
 	magyar.name = "Magyar"
 	magyar.shortname = "hu"
 	magyar.save(:validate => false)
-
-	french = Language.new
-	french.name = "Français"
-	french.shortname = "fr"
-	french.save(:validate => false)
 
 	#Create users
 	user_admin = User.new
