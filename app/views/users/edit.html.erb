@@ -31,6 +31,9 @@
         <%= f.radio_button :gender, 2 %><span class="gender_label">Female</span>
       </div>
 
+      <p class="form_legend">* Occupation or field of expertise</p>
+      <%= f.select :occupation, options_for_select(Utils.getOptionsForOccupation,@user.occupation || "Education"), {} ,{ :class=>'loep_input' } %>
+
       <p class="form_legend">* Preferred Language</p>
       <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan(nil),@user.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 

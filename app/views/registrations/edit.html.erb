@@ -1,10 +1,6 @@
 <div class="loep_form_wrapper">
   <h2>Settings</h2>
 
-  <% if flash[:alert] %>
-    <div class="alert alert-danger"><%= flash[:alert] %></div>
-  <% end %>
-
   <% devise_error_messages!.each do |msg| %>
       <% if msg.is_a?(String) %>
         <div class="alert alert-danger"><%= msg %></div>
@@ -27,6 +23,9 @@
         <%= f.radio_button :gender, 1 %><span class="gender_label">Male</span>
         <%= f.radio_button :gender, 2 %><span class="gender_label">Female</span>
       </div>
+
+      <p class="form_legend">* Occupation or field of expertise</p>
+      <%= f.select :occupation, options_for_select(Utils.getOptionsForOccupation,resource.occupation || "Education"), {} ,{ :class=>'loep_input' } %>
 
       <p class="form_legend">* Preferred Language</p>
       <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan("new"),resource.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>

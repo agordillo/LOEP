@@ -26,6 +26,10 @@ class Utils < ActiveRecord::Base
     [["Private","Private"],["Protected","Protected"],["Public","Public"]]
   end
 
+  def self.getOptionsForOccupation
+    [["Education (teacher, pedagogue, ...)","Education"],["Technology (educational content developer, IT support, ...)","Technology"],["Other","Other"]]
+  end
+
 
   #Dates
 

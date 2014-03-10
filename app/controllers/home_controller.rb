@@ -8,8 +8,7 @@ class HomeController < ApplicationController
 		end
 		respond_to do |format|
 			format.html { render layout: "application_without_menu" }
-		end
-		
+		end	
 	end
 
 	def index

@@ -9,6 +9,7 @@
       <tr>
         <th>Name</th>
         <th>Url</th>
+        <th>Tags</th>
       </tr>
     </thead>
     <tbody>
@@ -19,6 +20,9 @@
         </td>
         <td class="tdcenter">
           <a target="_blank" href="<%=lo.url%>"><span class="glyphicon glyphicon-share"></span></a>
+        </td>
+        <td class="tdcenter">
+          <p> <%=lo.tag_list.join(", ")%> </p>
         </td>
       </tr>
     <% end %>
@@ -46,7 +50,7 @@
       "sPaginationType": "full_numbers",
       "aaSorting": [[ 0, "asc" ]],
       "aoColumnDefs": [
-          { 'bSortable': false, 'aTargets': [ 1 ] },
+          { 'bSortable': false, 'aTargets': [ 1,2 ] },
           { "bSearchable": false, "aTargets": [ 1 ] }
       ],
       "sDom": '<"H"lfr><"F"ip>t',

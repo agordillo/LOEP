@@ -31,18 +31,23 @@
     <p class="show_value"><%="Female"%></p>
   <% end %>
 
+  <p class="show_legend">Field of expertise</p>
+  <p class="show_value"><%=@user.occupation%></p>
+
   <p class="show_legend">Preferred Language</p>
   <p class="show_value"><%=@user.language.name%></p>
 
   <p class="show_legend">All Languages</p>
   <p class="show_value"><%=@user.languages.map { |l| l.name }.join(", ")%></p>
-  
+
   <p class="show_legend">Areas of interest</p>
   <div class="tagsinput">
     <% @user.tag_list.each do |tag| %>
       <p class="show_value"><span class='tag'><%=tag%></span></p>
     <% end %>
-  </div> 
+  </div>
+
+
  
   <br/>
   <br/>

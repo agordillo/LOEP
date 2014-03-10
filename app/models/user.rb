@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :birthday, :gender, :tag_list, :language_id, :languages
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :birthday, :gender, :tag_list, :language_id, :languages, :occupation
 
   has_and_belongs_to_many :roles
   has_and_belongs_to_many :languages
@@ -29,6 +29,8 @@ class User < ActiveRecord::Base
   validates :gender, :presence => { :message => "can't be blank" }
   validates :roles, :presence => { :message => "can't be blank" }
   validates :language_id, :presence => { :message => "can't be blank" }
+  validates :occupation, :presence => { :message => "can't be blank" }
+  validates_inclusion_of :occupation, :in => ["Education", "Technology", "Other"], :allow_nil => false, :message => ": Invalid field of expertise"
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'
