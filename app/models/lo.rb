@@ -1,5 +1,5 @@
 class Lo < ActiveRecord::Base
-  attr_accessible :callback, :categories, :description, :name, :repository, :technology, :language_id, :lotype, :url, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list
+  attr_accessible :callback, :categories, :description, :name, :repository, :technology, :language_id, :lotype, :url, :scope, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list
 
   validates :url,
   :presence => true,
@@ -24,6 +24,11 @@ class Lo < ActiveRecord::Base
   :presence => true,
   :exclusion => { in: "Unspecified", message: "has to be specified" }
 
+  validates :scope,
+  :presence => true
+
+  validates_inclusion_of :scope, :in => ["Private", "Protected", "Public"], :allow_nil => false, :message => ": Invalid scope value"
+
   acts_as_taggable
 
   has_many :assignments, :dependent => :destroy
@@ -40,6 +45,10 @@ class Lo < ActiveRecord::Base
   #Get Users with assignments for evaluate this LO
   def assignedReviewers
     self.users.uniq
+  end
+
+  def pendingAssignedReviewers
+    self.assignments.where(:status=>"Pending").map{|as| as.user}.uniq
   end
 
   #Get Users that evaluate this LO

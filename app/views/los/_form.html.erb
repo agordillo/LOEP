@@ -13,6 +13,9 @@
     <p class="form_legend">Repository</p>
     <%= f.text_field :repository, :class=>'loep_input' %>
 
+    <p class="form_legend">* Scope</p>
+    <%= f.select :scope, options_for_select(Utils.getOptionsForSelectLOScope,@lo.scope || "Private"), {} ,{ :class=>'loep_input' } %>
+
     <p class="form_legend">Description</p>
     <%= f.text_area :description, :class=>'loep_input' %>
 

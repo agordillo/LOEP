@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140309144231) do
+ActiveRecord::Schema.define(:version => 20140310092323) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -194,8 +194,9 @@ ActiveRecord::Schema.define(:version => 20140309144231) do
     t.boolean  "hasFlashcards"
     t.boolean  "hasVirtualTours"
     t.boolean  "hasEnrichedVideos"
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
+    t.string   "scope",                                 :default => "private"
   end
 
   create_table "metrics", :force => true do |t|

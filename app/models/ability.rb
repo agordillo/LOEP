@@ -13,6 +13,7 @@ class Ability
             can [:create, :update, :destroy], Lo
             can [:create, :update, :destroy], Assignment
             can [:create, :update, :destroy], Evaluation
+            can :evaluate, :all
             can :reject, :all
             can :read, :all
             can :rshow, :all
@@ -33,6 +34,7 @@ class Ability
             can [:create, :update, :destroy], Lo
             can [:create, :update, :destroy], Assignment
             can :create, Evaluation
+            can :evaluate, :all
             can :reject, :all
             can :read, :all
             can :rshow, :all
@@ -45,19 +47,25 @@ class Ability
                 arr.all? { |el| can?(:rshow, el) }
             end
 
-        elsif !user.role.nil?
-            #Reviewers and Users
+        elsif user.role? :Reviewer
+            #Reviewers
+
             can :show, User, :id => user.id
             can :update, User, :id => user.id
 
             can :rshow, Lo do |lo|
-                !lo.allUsers.select{|u| u.id == user.id}.empty?
+                ["Public","Protected"].include?(lo.scope) or lo.allUsers.include? user
+            end
+            can :evaluate, Lo do |lo,evmethod|
+               (["Public"].include?(lo.scope) or lo.pendingAssignedReviewers.include? user) and (evmethod.nil? or Evaluation.where(:lo_id => lo.id, :user_id=> user.id, :evmethod_id => evmethod.id).empty?)
             end
 
             can :rshow, Assignment, :user_id => user.id
             can :reject, Assignment, :user_id => user.id
 
-            can :create, Evaluation
+            can :create, Evaluation do |ev|
+               ev.lo.nil? or can?(:evaluate, ev.lo, ev.evmethod)
+            end
             can [:show, :rshow], Evaluation, :user_id => user.id
             can :update, Evaluation do |ev|
                ev.user.id == user.id && (ev.assignment.nil? || ev.assignment.deadline.nil? || (ev.assignment.deadline > Time.now))
@@ -71,7 +79,11 @@ class Ability
             can :rshow, ActiveRecord::Relation do |arr|
                 arr.all? { |el| can?(:rshow, el) }
             end
-
+            
+        elsif user.role? :User
+            #Guests
+            can :show, User, :id => user.id
+            can :update, User, :id => user.id
         else
             #Not loggued users
         end

@@ -9,9 +9,10 @@
       <th>Evaluate</th>
     </tr>
     <% @evmethods.each_with_index do |ev,i| %>
+      <% if can?(:evaluate, @lo, ev) %>
       <tr>
          <td>
-          <span><%= ev.name %></span></a>
+          <a href="<%=ev.documentation_path%>"><span><%= ev.name %></span></a>
         </td>
         <td class="tdcenter">
           <a href="<%=ev.documentation_path%>"><span class="glyphicon glyphicon-book"></span> View</a>
@@ -20,6 +21,7 @@
           <a href="<%=ev.new_evaluation_path(@lo)%>"><button class="loep_button"><span class="glyphicon glyphicon-star-empty"></span> Evaluate with <%= ev.name %></button></a>
         </td>
       </tr>
+      <% end %>
     <% end %>
   </table>
 <% end %>

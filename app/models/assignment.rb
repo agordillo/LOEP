@@ -21,6 +21,8 @@ class Assignment < ActiveRecord::Base
   validates :status,
   :presence => true
 
+  validates_inclusion_of :status, :in => ["Pending", "Completed", "Rejected"], :allow_nil => false, :message => ": Invalid status value"
+
   validate :evmethods_blank
 
   def evmethods_blank

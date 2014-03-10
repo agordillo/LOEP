@@ -31,7 +31,7 @@ class Evaluation < ActiveRecord::Base
   validate :duplicated_evaluation
 
   def duplicated_evaluation
-    if self.id.nil?
+    if self.id.nil? and !user.isAdmin?
       evaluations = Evaluation.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
       if evaluations.length > 0
         errors.add(:duplicated_evaluation, ": The evaluation wasn't been created because this user had already evaluated this Learning Object.")
@@ -39,7 +39,7 @@ class Evaluation < ActiveRecord::Base
         true
       end
     else
-      #Updating an existing resource
+      #!self.id.nil? => Updating an existing resource
       true
     end
   end

@@ -22,6 +22,10 @@ class Utils < ActiveRecord::Base
     [["Pending","Pending"],["Completed","Completed"],["Rejected","Rejected"]]
   end
 
+  def self.getOptionsForSelectLOScope
+    [["Private","Private"],["Protected","Protected"],["Public","Public"]]
+  end
+
 
   #Dates
 
