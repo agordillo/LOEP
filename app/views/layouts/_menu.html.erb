@@ -42,6 +42,15 @@
 						<a href="/users"><h3><span class="glyphicon glyphicon-user"></span>Users</h3></a>
 					</li>
 				<% end %>
+				<% if iamAdmin? %>
+					<li class="<%='menu_option_selected' if params[:controller] == 'apps'%>">
+						<h3><span class="glyphicon glyphiconfull imac"></span>Applications</h3>
+						<ul>
+							<li><a href="/apps">List</a></li>
+							<li><a href="/apps/new">Add New</a></li>
+						</ul>
+					</li>
+				<% end %>
 				<li class="<%='menu_option_selected' if params[:controller] == 'documentation'%>">
 					<h3><span class="glyphicon glyphicon-book"></span>Documentation</h3>
 					<ul>

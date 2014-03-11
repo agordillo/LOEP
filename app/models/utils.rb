@@ -118,9 +118,9 @@ class Utils < ActiveRecord::Base
     true if Float(str) rescue false
   end
 
-  def self.build_token
+  def self.build_token(length=60)
     begin
-      token = SecureRandom.urlsafe_base64
+      token = SecureRandom.urlsafe_base64(length)
     end while App.exists?(auth_token: token)
     token
   end

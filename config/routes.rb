@@ -23,6 +23,7 @@ LOEP::Application.routes.draw do
   resources :evaluations
   resources :evmethods
   resources :assignments
+  resources :apps
   resources :lorics
 
   root :to =>'home#frontpage'
@@ -35,7 +36,9 @@ LOEP::Application.routes.draw do
   match '/assignments/:id/complete' => 'assignments#complete'
   match '/assignments/:id/reject' => 'assignments#reject'
 
+  #Web Services
   match '/surveys' => 'application#surveys'
+  match '/generateToken' => 'application#generateToken'
 
   #LOEP API
   namespace :api do

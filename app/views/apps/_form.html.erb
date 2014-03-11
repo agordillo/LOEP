@@ -1,0 +1,41 @@
+<div class="loep_form_wrapper new_lo_form">
+  
+  <p class="form_before_button">&nbsp;</p>
+
+  <%= form_for(@app) do |f| %>
+
+    <p class="form_legend">* Name</p>
+    <%= f.text_field :name, :class=>'loep_input' %>
+
+    <%if !@app.auth_token.nil? %>
+      <p class="form_legend">* Authentication Token <span id="refreshAuthToken" class="glyphicon glyphiconfull refresh refreshAuthToken"></span></p>
+      <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
+    <% end %>
+    
+    <%= f.hidden_field :user_id, :value=>(@app.user.nil? ? current_user.id : @app.user.id)%>
+
+    <p class="form_before_button">&nbsp;</p>
+    <p class="form_before_button">&nbsp;</p>
+    <%= f.submit :class => 'loep_button' %>
+
+  <% end %>
+</div>
+
+<%if !@app.auth_token.nil? %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#refreshAuthToken').click(function(event){
+      $.ajax({
+        type: "GET",
+        url: "/generateToken.json?length=60",
+        dataType:"json",
+        success:function(response){
+          $("#app_auth_token").val(response.token)
+        },
+        error:function (xhr, ajaxOptions, thrownError){
+        }
+      });
+    });
+  });
+</script>
+<% end %>

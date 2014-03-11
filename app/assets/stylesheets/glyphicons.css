@@ -1,7 +1,7 @@
 @font-face {
-  font-family: 'Glyphicons Regular';
-  src: url('/assets/glyphicons-regular.eot');
-  src: url('/assets/glyphicons-regular.eot?#iefix') format('embedded-opentype'), url('/assets/glyphicons-regular.woff') format('woff'), url('/assets/glyphicons-regular.ttf') format('truetype'), url('/assets/glyphicons-regular.svg#glyphicons_regular') format('svg');
+	font-family: 'Glyphicons Regular';
+	src: url('/assets/glyphicons-regular.eot');
+	src: url('/assets/glyphicons-regular.eot?#iefix') format('embedded-opentype'), url('/assets/glyphicons-regular.woff') format('woff'), url('/assets/glyphicons-regular.ttf') format('truetype'), url('/assets/glyphicons-regular.svg#glyphicons_regular') format('svg');
 }
 
 .glyphiconfull {
@@ -10,6 +10,28 @@
 	font-weight: normal;
 }
 
-.glyphicon-show_big_thumbnails:before {
+.glyphiconfull.glyphicon-show_big_thumbnails:before {
 	content: "\E156";
 }
+
+.glyphiconfull.imac:before {
+	content: "\E161";
+}
+
+.glyphiconfull.refresh:before {
+	content: "\E082";
+}
+
+.glyphiconfull.refreshAuthToken {
+	font-size: 21px;
+	margin-left: 7px;
+	margin-bottom: 9px;
+	margin-top: 7px;
+	opacity: 0.7;
+	cursor: pointer;
+}
+
+.glyphiconfull.refreshAuthToken:hover {
+	opacity: 1;
+}
+

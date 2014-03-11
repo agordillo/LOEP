@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   has_many :assignments, :dependent => :destroy
   has_many :evaluations
   has_many :los, through: :evaluations
+  has_many :apps
   
   before_save :checkLanguages
 
@@ -193,6 +194,26 @@ class User < ActiveRecord::Base
 
 
   #Class extra attrs and methods
+  def self.superAdmins
+    sadmins = []
+    User.find_each do |user|
+      if user.role?("SuperAdmin")
+        sadmins << user
+      end
+    end
+    sadmins
+  end
+
+  def self.admins
+    admins = []
+    User.find_each do |user|
+      if user.isAdmin?
+        admins << user
+      end
+    end
+    admins
+  end
+
   def self.reviewers
     reviewers = []
     User.find_each do |user|

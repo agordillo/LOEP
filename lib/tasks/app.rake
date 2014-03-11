@@ -15,8 +15,8 @@ namespace :app do
   	app.auth_token = Utils.build_token
   	app.save!
 
-	puts "Finish"
-	puts app.to_json
+    puts "Finish"
+    puts app.to_json
   end
 
   task :remove, [:name] => :environment do |t, args|
@@ -33,7 +33,7 @@ namespace :app do
   		app.destroy
   	end
 
-	puts "Finish"
+    puts "Finish"
   end
 
   task :refreshToken, [:name] => :environment do |t, args|
@@ -52,8 +52,8 @@ namespace :app do
   	app.auth_token = Utils.build_token
   	app.save!
 
-	puts "Finish"
-	puts app.to_json
+    puts "Finish"
+    puts app.to_json
   end
 
 end

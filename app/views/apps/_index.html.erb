@@ -1,0 +1,97 @@
+<% showTools ||= false %>
+
+<% aL = @apps.length %>
+<% if aL === 0 %>
+  <%= render '/layouts/emptytable', :resources => "applications" %>
+<% else %>
+  <table id="res_table" cellspacing='0' class="loep_table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Owner</th>
+        <th>Token</th>
+        <th>Creation Date</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @apps.each do |app| %>
+      <tr>
+        <td class="tdcenter">
+          <a href="<%=app_path(app)%>"><%= app.name %></a>
+        </td>
+        <td class="tdcenter">
+          <a target="_blank" href="<%=user_path(app.user)%>"><%= app.user.name %></a>
+        </td>
+        <td class="tdcenter">
+          <span class='authTokenEntry'><%= app.auth_token %></span>
+        </td>
+        <td class="tdcenter">
+          <%= app.created_at %>
+        </td>
+        <td class="tdcenter tdedit">
+            <%if can?(:update,app) %>
+              <a href="<%=edit_app_path(app)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+            <% end %>
+        </td>
+        <td class="tdcenter tddestroy">
+          <%if can?(:destroy,app) %>
+            <a href="<%=app_path(app)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> Remove</a>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+
+<% if showTools %>
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+
+    return;
+
+    //////////////////
+    // Table Sorter
+    //////////////////
+
+    var iDisplayLength = LOEP.Storage.get("AppsTable_iDisplayLength") || -1;
+
+    //DOC: http://datatables.net
+    var appsTable = $("#res_table").dataTable({
+      "bJQueryUI": true,
+      "sPaginationType": "full_numbers",
+      "aaSorting": [[ 1, "asc" ]],
+      "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [ 0,2,3,4,5,6 ] },
+          { "bSearchable": false, "aTargets": [ 0,2,3,4,5,6 ] }
+      ],
+      "sDom": '<"H"lfr><"F"ip>t',
+      "iDisplayLength": iDisplayLength,
+      "oLanguage": {
+        "sLengthMenu": 'Display <select>'+
+          '<option value="5">5</option>'+
+          '<option value="10">10</option>'+
+          '<option value="25">25</option>'+
+          '<option value="50">50</option>'+
+          '<option value="100">100</option>'+
+          '<option value="-1">All</option>'+
+          '</select> records'
+      }
+    });
+
+    //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page
+    $('#res_table_length').on('change', function(e){
+      var iDisplayLength = parseInt($(this).find("select").val());
+      LOEP.Storage.add("AppsTable_iDisplayLength",iDisplayLength);
+    });
+
+  });
+
+</script>
+
+<% end %>

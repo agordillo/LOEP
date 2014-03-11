@@ -39,6 +39,16 @@ namespace :fixes do
 		italiano.shortname = "it"
 		italiano.save
 
+		puts "Fixing Web Apps"
+		superAdmin = User.superAdmins.first
+		if !superAdmin.nil?
+			App.all.each do |app|
+				if app.user_id.nil?
+					app.update_column :user_id, superAdmin.id
+				end
+			end
+		end
+
 		puts "Updating finished"
 	end
 

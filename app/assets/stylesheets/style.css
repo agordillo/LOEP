@@ -182,6 +182,10 @@ select.loep_input {
 	padding: 5px;
 }
 
+input.loep_input[readonly="readonly"], textarea.loep_input[readonly="readonly"] {
+	background: #F0F0F0;
+}
+
 .loep_form_wrapper {
 	padding: 0% 10% 0% 10%;
 }
@@ -665,6 +669,10 @@ p.space_medium {
 p.space_small {
 	margin-top: 0px;
 	margin-bottom: 18px;
+}
+
+span.authTokenEntry {
+	font-size: 12px;
 }
 
 /* Rails Errors */

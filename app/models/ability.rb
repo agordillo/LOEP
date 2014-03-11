@@ -13,6 +13,10 @@ class Ability
             can [:create, :update, :destroy], Lo
             can [:create, :update, :destroy], Assignment
             can [:create, :update, :destroy], Evaluation
+            can :create, App
+            can [:update, :destroy], App do |app|
+                app.user.nil? || user.compareRole > app.user.compareRole || user.id == app.user.id
+            end
             can :evaluate, :all
             can :complete, :all
             can :reject, :all
@@ -27,6 +31,10 @@ class Ability
             can [:create, :update, :destroy], Lo
             can [:create, :update, :destroy], Assignment
             can :create, Evaluation
+            can :create, App
+            can [:update, :destroy], App do |app|
+                app.user.nil? || user.compareRole > app.user.compareRole || user.id == app.user.id
+            end
             can :evaluate, :all
             can :complete, :all
             can :reject, :all
@@ -50,10 +58,10 @@ class Ability
             can :complete, Assignment, :user_id => user.id
             can :reject, Assignment, :user_id => user.id
 
+            can [:show, :rshow], Evaluation, :user_id => user.id
             can :create, Evaluation do |ev|
                ev.lo.nil? or can?(:evaluate, ev.lo, ev.evmethod)
             end
-            can [:show, :rshow], Evaluation, :user_id => user.id
             can :update, Evaluation do |ev|
                ev.user.id == user.id && (ev.assignment.nil? || ev.assignment.deadline.nil? || (ev.assignment.deadline > Time.now))
             end
