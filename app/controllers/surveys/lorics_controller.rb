@@ -1,12 +1,12 @@
-class LoricsController < ApplicationController
+class Surveys::LoricsController < ApplicationController
 	before_filter :authenticate_user!
 
 	def new
 		if !current_user.loric.nil?
-			redirect_to edit_loric_path(current_user.loric)
+			redirect_to edit_surveys_loric_path(current_user.loric)
 			return
 		end
-		@loric = Loric.new
+		@loric = Surveys::Loric.new
 		@evmethod = Evmethod.find_by_name("LORI v1.5")
 		respond_to do |format|
       		format.html
@@ -14,7 +14,7 @@ class LoricsController < ApplicationController
 	end
 
 	def create
-		@loric = Loric.new(params[:loric])
+		@loric = Surveys::Loric.new(params[:surveys_loric])
 		@evmethod = Evmethod.find_by_name("LORI v1.5")
 		respond_to do |format|
 	      if @loric.save 
@@ -40,7 +40,7 @@ class LoricsController < ApplicationController
 
 	def update
 		@loric = current_user.loric
-		@loric.assign_attributes(params[:loric])
+		@loric.assign_attributes(params[:surveys_loric])
 		@loric.valid?
 
 	    respond_to do |format|

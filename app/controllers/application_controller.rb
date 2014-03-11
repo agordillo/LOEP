@@ -25,11 +25,6 @@ class ApplicationController < ActionController::Base
 
   #Web Services
 
-  def surveys
-    :authenticate_user!
-    render "surveys"
-  end
-
   def serve_tags
     term = params["term"].downcase;
     if term.length < 2

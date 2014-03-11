@@ -13,14 +13,10 @@
   <p class="form_before_button">&nbsp;</p>
 
   <%= form_for(@loric) do |f| %>
-
-    <input type="hidden" name="loric[user_id]" id="lori_evaluation_user_id" value="<%=current_user.id%>">
     <%= render 'loric_survey', :f => f , :readonly => readonly, :edit => edit %>
-
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
     <%= f.submit "Submit Survey", :class => 'loep_button' if !readonly %>
-
   <% end %>
 </div>
 

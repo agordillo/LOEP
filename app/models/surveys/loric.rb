@@ -1,4 +1,4 @@
-class Loric < ActiveRecord::Base
+class Surveys::Loric < ActiveRecord::Base
   attr_accessible :user_id, :item1, :item2, :item3, :item4, :item5, :item6, :item7, :item8, :item9, :comments
   belongs_to :user
 
@@ -18,7 +18,7 @@ class Loric < ActiveRecord::Base
   def update_user
   	user = User.find(self.user_id)
   	user.loric_id = self.id
-  	user.save(:validate => false)
+  	user.save
   end
 
 end

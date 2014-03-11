@@ -9,13 +9,14 @@ class Metrics::LORIWAM1 < Metrics::LORIWAM
   end
 
   def self.getItemWeightsFromSurvey
-    if Loric.count == 0
+
+    if Surveys::Loric.count == 0
       return nil
     end
 
     itemWs = []
     9.times do |i|
-      itemWs.push(Loric.average("item"+(i+1).to_s).to_f)
+      itemWs.push(Surveys::Loric.average("item"+(i+1).to_s).to_f)
     end
 
     itemWSum = 0
