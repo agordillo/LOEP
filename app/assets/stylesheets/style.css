@@ -186,6 +186,10 @@ input.loep_input[readonly="readonly"], textarea.loep_input[readonly="readonly"] 
 	background: #F0F0F0;
 }
 
+.show_wrapper input.loep_input {
+	width: 80% !important
+}
+
 .loep_form_wrapper {
 	padding: 0% 10% 0% 10%;
 }

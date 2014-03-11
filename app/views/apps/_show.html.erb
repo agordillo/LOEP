@@ -1,0 +1,28 @@
+<div class="show_wrapper loep_form_wrapper">
+  <h2><%=@app.name%></h2>
+  
+  <% if can?(:update,@app) %>
+    <%= link_to 'Edit', edit_app_path(@app) %>
+  <% end %>
+
+  <p class="space_small"></p>
+
+  <%= form_for(@app) do |f| %>
+    <p class="show_legend">Name</p>
+    <p class="show_value"><%=@app.name%></p>
+
+    <%if !@app.auth_token.nil? %>
+      <p class="form_legend">Authentication Token</p>
+      <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
+    <% end %>
+
+    <p class="space_small"></p>
+
+    <%if !@app.user.nil? %>
+      <p class="show_legend">Owner</p>
+      <a href="<%=user_path(@app.user)=%>"><p class="show_value"><%=@app.user.name%></p></a>
+    <%end%>
+  
+  <% end %>
+
+</div>

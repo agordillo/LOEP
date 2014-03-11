@@ -21,6 +21,8 @@ class HomeController < ApplicationController
 			authorize! :index, @evaluations
 			@users = User.all(:order => 'updated_at DESC').first(5)
 			authorize! :index, @users
+			@apps = App.all(:order => 'updated_at DESC').first(5)
+			authorize! :index, @apps
 		else
 			@assignments = current_user.assignments.all.sort{|b,a| a.compareAssignmentForReviewers(b)}.first(10)
 			authorize! :rshow, @assignments

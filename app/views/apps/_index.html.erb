@@ -25,7 +25,10 @@
           <a target="_blank" href="<%=user_path(app.user)%>"><%= app.user.name %></a>
         </td>
         <td class="tdcenter">
+          <%if can?(:update,app) %>
+          <!-- Prevent users to obtain token that may give them superior permissions -->
           <span class='authTokenEntry'><%= app.auth_token %></span>
+          <% end %>
         </td>
         <td class="tdcenter">
           <%= app.created_at %>
@@ -53,8 +56,6 @@
 
   $(document).ready(function(){
 
-    return;
-
     //////////////////
     // Table Sorter
     //////////////////
@@ -65,10 +66,10 @@
     var appsTable = $("#res_table").dataTable({
       "bJQueryUI": true,
       "sPaginationType": "full_numbers",
-      "aaSorting": [[ 1, "asc" ]],
+      "aaSorting": [[ 0, "asc" ]],
       "aoColumnDefs": [
-          { 'bSortable': false, 'aTargets': [ 0,2,3,4,5,6 ] },
-          { "bSearchable": false, "aTargets": [ 0,2,3,4,5,6 ] }
+          { 'bSortable': false, 'aTargets': [ 2,4,5 ] },
+          { "bSearchable": false, "aTargets": [ 2,4,5 ] }
       ],
       "sDom": '<"H"lfr><"F"ip>t',
       "iDisplayLength": iDisplayLength,

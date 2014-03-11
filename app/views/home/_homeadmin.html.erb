@@ -18,3 +18,10 @@
 	<%= render :partial => '/users/index' %>
 	<p class="link_wrapper"><%= link_to "View all", users_path %></p>
 </div>
+<%if @apps.length > 0 %>
+<div class="home_block">
+	<h1 class="loep_title"> Applications </h1>
+	<%= render :partial => '/apps/index' %>
+	<p class="link_wrapper"><%= link_to "View all", apps_path %></p>
+</div>
+<%end%>
