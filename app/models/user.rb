@@ -156,6 +156,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def compareUsers(user)
+    if self.compareRole != user.compareRole
+      return self.compareRole <=> user.compareRole
+    else
+       return self.created_at <=> user.created_at
+    end
+  end
+
   def check_permissions_to_change_role(current_user, newRole)
     unless current_user.role?("SuperAdmin") || current_user.role?("Admin")
       return false

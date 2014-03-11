@@ -3,31 +3,39 @@ class UsersController < ApplicationController
 	before_filter :filterULanguages
 
 	def index
-		@users = User.all(:order => 'updated_at DESC').sort_by {|user| user.compareRole }.reverse
+		@users = User.all.sort{|b,a| a.compareUsers(b)}
 		authorize! :index, @users
 
-    	Utils.update_sessions_paths(session, request.url, nil)
-	    respond_to do |format|
-	      format.html
-	      format.json { render json: @users }
-	    end
+		Utils.update_sessions_paths(session, request.url, nil)
+
+		respond_to do |format|
+			format.html
+			format.json { render json: @users }
+		end
 	end
 
 	def show
 		@user = User.find(params[:id])
 		authorize! :show, @user
 
-		@assignments = @user.assignments.sort{|b,a| a.compareAssignmentForAdmins(b)}
-    	authorize! :rshow, @assignments
-
-    	@evaluations = @user.evaluations(:order => 'updated_at DESC')
-    	authorize! :rshow, @evaluations
+		if current_user.isAdmin?
+			@assignments = @user.assignments.sort{|b,a| a.compareAssignmentForAdmins(b)}
+			authorize! :show, @assignments
+			@evaluations = @user.evaluations.sort_by{ |ev| ev.updated_at}.reverse
+			authorize! :show, @evaluations
+		else
+			@assignments = @user.assignments.sort{|b,a| a.compareAssignmentForReviewers(b)}
+			authorize! :rshow, @assignments
+			@evaluations = @user.evaluations.sort_by{ |ev| ev.updated_at}.reverse
+			authorize! :rshow, @evaluations
+		end
 
 		Utils.update_sessions_paths(session, nil, nil)
-	    respond_to do |format|
-	      format.html
-	      format.json { render json: @user }
-	    end
+
+		respond_to do |format|
+			format.html
+			format.json { render json: @user }
+		end
 	end
 
 	def edit
