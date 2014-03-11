@@ -26,7 +26,7 @@ class HomeController < ApplicationController
 		else
 			@assignments = current_user.assignments.all.sort{|b,a| a.compareAssignmentForReviewers(b)}.first(10)
 			authorize! :rshow, @assignments
-			@evaluations = current_user.evaluations.all(:order => 'updated_at DESC').first(5)
+			@evaluations = current_user.evaluations.sort_by{ |ev| ev.updated_at}.reverse.first(5)
 			authorize! :rshow, @evaluations
 		end
 

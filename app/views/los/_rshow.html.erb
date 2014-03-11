@@ -27,13 +27,24 @@
     <div class="identationNone">
       <%= render 'info' %>
     </div>
-    <p class="space_medium"></p>
 
     <% if can?(:evaluate, @lo) %>
+      <p class="space_large"></p>
       <h1 class="loep_title loep_title_min">
         Available Evaluation Methods
       </h1>
       <%= render '/evmethods/rindex', :showReviewer => adminMode %>
+    <% end %>
+
+    <% if @evaluations.length > 0 %>
+      <p class="space_medium"></p>
+      <% if adminMode %>
+          <h1 class="loep_title loep_title_min"> All Evaluations </h1>
+          <%= render '/evaluations/index' %>
+      <% else %>
+          <h1 class="loep_title loep_title_min"><%= @represented.nil? ? "Your" : @represented.name %> Evaluation<%="s" if @evaluations.length > 1%></h1>
+          <%= render '/evaluations/rindex' %>
+      <% end %>
     <% end %>
 
   </div>

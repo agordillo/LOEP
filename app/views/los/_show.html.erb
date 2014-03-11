@@ -7,21 +7,21 @@
     <a href="<%=new_assignment_path_for(@lo.id,nil)%>"> Add assignment </a>
   <% end %>
 
-  </br>
-  </br>
+  <p class="space_medium"></p>
 
   <%= render 'info' %>
 
-  <br/>
-  <br/>
-
-  <h1 class="loep_title"> Assignments </h1>
+  <p class="space_large"></p>
+  <h1 class="loep_title loep_title_min"> Assignments </h1>
   <%= render '/assignments/index' %>
 
-  <br/>
-  <br/>
-
-  <h1 class="loep_title"> Evaluations </h1>
+  <p class="space_large"></p>
+  <h1 class="loep_title loep_title_min"> Evaluations </h1>
   <%= render '/evaluations/index' %>
+
+  <p class="space_large"></p>
+  <h1 class="loep_title loep_title_min"> Metrics </h1>
+  <% @scores = @lo.scores %>
+  <%= render '/scores/index' %>
 
 </div>

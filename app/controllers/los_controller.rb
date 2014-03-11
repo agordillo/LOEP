@@ -59,7 +59,7 @@ class LosController < ApplicationController
     @assignments = @lo.assignments.sort{|b,a| a.compareAssignmentForAdmins(b)}
     authorize! :index, @assignments
 
-    @evaluations = @lo.evaluations(:order => 'updated_at DESC')
+    @evaluations = @lo.evaluations.sort_by{ |ev| ev.updated_at}.reverse
     authorize! :index, @evaluations
 
     Utils.update_sessions_paths(session, los_path, request.url)
@@ -90,6 +90,15 @@ class LosController < ApplicationController
         @evmethods << ev
       end  
     end
+
+    unless user.role?("Admin")
+      @evaluations = user.evaluations.where(:lo_id=>@lo.id)
+      authorize! :rshow, @evaluations
+    else
+      @evaluations = @lo.evaluations
+      authorize! :show, @evaluations
+    end
+    @evaluations = @evaluations.sort_by{ |ev| ev.updated_at}.reverse
 
     #After reject -> after destroy dependence
     Utils.update_sessions_paths(session, nil, request.url)

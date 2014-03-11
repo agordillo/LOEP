@@ -38,6 +38,9 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     authorize! :show, @assignment
 
+    @evaluations = @assignment.evaluations.sort_by{ |ev| ev.updated_at}.reverse
+    authorize! :index, @evaluations
+
     Utils.update_sessions_paths(session, assignments_path, nil)
 
     respond_to do |format|

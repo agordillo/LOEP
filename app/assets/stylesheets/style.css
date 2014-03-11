@@ -665,6 +665,12 @@ p.show_value, p.show_legend span.show_value {
 	padding-left: 0px;
 }
 
+
+p.space_large {
+	margin-top: 0px;
+	margin-bottom: 50px;
+}
+
 p.space_medium {
 	margin-top: 0px;
 	margin-bottom: 35px;

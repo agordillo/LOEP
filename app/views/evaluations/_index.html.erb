@@ -19,8 +19,8 @@
     <% @evaluations.each do |ev| %>
       <tr>
         <td><a href="<%=lo_path(ev.lo)%>"><%= ev.lo.name %></a></td>
-        <td>
-          <span><%=ev.evmethod.name%></span>
+        <td class="tdcenter">
+          <a href="<%=ev.evmethod.documentation_path%>"><span><%=ev.evmethod.name%></span></a>
         </td>
         <td>
           <a href="<%=user_path(ev.user)%>"><%=ev.user.name%></a>

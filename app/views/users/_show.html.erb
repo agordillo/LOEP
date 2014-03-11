@@ -1,13 +1,13 @@
 <div class="show_wrapper loep_form_wrapper">
 
   <h2><%=@user.name%></h2>
-  <% if current_user == @user || iamAdmin? %>
+  <% if can?(:update,@user) %>
     <a href="<%=edit_user_path(@user)%>">Edit profile</a>
   <% end %>
   <% if iamAdmin? %>
     | <a href="<%=new_assignment_path_for(nil,@user.id)%>"> Add assignment </a>
   <% end %>
-  </br>
+  <p class="space_medium"></p>
 
   <p class="show_legend">Username</p>
   <p class="show_value"><%=@user.name%></p>
@@ -47,29 +47,29 @@
     <% end %>
   </div>
 
-
- 
-  <br/>
-  <br/>
-  <h1 class="loep_title"> Assignments </h1>
   <% if iamAdmin? %>
-    <%= render '/assignments/index' %>
-  <% else %>
-    <%= render '/assignments/rindex' %>
-  <% end %>
-
-  <br/>
-  <br/>
-  <% if @evaluations.length > 0 %>
-    <h1 class="loep_title"> Evaluations </h1>
+    <p class="space_large"></p>
+    <h1 class="loep_title"> Assignments </h1>
     <% if iamAdmin? %>
-      <%= render '/evaluations/index' %>
+      <%= render '/assignments/index' %>
     <% else %>
-      <%= render '/evaluations/rindex' %>
+      <%= render '/assignments/rindex' %>
     <% end %>
   <% end %>
 
-  <br/>
+  <% if iamAdmin? %>
+    <p class="space_large"></p>
+    <% if @evaluations.length > 0 %>
+      <h1 class="loep_title"> Evaluations </h1>
+      <% if iamAdmin? %>
+        <%= render '/evaluations/index' %>
+      <% else %>
+        <%= render '/evaluations/rindex' %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <p class="space_small"></p>
 </div>
 
 <script type="text/javascript">
