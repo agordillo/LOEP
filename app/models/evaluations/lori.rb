@@ -25,4 +25,47 @@ class Evaluations::Lori < Evaluation
     ]
   end
 
+  def self.representationData(lo)
+    iScores = [];
+
+    evaluations = lo.evaluations.where(:evmethod_id => Evmethod.find_by_name("LORI v1.5").id)
+    if evaluations.length == 0
+      return nil
+    end
+
+    9.times do |i|
+      validEvaluations = Evaluation.getValidEvaluationsForItem(evaluations,i+1)
+      if validEvaluations.length == 0
+        #Means that this item has not been evaluated in any evaluation
+        #All evaluations had leave this item in blank
+        iScores.push(nil)
+      else
+        iScore = ((validEvaluations.average("item"+(i+1).to_s).to_f - 1) * 5/2.to_f).round(2)
+        iScores.push(iScore)
+      end
+    end
+
+    iScores
+  end
+
+
+  def self.getScoreForLo(lo)
+
+    
+
+    loScore = 0
+    9.times do |i|
+      validEvaluations = Evaluation.getValidEvaluationsForItem(evaluations,i+1)
+      if validEvaluations.length == 0
+        #Means that this item has not been evaluated in any evaluation
+        #All evaluations had leave this item in blank
+        return nil
+      end
+      iScore = validEvaluations.average("item"+(i+1).to_s).to_f
+      loScore = loScore + ((iScore-1) * itemWeights[i])
+    end
+    loScore = 5/2.to_f * loScore.to_f
+    loScore = ([[loScore,0].max,10].min).round(2)
+  end
+
 end

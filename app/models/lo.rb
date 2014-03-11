@@ -38,6 +38,7 @@ class Lo < ActiveRecord::Base
   belongs_to :language
   has_many :scores, :dependent => :destroy
   has_many :metrics, through: :scores
+  has_many :evmethods, through: :evaluations
 
   #---------------------------------------------------------------------------------
 
@@ -60,6 +61,23 @@ class Lo < ActiveRecord::Base
   #Get Users that evaluate the LO or habe an assignment for evaluate it
   def allUsers
     (assignedReviewers+reviewers).uniq
+  end
+
+  #Get the evMethods that have been used to score this LO
+  def getScoreEvmethods
+    scoreEvmethods = []
+    self.scores.map{|s| s.metric}.uniq.map{|m| m.evmethods.map{|ev| scoreEvmethods.push(ev)}}
+    scoreEvmethods.uniq
+  end
+
+  #Get the evMethods that have been used to evaluate this LO
+  def getEvaluationEvmethods
+    self.evmethods.uniq
+  end
+
+  #Get the evMethods that have been used to evaluate or score this LO
+  def getAllEvmethods
+    (getScoreEvmethods+getEvaluationEvmethods).uniq
   end
 
   #Extra Getters

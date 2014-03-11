@@ -18,6 +18,10 @@ class Evmethod < ActiveRecord::Base
     :case_sensitive => false
   }
 
+  #############
+  #Paths
+  #############
+
   def new_evaluation_path(lo)
     evaluationModule = getEvaluationModule
     helper_method_name = "new_" + self.module.gsub(":","").underscore + "_path"
@@ -31,19 +35,38 @@ class Evmethod < ActiveRecord::Base
     new_evaluation_path(assignment.lo) + "&assignment_id=" + assignment.id.to_s
   end
 
-  def documentation_path
-    Rails.application.routes.url_helpers.evmethods_path + "/" + self.nickname
+  def root_path
+    (Rails.application.routes.url_helpers.evmethods_path + "/" + self.nickname).downcase
   end
 
+  def documentation_path
+    self.root_path
+  end
+
+  def representation_path
+    # puts '/evmethods/lori__v1_5'
+    (self.root_path + "_representation").downcase
+  end
+
+  #############
+  # Nick Name for Paths
+  #############
+
   def nickname
-    self.name.split(/\s+/).join("__").gsub(/\./, "_")
-    # URI.encode(self.name)
+    self.class.getNicknameFromName(self.name)
+  end
+
+  def self.getNicknameFromName(name)
+    name.split(/\s+/).join("__").gsub(/\./, "_")
+  end
+
+  def self.getNameFromNickname(nickname)
+    nickname.gsub(/\_/, ".").split("__").join(" ")
   end
 
   def self.getEvMethodFromNickname(nickname)
-    name = nickname.gsub(/\_/, ".").split("__").join(" ")
-    # name = URI.decode(nickname)
-    Evmethod.find_by_name(name);
+    name = getNameFromNickname(nickname)
+    Evmethod.find_by_name(name)
   end
 
   def getEvaluationModule
