@@ -26,6 +26,7 @@ class Evaluations::Lori < Evaluation
   end
 
   def self.representationData(lo)
+    representationData = Hash.new
     iScores = [];
 
     evaluations = lo.evaluations.where(:evmethod_id => Evmethod.find_by_name("LORI v1.5").id)
@@ -45,27 +46,9 @@ class Evaluations::Lori < Evaluation
       end
     end
 
-    iScores
-  end
-
-
-  def self.getScoreForLo(lo)
-
-    
-
-    loScore = 0
-    9.times do |i|
-      validEvaluations = Evaluation.getValidEvaluationsForItem(evaluations,i+1)
-      if validEvaluations.length == 0
-        #Means that this item has not been evaluated in any evaluation
-        #All evaluations had leave this item in blank
-        return nil
-      end
-      iScore = validEvaluations.average("item"+(i+1).to_s).to_f
-      loScore = loScore + ((iScore-1) * itemWeights[i])
-    end
-    loScore = 5/2.to_f * loScore.to_f
-    loScore = ([[loScore,0].max,10].min).round(2)
+    representationData["iScores"] = iScores
+    representationData["labels"] = getLoriItems.map{|li| li[0]}
+    representationData
   end
 
 end

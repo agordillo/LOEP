@@ -1,2 +1,44 @@
-<p class="space-medium"></p>
-<%= @representationData %>
+<%= render 'application/rgraph' %>
+<p class="space-large"></p>
+
+<div class="graphWrapper">
+	<canvas id="graphCanvas">[No canvas support]</canvas>
+</div>
+
+<script>
+	$(document).ready(function(){
+		var canvas = $("#graphCanvas");
+		var canvasContainer = $(canvas).parent();
+
+		var newWidth = $(canvasContainer).width()*0.9;
+		var newHeight = newWidth * 4/6;
+		$(canvas).attr("width",newWidth);
+		$(canvas).attr("height",newHeight);
+		$(canvas).width(newWidth);
+		$(canvas).height(newHeight);
+
+		drawCanvas();
+	});
+
+	var drawCanvas = function(){
+		var values = <%=@representationData["iScores"]%>;
+		
+		var labels = [];
+		<%@representationData["labels"].each do |l|%>
+			labels.push('<%=l%>');
+		<% end %>
+
+	    var radar = new RGraph.Radar('graphCanvas',values)
+	        .Set('strokestyle', 'black')
+	        .Set('colors.alpha', 0.3)
+	        .Set('colors', ['Gradient(white:green:green)', 'Gradient(white:green:green)', 'Gradient(white:yellow)'])
+	        .Set('labels', labels)
+	        .Set('labels.axes', '')
+	        .Set('gutter.top', 35)
+	        .Set('accumulative', true)
+	        .Set('axes.color', 'rgba(0,0,0,0)')
+	        .Set('background.circles.poly', true)
+	        .Set('background.circles.spacing', 25)
+	        .Draw();
+	};
+</script>
