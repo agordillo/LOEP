@@ -15,34 +15,10 @@
 	<div id='container'>
 		<%= render '/layouts/menu' %>
 		<div id="homepagecontent">
-			<% if flash[:alert] %>
-				<% if flash[:alert].is_a? Array %>
-					<% flash[:alert].uniq! %>
-					<% flash[:alert].each do |msg| %>
-						<div class="alert alert-danger"><%= msg %></div>
-					<% end %>
-				<% else %>
-					<div class="alert alert-danger"><%= flash[:alert] %></div>
-				<% end %>
-			<% end %>
-			<% if flash[:notice] %>
-				<div class="alert alert-success"><%= flash[:notice] %></div>
-			<% end %>
-			<% if flash[:warning] %>
-				<% if flash[:warning].is_a? Array %>
-					<% flash[:warning].uniq! %>
-					<% flash[:warning].each do |msg| %>
-						<div class="alert alert-warning"><%= msg %></div>
-					<% end %>
-				<% else %>
-					<div class="alert alert-warning"><%= flash[:warning] %></div>
-				<% end %>
-			<% end %>
-
+			<%= render '/application/notifications' %>
 			<%= yield %>
 		</div>
 	</div>
-
 	<div id='footer'>
 		<%= render 'layouts/footer' %>
 	</div>

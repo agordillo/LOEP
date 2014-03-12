@@ -19,9 +19,9 @@
 
 		drawCanvas();
 	});
-var graphValues;
+
 	var drawCanvas = function(){
-		graphValues = <%=@representationData["iScores"]%>;
+		var graphValues = <%=@representationData["iScores"]%>;
 		
 		var graphLabels = [];
 		<%@representationData["labels"].each do |l|%>
