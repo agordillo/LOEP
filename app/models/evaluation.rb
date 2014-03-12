@@ -77,7 +77,20 @@ class Evaluation < ActiveRecord::Base
   #Utils
 
   def self.getValidEvaluationsForItem(evaluations,nItem)
-    evaluations.where('item' + (nItem.to_s) + ' != -1')
+    getValidEvaluationsForItems(evaluations,[nItem])
+  end
+
+  def self.getValidEvaluationsForItems(evaluations,nItems)
+    # Evaluation.where(:lo_id => Lo.first.id).where('item1!=-1 and item2 !=-1 and item3!=-1 and item17 IS NOT NULL')
+    # Usage example: Evaluation.getValidEvaluationsForItems(Evaluation,[1,2,3])
+    query = "";
+    nItems.each_with_index do |nItem,index|
+      if(index!=0)
+        query = query + " and "
+      end
+      query = query + 'item' + (nItem.to_s) + ' != -1'
+    end
+    evaluations.where(query)
   end
 
 

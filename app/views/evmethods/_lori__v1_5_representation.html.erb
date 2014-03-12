@@ -61,7 +61,7 @@
 			graphLabels.push('<%=l%>');
 		<% end %>
 
-		<% if !@lo.nil? %>
+		<% if !@lo.nil? or @representationData["iScores"].is_a? Array %>
 			//Common case (one LO)
 			var graphValues = <%=@representationData["iScores"]%>;
 			RGraphRadarArgs.push(graphValues);

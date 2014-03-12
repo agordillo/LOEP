@@ -25,6 +25,14 @@ class Evaluations::Lori < Evaluation
     ]
   end
 
+  def self.getItemsArray
+    items = []
+    getLoriItems.length.times do |i|
+      items.push(i+1)
+    end
+    items
+  end
+
   def self.representationData(lo)
     representationData = Hash.new
     iScores = [];
@@ -47,7 +55,7 @@ class Evaluations::Lori < Evaluation
     end
 
     representationData["iScores"] = iScores
-    representationData["averageScore"] = lo.scores.find_by_metric_id(Metric.find_by_type("Metrics::LORIAM").id).value
+    representationData["averageScore"] = lo.scores.find_by_metric_id(Metric.find_by_type("Metrics::LORIAM").id).value.round(2)
     representationData["name"] = lo.name
     representationData["labels"] = getLoriItems.map{|li| li[0]}   
     representationData
@@ -76,12 +84,12 @@ class Evaluations::Lori < Evaluation
     losL = los.length
     9.times do |i|
       if !iScores[i].nil?
-        iScores[i] = iScores[i]/losL;
+        iScores[i] = (iScores[i]/losL).round(2)
       end
     end
 
     representationData["iScores"] = iScores
-    representationData["averageScore"] = representationData["iScores"].sum/representationData["iScores"].size.to_f
+    representationData["averageScore"] = (representationData["iScores"].sum/representationData["iScores"].size.to_f).round(2)
     representationData["labels"] = getLoriItems.map{|li| li[0]}
     representationData
   end

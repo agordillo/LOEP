@@ -26,11 +26,13 @@
 
   <% @evmethods = @lo.getScoreEvmethods %>
   <% @evmethods.each do |evmethod| %>
-    <%if evmethod.getEvaluationModule.methods.include? :representationData%>
-      <%@representationData = evmethod.getEvaluationModule.representationData(@lo)%>
-      <p class="space_large"></p>
-      <h1 class="loep_title loep_title_min">Summary of <%=evmethod.name%> evaluations </h1>
-      <%= render evmethod.representation_path %>
+    <%if @lo.hasBeenEvaluatedWithEvmethod(evmethod)%>
+      <%if evmethod.getEvaluationModule.methods.include? :representationData%>
+        <%@representationData = evmethod.getEvaluationModule.representationData(@lo)%>
+        <p class="space_large"></p>
+        <h1 class="loep_title loep_title_min">Summary of <%=evmethod.name%> evaluations </h1>
+        <%= render evmethod.representation_path %>
+      <%end%>
     <%end%>
   <% end %>
 

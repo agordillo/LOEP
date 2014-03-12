@@ -97,6 +97,23 @@ class Lo < ActiveRecord::Base
   	end
   end
 
+  def hasBeenEvaluatedWithMetric(metric)
+    !getScoreForMetric(metric).nil?
+  end
+
+  def hasBeenEvaluatedWithEvmethod(evmethod)
+    if evmethod.nil?
+      false
+    else
+      !Evaluation.getValidEvaluationsForItems(self.evaluations.where(:evmethod_id => evmethod.id),evmethod.getEvaluationModule.getItemsArray).empty?
+    end
+  end
+
+  def getScoreForMetric(metric)
+    self.scores.where(:metric_id => metric.id).first
+  end
+
+
   #Class Methods
 
   def self.orderByScore(los,metric)

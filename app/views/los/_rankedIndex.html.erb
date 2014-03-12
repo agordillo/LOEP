@@ -28,9 +28,8 @@
           <p> <%=lo.tag_list.join(", ")%> </p>
         </td>
         <% @metrics.each do |metric| %>
-        <% loScore = lo.scores.where(:metric_id => metric.id).first %>
         <td class="tdcenter">
-          <p> <%= loScore.nil? ? "No evaluated" : loScore.value %></p>
+          <p> <%= lo.hasBeenEvaluatedWithMetric(metric) ? lo.getScoreForMetric(metric).value : "No evaluated" %></p>
         </td>
         <%end%>
       </tr>
