@@ -1,0 +1,9 @@
+<div id="searchLOs">
+	<h1 class="loep_title"> Search Learning Objects </h1>
+	<%=render "los/searchForm" %>
+
+	<%if !@los.nil? %>
+		<%=render "los/searchResults" %>
+	<% end %>
+</div>
+

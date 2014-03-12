@@ -1,0 +1,127 @@
+<% @params ||= {} %>
+
+<form accept-charset="UTF-8" action="/los/search" method="post">
+
+	<input name="utf8" type="hidden" value="✓">
+	<input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+	<div class="resources_search">
+		<input name="query" class="resources_search_input" type="text" placeholder="Search" value="<%=@params["query"]%>" autocomplete="off">
+		<button class="resources_search_button loep_search_button">
+			<img class="resources_search_button_img" src="/assets/gsearch.png">
+		</button>
+	</div>
+
+	<div class="search_field_wrapper">
+		<p class="search_field">
+			<span class="search_field_title">Repository:</span> 
+			<input name="repository" class="loep_input loep_search_input" value="<%=@params["repository"]%>"/>
+		</p>
+	</div>
+
+	<div class="search_field_wrapper">
+		<div class="form_checkbox_wrapper">
+	      <p class="search_field">
+			<span class="search_field_title">Search Learning Objects with:</span> 
+		  </p>
+			<table class="loep_table_form">
+		      <tbody><tr>
+		        <td>
+		        	<input name="hasText" type="checkbox" value="1" <%=@params["hasText"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Text</span>
+		        </td>
+		        <td>
+		        	<input name="hasImages" type="checkbox" value="1" <%=@params["hasImages"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Images</span>
+		        </td>
+		        <td>
+		        	<input name="hasVideos" type="checkbox" value="1" <%=@params["hasVideos"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Videos</span>
+		        </td>
+		        <td>
+		        	<input name="hasAudios" type="checkbox" value="1" <%=@params["hasAudios"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Audios</span>
+		        </td>
+		      </tr>
+		      <tr>
+		        <td>
+		        	<input name="hasQuizzes" type="checkbox" value="1" <%=@params["hasQuizzes"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Quizzes</span>
+		        </td>
+		        <td>
+		        	<input name="hasWebs" type="checkbox" value="1" <%=@params["hasWebs"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Webs</span>
+		        </td>
+		        <td>
+		        	<input name="hasFlashObjects" type="checkbox" value="1" <%=@params["hasFlashObjects"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>FlashObjects</span>
+		        </td>
+		        <td>
+		        	<input name="hasApplets" type="checkbox" value="1" <%=@params["hasApplets"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Applets</span>
+		        </td>
+		      </tr>
+		      <tr>
+		        <td>
+		        	<input name="hasDocuments" type="checkbox" value="1" <%=@params["hasDocuments"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Documents</span></td>
+		        <td>
+		        	<input name="hasFlashcards" type="checkbox" value="1" <%=@params["hasFlashcards"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Flashcards</span>
+		        </td>
+		        <td>
+		        	<input name="hasVirtualTours" type="checkbox" value="1" <%=@params["hasVirtualTours"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Virtual Tours</span>
+		        </td>
+		        <td>
+		        	<input name="hasEnrichedVideos" type="checkbox" value="1" <%=@params["hasEnrichedVideos"].nil? ? "" : "checked='checked'"=%>>
+		        	<span>Enriched Videos</span>
+		        </td>
+		      </tr>
+		      </tbody>
+	  		</table>
+	    </div>
+	</div>
+
+	<%if @evmethods.length > 0 %>
+	<div class="search_field_wrapper">
+		<p class="search_field">
+			<span class="search_field_title">Search Learning Objects evaluated with:</span> 
+		</p>
+		<select class="loep_input" multiple="multiple" name="evmethods_yes[]">
+			<%@evmethods.each do |evmethod|%>
+				<option value="<%=evmethod.id=%>" <%=(!@params["evmethods_yes"].nil? and @params["evmethods_yes"].include?(evmethod.id.to_s)) ? "selected='selected'" : ""%>><%=evmethod.name%></option>
+			<%end%>
+		</select>
+	</div>
+	<div class="search_field_wrapper">
+		<p class="search_field">
+			<span class="search_field_title">Search Learning Objects no evaluated with:</span> 
+		</p>
+		<select class="loep_input" multiple="multiple" name="evmethods_no[]">
+			<%@evmethods.each do |evmethod|%>
+				<option value="<%=evmethod.id=%>" <%=(!@params["evmethods_no"].nil? and @params["evmethods_no"].include?(evmethod.id.to_s)) ? "selected='selected'" : ""%>><%=evmethod.name%></option>
+			<%end%>
+		</select>
+	</div>
+	<% end %>
+
+	<div class="overall_search_button_wrapper">
+		<input class="loep_button loep_search_button" type="submit" value="Search in LOEP"/>
+	</div>
+
+</form>
+
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(document).on('click', 'select[multiple] option', function(){
+			if($(this).attr("selected")=="selected"){
+	         	$(this).removeAttr("selected");
+	       	} else {
+	       		$(this).attr("selected","selected");
+	       	}			
+		});
+	});
+</script>

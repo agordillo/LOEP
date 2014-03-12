@@ -266,6 +266,130 @@ class LosController < ApplicationController
     @evmethods.uniq!
   end
 
+  #Search
+  def searchIndex
+    @evmethods = Evmethod.all
+    render 'search'
+  end
+
+  def search
+    @params = params
+    @evmethods = Evmethod.all
+
+    #Search Logic
+    #Params Example
+    # {"utf8"=>"✓",
+    # "authenticity_token"=>"hDBVxA7HIBZ3lGGY1vVx/M7OBWUCKfWnUJzbx0FiSus=",
+    # "query"=>"QUERY",
+    # "repository"=>"REPOSITORY",
+    # "hasText"=>"1",
+    # "hasImages"=>"1",
+    # "hasVideos"=>"1",
+    # "hasAudios"=>"1",
+    # "hasQuizzes"=>"1",
+    # "hasWebs"=>"1",
+    # "hasFlashObjects"=>"1",
+    # "hasApplets"=>"1",
+    # "hasDocuments"=>"1",
+    # "hasFlashcards"=>"1",
+    # "hasVirtualTours"=>"1",
+    # "hasEnrichedVideos"=>"1",
+    # "evmethods_yes"=>["1", "2"],
+    # "evmethods_no"=>["1", "2"],
+    # "controller"=>"los",
+    # "action"=>"search"}
+
+    #Perform Search based on query param and parameters
+    #TODO: Enhance with sphinx
+   
+    queries = []
+
+    if !params["query"].blank?
+       queries << "los.name LIKE '" + params["query"] + "'"
+    end
+
+    #Repository
+    if !params["repository"].blank?
+      queries << "los.repository='" + params["repository"] + "'"
+    end
+
+    if params["hasText"] == "1"
+      queries << "los.hasText=true"
+    end
+
+    if params["hasImages"] == "1"
+      queries << "los.hasImages=true"
+    end
+
+    if params["hasVideos"] == "1"
+      queries << "los.hasVideos=true"
+    end
+
+    if params["hasAudios"] == "1"
+      queries << "los.hasAudios=true"
+    end
+
+    if params["hasQuizzes"] == "1"
+      queries << "los.hasQuizzes=true"
+    end
+
+    if params["hasWebs"] == "1"
+      queries << "los.hasWebs=true"
+    end
+
+    if params["hasFlashObjects"] == "1"
+      queries << "los.hasFlashObjects=true"
+    end
+
+    if params["hasApplets"] == "1"
+      queries << "los.hasApplets=true"
+    end
+
+    if params["hasDocuments"] == "1"
+      queries << "los.hasDocuments=true"
+    end
+
+    if params["hasFlashcards"] == "1"
+      queries << "los.hasFlashcards=true"
+    end
+
+    if params["hasVirtualTours"] == "1"
+      queries << "los.hasVirtualTours=true"
+    end
+
+    if params["hasEnrichedVideos"] == "1"
+      queries << "los.hasEnrichedVideos=true"
+    end
+
+    query = Utils.composeQuery(queries)
+
+    if !query.nil?
+      @los = Lo.where(query)
+    else
+      @los = Lo.all
+    end
+
+    #Filter by evaluations
+
+    #Evaluated
+    if !params["evmethods_yes"].blank?
+      Evmethod.find(params["evmethods_yes"]).each do |evmethod|
+        @los = @los.select{|lo| lo.hasBeenEvaluatedWithEvmethod(evmethod)}
+      end
+    end
+
+    #Non evaluated
+    if !params["evmethods_no"].blank?
+      Evmethod.find(params["evmethods_no"]).each do |evmethod|
+        @los = @los.select{|lo| !lo.hasBeenEvaluatedWithEvmethod(evmethod)}
+      end
+    end
+
+    authorize! :show, @los
+  end
+
+
+
   private
 
   def getOptionsForSelect

@@ -111,6 +111,18 @@ class Utils < ActiveRecord::Base
     end
   end
 
+  #Querys
+  def self.composeQuery(queries)
+    composedQuery = nil
+    queries.each_with_index do |query,index|
+      if index!=0
+        composedQuery = composedQuery + " and " + query
+      else
+        composedQuery = query
+      end
+    end
+    composedQuery
+  end
 
   #More Utils
 

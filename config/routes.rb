@@ -11,6 +11,8 @@ LOEP::Application.routes.draw do
   match '/los/publicIndex' => 'los#publicIndex'
   match '/los/stats' => 'los#stats'
   match '/los/compare' => 'los#compare'
+  match '/los/search' => 'los#searchIndex', via: [:get]
+  match '/los/search' => 'los#search', via: [:post]
   match '/assignments/remove' => 'assignments#removelist'
   match '/automatic_assignments/new' => 'assignments#new_automatic', via: [:get]
   match '/automatic_assignments' => 'assignments#create_automatic', via: [:post]

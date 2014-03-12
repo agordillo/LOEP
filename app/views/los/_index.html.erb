@@ -1,10 +1,11 @@
+<% fullmessage ||= nil %>
 <% showTools ||= false %>
 <% showToolActions = (local_assigns[:showToolActions].nil?) ? showTools : local_assigns[:showToolActions] %>
 <% displayedEntries ||= 'auto' %>
 
 <% rL = @los.length %>
 <% if rL === 0 %>
-  <%= render '/layouts/emptytable', :resources => "learning objects" %>
+  <%= render '/layouts/emptytable', :resources => "learning objects", :fullmessage => fullmessage %>
 <% else %>
   <% if showToolActions %>
   <div class="loep_table_tools">
