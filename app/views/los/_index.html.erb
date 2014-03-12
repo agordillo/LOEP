@@ -38,7 +38,7 @@
     </a>
   </div>
   <% end %>
-  <table id="los_table" cellspacing='0' class="loep_table">
+  <table id="res_table" cellspacing='0' class="loep_table">
     <thead>
       <tr>
         <% if showToolActions %>
@@ -218,7 +218,7 @@
     <% end %>
 
     //DOC: http://datatables.net
-    var losTable = $("#los_table").dataTable({
+    var losTable = $("#res_table").dataTable({
       "bJQueryUI": true,
       "sPaginationType": "full_numbers",
       "aaSorting": [[ 1, "asc" ]],
@@ -249,7 +249,7 @@
     });
 
     <%if displayedEntries == "auto" %>
-    $('#los_table_length').on('change', function(e){
+    $('#res_table_length').on('change', function(e){
       var iDisplayLength = parseInt($(this).find("select").val());
       LOEP.Storage.add("LosTable_iDisplayLength",iDisplayLength);
     });

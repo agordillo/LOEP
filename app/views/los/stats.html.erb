@@ -1,9 +1,20 @@
 <div class="show_wrapper loep_form_wrapper">
   <h2>Stats for the following Learning Objects</h2>
-  
   <%= render '/los/index', :showTools => true, :showToolActions => false, :displayedEntries => 5 %>
 
+  <p class="space_large"></p>
+  <h1 class="loep_title loep_title_min"> Metrics (Average score) </h1>
+  <%= render '/scores/index' %>
 
-
+  <% if @scores.length > 0 %>
+	  <% @evmethods.each do |evmethod| %>
+	    <%if evmethod.getEvaluationModule.methods.include? :representationDataForLos%>
+	      <%@representationData = evmethod.getEvaluationModule.representationDataForLos(@los)%>
+	      <p class="space_large"></p>
+	      <h1 class="loep_title loep_title_min">Summary of <%=evmethod.name%> evaluations </h1>
+	      <%= render evmethod.representation_path %>
+	    <%end%>
+	  <% end %>
+  <% end %>
 
 </div>

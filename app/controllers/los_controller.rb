@@ -209,6 +209,34 @@ class LosController < ApplicationController
   def stats
     @los = Lo.find(params[:lo_ids].split(","));
     authorize! :show, @los
+
+    #Get the average score
+    @scores = []
+    Metric.all.each do |m|
+      metricScores = @los.map{|lo| lo.scores.select{|s| s.metric_id==m.id}}.map{|sA| sA.first}
+
+      if metricScores.empty? or !metricScores.select{|ms| ms.nil? }.empty?
+        #To get stats from a set of LOs all of them should have been evaluated
+        next
+      end
+
+      #Calculate average value
+      sum = 0
+      metricScores.map{|mS| sum = sum + mS.value}
+      average = sum.to_f/metricScores.size
+
+      score = Score.new
+      score.metric_id = m.id
+      score.value = average
+      @scores << score
+    end
+
+    @evmethods = []
+    @los.each do |lo|
+      @evmethods = @evmethods + lo.getScoreEvmethods
+    end
+    @evmethods.uniq!
+
   end
 
   #Compare

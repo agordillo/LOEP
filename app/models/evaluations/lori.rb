@@ -51,4 +51,36 @@ class Evaluations::Lori < Evaluation
     representationData
   end
 
+  def self.representationDataForLos(los)
+    representationData = Hash.new
+    iScores = [nil,nil,nil,nil,nil,nil,nil,nil,nil];
+
+    los.each do |lo|
+      rpdLo = representationData(lo)
+      if !rpdLo.nil?
+        iScoresLo = rpdLo["iScores"]
+        9.times do |i|
+          if !iScoresLo[i].nil?
+            if iScores[i].nil?
+              iScores[i] = iScoresLo[i]
+            else
+              iScores[i] = iScores[i] + iScoresLo[i]
+            end
+          end
+        end
+      end
+    end
+
+    losL = los.length
+    9.times do |i|
+      if !iScores[i].nil?
+        iScores[i] = iScores[i]/losL;
+      end
+    end
+
+    representationData["iScores"] = iScores
+    representationData["labels"] = getLoriItems.map{|li| li[0]}
+    representationData
+  end
+
 end
