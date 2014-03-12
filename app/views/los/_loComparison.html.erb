@@ -1,0 +1,104 @@
+<% showTools ||= false %>
+
+<% rL = @los.length %>
+<% if rL === 0 %>
+  <%= render '/layouts/emptytable', :resources => "learning objects" %>
+<% else %>
+  <table id="locomparison_table" cellspacing='0' class="loep_table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <% @metrics.each do |metric| %>
+        <th><%=metric.name=%></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+    <% @los.each do |lo| %>
+      <tr>
+        <td>
+          <a href="<%=lo_path(lo)%>"><%= lo.name %></a>
+        </td>
+        <% @metrics.each do |metric| %>
+        <% loScore = lo.scores.where(:metric_id => metric.id).first %>
+        <td class="tdcenter">
+          <p> <%= loScore.nil? ? "No evaluated" : loScore.value %></p>
+        </td>
+        <%end%>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+
+<% if showTools %>
+
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+
+    //////////////////
+    // Table Sorter
+    //////////////////
+
+    var iDisplayLength = LOEP.Storage.get("LOComparisonTable_iDisplayLength") || -1;
+    
+    var metricsLength = parseInt('<%=@metrics.length%>');
+    var bSearchableArray = [];
+    var scoresArray = [];
+    for(var i=1; i<(metricsLength+1); i++){
+        scoresArray.push(i);
+    }
+
+    //Custom Sorting
+    jQuery.fn.dataTableExt.oSort['scores-asc'] = function(a,b){
+      if(a.indexOf("No")!=-1){
+        return -1;
+      } else if(b.indexOf("No")!=-1){
+        return 1;
+      }
+      return jQuery.fn.dataTableExt.oSort['html-asc'](a,b);
+    };
+
+    jQuery.fn.dataTableExt.oSort['scores-desc'] = function(a,b){
+      return jQuery.fn.dataTableExt.oSort['scores-asc'](a,b)*(-1);
+    };
+
+    //DOC: http://datatables.net
+    var losTable = $("#locomparison_table").dataTable({
+      "bJQueryUI": true,
+      "sPaginationType": "full_numbers",
+      "aaSorting": [[ 1, "desc" ]],
+      "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [] },
+          { "bSearchable": false, "aTargets": bSearchableArray },
+          { "sType":"scores", "aTargets": scoresArray }
+      ],
+      "sDom": '<"H"lfr><"F"ip>t',
+      "iDisplayLength": iDisplayLength,
+      "oLanguage": {
+        "sLengthMenu": 'Display <select>'+
+          '<option value="5">5</option>'+
+          '<option value="10">10</option>'+
+          '<option value="25">25</option>'+
+          '<option value="50">50</option>'+
+          '<option value="100">100</option>'+
+          '<option value="-1">All</option>'+
+          '</select> records'
+      }
+    });
+
+    //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page
+
+    $('#los_table_length').on('change', function(e){
+      var iDisplayLength = parseInt($(this).find("select").val());
+      LOEP.Storage.add("LOComparisonTable_iDisplayLength",iDisplayLength);
+    });
+
+  });
+
+</script>
+
+<% end %>

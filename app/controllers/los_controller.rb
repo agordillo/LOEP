@@ -208,6 +208,11 @@ class LosController < ApplicationController
   #Stats
   def stats
     @los = Lo.find(params[:lo_ids].split(","));
+    getStatsForLos(@los)
+  end
+
+  def getStatsForLos(los)
+    @los = los
     authorize! :show, @los
 
     #Get the average score
@@ -233,16 +238,32 @@ class LosController < ApplicationController
 
     @evmethods = []
     @los.each do |lo|
+      if lo.getScoreEvmethods.empty?
+        @evmethods = []
+        break
+      end
       @evmethods = @evmethods + lo.getScoreEvmethods
     end
     @evmethods.uniq!
-
   end
 
   #Compare
   def compare
     @los = Lo.find(params[:lo_ids].split(","));
     authorize! :show, @los
+
+    @metrics = Metric.all
+    @los = Lo.orderByScore(@los,Metric.find_by_type("Metrics::LORIAM"))
+
+    @evmethods = []
+    @los.each do |lo|
+      if lo.getScoreEvmethods.empty?
+        @evmethods = []
+        break
+      end
+      @evmethods = @evmethods + lo.getScoreEvmethods
+    end
+    @evmethods.uniq!
   end
 
   private

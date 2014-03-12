@@ -13,7 +13,7 @@
     </a>
   </div>
   <% end %>
-  <table id="res_table" cellspacing='0' class="loep_table">
+  <table id="as_table" cellspacing='0' class="loep_table">
     <thead>
       <tr>
         <% if showTools %>
@@ -141,7 +141,7 @@
     var iDisplayLength = LOEP.Storage.get("AssignmentsTable_iDisplayLength") || -1;
 
     //DOC: http://datatables.net
-    var resTable = $("#res_table").dataTable({
+    var resTable = $("#as_table").dataTable({
       "bJQueryUI": true,
       "sPaginationType": "full_numbers",
       "aaSorting": [[ 1, "asc" ]],
@@ -171,7 +171,7 @@
       $("input:checkbox.checkallresources").trigger("change");
     });
 
-    $('#res_table_length').on('change', function(e){
+    $('#as_table_length').on('change', function(e){
       var iDisplayLength = parseInt($(this).find("select").val());
       LOEP.Storage.add("AssignmentsTable_iDisplayLength",iDisplayLength);
     });

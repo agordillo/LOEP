@@ -47,7 +47,9 @@ class Evaluations::Lori < Evaluation
     end
 
     representationData["iScores"] = iScores
-    representationData["labels"] = getLoriItems.map{|li| li[0]}
+    representationData["averageScore"] = lo.scores.find_by_metric_id(Metric.find_by_type("Metrics::LORIAM").id).value
+    representationData["name"] = lo.name
+    representationData["labels"] = getLoriItems.map{|li| li[0]}   
     representationData
   end
 
@@ -79,6 +81,19 @@ class Evaluations::Lori < Evaluation
     end
 
     representationData["iScores"] = iScores
+    representationData["averageScore"] = representationData["iScores"].sum/representationData["iScores"].size.to_f
+    representationData["labels"] = getLoriItems.map{|li| li[0]}
+    representationData
+  end
+
+  def self.representationDataForComparingLos(los)
+    representationData = Hash.new
+    los.each do |lo|
+      rpdLo = representationData(lo)
+      if !rpdLo.nil? and !rpdLo["iScores"].nil? and !rpdLo["iScores"].include? nil
+        representationData[lo.id] = rpdLo
+      end
+    end
     representationData["labels"] = getLoriItems.map{|li| li[0]}
     representationData
   end

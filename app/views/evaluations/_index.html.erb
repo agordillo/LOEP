@@ -4,7 +4,7 @@
 <% if rL === 0 %>
   <%= render '/layouts/emptytable', :resources => "evaluations" %>
 <% else %>
-  <table id="res_table" cellspacing='0' class="loep_table">
+  <table id="ev_table" cellspacing='0' class="loep_table">
     <thead>
     <tr>
       <th>Learning Object</th>
@@ -54,7 +54,7 @@
     var iDisplayLength = LOEP.Storage.get("EvaluationsTable_iDisplayLength") || -1;
 
     //DOC: http://datatables.net
-    var resTable = $("#res_table").dataTable({
+    var resTable = $("#ev_table").dataTable({
       "bJQueryUI": true,
       "sPaginationType": "full_numbers",
       "aaSorting": [[ 0, "asc" ]],
@@ -77,7 +77,7 @@
     });
 
     //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page
-    $('#res_table_length').on('change', function(e){
+    $('#ev_table_length').on('change', function(e){
       var iDisplayLength = parseInt($(this).find("select").val());
       LOEP.Storage.add("EvaluationsTable_iDisplayLength",iDisplayLength);
     });

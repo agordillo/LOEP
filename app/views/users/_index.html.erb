@@ -19,7 +19,7 @@
     </a>
   </div>
   <% end %>
-  <table id="res_table" cellspacing='0' class="loep_table">
+  <table id="users_table" cellspacing='0' class="loep_table">
     <thead>
     <tr>
       <% if showTools %>
@@ -156,7 +156,7 @@
     };
 
     //DOC: http://datatables.net
-    var resTable = $("#res_table").dataTable({
+    var resTable = $("#users_table").dataTable({
       "bJQueryUI": true,
       "sPaginationType": "full_numbers",
       "aaSorting": [[ 2, "asc" ]],
@@ -187,7 +187,7 @@
       $("input:checkbox.checkallresources").trigger("change");
     });
 
-    $('#res_table_length').on('change', function(e){
+    $('#users_table_length').on('change', function(e){
       var iDisplayLength = parseInt($(this).find("select").val());
       LOEP.Storage.add("UsersTable_iDisplayLength",iDisplayLength);
     });
