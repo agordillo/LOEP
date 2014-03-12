@@ -1,11 +1,25 @@
 <% showTools ||= false %>
+<% showToolActions = (local_assigns[:showToolActions].nil?) ? showTools : local_assigns[:showToolActions] %>
+<% displayedEntries ||= 'auto' %>
 
 <% rL = @los.length %>
 <% if rL === 0 %>
   <%= render '/layouts/emptytable', :resources => "learning objects" %>
 <% else %>
-  <% if showTools %>
+  <% if showToolActions %>
   <div class="loep_table_tools">
+    <a id="stat_los">
+      <div class="loep_tool_button">
+        <span class="glyphicon glyphiconfull charts"></span>
+        <span class="loep_tool_text">Statistics</span>
+      </div>
+    </a>
+    <a id="compare_los">
+      <div class="loep_tool_button">
+        <span class="glyphicon glyphiconfull vector_path_polygon"></span>
+        <span class="loep_tool_text">Compare</span>
+      </div>
+    </a>
     <a id="automatic_assign_los">
       <div class="loep_tool_button">
         <span class="glyphicon glyphicon-time"></span><span class="glyphicon glyphicon-user"></span>
@@ -27,7 +41,7 @@
   <table id="los_table" cellspacing='0' class="loep_table">
     <thead>
       <tr>
-        <% if showTools %>
+        <% if showToolActions %>
         <th><input type="checkbox" class="checkalllos" autocomplete="off" value="all"/></th>
         <% end %>
         <th>Name</th>
@@ -41,7 +55,7 @@
     <tbody>
     <% @los.each do |lo| %>
       <tr>
-        <% if showTools %>
+        <% if showToolActions %>
         <td class="tdcenter">
           <input type="checkbox" class="checklo" autocomplete="off" value="<%=lo.id%>"/>
         </td>
@@ -81,6 +95,8 @@
 
   $(document).ready(function(){
 
+    <%if showToolActions %>
+
     //////////////////
     // Table Basics
     //////////////////
@@ -117,6 +133,26 @@
     //////////////////
     //Toolbar Actions
     //////////////////
+
+     $("#stat_los").click(function(){
+      var lo_ids = getSelectedLos();
+      if(lo_ids.length===0){
+        _showLOEPDialog("You have not selected any item.", false);
+        return;
+      }
+      var url = LOEP.Main.createURL("/los/stats",[["lo_ids", lo_ids]]);
+      window.top.location= url;
+    });
+
+     $("#compare_los").click(function(){
+      var lo_ids = getSelectedLos();
+      if(lo_ids.length===0){
+        _showLOEPDialog("You have not selected any item.", false);
+        return;
+      }
+      var url = LOEP.Main.createURL("/los/compare",[["lo_ids", lo_ids]]);
+      window.top.location= url;
+    });
 
     $("#assign_los").click(function(){
       var lo_ids = getSelectedLos();
@@ -157,11 +193,29 @@
       });
     });
 
+    <% end %>
+
+
     //////////////////
     // Table Sorter
     //////////////////
 
-    var iDisplayLength = LOEP.Storage.get("LosTable_iDisplayLength") || -1;
+    <%if displayedEntries == "auto" %>
+      var iDisplayLength = LOEP.Storage.get("LosTable_iDisplayLength") || -1;
+    <% else %>
+      var iDisplayLength = <%=displayedEntries%>;
+    <% end %>
+
+    var bSortableArray;
+    var bSearchable;
+
+    <%if showToolActions %>
+      bSortableArray = [ 0,2,3,4,5,6 ];
+      bSearchable = [ 0,2,3,4,5,6 ];
+    <% else %>
+      bSortableArray = [ 1,2,3,4,5 ];
+      bSearchable = [ 1,2,3,4,5 ];
+    <% end %>
 
     //DOC: http://datatables.net
     var losTable = $("#los_table").dataTable({
@@ -169,8 +223,8 @@
       "sPaginationType": "full_numbers",
       "aaSorting": [[ 1, "asc" ]],
       "aoColumnDefs": [
-          { 'bSortable': false, 'aTargets': [ 0,2,3,4,5,6 ] },
-          { "bSearchable": false, "aTargets": [ 0,2,3,4,5,6 ] }
+          { 'bSortable': false, 'aTargets': bSortableArray },
+          { "bSearchable": false, "aTargets": bSearchable }
       ],
       "sDom": '<"H"lfr><"F"ip>t',
       "iDisplayLength": iDisplayLength,
@@ -194,10 +248,12 @@
       $("input:checkbox.checkalllos").trigger("change");
     });
 
+    <%if displayedEntries == "auto" %>
     $('#los_table_length').on('change', function(e){
       var iDisplayLength = parseInt($(this).find("select").val());
       LOEP.Storage.add("LosTable_iDisplayLength",iDisplayLength);
     });
+    <% end %>
 
   });
 

@@ -205,6 +205,18 @@ class LosController < ApplicationController
     end
   end
 
+  #Stats
+  def stats
+    @los = Lo.find(params[:lo_ids].split(","));
+    authorize! :show, @los
+  end
+
+  #Compare
+  def compare
+    @los = Lo.find(params[:lo_ids].split(","));
+    authorize! :show, @los
+  end
+
   private
 
   def getOptionsForSelect

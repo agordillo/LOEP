@@ -5,7 +5,7 @@
 }
 
 .glyphiconfull {
-	font: 24px/1em 'Glyphicons Regular';
+	font-family: 'Glyphicons Regular';
 	font-style: normal;
 	font-weight: normal;
 }
@@ -35,3 +35,10 @@
 	opacity: 1;
 }
 
+.glyphiconfull.charts:before {
+	content: "\E042";
+}
+
+.glyphiconfull.vector_path_polygon:before {
+	content: "\E097";
+}
