@@ -388,7 +388,17 @@ class LosController < ApplicationController
     authorize! :show, @los
   end
 
+  #Render XLSX
+  def download
+    Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
+    getXLSX(@los)
+  end
 
+  def getXLSX(los)
+    format.xlsx {
+      render xlsx: "excel_index", disposition: "attachment", filename: "LOEP_LOS.xlsx"
+    }
+  end
 
   private
 

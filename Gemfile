@@ -18,12 +18,6 @@ gem 'recaptcha', :require => 'recaptcha/rails'
 gem 'devise'
 gem 'cancan'
 
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
 # Deploy with Capistrano
 gem 'capistrano', :group => :development
 
@@ -39,3 +33,9 @@ end
 gem 'faker'
 
 gem 'pry-rails', :group => :development
+
+#xlsx generation
+gem 'axlsx'
+gem 'axlsx_rails'
+
+gem 'yard', :group => :development
