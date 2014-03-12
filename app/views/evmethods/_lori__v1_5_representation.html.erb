@@ -10,7 +10,7 @@
 		var canvas = $("#graphCanvas");
 		var canvasContainer = $(canvas).parent();
 
-		var newWidth = $(canvasContainer).width()*0.9;
+		var newWidth = $(canvasContainer).width()*0.8;
 		var newHeight = newWidth * 4/6;
 		$(canvas).attr("width",newWidth);
 		$(canvas).attr("height",newHeight);
@@ -19,26 +19,29 @@
 
 		drawCanvas();
 	});
-
+var graphValues;
 	var drawCanvas = function(){
-		var values = <%=@representationData["iScores"]%>;
+		graphValues = <%=@representationData["iScores"]%>;
 		
-		var labels = [];
+		var graphLabels = [];
 		<%@representationData["labels"].each do |l|%>
-			labels.push('<%=l%>');
+			graphLabels.push('<%=l%>');
 		<% end %>
 
-	    var radar = new RGraph.Radar('graphCanvas',values)
-	        .Set('strokestyle', 'black')
-	        .Set('colors.alpha', 0.3)
-	        .Set('colors', ['Gradient(white:green:green)', 'Gradient(white:green:green)', 'Gradient(white:yellow)'])
-	        .Set('labels', labels)
-	        .Set('labels.axes', '')
-	        .Set('gutter.top', 35)
-	        .Set('accumulative', true)
-	        .Set('axes.color', 'rgba(0,0,0,0)')
-	        .Set('background.circles.poly', true)
-	        .Set('background.circles.spacing', 25)
-	        .Draw();
+	    var radar = new RGraph.Radar('graphCanvas',graphValues)
+			.Set('labels', graphLabels)
+			.Set('labels.axes', '')
+			.Set('tooltips', graphValues.map(function(v){return v.toString()}))
+			.Set('background.circles.poly', true)
+			.Set('background.circles.spacing', 30)
+			.Set('colors', ['Gradient(white:green:green)', 'Gradient(white:green:green)', 'Gradient(white:yellow)'])
+			.Set('colors.alpha', 0.3)
+			.Set('axes.color', 'rgba(0,0,0,0)')
+			.Set('highlights', true)
+			.Set('gutter.top', 35)
+			.Set('accumulative', true)
+			.Set('strokestyle', 'black')
+			.Draw();
+
 	};
 </script>
