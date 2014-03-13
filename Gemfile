@@ -37,5 +37,6 @@ gem 'pry-rails', :group => :development
 #xlsx generation
 gem 'axlsx'
 gem 'axlsx_rails'
+gem 'acts_as_xlsx'
 
 gem 'yard', :group => :development

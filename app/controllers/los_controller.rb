@@ -66,7 +66,12 @@ class LosController < ApplicationController
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
-      format.json { render json: @lo }
+      format.xlsx {
+        render :xlsx => "show", :filename => "LO" + @lo.id.to_s + ".xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
+      }
+      format.json { 
+        render json: @lo 
+      }
     end
   end
 
@@ -390,15 +395,28 @@ class LosController < ApplicationController
 
   #Render XLSX
   def download
-    Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
-    getXLSX(@los)
+    @los = Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
+    respond_to do |format|
+        # format.xlsx
+        format.any {
+            getXLSX(@los)
+        }
+    end
   end
 
   def getXLSX(los)
-    format.xlsx {
-      render xlsx: "excel_index", disposition: "attachment", filename: "LOEP_LOS.xlsx"
-    }
+    #   render xlsx: "excel_index", disposition: "attachment", filename: "LOEP_LOS.xlsx"
+    send_data los.first.to_xlsx.to_stream.read, :filename => 'posts.xlsx', :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
   end
+
+
+#   p = Axlsx::Package.new
+# p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+#   sheet.add_row ["First Column", "Second", "Third"]
+#   sheet.add_row [1, 2, 3]
+# end
+# p.use_shared_strings = true
+# p.serialize('simple.xlsx')
 
   private
 

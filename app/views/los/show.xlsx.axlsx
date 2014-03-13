@@ -1,0 +1,6 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(:name => "LO" + @lo.id.to_s) do |sheet|
+	sheet.add_row ["First Column", "Second", "Third"]
+	sheet.add_row [1, 2, 3]
+	sheet.add_row ['     preserving whitespace']
+end

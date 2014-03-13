@@ -1,6 +1,8 @@
 class Lo < ActiveRecord::Base
   attr_accessible :callback, :categories, :description, :name, :repository, :technology, :language_id, :lotype, :url, :scope, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list
 
+  acts_as_xlsx
+  
   validates :url,
   :presence => true,
   :uniqueness => {
