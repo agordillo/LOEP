@@ -1,5 +1,5 @@
 class App < ActiveRecord::Base
-  attr_accessible :user_id, :name, :auth_token
+  attr_accessible :user_id, :name, :auth_token, :callback
 
   belongs_to :user
 

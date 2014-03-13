@@ -11,6 +11,15 @@
     <p class="show_legend">Name</p>
     <p class="show_value"><%=@app.name%></p>
 
+    <p class="space_small"></p>
+
+    <%if !@app.user.nil? %>
+      <p class="show_legend">Owner</p>
+      <a href="<%=user_path(@app.user)=%>"><p class="show_value"><%=@app.user.name%></p></a>
+    <%end%>
+
+    <p class="space_small"></p>
+
     <%if !@app.auth_token.nil? %>
       <p class="form_legend">Authentication Token</p>
       <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
@@ -18,9 +27,9 @@
 
     <p class="space_small"></p>
 
-    <%if !@app.user.nil? %>
-      <p class="show_legend">Owner</p>
-      <a href="<%=user_path(@app.user)=%>"><p class="show_value"><%=@app.user.name%></p></a>
+    <%if !@app.callback.nil? %>
+      <p class="show_legend">Callback</p>
+      <p class="show_value"><%=@app.callback%></p>
     <%end%>
   
   <% end %>

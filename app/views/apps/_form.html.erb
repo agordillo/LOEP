@@ -11,6 +11,10 @@
       <p class="form_legend">* Authentication Token <span id="refreshAuthToken" class="glyphicon glyphiconfull refresh refreshAuthToken"></span></p>
       <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
     <% end %>
+
+    <p class="space_XXS">&nbsp;</p>
+    <p class="form_legend">Callback</p>
+    <%= f.text_field :callback, :class=>'loep_input' %>
     
     <%= f.hidden_field :user_id, :value=>(@app.user.nil? ? current_user.id : @app.user.id)%>
 

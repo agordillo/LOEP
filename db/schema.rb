@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140311102310) do
+ActiveRecord::Schema.define(:version => 20140313124956) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20140311102310) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "user_id"
+    t.text     "callback"
   end
 
   create_table "assignments", :force => true do |t|
@@ -180,7 +181,6 @@ ActiveRecord::Schema.define(:version => 20140311102310) do
     t.text     "description",       :limit => 16777215
     t.string   "lotype"
     t.string   "repository"
-    t.text     "callback",          :limit => 16777215
     t.string   "technology"
     t.text     "categories",        :limit => 16777215
     t.integer  "language_id"

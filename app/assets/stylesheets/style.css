@@ -686,6 +686,12 @@ p.space_extra_small {
 	margin-bottom: 10px;
 }
 
+p.space_XXS {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	height: 10px;
+}
+
 span.authTokenEntry {
 	font-size: 12px;
 }
