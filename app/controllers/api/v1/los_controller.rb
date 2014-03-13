@@ -14,7 +14,7 @@ class Api::V1::LosController < Api::V1::BaseController
       format.any {
         render json: current_app.los
       }
-    }    
+    end    
   end
 
   # GET /api/v1/los/:id
@@ -26,13 +26,20 @@ class Api::V1::LosController < Api::V1::BaseController
       format.any {
         render json: lo
       }
-    }  
+    end  
   end
 
   # POST /api/v1/los
   def create
     @lo = Lo.new(params[:lo])
     authorize! :create, @lo
+
+    @lo.app_id = current_app.id
+    @lo.owner_id = current_app.user.id
+
+    if @lo.scope.nil? or !["Private", "Protected", "Public"].include? @lo.scope
+      @lo.scope = "Private"
+    end
 
     respond_to do |format|
       format.any { 
@@ -88,6 +95,7 @@ class Api::V1::LosController < Api::V1::BaseController
       begin
       	params[:lo][:language_id] = Language.find_by_shortname(params[:lo][:lanCode]).id
       rescue
+        #TODO: Puts 'Other' language
       end
       params[:lo].delete :lanCode
     end

@@ -29,7 +29,6 @@ class Lo < ActiveRecord::Base
 
   validates :scope,
   :presence => true
-
   validates_inclusion_of :scope, :in => ["Private", "Protected", "Public"], :allow_nil => false, :message => ": Invalid scope value"
 
   validates :owner_id, :presence => { :message => "has to be specified" }
