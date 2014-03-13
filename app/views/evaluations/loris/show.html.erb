@@ -1,5 +1,5 @@
 <div class="loep_form_wrapper">
-	<h2>Evaluation of the LO <a href="<%=rlo_path(@lo)%>"><span class='lo_name_in_evaluation'><%=@lo.name%></span></a> with <%=@evmethod.name%></h1>
+	<h2>Evaluation of the LO <a href="<%=(iamAdmin?) ? lo_path(@lo) : rlo_path(@lo)%>"><span class='lo_name_in_evaluation'><%=@lo.name%></span></a> with <%=@evmethod.name%></h1>
 	<% if can?(:update, @evaluation) %>
 		<a href="<%=@evaluation.edit_evaluation_path%>"><p class="form_legend">Edit</p></a>
 	<% end %>

@@ -18,9 +18,9 @@ namespace :db do
 		Evmethod.delete_all
 		Assignment.delete_all
 		Evaluation.delete_all
-		App.delete_all
 		Metric.delete_all
 		Score.delete_all
+		App.delete_all
 	end
 
   	#Create Roles
@@ -79,6 +79,7 @@ namespace :db do
 	user_admin.language_id = spanish.id
 	user_admin.languages.push(spanish)
 	user_admin.languages.push(english)
+	user_admin.occupation = "Education"
 	user_admin.roles.push(role_sadmin)
 	user_admin.roles.push(role_admin)
 	user_admin.save(:validate => false)
@@ -91,6 +92,7 @@ namespace :db do
 	user_reviewer.language_id = english.id
 	user_reviewer.languages.push(english)
 	user_reviewer.languages.push(spanish)
+	user_reviewer.occupation = "Education"
 	user_reviewer.roles.push(role_reviewer)
 	user_reviewer.save(:validate => false)
 
@@ -103,6 +105,7 @@ namespace :db do
 			user.password_confirmation = "reviewer"
 			user.language_id = spanish.id
 			user.languages.push(spanish)
+			user.occupation = "Education"
 			user.roles.push(role_reviewer)
 			user.save(:validate => false)
 		end
@@ -118,6 +121,7 @@ namespace :db do
 	loA.technology = "HTML"
 	loA.language_id = english.id
 	loA.hasQuizzes = true
+	loA.owner_id = user_admin.id
 	loA.save(:validate => false)
 
 	loB = Lo.new
@@ -130,6 +134,7 @@ namespace :db do
 	loB.language_id = spanish.id
 	loB.hasQuizzes = false
 	loB.hasWebs = true
+	loB.owner_id = user_admin.id
 	loB.save(:validate => false)
 
 	if Rails.env == "development"
@@ -141,6 +146,7 @@ namespace :db do
 			lo.repository = "ViSH"
 			lo.technology = "HTML"
 			lo.language_id = spanish.id
+			lo.owner_id = user_admin.id
 			lo.save(:validate => false)
 		end
 	end
@@ -148,44 +154,9 @@ namespace :db do
 	#Create Evaluation Methods
 	LORI = Evmethod.new
 	LORI.name = "LORI v1.5"
-	LORI.module = "LoriEvaluation"
+	LORI.module = "Evaluations::Lori"
+	LORI.allow_multiple_evaluations = false
 	LORI.save(:validate => false)
-
-	#Create Assignments
-
-	#Admin create an assigment to request the Reviewer to evaluate the Curiosity Flashcard
-	asA = Assignment.new
-    asA.author_id = user_admin.id
-    asA.user_id = user_reviewer.id
-    asA.lo_id = loA.id
-	asA.status = "Pending"
-	#Deadline in one week
-	asA.deadline = DateTime.now + 7
-	asA.description = "Please, evaluate the following flashcard using LORI (Learning Object Review Instrument)."
-	asA.evmethods.push(LORI)
-	asA.save(:validate => false)
-
-	#Also evaluate the LO titled: Chess: The Art of Learning
-	#Admin create an assigment to request the Reviewer to evaluate the Curiosity Flashcard
-	asB = Assignment.new
-    asB.author_id = user_admin.id
-    asB.user_id = user_reviewer.id
-    asB.lo_id = loB.id
-	asB.status = "Pending"
-	#Deadline in two weeks
-	asB.deadline = DateTime.now + 14
-	asB.description = "Please, evaluate the following LO using LORI (Learning Object Review Instrument)."
-	asB.evmethods.push(LORI)
-	asB.save(:validate => false)
-
-	#Create evaluations
-	#Reviewer evaluate the Curiosity Flashcard using LORI (Evaluation requested in the assignment)
-	evA = Evaluations::Lori.new
-	evA.user_id = user_reviewer.id
-	evA.lo_id = loA.id
-	evA.evmethod_id = LORI.id
-	evA.assignment_id = asA.id #not mandatory
-	evA.save(:validate => false)
 
 	#Create Metrics
 	LORIAM = Metrics::LORIAM.new
@@ -197,6 +168,54 @@ namespace :db do
 	LORIWAM.name = "LORI Weighted Arithmetic Mean"
 	LORIWAM.evmethods.push(LORI);
 	LORIWAM.save(:validate => false)
+
+
+	#Create Assignments
+
+	#Admin create an assigment to request the Reviewer to evaluate the Curiosity Flashcard
+	asA = Assignment.new
+    asA.author_id = user_admin.id
+    asA.user_id = user_reviewer.id
+    asA.lo_id = loA.id
+    asA.evmethod_id = LORI.id
+	asA.status = "Pending"
+	#Deadline in one week
+	asA.deadline = DateTime.now + 7
+	asA.description = "Please, evaluate the following flashcard using LORI (Learning Object Review Instrument)."
+	asA.save(:validate => false)
+
+	#Also evaluate the LO titled: Chess: The Art of Learning
+	#Admin create an assigment to request the Reviewer to evaluate the Curiosity Flashcard
+	asB = Assignment.new
+    asB.author_id = user_admin.id
+    asB.user_id = user_reviewer.id
+    asB.lo_id = loB.id
+    asB.evmethod_id = LORI.id
+	asB.status = "Pending"
+	#Deadline in two weeks
+	asB.deadline = DateTime.now + 14
+	asB.description = "Please, evaluate the following LO using LORI (Learning Object Review Instrument)."
+	asB.save(:validate => false)
+
+	#Create evaluations
+	#Reviewer evaluate the Curiosity Flashcard using LORI (Evaluation requested in the assignment)
+	evA = Evaluations::Lori.new
+	evA.user_id = user_reviewer.id
+	evA.lo_id = loA.id
+	evA.evmethod_id = LORI.id
+	evA.assignment_id = asA.id #not mandatory
+	evA.item1 = 4
+	evA.item2 = 3
+	evA.item3 = 5
+	evA.item4 = 2
+	evA.item5 = 3
+	evA.item6 = 4
+	evA.item7 = 1
+	evA.item8 = 3
+	evA.item9 = 5
+	evA.comments = "This Learning Object is great!"
+	evA.score = 8 #Propose an score for the LO
+	evA.save(:validate => false)
 
 	#Create Scores
 	Metric.all.each do |m|
