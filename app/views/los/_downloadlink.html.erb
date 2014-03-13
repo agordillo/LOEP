@@ -1,18 +1,1 @@
-<a id="download_los" href="#">Download</a>
-
-<script type="text/javascript">
-
-$(document).ready(function(){
-	$("#download_los").click(function(event){
-		event.preventDefault();
-		event.stopPropagation();
-		var lo_ids = <%=@los.map{|lo| lo.id}%>;
-		if(lo_ids.length===0){
-			_showLOEPDialog("There are no items to download.", false);
-			return;
-		}
-		var url = LOEP.Main.createURL("/los/download",[["lo_ids", lo_ids]]);
-		window.top.location= url;
-	});
-});
-</script>
+<a id="download_los" href="<%=download_path(@los,"xlsx")%>">Download</a>

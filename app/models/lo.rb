@@ -126,6 +126,17 @@ class Lo < ActiveRecord::Base
     self.scores.where(:metric_id => metric.id).first
   end
 
+  #XLSX management
+  def getXLSXHeaders
+    keys = self.attributes.keys
+    keys.push("New")
+  end
+
+  def getXLSXValues
+    values = self.attributes.values
+    values.push("Value for New")
+  end
+
 
   #Class Methods
 

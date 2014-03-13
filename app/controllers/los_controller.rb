@@ -397,26 +397,15 @@ class LosController < ApplicationController
   def download
     @los = Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
     respond_to do |format|
-        # format.xlsx
-        format.any {
-            getXLSX(@los)
+        format.json {
+            render :json => @los, :filename => "LOs.json", :type => "application/json"
+        }
+        format.xlsx {
+            render :xlsx => "index", :filename => "LOs.xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
         }
     end
   end
 
-  def getXLSX(los)
-    #   render xlsx: "excel_index", disposition: "attachment", filename: "LOEP_LOS.xlsx"
-    send_data los.first.to_xlsx.to_stream.read, :filename => 'posts.xlsx', :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
-  end
-
-
-#   p = Axlsx::Package.new
-# p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
-#   sheet.add_row ["First Column", "Second", "Third"]
-#   sheet.add_row [1, 2, 3]
-# end
-# p.use_shared_strings = true
-# p.serialize('simple.xlsx')
 
   private
 

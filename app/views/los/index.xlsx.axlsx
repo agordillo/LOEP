@@ -1,7 +1,6 @@
 #Config
 xlsx_package.use_autowidth = false
 
-#Init
 wb = xlsx_package.workbook
 
 #Style
@@ -21,11 +20,17 @@ even_row_style = wb.styles.add_style :bg_color => "FFF",
 
 #WorkSheet content
 
-wb.add_worksheet(:name => "LO" + @lo.id.to_s) do |sheet|
+wb.add_worksheet(:name => "LOs") do |sheet|
+
+	if @los.length < 1
+		return
+	end
 
 	rowContents = [];
-	rowContents[0] = @lo.getXLSXHeaders
-	rowContents[1] = @lo.getXLSXValues
+	rowContents[0] = @los.first.getXLSXHeaders
+	@los.each_with_index do |lo,index|
+		rowContents[index+1] = lo.getXLSXValues
+	end
 
 	rowContents.each_with_index do |rowContent,index|
 		style = odd_row_style

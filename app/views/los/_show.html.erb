@@ -4,7 +4,8 @@
   <% if iamAdmin? %>
     <%= link_to 'View as Reviewer', rlo_path(@lo) %> |
     <%= link_to 'Edit', edit_lo_path(@lo) %> |
-    <a href="<%=new_assignment_path_for(@lo.id,nil)%>"> Add assignment </a>
+    <a href="<%=new_assignment_path_for(@lo.id,nil)%>"> Add assignment </a> |
+    <a href="<%=download_path(@lo,"xlsx")%>">Download</a>
   <% end %>
 
   <p class="space_medium"></p>
