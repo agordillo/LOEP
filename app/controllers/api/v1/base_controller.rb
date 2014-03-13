@@ -1,52 +1,43 @@
 class Api::V1::BaseController < ActionController::Base
-  before_filter :authenticate_app
-  before_filter :filterLOCategories
-  before_filter :filterLOLanguage
 
-  def addLo
-  	@lo = Lo.new(params[:lo])
-  	# authorize! :create, @lo #API authentication lacks CanCan integration
+  #################
+  # Authentication for Web Apps
+  ################
 
-  	respond_to do |format|
-      format.json { 
-      	if @lo.save
-      		render :json => @lo
-      	else
-      		render json: @lo.errors, status: :unprocessable_entity
-      	end 
-      }
-    end
-  end
+  #The authentication for web apps is performed based on the auth_token, without interact with device or CanCan
+  #A web app has the same permissions as its owner
+  #Only admins are allowed to use the API
 
-
-
-  private
-
-  def filterLOCategories
-    if params[:lo] and params[:lo][:categories]
-      params[:lo][:categories] = params[:lo][:categories].reject{|c| c.empty? }.to_json
-    end
-  end
-
-  def filterLOLanguage
-    if params[:lo] and params[:lo][:lanCode]
-      begin
-      	params[:lo][:language_id] = Language.find_by_shortname(params[:lo][:lanCode]).id
-      rescue
-      end
-      params[:lo].delete :lanCode
-    end
-  end
-
-  #Authentication filter
   def authenticate_app
-    if params["name"].nil? or params["auth_token"].nil?
+    if (params["app_name"].nil? and params["app_id"].nil?) or params["auth_token"].nil?
       render :json => ["Unauthorized"], :status => :unauthorized
+      return
     end
-    app = App.find_by_name(params["name"])
-    if app.nil? or app.auth_token != params["auth_token"]
+
+    begin
+      if !params["app_id"].nil?
+        app = App.find(params["app_id"])
+      else
+        app = App.find_by_name(params["app_name"])
+      end
+    rescue
       render :json => ["Unauthorized"], :status => :unauthorized
+      return
     end
+
+    if app.nil? or app.auth_token.nil? or app.auth_token != params["auth_token"] or app.user.nil? or !app.user.isAdmin?
+      render :json => ["Unauthorized"], :status => :unauthorized
+      return
+    end
+
+    session[:app_id] = app.id
+    @current_user = app.user
   end
+
+  #Access to current app
+  def current_app
+    @current_app ||= App.find(session[:app_id]) if session[:app_id].present?
+  end
+  helper_method :current_app
 
 end

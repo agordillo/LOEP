@@ -22,7 +22,6 @@ class ApplicationController < ActionController::Base
     redirect_to home_path, alert: flash[:alert]
   end
 
-
   #Web Services
 
   def serve_tags

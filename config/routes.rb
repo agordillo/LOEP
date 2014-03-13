@@ -52,8 +52,7 @@ LOEP::Application.routes.draw do
   #LOEP API
   namespace :api do
     namespace :v1 do
-      #/api/v1/addLo
-      match '/addLo' => 'base#addLo', via: [:post]
+      resources :los
     end
   end
 
