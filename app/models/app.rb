@@ -2,6 +2,7 @@ class App < ActiveRecord::Base
   attr_accessible :user_id, :name, :auth_token, :callback
 
   belongs_to :user
+  has_many :los
 
   validates :user_id, :presence => true
 

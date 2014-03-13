@@ -102,6 +102,11 @@ class User < ActiveRecord::Base
     (evLos+asLos).uniq
   end
 
+  #Get LOs submitted by the user
+  def getSubmittedLos
+    Lo.where(:owner_id=>self.id)
+  end
+
   #Extra Getters
   def getLanguages
     unless self.languages.empty?

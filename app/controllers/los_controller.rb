@@ -146,9 +146,11 @@ class LosController < ApplicationController
   # POST /los.json
   def create
     @lo = Lo.new(params[:lo])
+    @lo.owner_id = current_user.id
     authorize! :create, @lo
 
     @options_select = getOptionsForSelect
+
     respond_to do |format|
       if @lo.save 
         format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully created.' }
@@ -168,7 +170,9 @@ class LosController < ApplicationController
   def update
     @lo = Lo.find(params[:id])
     authorize! :update, @lo
+
     @options_select = getOptionsForSelect
+
     respond_to do |format|
       if @lo.update_attributes(params[:lo])
         format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully updated.' }

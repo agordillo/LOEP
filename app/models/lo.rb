@@ -32,6 +32,8 @@ class Lo < ActiveRecord::Base
 
   validates_inclusion_of :scope, :in => ["Private", "Protected", "Public"], :allow_nil => false, :message => ": Invalid scope value"
 
+  validates :owner_id, :presence => { :message => "has to be specified" }
+
   acts_as_taggable
 
   has_many :assignments, :dependent => :destroy
@@ -41,6 +43,7 @@ class Lo < ActiveRecord::Base
   has_many :scores, :dependent => :destroy
   has_many :metrics, through: :scores
   has_many :evmethods, through: :evaluations
+  belongs_to :app
 
   #---------------------------------------------------------------------------------
 
@@ -64,6 +67,17 @@ class Lo < ActiveRecord::Base
   def allUsers
     (assignedReviewers+reviewers).uniq
   end
+
+  #Get the owner of the LO
+  def owner
+    if self.app.nil?
+      unless self.owner_id.nil?
+        User.find(self.owner_id)
+      end
+    else
+      self.app.user
+    end
+  end 
 
   #Get the evMethods that have been used to score this LO
   def getScoreEvmethods

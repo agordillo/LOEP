@@ -47,6 +47,15 @@ namespace :fixes do
 					app.update_column :user_id, superAdmin.id
 				end
 			end
+
+			#LOs without owner
+			adminApp = superAdmin.apps.first
+			Lo.where(:owner_id => nil).each do |lo|
+				lo.update_column :owner_id, superAdmin.id
+				if !adminApp.nil?
+					lo.update_column :app_id, adminApp.id
+				end
+			end
 		end
 
 		puts "Updating finished"
