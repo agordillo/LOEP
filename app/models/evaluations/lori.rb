@@ -55,7 +55,10 @@ class Evaluations::Lori < Evaluation
     end
 
     representationData["iScores"] = iScores
-    representationData["averageScore"] = lo.scores.find_by_metric_id(Metric.find_by_type("Metrics::LORIAM").id).value.round(2)
+    loScoreForAverage = lo.scores.find_by_metric_id(Metric.find_by_type("Metrics::LORIAM").id)
+    if !loScoreForAverage.nil?
+      representationData["averageScore"] = loScoreForAverage.value.round(2)
+    end
     representationData["name"] = lo.name
     representationData["labels"] = getLoriItems.map{|li| li[0]}   
     representationData

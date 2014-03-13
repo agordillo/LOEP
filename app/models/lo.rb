@@ -129,12 +129,74 @@ class Lo < ActiveRecord::Base
   #XLSX management
   def getXLSXHeaders
     keys = self.attributes.keys
-    keys.push("New")
+    keys.push("Keywords")
+
+    Evmethod.all.each do |evmethod|
+      keys.push("Assignments with " + evmethod.name)
+      keys.push("Completed Assignments")
+      keys.push("Pending Assignments")
+      keys.push("Rejected Assignments")
+
+      keys.push("Evaluations with " + evmethod.name)
+      keys.push("Completed Evaluations with " + evmethod.name)
+
+      itemsArray = evmethod.getEvaluationModule.getItemsArray
+      itemsArray.each do |nItem|
+        keys.push(evmethod.name + " item" + nItem.to_s)
+      end
+    end
+
+    Metric.all.each do |metric|
+      keys.push("Metric Score: " + metric.name)
+    end
+
+    keys
   end
 
   def getXLSXValues
     values = self.attributes.values
-    values.push("Value for New")
+    values.push(self.tag_list.to_s)
+
+    Evmethod.all.each do |evmethod|
+      evMethodAssignments = self.assignments.where(:evmethod_id=>evmethod.id)
+      values.push(evMethodAssignments.length)
+      values.push(evMethodAssignments.where(:status => "Completed").length)
+      values.push(evMethodAssignments.where(:status => "Pending").length)
+      values.push(evMethodAssignments.where(:status => "Rejected").length)
+
+      evMethodEvaluations = self.evaluations.where(:evmethod_id => evmethod.id)
+      values.push(evMethodEvaluations.length)
+      itemsArray = evmethod.getEvaluationModule.getItemsArray
+      evMethodFullValidEvaluations = Evaluation.getValidEvaluationsForItems(evMethodEvaluations,itemsArray)
+      values.push(evMethodFullValidEvaluations.length)
+
+      if evmethod.getEvaluationModule.methods.include? :representationData
+        representationData = evmethod.getEvaluationModule.representationData(self)
+      end
+
+      itemsArray.each_with_index do |nItem,index|
+        if !representationData.nil?
+          if !representationData["iScores"][index].nil?
+            values.push(representationData["iScores"][index])
+          else
+            values.push("")
+          end
+        else
+          values.push("")
+        end
+      end
+    end
+
+    Metric.all.each do |metric|
+      score = self.scores.where(:metric_id => metric.id).first
+      if !score.nil?
+        values.push(score.value)
+      else
+        values.push("")
+      end
+    end
+
+    values
   end
 
 
