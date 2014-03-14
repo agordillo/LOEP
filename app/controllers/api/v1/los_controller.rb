@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Api::V1::LosController < Api::V1::BaseController
   before_filter :authenticate_app
   before_filter :filterLOCategories, :only => [:create, :update]
@@ -86,7 +88,17 @@ class Api::V1::LosController < Api::V1::BaseController
 
   def filterLOCategories
     if params[:lo] and params[:lo][:categories]
-      params[:lo][:categories] = params[:lo][:categories].reject{|c| c.empty? }.to_json
+      if params[:lo][:categories].is_a? String
+        if !params[:lo][:categories].blank?
+          params[:lo][:categories] = [params[:lo][:categories]].to_json
+        else
+          params[:lo].delete [:categories]
+        end       
+      elsif params[:lo][:categories].is_a? Array
+        params[:lo][:categories] = params[:lo][:categories].reject{|c| c.empty? }.to_json
+      else
+        params[:lo].delete [:categories]
+      end
     end
   end
 
