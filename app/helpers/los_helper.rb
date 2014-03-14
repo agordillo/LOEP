@@ -4,7 +4,11 @@ module LosHelper
 	end
 
 	def download_path(los,format)
-		unless los.is_a? Array
+		if los.is_a? ActiveRecord::Relation
+			los = los.all
+		end
+
+		if !los.is_a? Array
 			los = [los]
 		end
 

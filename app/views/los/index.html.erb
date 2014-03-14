@@ -1,4 +1,9 @@
 <h1 class="loep_title"> Learning Objects </h1>
 <%= render '/los/index', :showTools => true %>
-<p class="link_wrapper"><%= render '/los/downloadlink' %> | <%= link_to "Add new", new_lo_path %></p>
+<p class="link_wrapper">
+	<%if @los.length > 0%>
+		<%= render '/los/downloadlink' %> |
+	<%end%>
+	<%= link_to "Add new", new_lo_path %>
+</p>
 
