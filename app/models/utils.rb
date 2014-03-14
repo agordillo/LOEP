@@ -17,17 +17,21 @@ class Utils < ActiveRecord::Base
       end
     end
 
-    languages = Language.all.map{ |l| [l.name,l.id] }.sort_by{ |l| l[0].downcase }
+    #Special languages
+    lOther = Language.find_by_shortname("lanot")
+    lIndependent = Language.find_by_shortname("lanin")
 
-    lIndependentId = Language.find_by_shortname("lanin").id
+    #Get all languages (but other)
+    languages = Language.all.map{ |l| [l.name,l.id] }.sort_by{ |l| l[0].downcase }.reject{|l| l[1]==lOther.id}
+
     if !addLIndependent
-      languages = languages.reject{|l| l[1]==lIndependentId}
+      languages = languages.reject{|l| l[1]==lIndependent.id}
     else
       languages = languages.sort{ |a,b|
-        if a[1]==lIndependentId
-          1
-        elsif b[1]==lIndependentId
+        if a[1]==lIndependent.id
           -1
+        elsif b[1]==lIndependent.id
+          +1
         else
          0
         end
@@ -37,6 +41,9 @@ class Utils < ActiveRecord::Base
     if addUnespecified
       languages.unshift(["Unspecified",-1])
     end
+
+    #Add other at the end
+    languages.push([lOther.name,lOther.id])
 
     languages
   end

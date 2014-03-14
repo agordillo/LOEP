@@ -34,6 +34,11 @@ namespace :fixes do
 		lindependant.shortname = "lanin"
 		lindependant.save
 
+		lother = Language.new
+		lother.name = "Other"
+		lother.shortname = "lanot"
+		lother.save
+
 		italiano = Language.new
 		italiano.name = "Italiano"
 		italiano.shortname = "it"
@@ -56,6 +61,13 @@ namespace :fixes do
 					lo.update_column :app_id, adminApp.id
 				end
 			end
+		end
+
+		puts "Fixing Learning Objects"
+		Lo.all.each do |lo|
+			if lo.scope.nil? or !["Private", "Protected", "Public"].include? lo.scope
+      			lo.update_column :scope, "Private"
+    		end
 		end
 
 		puts "Updating finished"

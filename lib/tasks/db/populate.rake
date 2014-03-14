@@ -35,6 +35,11 @@ namespace :db do
 	lindependant.shortname = "lanin"
 	lindependant.save(:validate => false)
 
+	lother = Language.new
+	lother.name = "Other"
+	lother.shortname = "lanot"
+	lother.save
+
 	english = Language.new
 	english.name = "English"
 	english.shortname = "en"

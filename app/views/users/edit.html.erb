@@ -77,8 +77,16 @@
       }
     );
 
-    $("#user_language_id").on("select2-selecting", function(event) {
+    // var excludedIds = ['<%=Language.find_by_shortname("lanot").id%>'];
+    var excludedIds = [];
+
+    $("#user_language_id").on("select2-selecting", function(event){
       var valueSelected = event.val;
+
+      if(excludedIds.indexOf(valueSelected) != -1){
+        return;
+      }
+
       var userLanguagesVal = $("#user_languages").val();
       if((userLanguagesVal == null) || (userLanguagesVal.indexOf(valueSelected)==-1)){
         if(userLanguagesVal == null){
@@ -87,7 +95,6 @@
         userLanguagesVal.push(valueSelected);
         $("#user_languages").val(userLanguagesVal).trigger("change");
       }
-
     });
 
     $("#user_languages").attr("style","width:" + $("#user_languages").width() + "px");
