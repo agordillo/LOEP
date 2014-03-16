@@ -197,7 +197,7 @@ class Lo < ActiveRecord::Base
 
       score = self.scores.where(:metric_id => metric.id).first
       if !score.nil?
-        attrs[attrKey] = score.value
+        attrs[attrKey] = score.value.to_f
       else
         attrs[attrKey] = ""
       end

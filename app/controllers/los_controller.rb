@@ -14,7 +14,7 @@ class LosController < ApplicationController
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
-      format.json { render json: @los }
+      format.json { render json: @los.map{ |lo| lo.extended_attributes } }
     end
   end
 
@@ -40,7 +40,7 @@ class LosController < ApplicationController
     respond_to do |format|
       format.html
       format.json {
-        render json: @los 
+        render json: @los.map{ |lo| lo.extended_attributes } 
       }
     end
   end
@@ -70,7 +70,7 @@ class LosController < ApplicationController
         render :xlsx => "show", :filename => "LO" + @lo.id.to_s + ".xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
       }
       format.json { 
-        render json: @lo 
+        render json: @lo.extended_attributes
       }
     end
   end
@@ -125,7 +125,7 @@ class LosController < ApplicationController
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
-      format.json { render json: @lo }
+      format.json { render json: @lo.extended_attributes }
     end
   end
 
@@ -138,7 +138,7 @@ class LosController < ApplicationController
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
-      format.json { render json: @lo }
+      format.json { render json: @lo.extended_attributes }
     end
   end
 
@@ -154,7 +154,7 @@ class LosController < ApplicationController
     respond_to do |format|
       if @lo.save 
         format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully created.' }
-        format.json { render json: @lo, status: :created, location: @lo }
+        format.json { render json: @lo.extended_attributes, status: :created, location: @lo }
       else
         format.html { 
           flash.now[:alert] = @lo.errors.full_messages
@@ -176,7 +176,7 @@ class LosController < ApplicationController
     respond_to do |format|
       if @lo.update_attributes(params[:lo])
         format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully updated.' }
-        format.json { head :no_content }
+        format.json { head @lo.extended_attributes }
       else
         format.html { 
           flash.now[:alert] = @lo.errors.full_messages
@@ -419,7 +419,7 @@ class LosController < ApplicationController
     @los = Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
     respond_to do |format|
         format.json {
-            render :json => @los, :filename => "LOs.json", :type => "application/json"
+            render json: @los.map{ |lo| lo.extended_attributes }, :filename => "LOs.json", :type => "application/json"
         }
         format.xlsx {
             render :xlsx => "index", :filename => "LOs.xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"

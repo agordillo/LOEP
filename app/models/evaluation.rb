@@ -155,8 +155,8 @@ class Evaluation < ActiveRecord::Base
   def checkCallbacks
     #Look for any web app that want to be notified about this evaluation
     if !self.lo.app.nil? and !self.lo.app.callback.nil?
-      #An App wants to be notified
-      LoepNotifier.notifyApp(self.lo.app,self.lo)
+      #An App wants to be notified that there is new data about this Lo
+      LoepNotifier.notifyLoUpdate(self.lo.app,self.lo)
     end
   end
   
