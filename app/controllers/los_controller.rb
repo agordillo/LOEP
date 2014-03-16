@@ -195,7 +195,7 @@ class LosController < ApplicationController
     @lo.destroy
 
     respond_to do |format|
-      format.html { redirect_to Utils.return_after_destroy_path(session) }
+      format.html { redirect_to(:back) }
       format.json { head :no_content }
     end
   end
@@ -209,7 +209,7 @@ class LosController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to Utils.return_after_destroy_path(session) }
+      format.html { redirect_to(:back) }
       format.json { head :no_content }
     end
   end
