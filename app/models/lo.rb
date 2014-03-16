@@ -11,10 +11,7 @@ class Lo < ActiveRecord::Base
 
   validates :name,
   :presence => true,
-  :length => { :in => 3..255 },
-  :uniqueness => {
-    :case_sensitive => false
-  }
+  :length => { :in => 3..255 }
 
   validates :language_id, :presence => { :message => "has to be specified" }
   validates :language_id, :exclusion => { :in => [-1], :message => "has to be specified."}
@@ -32,6 +29,20 @@ class Lo < ActiveRecord::Base
   validates_inclusion_of :scope, :in => ["Private", "Protected", "Public"], :allow_nil => false, :message => ": Invalid scope value"
 
   validates :owner_id, :presence => { :message => "has to be specified" }
+
+  validate :checkRepositoryId
+
+  def checkRepositoryId
+    if self.id.nil? and !self.repository.blank? and !self.id_repository.blank?
+      #Create a new LO with repository and repository ID
+      #Check if the ID is uniq for this repository
+      if Lo.where(:repository => self.repository, :id_repository => self.id_repository).length > 0
+        errors.add(:repository, 'If the repository identifier is included, it must be unique')
+        return
+      end
+    end
+    true
+  end
 
   acts_as_taggable
 
