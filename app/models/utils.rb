@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Utils < ActiveRecord::Base
-
-  #Constants
+class Utils
 
   def self.getOptionsForSelectLan(resource,options=nil)
     addUnespecified = false
