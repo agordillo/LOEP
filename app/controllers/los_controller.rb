@@ -377,8 +377,20 @@ class LosController < ApplicationController
 
     query = Utils.composeQuery(queries)
 
+    #Include query in the search form
+    if params["queryStatement"] == "1" and can?(:performQueryStatements, nil)
+      @params["query"] = query
+    end
+    
     if !query.nil?
-      @los = Lo.where(query)
+      begin
+        @los = Lo.where(query)
+        #This line will raise an exception, if the SQL Statement is invalid
+        @los.exists?
+      rescue Exception => e
+        @los = []
+        flash.now[:alert] = e.message
+      end
     else
       @los = Lo.all
     end

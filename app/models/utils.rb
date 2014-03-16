@@ -120,6 +120,7 @@ class Utils < ActiveRecord::Base
 
   #Querys
   def self.composeQuery(queries)
+    queries.uniq!
     composedQuery = nil
     queries.each_with_index do |query,index|
       if index!=0
