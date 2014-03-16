@@ -305,6 +305,7 @@ class LosController < ApplicationController
     # "hasEnrichedVideos"=>"1",
     # "evmethods_yes"=>["1", "2"],
     # "evmethods_no"=>["1", "2"],
+    # "queryStatement"=>"1",
     # "controller"=>"los",
     # "action"=>"search"}
 
@@ -314,7 +315,11 @@ class LosController < ApplicationController
     queries = []
 
     if !params["query"].blank?
-       queries << "los.name LIKE '" + params["query"] + "'"
+      if params["queryStatement"] == "1" and can?(:performQueryStatements, nil)
+        queries << params["query"]
+      else
+        queries << "los.name LIKE '" + params["query"] + "'"
+      end
     end
 
     #Repository

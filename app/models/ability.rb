@@ -23,6 +23,8 @@ class Ability
             can :read, :all
             can :rshow, :all
 
+            can :performQueryStatements, :all
+
         elsif user.role? :Admin
             #Admin
             can [:update, :destroy], User do |u|
