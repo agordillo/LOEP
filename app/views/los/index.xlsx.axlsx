@@ -27,9 +27,9 @@ wb.add_worksheet(:name => "LOs") do |sheet|
 	end
 
 	rowContents = [];
-	rowContents[0] = @los.first.getXLSXHeaders
+	rowContents[0] = @los.first.extended_attributes.keys
 	@los.each_with_index do |lo,index|
-		rowContents[index+1] = lo.getXLSXValues
+		rowContents[index+1] = lo.extended_attributes.values
 	end
 
 	rowContents.each_with_index do |rowContent,index|

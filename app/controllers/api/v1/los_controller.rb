@@ -14,7 +14,7 @@ class Api::V1::LosController < Api::V1::BaseController
 
     respond_to do |format|
       format.any {
-        render json: current_app.los
+        render json: current_app.los.map{ |lo| lo.extended_attributes }
       }
     end    
   end
@@ -26,7 +26,7 @@ class Api::V1::LosController < Api::V1::BaseController
 
     respond_to do |format|
       format.any {
-        render json: lo
+        render json: lo.extended_attributes
       }
     end  
   end
@@ -46,7 +46,7 @@ class Api::V1::LosController < Api::V1::BaseController
     respond_to do |format|
       format.any { 
         if @lo.save
-          render :json => @lo
+          render :json => @lo.extended_attributes
         else
           render json: @lo.errors, status: :unprocessable_entity
         end 
@@ -62,7 +62,7 @@ class Api::V1::LosController < Api::V1::BaseController
     respond_to do |format|
         format.any { 
           if lo.update_attributes(params[:lo])
-            render json: lo 
+            render json: lo.extended_attributes 
           else
             render json: lo.errors, status: :unprocessable_entity
           end
