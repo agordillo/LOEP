@@ -4,12 +4,13 @@ namespace :fixes do
 	#How to use: bundle exec rake fixes:patchToV001
 	task :patchToV001 => :environment do |t, args|
 		puts "Updating LOEP to VERSION 0.0.1"
-		Rake::Task["fixes:assignments"].invoke
-
+		
 		puts "Fixing Evaluations STI"
 		Evaluation.update_all(:type => "Evaluations::Lori")
 		LORI15 = Evmethod.find_by_name("LORI v1.5")
 		LORI15.update_column :module, "Evaluations::Lori"
+
+		Rake::Task["fixes:assignments"].invoke
 
 		puts "Creating metrics"
 		LORI15 = Evmethod.find_by_name("LORI v1.5")
