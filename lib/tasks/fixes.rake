@@ -2,6 +2,7 @@
 
 namespace :fixes do
 	#How to use: bundle exec rake fixes:patchToV001
+	#In production: bundle exec rake fixes:patchToV001 RAILS_ENV=production
 	task :patchToV001 => :environment do |t, args|
 		puts "Updating LOEP to VERSION 0.0.1"
 		
