@@ -24,8 +24,8 @@ even_row_style = wb.styles.add_style :bg_color => "FFF",
 wb.add_worksheet(:name => "LO" + @lo.id.to_s) do |sheet|
 
 	rowContents = [];
-	rowContents[0] = @lo.getXLSXHeaders
-	rowContents[1] = @lo.getXLSXValues
+	rowContents[0] = @lo.extended_attributes.keys
+	rowContents[1] = @lo.extended_attributes.values
 
 	rowContents.each_with_index do |rowContent,index|
 		style = odd_row_style

@@ -14,7 +14,7 @@ class LosController < ApplicationController
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
-      format.json { render json: @los }
+      format.json { render json: @los.map{ |lo| lo.extended_attributes } }
     end
   end
 
@@ -40,7 +40,7 @@ class LosController < ApplicationController
     respond_to do |format|
       format.html
       format.json {
-        render json: @los 
+        render json: @los.map{ |lo| lo.extended_attributes } 
       }
     end
   end
@@ -70,7 +70,7 @@ class LosController < ApplicationController
         render :xlsx => "show", :filename => "LO" + @lo.id.to_s + ".xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
       }
       format.json { 
-        render json: @lo 
+        render json: @lo.extended_attributes
       }
     end
   end
@@ -125,7 +125,7 @@ class LosController < ApplicationController
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
-      format.json { render json: @lo }
+      format.json { render json: @lo.extended_attributes }
     end
   end
 
@@ -138,7 +138,7 @@ class LosController < ApplicationController
     @options_select = getOptionsForSelect
     respond_to do |format|
       format.html
-      format.json { render json: @lo }
+      format.json { render json: @lo.extended_attributes }
     end
   end
 
@@ -154,7 +154,7 @@ class LosController < ApplicationController
     respond_to do |format|
       if @lo.save 
         format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully created.' }
-        format.json { render json: @lo, status: :created, location: @lo }
+        format.json { render json: @lo.extended_attributes, status: :created, location: @lo }
       else
         format.html { 
           flash.now[:alert] = @lo.errors.full_messages
@@ -176,7 +176,7 @@ class LosController < ApplicationController
     respond_to do |format|
       if @lo.update_attributes(params[:lo])
         format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully updated.' }
-        format.json { head :no_content }
+        format.json { head @lo.extended_attributes }
       else
         format.html { 
           flash.now[:alert] = @lo.errors.full_messages
@@ -195,7 +195,7 @@ class LosController < ApplicationController
     @lo.destroy
 
     respond_to do |format|
-      format.html { redirect_to Utils.return_after_destroy_path(session) }
+      format.html { redirect_to(:back) }
       format.json { head :no_content }
     end
   end
@@ -209,7 +209,7 @@ class LosController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to Utils.return_after_destroy_path(session) }
+      format.html { redirect_to(:back) }
       format.json { head :no_content }
     end
   end
@@ -305,6 +305,7 @@ class LosController < ApplicationController
     # "hasEnrichedVideos"=>"1",
     # "evmethods_yes"=>["1", "2"],
     # "evmethods_no"=>["1", "2"],
+    # "queryStatement"=>"1",
     # "controller"=>"los",
     # "action"=>"search"}
 
@@ -314,7 +315,11 @@ class LosController < ApplicationController
     queries = []
 
     if !params["query"].blank?
-       queries << "los.name LIKE '" + params["query"] + "'"
+      if params["queryStatement"] == "1" and can?(:performQueryStatements, nil)
+        queries << params["query"]
+      else
+        queries << "los.name LIKE '" + params["query"] + "'"
+      end
     end
 
     #Repository
@@ -372,8 +377,20 @@ class LosController < ApplicationController
 
     query = Utils.composeQuery(queries)
 
+    #Include query in the search form
+    if params["queryStatement"] == "1" and can?(:performQueryStatements, nil)
+      @params["query"] = query
+    end
+    
     if !query.nil?
-      @los = Lo.where(query)
+      begin
+        @los = Lo.where(query)
+        #This line will raise an exception, if the SQL Statement is invalid
+        @los.exists?
+      rescue Exception => e
+        @los = []
+        flash.now[:alert] = e.message
+      end
     else
       @los = Lo.all
     end
@@ -402,7 +419,7 @@ class LosController < ApplicationController
     @los = Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
     respond_to do |format|
         format.json {
-            render :json => @los, :filename => "LOs.json", :type => "application/json"
+            render json: @los.map{ |lo| lo.extended_attributes }, :filename => "LOs.json", :type => "application/json"
         }
         format.xlsx {
             render :xlsx => "index", :filename => "LOs.xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"

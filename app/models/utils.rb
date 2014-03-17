@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Utils < ActiveRecord::Base
-
-  #Constants
+class Utils
 
   def self.getOptionsForSelectLan(resource,options=nil)
     addUnespecified = false
@@ -120,6 +118,7 @@ class Utils < ActiveRecord::Base
 
   #Querys
   def self.composeQuery(queries)
+    queries.uniq!
     composedQuery = nil
     queries.each_with_index do |query,index|
       if index!=0

@@ -1,6 +1,41 @@
-div.survey_block {
-	margin-bottom: 20px;
+/*
+ * Surveys screen
+ */
+
+#surveys {
+
 }
+
+#surveys h1 {
+	font-size: 30px;
+}
+
+#surveys h2 {
+	font-size: 23px;
+}
+
+#surveys p {
+	color: #999;
+	font-size: 15px;
+}
+
+#surveys .loep_button {
+	min-width: 200px;
+	padding: 2px 6px;
+}
+
+div.survey_block {
+	margin-bottom: 40px;
+}
+
+span.flagInSurveyBlockTitle img {
+	margin-top: 5px;
+}
+
+
+/*
+ * Surveys
+ */
 
 .survey_title {
 	font-size: 25px;

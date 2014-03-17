@@ -76,3 +76,7 @@ div.search_field_wrapper select.loep_input[multiple] {
 div.overall_search_button_wrapper {
 	margin-top: 5px;
 }
+
+span.queryExample {
+	color: #ccc;
+}

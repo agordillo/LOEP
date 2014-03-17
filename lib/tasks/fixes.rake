@@ -118,6 +118,18 @@ namespace :fixes do
 			assignment.update_column :deadline, (DateTime.now - 1)
 		end
 	end
+
+	task :fixViSHLOs => :environment do |t, args|
+		puts "Fixing ViSH Learning Objects"
+
+		puts "Add repository id field"
+		Lo.where(:repository=>"ViSH", :id_repository=>nil).each do |lo|
+			if !lo.url.nil?
+				idRepository = lo.url.split("/").pop.to_i
+				lo.update_column :id_repository, idRepository
+			end
+		end
+	end
 	
 end
 

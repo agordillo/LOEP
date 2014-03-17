@@ -12,6 +12,16 @@
 		</button>
 	</div>
 
+	<% if can?(:performQueryStatements, nil) %>
+	<div class="search_field_wrapper">
+		<p class="search_field">
+			<input name="queryStatement" type="checkbox" value="1" <%=@params["queryStatement"].nil? ? "" : "checked='checked'"=%>>
+		    <span>Use the value of the search input as the SQL query statement</span><br/>
+		    <span class="queryExample">For instance: "los.hasText=true and los.hasVideos=false" </span>
+		</p>
+	</div>
+	<% end %>
+
 	<div class="search_field_wrapper">
 		<p class="search_field">
 			<span class="search_field_title">Repository:</span> 

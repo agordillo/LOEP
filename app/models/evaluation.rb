@@ -47,10 +47,11 @@ class Evaluation < ActiveRecord::Base
     end
   end
 
+  after_initialize :init
   before_validation :checkScoreBeforeSave
   after_create :checkAssignment
-  after_save :update_scores
-  after_initialize :init
+  after_save :updateScores
+  after_save :checkCallbacks
 
   def init
   end
@@ -120,7 +121,7 @@ class Evaluation < ActiveRecord::Base
     end
   end
 
-  def update_scores
+  def updateScores
     # Look for scores than should be updated or created after create or remove this evaluation
 
     #1. Get EvMethod of the Evaluation
@@ -148,6 +149,14 @@ class Evaluation < ActiveRecord::Base
         s.lo_id = self.lo.id
         s.save #If the value can't be calculated, the score will not be saved. (Don't use save!)
       end
+    end
+  end
+
+  def checkCallbacks
+    #Look for any web app that want to be notified about this evaluation
+    if !self.lo.app.nil? and !self.lo.app.callback.nil?
+      #An App wants to be notified that there is new data about this Lo
+      LoepNotifier.notifyLoUpdate(self.lo.app,self.lo)
     end
   end
   
