@@ -11,15 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140316172747) do
+ActiveRecord::Schema.define(:version => 20140317121400) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
     t.string   "auth_token"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.integer  "user_id"
-    t.text     "callback"
+    t.text     "callback",   :limit => 16777215
   end
 
   create_table "assignments", :force => true do |t|
@@ -176,13 +176,13 @@ ActiveRecord::Schema.define(:version => 20140316172747) do
   end
 
   create_table "los", :force => true do |t|
-    t.text     "url",               :limit => 2147483647
+    t.text     "url",               :limit => 16777215
     t.string   "name"
-    t.text     "description",       :limit => 2147483647
+    t.text     "description",       :limit => 16777215
     t.string   "lotype"
     t.string   "repository"
     t.string   "technology"
-    t.text     "categories",        :limit => 2147483647
+    t.text     "categories",        :limit => 16777215
     t.integer  "language_id"
     t.boolean  "hasText"
     t.boolean  "hasImages"
@@ -196,9 +196,9 @@ ActiveRecord::Schema.define(:version => 20140316172747) do
     t.boolean  "hasFlashcards"
     t.boolean  "hasVirtualTours"
     t.boolean  "hasEnrichedVideos"
-    t.datetime "created_at",                                                     :null => false
-    t.datetime "updated_at",                                                     :null => false
-    t.string   "scope",                                   :default => "private"
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
+    t.string   "scope",                                 :default => "Private"
     t.integer  "owner_id"
     t.integer  "app_id"
     t.integer  "id_repository"
@@ -233,6 +233,18 @@ ActiveRecord::Schema.define(:version => 20140316172747) do
     t.integer  "lo_id"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "survey_ranking_a", :force => true do |t|
+    t.text     "results"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "survey_ranking_as", :force => true do |t|
+    t.text     "results"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "taggings", :force => true do |t|

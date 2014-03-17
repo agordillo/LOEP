@@ -31,8 +31,10 @@ LOEP::Application.routes.draw do
   resources :apps
 
   #Surveys
+  match '/surveys/completed' => 'surveys#completed'
   namespace :surveys do
     resources :lorics
+    resources :survey_ranking_as
   end
 
   root :to =>'home#frontpage'

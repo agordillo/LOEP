@@ -2,13 +2,15 @@
 	<h1> Available Surveys </h1>
 	<p class="space_small">&nbsp;</p>
 
+	<% if user_signed_in? %>
 	<div class="survey_block">
 		<h2>LORI v1.5 Items Rating Survey</h2>
 		<p>The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, the LORI Score Metric is defined and the LORI scores are calculated.</p>
 		<a href="<%=new_surveys_loric_path%>"><button class="loep_button"><span class="glyphicon glyphicon-edit"></span>&nbsp; Fill Survey</button></a>
 	</div>
+	<% end %>
 
-	<% if current_user.languages.include?(Language.find_by_shortname("es")) %>
+	<% if !user_signed_in? or current_user.languages.include?(Language.find_by_shortname("es")) %>
 	<div class="survey_block">
 		<h2>Learning Object Quality Indicators (Indicadores de calidad de objetos de aprendizaje) <span class="flagInSurveyBlockTitle"><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/></span></h2>
 		<p>En la siguiente encuesta se le plantearán una serie de preguntas para conocer su opinión sobre la importancia que para usted tienen diferentes factores o indicadores en la calidad de un objeto de aprendizaje.</p>
@@ -16,11 +18,11 @@
 	</div>
 	<%end%>
 
-	<% if current_user.languages.include?(Language.find_by_shortname("es")) %>
+	<% if !user_signed_in? or current_user.languages.include?(Language.find_by_shortname("es")) %>
 	<div class="survey_block">
 		<h2>Learning Object Ranking <span class="flagInSurveyBlockTitle"><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/></span></h2>
 		<p>Coming soon...</p>
-		<a href="#"><button class="loep_button"><span class="glyphicon glyphicon-edit"></span>&nbsp; Rellenar encuesta</button></a>
+		<a href="<%=new_surveys_survey_ranking_a_path%>"><button class="loep_button"><span class="glyphicon glyphicon-edit"></span>&nbsp; Rellenar encuesta</button></a>
 	</div>
 	<%end%>
 	
