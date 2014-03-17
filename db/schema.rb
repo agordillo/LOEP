@@ -16,10 +16,10 @@ ActiveRecord::Schema.define(:version => 20140316172747) do
   create_table "apps", :force => true do |t|
     t.string   "name"
     t.string   "auth_token"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.integer  "user_id"
-    t.text     "callback",   :limit => 16777215
+    t.text     "callback"
   end
 
   create_table "assignments", :force => true do |t|
@@ -34,11 +34,6 @@ ActiveRecord::Schema.define(:version => 20140316172747) do
     t.datetime "updated_at",                       :null => false
     t.integer  "evmethod_id"
     t.integer  "suitability"
-  end
-
-  create_table "assignments_evmethods", :id => false, :force => true do |t|
-    t.integer "assignment_id"
-    t.integer "evmethod_id"
   end
 
   create_table "evaluations", :force => true do |t|
@@ -147,11 +142,6 @@ ActiveRecord::Schema.define(:version => 20140316172747) do
     t.boolean  "allow_multiple_evaluations", :default => false
   end
 
-  create_table "evmethods_assignments", :id => false, :force => true do |t|
-    t.integer "evmethod_id"
-    t.integer "assignment_id"
-  end
-
   create_table "evmethods_metrics", :id => false, :force => true do |t|
     t.integer "evmethod_id"
     t.integer "metric_id"
@@ -186,13 +176,13 @@ ActiveRecord::Schema.define(:version => 20140316172747) do
   end
 
   create_table "los", :force => true do |t|
-    t.text     "url",               :limit => 16777215
+    t.text     "url",               :limit => 2147483647
     t.string   "name"
-    t.text     "description",       :limit => 16777215
+    t.text     "description",       :limit => 2147483647
     t.string   "lotype"
     t.string   "repository"
     t.string   "technology"
-    t.text     "categories",        :limit => 16777215
+    t.text     "categories",        :limit => 2147483647
     t.integer  "language_id"
     t.boolean  "hasText"
     t.boolean  "hasImages"
@@ -206,9 +196,9 @@ ActiveRecord::Schema.define(:version => 20140316172747) do
     t.boolean  "hasFlashcards"
     t.boolean  "hasVirtualTours"
     t.boolean  "hasEnrichedVideos"
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
-    t.string   "scope",                                 :default => "Private"
+    t.datetime "created_at",                                                     :null => false
+    t.datetime "updated_at",                                                     :null => false
+    t.string   "scope",                                   :default => "private"
     t.integer  "owner_id"
     t.integer  "app_id"
     t.integer  "id_repository"

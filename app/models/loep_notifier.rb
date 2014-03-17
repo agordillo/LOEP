@@ -1,7 +1,10 @@
 class LoepNotifier
 
+	# Notify an app that a LO has new information available
+	# Request example
+	# PUT http://localhost:3000/loep/los/55?app_name=MyLORApp&auth_token=tokenOfMyLORApp
 	def self.notifyLoUpdate(app,lo)
-		if app.callback.nil? or app.auth_token.nil? or lo.id_repository.nil?
+		if app.callback.blank? or app.auth_token.blank? or lo.id_repository.blank?
 			return
 		end
 
@@ -9,7 +12,15 @@ class LoepNotifier
 		if app.callback.last != "/"
 			basePath = app.callback + "/"
 		end
-		appURI = URI(app.callback)
+		appURI = URI(basePath)
+
+		host = appURI.host
+		port = appURI.port
+		path = appURI.path + "los/" + lo.id_repository.to_s
+
+		if host.blank?
+			return
+		end
 
 		#Build params
 		params = Hash.new
@@ -19,13 +30,17 @@ class LoepNotifier
 		params["id_repository"] = lo.id_repository
 		params["lo"] = lo.extended_attributes.to_json
 
-		host = appURI.host
-		port = appURI.port
-		path = appURI.path + "los/" + lo.id_repository.to_s
-
-		req = Net::HTTP::Put.new(path,{'Content-Type' =>'application/json'})
-		req.set_form_data(params)
-		response = Net::HTTP.new(host, port).start {|http| http.request(req) }
+		require 'thread'
+		Thread.new {
+			begin 
+				req = Net::HTTP::Put.new(path,{'Content-Type' =>'application/json'})
+				req.set_form_data(params)
+				response = Net::HTTP.new(host, port).start {|http| http.request(req) }
+				# puts response
+			rescue Exception => e
+				# puts e.message
+			end
+		}
 	end
 
 end
