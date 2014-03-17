@@ -1,30 +1,182 @@
 <div class="loep_form_wrapper">
-  <h2>LORI v1.5 Items Rating Survey</h1>
-  <p class="form_before_button">&nbsp;</p>
-  <p> The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, a Learning Object LORI Quality Metric is defined, and the scores for the Learning Objects are calculated.</p>
-  <p> For each of the items, rate the importance that it has for you regarding pedagogical quality in a scale from 0 to 10, being 0 valueless and 10 extremely valuable. </p>
-</div>
-
-<div class="loep_form_wrapper">
-  <p class="form_before_button">&nbsp;</p>
-
   <%= form_for(@ranking) do |f| %>
-   
-    <p> Formulario aqui </p>
-
+    <h2>Clasificación de Objetos de Aprendizaje</h1>
     <p class="form_before_button">&nbsp;</p>
+    <p>
+      En la siguiente encuesta se le va a mostrar una lista con 12 objetos de aprendizaje, que usted deberá explorar y posteriormente valorar en función de su calidad como recurso educativo.
+    </p>
+    <p>
+      Un objeto de aprendizaje puede ser definido como un recurso digital reutilizable, generalmente etiquetado con metadatos, que es autocontenido y que puede ser utilizado para la enseñanza.</br>
+      Los metadatos son información adicional del objeto de aprendizaje como por ejemplo su descripción, idioma, tema o palabras clave para motores de búsqueda.</br>
+      Ejemplos de objetos de aprendizaje pueden ser una presentación de diapositivas en formato digital, un vídeo (con carácter didáctico), una simulación virtual de un laboratorio de física, un cuestionario de preguntas interactivo, etc.
+    </p>
+    <p>
+      La lista mostrada a continuación consta de 12 objetos de aprendizaje diferentes sobre temas relacionados con la "Física". Todos ellos han sido creados con la misma aplicación y todos ellos se encuentran accesibles a través del mismo repositorio de contenidos educativos: <a href="http://vishub.org" target="_blank">VisH (Virtual Science Hub)</a>.
+    </p>
+    <p>
+      Imagine que esta lista son los 12 primeros resultados de una búsqueda que usted ha realizado en el repositorio de contenidos educativos introduciendo la palabra "Física". </br>
+      Considere que usted ha realizado la búsqueda con el objetivo de encontrar una serie de objetos de aprendizaje (para enseñar conceptos relacionados con la Física) que pueda incluir en su planificación académica y utilizar en su trabajo, bien como material de apoyo en clase, bien para que puedan ser utilizados directamente por sus alumnos o para referenciarlos en alguna plataforma de aprendizaje como Moodle o Blackboard.</br>
+    </p>
+    <p>
+      En primer lugar, le pedimos que visualice detenidamente cada uno de los diferentes objetos de aprendizaje, y que <b>puntúe cada uno de ellos en una escala de 0 a 10 en función de su calidad como recurso educativo</b>, siendo 0 la calidad más baja posible. Realice las valoraciones desde un punto de vista objetivo, sin considerar su situación personal. Por ejemplo, si usted no puede utilizar uno de los objetos de aprendizaje porque está orientado a alumnos de edad más avanzada a los que usted imparte clase o porque no forma parte del temario de sus asignaturas, póngase en la situación de otro profesor que si tendría la oportunidad de utilizarlo.</br>
+      <b>Si considera que un objeto de aprendizaje no tiene la suficiente calidad como para ser utilizado como recurso educativo, deberá otorgarle una puntuación &lt; 5</b>. Por el contrario, si considera que el recurso es apto deberá otorgarle una puntuación &gt;&#61; 5.
+    </p>
+
+    <p>&nbsp;</p>
+
+    <ul class="rs_loslist rs_loslist1">
+      <%@los.each do |key, array|%>
+        <li>
+         <div class="survey_block">
+          <p class="survey_question_title"><%=array["title"]%></p>
+
+          <div class="rs_loslistelement">
+          <a href="<%=array["url"]%>" target="_blank">
+            <div class="rs_loslistelement_left">
+              <img src="<%=array["avatar"]%>"/>
+              <p class="rs_url"><%=array["url"]%></p>
+            </div>
+          </a>
+          <div class="rs_loslistelement_right">
+            <div class="rating_wrapper">
+              <div class="stars_wrapper">
+                <span class="hover-star_legend_left">Baja</span>
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="0" type="radio" value="0">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="1" type="radio" value="1">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="2" type="radio" value="2">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="3" type="radio" value="3">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="4" type="radio" value="4">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="5" type="radio" value="5">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="6" type="radio" value="6">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="7" type="radio" value="7">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="8" type="radio" value="8">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="9" type="radio" value="9">
+                <input class="hover-star" name="surveys_survey_ranking_as[<%=key%>]" title="10" type="radio" value="10">
+                <span class="hover-star_legend_right">Alta</span>
+              </div>
+              <div class="hover-start_text"></div>
+              <div class="remove_hover-start-value"><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
+            </div>
+            <div class="validEdrResourceWrapper valid" style="display:none">
+              <p><span class="glyphicon glyphicon-ok"></span> &nbsp; Objeto apto como recurso educativo</p>
+            </div>
+            <div class="validEdrResourceWrapper novalid" style="display:none">
+              <p><span class="glyphicon glyphicon-remove"></span> &nbsp; Objeto no apto como recurso educativo</p>
+            </div>
+          </div>
+        </div>
+        </li>
+      <%end%>
+    </ul>
+
+    <p>
+      Finalmente, se muestra otra lista en la que aparecen los mismos 12 objetos de aprendizaje que ha valorado en la pregunta anterior. Ordénelos de mayor calidad (nº1) a peor calidad (nº12). Para ello simplemente arrastre con el ratón cada elemento de la lista a la posición que desee.
+    </p>
+    <p>&nbsp;</p>
+
+    <ul class="rs_loslist rs_loslist2">
+      <%index=1%>
+      <%@los.each do |key, array|%>
+        <li>
+         <div class="survey_block">
+          <p class="survey_question_title"><span class="rs_list_index"><%=index.to_s%></span>. <span><%=array["title"]%></span></p>
+          <div class="rs_loslistelement">
+          <div class="rs_loslistelement_left">
+            <img src="<%=array["avatar"]%>"/>
+          </div>
+          <div class="rs_loslistelement_right">
+            <p class="rs_url"><a href="<%=array["url"]%>" target="_blank"><%=array["url"]%></a></p>
+          </div>
+        </div>
+        </li>
+        <%index=index+1%>
+      <%end%>
+    </ul>
+
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>
+      Ha terminado la encuesta.
+      ¡Muchas gracias por su colaboración!
+    </p>
+
     <p class="form_before_button">&nbsp;</p>
     <%= f.submit "Submit Survey", :class => 'loep_button' %>
   <% end %>
 </div>
 
-</br>
+</br></br>
 <div class="loep_form_wrapper">
   <%= link_to 'Back', :back %>
 </div>
 
+
 <script type="text/javascript">
-  jQuery(document).ready(function($){
-    console.log("DocumentReady");
+  $(document).ready(function(){
+      $('.hover-star').rating({
+          focus: function(value, link){
+              var tip = $(this).parent().parent().find("div.hover-start_text");
+              var title = $(link).attr("ititle");
+              if(typeof title == "undefined"){
+                title = $(link).attr("title");
+                $(link).removeAttr("title");
+                $(link).attr("ititle",title);
+              }
+              var text = "<div class='numberCircle'>"+title+"</div>";
+              tip.html(text);
+          },
+          blur: function(value, link){
+              var tip = $(this).parent().parent().find("div.hover-start_text");
+              var selectedValue = $(tip).attr("selectedValue");
+              if(selectedValue){
+                var text = "<div class='numberCircle'>"+selectedValue+"</div>";
+              }
+              $(tip).html(text || '');
+          },
+          callback: function(value, link){
+            var tip = $(this).parent().parent().find("div.hover-start_text");
+            var remove = $(tip).parent().find("div.remove_hover-start-value");
+            $(tip).attr("selectedValue",value);
+            $(remove).fadeIn().css("display","inline-block");
+
+            if(typeof value != "undefined"){
+              var validWrapper = $(this).parent().parent().parent().find("div.validEdrResourceWrapper.valid");
+              var nonValidWrapper = $(this).parent().parent().parent().find("div.validEdrResourceWrapper.novalid");
+              if(value < 5){
+                $(validWrapper).hide();
+                $(nonValidWrapper).fadeIn();
+              } else {
+                $(nonValidWrapper).hide();
+                $(validWrapper).fadeIn();
+              }
+            }
+
+          }
+      });
+  
+      $(document).on('click', 'div.remove_hover-start-value', function(event){
+          var removeDiv = event.target;
+          if(!$(removeDiv).hasClass("remove_hover-start-value")){
+            removeDiv = $(event.target).parent();
+          }
+          var tip = $(removeDiv).parent().find("div.hover-start_text");
+          $(tip).removeAttr("selectedValue");
+
+          var ratingCancelButton = $(removeDiv).parent().find("div.rating-cancel > a");
+          $(ratingCancelButton).trigger("click")
+
+          $(tip).fadeOut(function(){
+            $(tip).html("");
+            $(tip).css("display","inline-block");
+          });
+          $(removeDiv).fadeOut();
+
+          var validWrapper = $(tip).parent().parent().parent().find("div.validEdrResourceWrapper.valid");
+          var nonValidWrapper = $(tip).parent().parent().parent().find("div.validEdrResourceWrapper.novalid");
+          $(nonValidWrapper).fadeOut();
+          $(validWrapper).fadeOut();
+      });
+
+
   });
 </script>

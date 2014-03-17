@@ -12,7 +12,7 @@
 
 	<% if !user_signed_in? or current_user.languages.include?(Language.find_by_shortname("es")) %>
 	<div class="survey_block">
-		<h2>Learning Object Quality Indicators (Indicadores de calidad de objetos de aprendizaje) <span class="flagInSurveyBlockTitle"><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/></span></h2>
+		<h2>Learning Object Quality Indicators (Indicadores de calidad de Objetos de Aprendizaje) <span class="flagInSurveyBlockTitle"><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/></span></h2>
 		<p>En la siguiente encuesta se le plantearán una serie de preguntas para conocer su opinión sobre la importancia que para usted tienen diferentes factores o indicadores en la calidad de un objeto de aprendizaje.</p>
 		<a href="https://docs.google.com/forms/d/1BlkqLSA7QYaUNvYNu59rQgROKJ-Udt3Q_A56OwRrPE4/viewform" target="_blank"><button class="loep_button"><span class="glyphicon glyphicon-edit"></span>&nbsp; Rellenar encuesta</button></a>
 	</div>
@@ -20,8 +20,8 @@
 
 	<% if !user_signed_in? or current_user.languages.include?(Language.find_by_shortname("es")) %>
 	<div class="survey_block">
-		<h2>Learning Object Ranking <span class="flagInSurveyBlockTitle"><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/></span></h2>
-		<p>Coming soon...</p>
+		<h2>Learning Object Sorting (Clasificación de Objetos de Aprendizaje)<span class="flagInSurveyBlockTitle"><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/></span></h2>
+		<p> En la siguiente encuesta se le presentará una lista de objetos de aprendizaje, y se le solicitará en primer lugar que otorgue una puntuación a cada uno de ellos. En segundo lugar, tendrá que ordenar estos objetos de mejor a peor en función de su calidad.</p>
 		<a href="<%=new_surveys_survey_ranking_a_path%>"><button class="loep_button"><span class="glyphicon glyphicon-edit"></span>&nbsp; Rellenar encuesta</button></a>
 	</div>
 	<%end%>

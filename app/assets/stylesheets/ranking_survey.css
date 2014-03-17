@@ -1,0 +1,96 @@
+ul.rs_loslist{
+
+}
+
+ul.rs_loslist li{
+	text-decoration: none;
+	list-style: none;
+	margin: 0 0 0 0;
+}
+
+ul.rs_loslist div.rs_loslistelement{
+	margin-bottom: 40px;
+	width: 100%;
+	overflow: hidden;
+	background-color: #F5EFEF;
+	border-radius: 5px;
+	text-align: center;
+	position: relative;
+}
+
+div.rs_loslistelement img {
+	height: 150px;
+	max-width: 200px;
+}
+
+div.rs_loslistelement p.rs_title {
+	margin-top: 10px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+}
+
+div.rs_loslistelement p.rs_url {
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+div.rs_loslistelement_left {
+	float: left;
+	width: 30%;
+}
+
+div.rs_loslistelement_right {
+	float: right;
+	width: 70%;
+}
+
+ul.rs_loslist div.rating_wrapper {
+	width: 100%;
+	text-align: center;
+	padding: 30px;
+	margin-top: 25px;
+	margin-left: 10px;
+	height: 100px;
+}
+
+div.validEdrResourceWrapper{
+	position: relative;
+	bottom: -20px;
+	right: 15px;
+	text-align: right;
+	margin-left: 100px;
+	color: #2B4923;
+	font-size: 14px;
+}
+
+div.validEdrResourceWrapper.novalid  {
+	color: #6B1425;
+}
+
+ul.rs_loslist2 div.survey_block {
+	font-size: 15px;
+	margin-bottom: 5px !important;
+	cursor: pointer;
+}
+
+ul.rs_loslist2 .survey_question_title{
+	border-radius: 15px 15px 0px 0px;
+}
+
+ul.rs_loslist2 p.survey_question_title {
+	margin: 0px;
+}
+
+ul.rs_loslist2 div.rs_loslistelement{
+	margin-bottom: 5px !important;
+	border-radius: 0px 0px 15px 15px;
+}
+
+ul.rs_loslist2 img {
+	height: 75px;
+	max-width: 100px;
+}
+
+ul.rs_loslist2 div.rs_loslistelement p.rs_url{
+	margin-top: 25px !important;
+}
