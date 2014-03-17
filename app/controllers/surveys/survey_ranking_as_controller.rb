@@ -71,20 +71,44 @@ class Surveys::SurveyRankingAsController < ApplicationController
 		@los = Hash[@los.to_a.shuffle]
 
 		respond_to do |format|
-      		format.html
+      		format.html{
+      			render :layout => "application_without_menu"
+      		} 
     	end
 	end
 
 	def create
-		@ranking = Surveys::SurveyRankingA.new(params[:surveys_survey_ranking_as])
+		if params[:ranking].blank? or params[:surveys_survey_ranking_as].blank?
+			flash.now[:alert] = "La encuesta está incompleta"
+			render action: "new"
+			return
+		end
+		
+		results = Hash.new
+		results["los"] = Hash.new
+		results["ranking"] = JSON(params[:ranking])
+
+		params[:surveys_survey_ranking_as].each do |key, value|
+			results["los"][key] = Hash.new
+			results["los"][key]["score"] = value
+			results["ranking"].each_with_index do |loid,index|
+				if loid === key.to_i
+					results["los"][key]["ranking"] = index+1
+				end
+			end
+		end
+
+		# binding.pry
+		results = results.to_json
+		@ranking = Surveys::SurveyRankingA.new({:results => results})
 
 		respond_to do |format|
 			format.any {
-				if @ranking.save 
-					flash[:notice] = 'Your answer was successfully stored.'
-					redirect_to "/surveys/completed"
+				if @ranking.save
+					flash.now[:notice] = 'Tu respuesta se ha guardado correctamente. Muchas gracias por tu colaboración.'
+					render "/surveys/completed", :layout => "application_without_menu"
 				else
-					flash.now[:alert] = @loric.errors.full_messages
+					flash.now[:alert] = @ranking.errors.full_messages
 					render action: "new"
 				end
 			}

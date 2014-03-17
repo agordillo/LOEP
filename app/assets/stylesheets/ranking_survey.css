@@ -59,21 +59,25 @@ div.validEdrResourceWrapper{
 	right: 15px;
 	text-align: right;
 	margin-left: 100px;
-	color: #2B4923;
 	font-size: 14px;
+	opacity: 0.7;
+}
+
+div.validEdrResourceWrapper.valid  {
+	color: #34831F;
 }
 
 div.validEdrResourceWrapper.novalid  {
-	color: #6B1425;
+	color: #C40026;
 }
 
 ul.rs_loslist2 div.survey_block {
-	font-size: 15px;
 	margin-bottom: 5px !important;
 	cursor: pointer;
 }
 
 ul.rs_loslist2 .survey_question_title{
+	font-size: 16px;
 	border-radius: 15px 15px 0px 0px;
 }
 
@@ -87,10 +91,17 @@ ul.rs_loslist2 div.rs_loslistelement{
 }
 
 ul.rs_loslist2 img {
-	height: 75px;
-	max-width: 100px;
+	height: 65px;
+	max-width: 88px;
 }
 
 ul.rs_loslist2 div.rs_loslistelement p.rs_url{
 	margin-top: 25px !important;
+}
+
+div.rs_loslist2titlewrapper{
+	width: 100%;
+	text-align: center;
+	font-size: 18px;
+	color: #999;
 }
