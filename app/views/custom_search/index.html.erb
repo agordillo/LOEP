@@ -1,0 +1,9 @@
+<h1 class="loep_title"> LOEP Custom Search</h1>
+
+<p>&nbsp;</p>
+
+<%if !@los.nil? %>
+	<h1 class="loep_title"> Learning Objects </h1>
+	<%= render '/los/index', :showTools => true %>
+	<p class="link_wrapper"><%= render '/los/downloadlink' %></p>
+<%end%>

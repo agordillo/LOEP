@@ -51,6 +51,8 @@ LOEP::Application.routes.draw do
   match '/surveys' => 'surveys#index'
   match '/generateToken' => 'application#generateToken'
 
+  match '/custom' => 'customSearch#index'
+
   #LOEP API
   namespace :api do
     namespace :v1 do
