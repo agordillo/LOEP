@@ -54,4 +54,14 @@ class Surveys::SurveyRankingAsController < ApplicationController
 	    end
 	end
 
+	#Results
+	def index
+		if current_user.nil? or !current_user.isAdmin?
+			redirect_to home_path
+			return
+		end
+		@los = Surveys::SurveyRankingA.getRanking
+		render "results"
+	end
+
 end

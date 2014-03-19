@@ -23,6 +23,9 @@
 		<h2>Learning Object Sorting (Clasificación de Objetos de Aprendizaje)<span class="flagInSurveyBlockTitle"><img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/></span></h2>
 		<p> En la siguiente encuesta se le presentará una lista de objetos de aprendizaje, y se le solicitará en primer lugar que otorgue una puntuación a cada uno de ellos. En segundo lugar, tendrá que ordenar estos objetos de mejor a peor en función de su calidad.</p>
 		<a href="<%=new_surveys_survey_ranking_a_path%>"><button class="loep_button"><span class="glyphicon glyphicon-edit"></span>&nbsp; Rellenar encuesta</button></a>
+		<%if iamAdmin? %>
+		<span>&nbsp;</span><a href="<%=surveys_survey_ranking_as_path%>"><button class="loep_button"><span class="glyphicon glyphicon-list"></span>&nbsp; Ver resultados</button></a>
+		<%end%>
 	</div>
 	<%end%>
 	

@@ -1,0 +1,42 @@
+<div class="loep_form_wrapper">
+  <h2>Clasificación de Objetos de Aprendizaje (Resultados)</h1>
+  <p class="form_before_button">&nbsp;</p>
+  <p>
+    Clasificación y puntuaciones de los 12 objetos de aprendizaje.
+  </p>
+  <p> Número total de respuestas: <%=Surveys::SurveyRankingA.count%></p>
+  <p> Última respuesta: <%=Surveys::SurveyRankingA.last.created_at.strftime("%d/%m/%Y %H:%M %P")%></p>
+  
+  <p>&nbsp;</p>
+
+  <ul class="rs_loslist rs_loslist1">
+    <%index=1%>
+    <%@los.each do |key, array|%>
+      <li>
+       <div class="survey_block">
+        <p class="survey_question_title"><%=index.to_s%>. <%=array["title"]%></p>
+
+        <div class="rs_loslistelement">
+        <a href="<%=array["url"]%>" target="_blank">
+          <div class="rs_loslistelement_left">
+            <img src="<%=array["avatar"]%>"/>
+            <p class="rs_url"><%=array["url"]%></p>
+          </div>
+        </a>
+        <div class="rs_loslistelement_right">
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+          <p>Average Ranking: <%=array["avgranking"]%></p>
+          <p>Average Score: <%=array["avgscore"]%></p>
+        </div>
+      </div>
+      </li>
+      <%index=index+1%>
+    <%end%>
+  </ul>
+</div>
+
+</br></br>
+<div class="loep_form_wrapper">
+  <%= link_to 'Back', :back %>
+</div>
