@@ -23,3 +23,4 @@ Gemfile~
 .gitignore~
 README.md~
 /dumps/*
+config/deploy.rb
