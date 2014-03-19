@@ -36,11 +36,6 @@ ActiveRecord::Schema.define(:version => 20140317121400) do
     t.integer  "suitability"
   end
 
-  create_table "assignments_evmethods", :id => false, :force => true do |t|
-    t.integer "assignment_id"
-    t.integer "evmethod_id"
-  end
-
   create_table "evaluations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "assignment_id"
@@ -147,11 +142,6 @@ ActiveRecord::Schema.define(:version => 20140317121400) do
     t.boolean  "allow_multiple_evaluations", :default => false
   end
 
-  create_table "evmethods_assignments", :id => false, :force => true do |t|
-    t.integer "evmethod_id"
-    t.integer "assignment_id"
-  end
-
   create_table "evmethods_metrics", :id => false, :force => true do |t|
     t.integer "evmethod_id"
     t.integer "metric_id"
@@ -243,6 +233,12 @@ ActiveRecord::Schema.define(:version => 20140317121400) do
     t.integer  "lo_id"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "survey_ranking_a", :force => true do |t|
+    t.text     "results"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "survey_ranking_as", :force => true do |t|
