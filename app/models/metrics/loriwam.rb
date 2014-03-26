@@ -40,6 +40,20 @@ class Metrics::LORIWAM < Metric
     loScore = ([[loScore,0].max,10].min).round(2)
   end
 
+  #Optional
+  def self.getScoreForEvaluation(evaluation)
+    loScore = 0
+    9.times do |i|
+      iScore = evaluation.send("item"+(i+1).to_s)
+      if iScore.nil?
+        return nil
+      end
+      loScore = loScore + ((iScore-1) * itemWeights[i])
+    end
+    loScore = 5/2.to_f * loScore.to_f
+    loScore = ([[loScore,0].max,10].min).round(2)
+  end
+
   def self.itemWeights
     [
       BigDecimal(0.1724,4),

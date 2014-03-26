@@ -2,6 +2,7 @@
 <% showTools ||= false %>
 <% showToolActions = (local_assigns[:showToolActions].nil?) ? showTools : local_assigns[:showToolActions] %>
 <% displayedEntries ||= 'auto' %>
+<% download ||= false %>
 
 <% rL = @los.length %>
 <% if rL === 0 %>
@@ -85,6 +86,9 @@
   </table>
 <% end %>
 
+<% if download and @los.length > 0%>
+  <p class="link_wrapper"><%= render '/los/downloadlink' %></p>
+<% end %>
 
 <% if showTools %>
 

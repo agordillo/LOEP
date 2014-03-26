@@ -60,6 +60,27 @@ class Evaluation < ActiveRecord::Base
     Utils.getReadableDate(self.completed_at)
   end
 
+  #######################
+  # Get extended Evaluation Data
+  #######################
+
+  def extended_attributes
+    attrs = self.attributes
+    attrs["Reviewer"] = self.user.name
+    attrs["loName"] = self.lo.name
+    attrs["evMethodName"] = self.evmethod.name
+    
+    Metric.all.select { |m| m.evmethods == [self.evmethod] }.each do |m|
+      #Metrics that only use the ev method.
+      #In this case, the scores of the metrics may be included in the evaluations
+      if m.class.methods.include? :getScoreForEvaluation
+        attrs[m.name] = m.class.getScoreForEvaluation(self)
+      end
+    end
+    
+    attrs
+  end
+
 
   #Path Methods
 

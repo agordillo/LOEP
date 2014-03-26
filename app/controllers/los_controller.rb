@@ -414,15 +414,35 @@ class LosController < ApplicationController
     authorize! :show, @los
   end
 
-  #Render XLSX
   def download
-    @los = Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
+    los = Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
     respond_to do |format|
         format.json {
-            render json: @los.map{ |lo| lo.extended_attributes }, :filename => "LOs.json", :type => "application/json"
+            render json: los.map{ |lo| lo.extended_attributes }, :filename => "LOs.json", :type => "application/json"
         }
         format.xlsx {
+            @resources = los
+            @resourceName = "LOs"
             render :xlsx => "index", :filename => "LOs.xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
+        }
+    end
+  end
+
+  #Download evaluations
+  def downloadevs
+    @los = Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
+    
+    evaluations = []
+    @los.map{|lo| lo.evaluations.map{|ev| evaluations.push(ev)} }
+    
+    respond_to do |format|
+        format.json {
+            render json: evaluations.map{ |ev| ev.extended_attributes }, :filename => "LOEvaluations.json", :type => "application/json"
+        }
+        format.xlsx {
+            @resources = evaluations
+            @resourceName = "LOEvaluations"
+            render :xlsx => "index", :filename => "LOEvaluations.xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
         }
     end
   end

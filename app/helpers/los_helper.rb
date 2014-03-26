@@ -4,6 +4,16 @@ module LosHelper
 	end
 
 	def download_path(los,format)
+		return "/los/download." + format + "?lo_ids="+getLoIds(los)
+	end
+
+	def download_evs_path(los,format)
+		return "/los/downloadevs." + format + "?lo_ids="+getLoIds(los)
+	end
+
+	private
+
+	def getLoIds(los)
 		if los.is_a? ActiveRecord::Relation
 			los = los.all
 		end
@@ -20,7 +30,7 @@ module LosHelper
 				lo_ids = lo_ids + "," + lo.id.to_s
 			end
 		end
-
-		return "/los/download." + format + "?lo_ids="+lo_ids
+		lo_ids
 	end
+
 end

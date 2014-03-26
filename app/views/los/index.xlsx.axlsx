@@ -20,15 +20,15 @@ even_row_style = wb.styles.add_style :bg_color => "FFF",
 
 #WorkSheet content
 
-wb.add_worksheet(:name => "LOs") do |sheet|
+wb.add_worksheet(:name => @resourceName) do |sheet|
 
-	if @los.length < 1
+	if @resources.length < 1
 		return
 	end
 
 	rowContents = [];
-	rowContents[0] = @los.first.extended_attributes.keys
-	@los.each_with_index do |lo,index|
+	rowContents[0] = @resources.first.extended_attributes.keys
+	@resources.each_with_index do |lo,index|
 		rowContents[index+1] = lo.extended_attributes.values
 	end
 
