@@ -1,0 +1,91 @@
+<%= render 'application/rgraph' %>
+<p class="space-large"></p>
+
+<div class="graphWrapper">
+	<canvas id="graphCanvas">[No canvas support]</canvas>
+</div>
+
+<script>
+	$(document).ready(function(){
+		var canvas = $("#graphCanvas");
+		var canvasContainer = $(canvas).parent();
+
+		var newWidth = $(canvasContainer).width()*0.8;
+		var newHeight = newWidth * 4/6;
+		$(canvas).attr("width",newWidth);
+		$(canvas).attr("height",newHeight);
+		$(canvas).width(newWidth);
+		$(canvas).height(newHeight);
+
+		drawCanvas();
+	});
+
+	function construct(constructor, args) {
+	    function F(){
+	        return constructor.apply(this, args);
+	    };
+	    F.prototype = constructor.prototype;
+	    return new F();
+	};
+
+	var colors = ["green","red","blue","yellow","grey","orange"];
+	var cL = colors.length;
+
+	var getColor = function(i){
+		return colors[i - cL*(Math.floor(i/cL))];
+	};
+
+	var getGradient = function(i){
+		return 'Gradient(white:'+getColor(i)+':'+getColor(i)+')';
+	};
+
+	var strLMax = 40;
+	var shortString = function(str){
+		var strL = str.length;
+		if(strL>strLMax){
+			str = str.substring(0,strLMax-3)+"...";
+		}
+		return str;
+	};
+
+	var drawCanvas = function(){
+		RGraphRadarArgs = ['graphCanvas'];
+		RGraphRadarKeyArgs = ['key', ["Flashcards","Virtual Tours","Enriched Videos","Interactive Presentations"]];
+		RGraphRadarColorsArgs = ['colors',["green","red","blue","yellow","grey","orange"]];
+		RGraphRadarKeyColorsArgs = ['key.colors',["green","red","blue","yellow","grey","orange"]];
+		
+		var graphLabels = [];
+		graphLabels.push('Content Quality');
+		graphLabels.push('Learning Goal Alignment');
+		graphLabels.push('Feedback and Adaptation');
+		graphLabels.push('Motivation');
+		graphLabels.push('Presentation Design');
+		graphLabels.push('Interaction Usability');
+		graphLabels.push('Accessibility');
+		graphLabels.push('Reusability');
+		graphLabels.push('Standards Compliance');
+
+	    var radar = new RGraph.Radar('graphCanvas',
+	    	[7.61,7.14,5.51,7.27,7.09,6.79,6.51,6.16,8.53],
+	    	[7.21,7.46,4.02,6.46,5.79,6.87,7.33,7.94,8.62],
+	    	[8.69,8.22,6.34,7.53,6.97,8.04,5.98,6.91,8.99],
+	    	[6.56,6.52,4.21,6.03,5.47,5.76,5.89,5.68,8.61]);
+	    var keysLength = RGraphRadarKeyArgs[1].length;
+	    if(keysLength > 0){
+	    	radar.Set.apply(this,RGraphRadarKeyArgs);
+	    	radar.Set('key.interactive', true)
+	    	radar.Set.apply(this,RGraphRadarKeyColorsArgs);
+	    }
+	    radar.Set.apply(this,RGraphRadarColorsArgs);
+	    radar.Set('labels', graphLabels)
+			.Set('labels.axes', '')
+			.Set('background.circles.poly', true)
+			.Set('background.circles.spacing', 30)
+			.Set('colors.alpha', 0.3)
+			.Set('axes.color', 'rgba(0,0,0,0)')
+			.Set('highlights', true)
+			.Set('gutter.top', 35)
+			.Set('strokestyle', 'black')
+			.Draw();
+	};
+</script>

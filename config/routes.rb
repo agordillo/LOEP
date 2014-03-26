@@ -18,7 +18,7 @@ LOEP::Application.routes.draw do
   match '/assignments/remove' => 'assignments#removelist'
   match '/automatic_assignments/new' => 'assignments#new_automatic', via: [:get]
   match '/automatic_assignments' => 'assignments#create_automatic', via: [:post]
-  
+
   #EvMethods
   namespace :evaluations do
     resources :loris
@@ -60,6 +60,9 @@ LOEP::Application.routes.draw do
       resources :los
     end
   end
+
+  #Special pages used for research
+  match '/slidesetsstats' => 'application#slidesetsstats', via: [:get]
 
   #Wildcard route
   match '*path' => 'application#page_not_found'
