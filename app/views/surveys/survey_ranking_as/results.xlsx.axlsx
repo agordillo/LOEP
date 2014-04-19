@@ -28,8 +28,8 @@ wb.add_worksheet(:name => @resourceName) do |sheet|
 
 	rowContents = [];
 	rowContents[0] = @resources.first.extended_attributes.keys
-	@resources.each_with_index do |lo,index|
-		rowContents[index+1] = lo.extended_attributes.values
+	@resources.each_with_index do |result,index|
+		rowContents[index+1] = result.extended_attributes.values
 	end
 
 	rowContents.each_with_index do |rowContent,index|
