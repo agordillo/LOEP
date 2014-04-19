@@ -1,7 +1,6 @@
 # encoding: UTF-8
 
 class Surveys::SurveyRankingAsController < ApplicationController
-
 	def new
 		@ranking = Surveys::SurveyRankingA.new
 
@@ -57,11 +56,24 @@ class Surveys::SurveyRankingAsController < ApplicationController
 	#Results
 	def index
 		if current_user.nil? or !current_user.isAdmin?
-			redirect_to home_path
-			return
+			return redirect_to home_path
 		end
+		@results = Surveys::SurveyRankingA.all
 		@los = Surveys::SurveyRankingA.getRanking
-		render "results"
+
+		respond_to do |format|
+		  format.html {
+		  	render "results"
+		  }
+		  format.xlsx {
+		  	@resources = @results
+            @resourceName = "SurveyRankingResults"
+		    render :xlsx => "results", :filename => "SurveyRankingA_Results.xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
+		  }
+		  format.json { 
+		    format.json { render json: @results.map{ |r| r.getAttributes } }
+		  }
+		end
 	end
 
 end

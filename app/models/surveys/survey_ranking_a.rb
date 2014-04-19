@@ -177,4 +177,15 @@ class Surveys::SurveyRankingA < ActiveRecord::Base
   	getRanking.map{ |lo| lo[0] }
   end
 
+  def extended_attributes
+  	attrs = Hash.new
+  	surveyResult = JSON(self.results)["los"]
+  	12.times do |i|
+  		i = i+1
+  		attrs["Score_LO" + i.to_s] = surveyResult[i.to_s]["score"]
+  		attrs["Ranking_LO" + i.to_s] = surveyResult[i.to_s]["ranking"]
+  	end
+  	attrs
+  end
+
 end
