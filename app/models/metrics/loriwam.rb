@@ -1,5 +1,4 @@
-#Weighted arithmetic mean of LORI items.
-#Use the weights obtained from the LORI survey
+#Weighted Arithmetic Mean of LORI items.
 
 class Metrics::LORIWAM < Metric
   # this is for Metrics with type=LORIWAM
