@@ -15,4 +15,4 @@ end
 
 #Configure the metrics you want to use in your LOEP instance
 #See app/models/metrics for more possible metrics to add
-LOEP::Application.config.metrics = [Metrics::LORIAM, Metrics::LORIPWAM]
+LOEP::Application.config.metrics = [Metrics::LORIAM, Metrics::LORIWAM]
