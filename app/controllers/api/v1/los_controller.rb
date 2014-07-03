@@ -21,12 +21,20 @@ class Api::V1::LosController < Api::V1::BaseController
 
   # GET /api/v1/los/:id
   def show
-    lo = Lo.find(params[:id])
+    unless !params[:use_id_loep].nil?
+      lo = current_app.los.find_by_id_repository(params[:id])
+    else
+      lo = Lo.find(params[:id])
+    end
     authorize! :show, lo
 
     respond_to do |format|
       format.any {
-        render json: lo.extended_attributes
+        if !lo.nil?
+          render json: lo.extended_attributes
+        else
+          render json: {"error" => "Learning Object not found"}
+        end
       }
     end  
   end
