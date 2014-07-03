@@ -1,5 +1,7 @@
 # Be sure to restart your server when you modify this file.
 
+LOEP::Application.config.version = "1.0.0"
+
 #Secret key for verifying the integrity of signed cookies.
 LOEP::Application.config.secret_token = LOEP::Application.config.APP_CONFIG['secret_token']
 
