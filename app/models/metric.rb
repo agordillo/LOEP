@@ -10,4 +10,8 @@ class Metric < ActiveRecord::Base
   has_many :scores, :dependent => :destroy
   has_and_belongs_to_many :evmethods
   
+  def self.allc
+  	Metric.where("type in (?)",LOEP::Application.config.metrics.map{|m| m.name})
+  end
+
 end

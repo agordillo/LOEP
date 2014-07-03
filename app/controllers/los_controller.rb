@@ -33,9 +33,11 @@ class LosController < ApplicationController
     @los = Lo.all
     authorize! :index, @los
 
-    @metrics = Metric.all
+    @metrics = Metric.allc
 
-    @los = Lo.orderByScore(@los,Metric.find_by_type("Metrics::LORIAM"))
+    if @metrics.length > 0
+      @los = Lo.orderByScore(@los,@metrics[0])
+    end
 
     respond_to do |format|
       format.html
@@ -226,7 +228,7 @@ class LosController < ApplicationController
 
     #Get the average score
     @scores = []
-    Metric.all.each do |m|
+    Metric.allc.each do |m|
       metricScores = @los.map{|lo| lo.scores.select{|s| s.metric_id==m.id}}.map{|sA| sA.first}
 
       if metricScores.empty? or !metricScores.select{|ms| ms.nil? }.empty?
@@ -261,9 +263,12 @@ class LosController < ApplicationController
     @los = Lo.find(params[:lo_ids].split(","));
     authorize! :show, @los
 
-    @metrics = Metric.all
-    @los = Lo.orderByScore(@los,Metric.find_by_type("Metrics::LORIAM"))
+    @metrics = Metric.allc
 
+    if @metrics.length > 0
+      @los = Lo.orderByScore(@los,@metrics[0])
+    end
+    
     @evmethods = []
     @los.each do |lo|
       if lo.getScoreEvmethods.empty?

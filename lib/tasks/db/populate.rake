@@ -9,7 +9,7 @@ namespace :db do
   		fail "Prevent populate in production without empty database"
   	end
 
-  	if Rails.env == "development"
+	if Rails.env == "development"
 		#Removing data
 		Role.delete_all
 		Language.delete_all
@@ -223,7 +223,7 @@ namespace :db do
 	evA.save(:validate => false)
 
 	#Create Scores
-	Metric.all.each do |m|
+	Metric.allc.each do |m|
 		Lo.all.each do |lo|
 			s = Score.new
 			s.metric_id = m.id

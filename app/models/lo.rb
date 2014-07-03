@@ -92,7 +92,7 @@ class Lo < ActiveRecord::Base
   #Get the evMethods that have been used to score this LO
   def getScoreEvmethods
     scoreEvmethods = []
-    self.scores.map{|s| s.metric}.uniq.map{|m| m.evmethods.map{|ev| scoreEvmethods.push(ev)}}
+    self.scoresc.map{|s| s.metric}.uniq.map{|m| m.evmethods.map{|ev| scoreEvmethods.push(ev)}}
     scoreEvmethods.uniq
   end
 
@@ -150,6 +150,11 @@ class Lo < ActiveRecord::Base
     self.scores.where(:metric_id => metric.id).first
   end
 
+  #Get scores filtering the ones from disabled Metrics
+  def scoresc
+    self.scores.where("metric_id in (?)", Metric.allc.map{|m| m.id})
+  end
+
 
   #######################
   # Get extended LO Data
@@ -192,7 +197,7 @@ class Lo < ActiveRecord::Base
       end
     end
 
-    Metric.all.each do |metric|
+    Metric.allc.each do |metric|
       attrKey = "Metric Score: " + metric.name
 
       score = self.scores.where(:metric_id => metric.id).first

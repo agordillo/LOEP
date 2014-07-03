@@ -70,7 +70,7 @@ class Evaluation < ActiveRecord::Base
     attrs["loName"] = self.lo.name
     attrs["evMethodName"] = self.evmethod.name
     
-    Metric.all.select { |m| m.evmethods == [self.evmethod] }.each do |m|
+    Metric.allc.select { |m| m.evmethods == [self.evmethod] }.each do |m|
       #Metrics that only use the ev method.
       #In this case, the scores of the metrics may be included in the evaluations
       if m.class.methods.include? :getScoreForEvaluation
@@ -148,7 +148,7 @@ class Evaluation < ActiveRecord::Base
     #1. Get EvMethod of the Evaluation
     #2. Get all the Metrics that used this EvMethod
     #3. For each Metric, create/update the scores of the LO.
-    metrics = Metric.all.select { |m| m.evmethods.include? self.evmethod }
+    metrics = Metric.allc.select { |m| m.evmethods.include? self.evmethod }
     metrics.each do |m|
       scores = self.lo.scores.where(:metric_id=>m.id)
       if (scores.length > 0)

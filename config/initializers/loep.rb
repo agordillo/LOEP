@@ -10,3 +10,7 @@ Recaptcha.configure do |config|
     config.public_key  = LOEP::Application.config.APP_CONFIG['recaptcha']['public_key']
     config.private_key = LOEP::Application.config.APP_CONFIG['recaptcha']['private_key']
 end
+
+#Configure the metrics you want to use in your LOEP instance
+#See app/models/metrics for more possible metrics to add
+LOEP::Application.config.metrics = [Metrics::LORIAM, Metrics::LORIPWAM]

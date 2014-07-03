@@ -102,7 +102,7 @@ namespace :fixes do
 	task :updateScores => :environment do |t, args|
 		puts "Updating scores"
 		Score.delete_all
-		Metric.all.each do |m|
+		Metric.allc.each do |m|
 			Lo.all.each do |lo|
 				s = Score.new
 				s.metric_id = m.id
