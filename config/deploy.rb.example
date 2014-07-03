@@ -1,7 +1,7 @@
 require 'bundler/capistrano' # for bundler support
 
 set :application, "LOEP"
-set :repository,  "git@github.com:loepRepository.git"
+set :repository,  "git@github.com:agordillo/LOEP.git"
 
 set :user, 'yourUser'
 set :deploy_to, "/home/#{ user }/#{ application }"
@@ -35,12 +35,9 @@ namespace :deploy do
   end
 
   task :link_files do
-    puts "LINK FILES DO"
-    run "ln -s #{ shared_path}/secret_token.rb #{ release_path }/config/initializers/secret_token.rb"
-    run "rm  #{ release_path }/config/initializers/session_store.rb"
-    run "ln -s #{ shared_path}/secret_token.rb #{ release_path }/config/initializers/session_store.rb"
-    run "ln -s #{ shared_path}/recaptcha.rb #{ release_path }/config/initializers/recaptcha.rb"
+    puts "Link Files do..."
     run "ln -s #{ shared_path}/database.yml #{ release_path }/config/database.yml"
+    run "ln -s #{ shared_path}/application_config.yml #{ release_path }/config/application_config.yml"   
   end
 
   task :precompile_assets do

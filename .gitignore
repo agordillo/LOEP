@@ -16,11 +16,10 @@ capybara-*.html
 rerun.txt
 pickle-email-*.html
 .project
-config/initializers/secret_token.rb
-config/initializers/recaptcha.rb
-config/database.yml
 Gemfile~
 .gitignore~
 README.md~
 /dumps/*
+config/database.yml
 config/deploy.rb
+config/application_config.yml

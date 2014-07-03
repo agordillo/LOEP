@@ -4,13 +4,13 @@ Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
-  config.secret_key = 'cd979eabaa92cb43435c2dcea7273bccfe1aefe795ca3015d44d01fe6c101e0664fe58fe3191396bca54309031851f7551164f522de202b234c20304851efa10'
+  config.secret_key = LOEP::Application.config.APP_CONFIG['secret_token']
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'norepy@loep.global.dit.upm.es'
+  config.mailer_sender = LOEP::Application.config.APP_CONFIG['no_reply_mail']
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'

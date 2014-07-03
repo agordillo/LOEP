@@ -1,0 +1,26 @@
+#Copy this file to application_config.yml
+#Configure here all the variables of your LOEP instance.
+
+development:
+  domain: "localhost:8080"
+  no_reply_mail: "no-reply@loep.global.dit.upm.es"
+  main_mail: "no-reply@loep.global.dit.upm.es"
+  # Your secret key for verifying the integrity of signed cookies.
+  # If you change this key, all old signed cookies will become invalid!
+  # Make sure the secret is at least 30 characters and all random,
+  # no regular words or you'll be exposed to dictionary attacks.
+  # Execute 'bundle exec rake secret' to generate a new secret_token and copy it here
+  secret_token: ""
+  #Get your own keys from https://www.google.com/recaptcha
+  recaptcha:
+    public_key: ""
+    private_key: ""
+
+production:
+  domain: "loep.global.dit.upm.es"
+  no_reply_mail: "no-reply@loep.global.dit.upm.es"
+  main_mail: "no-reply@loep.global.dit.upm.es"
+  secret_token: ""
+  recaptcha:
+    public_key: ""
+    private_key: ""
