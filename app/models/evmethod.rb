@@ -18,6 +18,10 @@ class Evmethod < ActiveRecord::Base
     :case_sensitive => false
   }
 
+  def self.allc
+    Evmethod.where("name in (?)",LOEP::Application.config.evmethod_names)
+  end
+
   #############
   #Paths
   #############

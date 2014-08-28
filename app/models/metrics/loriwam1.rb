@@ -1,4 +1,4 @@
-#Weighted arithmetic mean of LORI items.
+#LORI WAM with collected weights (LORI WAM CW)
 #Use the weights obtained from the LORI survey
 
 class Metrics::LORIWAM1 < Metrics::LORIWAM
@@ -9,7 +9,6 @@ class Metrics::LORIWAM1 < Metrics::LORIWAM
   end
 
   def self.getItemWeightsFromSurvey
-
     if Surveys::Loric.count == 0
       return nil
     end

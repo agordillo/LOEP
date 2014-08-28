@@ -1,4 +1,4 @@
-#LORI Root Square Metric
+#LORI Square Root Metric
 
 class Metrics::LORISQRT < Metrics::LORIORT
   #this is for Metrics with type=LORISQRT

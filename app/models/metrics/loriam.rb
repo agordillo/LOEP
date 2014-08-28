@@ -1,4 +1,5 @@
-#Arithmetic mean of LORI items.
+#LORI Arithmetic Mean (LORI AM)
+#Arithmetic mean of all LORI items.
 #All items have the same importance (same weight)
 
 class Metrics::LORIAM < Metrics::LORIWAM

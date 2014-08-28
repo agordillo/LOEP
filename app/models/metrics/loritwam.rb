@@ -1,4 +1,5 @@
-#Technological Weighted Arithmetic Mean of LORI items.
+#LORI Technological WAM
+#Weighted Arithmetic Mean of LORI items related to technology.
 
 class Metrics::LORITWAM < Metrics::LORIWAM
   # this is for Metrics with type=LORITWAM

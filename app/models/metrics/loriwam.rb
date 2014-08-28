@@ -1,3 +1,4 @@
+#LORI Weighted Arithmetic Mean (LORI WAM)
 #Weighted Arithmetic Mean of LORI items.
 
 class Metrics::LORIWAM < Metric

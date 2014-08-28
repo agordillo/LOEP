@@ -11,7 +11,7 @@ class Metric < ActiveRecord::Base
   has_and_belongs_to_many :evmethods
   
   def self.allc
-  	Metric.where("type in (?)",LOEP::Application.config.metrics.map{|m| m.name})
+    Metric.where("type in (?)",LOEP::Application.config.metrics.map{|m| m.class.name})
   end
 
 end

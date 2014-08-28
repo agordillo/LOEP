@@ -1,4 +1,5 @@
-#Pedagogical Weighted Arithmetic Mean of LORI items.
+#LORI Pedagogical WAM
+#Weighted Arithmetic Mean of Pedagogical LORI items.
 
 class Metrics::LORIPWAM < Metrics::LORIWAM
   # this is for Metrics with type=LORIPWAM

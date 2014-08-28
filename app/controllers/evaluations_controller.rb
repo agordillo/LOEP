@@ -57,6 +57,7 @@ class EvaluationsController < ApplicationController
     authorize! :rshow, @lo
 
     @evmethod = @evaluation.evmethod
+    @evmethodItems = evModel.getItems
 
     if params[:assignment_id]
       @assignment = Assignment.find(params[:assignment_id])
@@ -186,6 +187,7 @@ class EvaluationsController < ApplicationController
     @lo = @evaluation.lo
     authorize! :rshow, @lo
     @evmethod = @evaluation.evmethod
+    @evmethodItems = @evaluation.class.getItems
   end
 
 end

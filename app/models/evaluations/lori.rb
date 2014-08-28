@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Evaluations::Lori < Evaluation
   # this is for Evaluations with evMethod=LORI (type=LoriEvaluation)
   #Override methods here
@@ -11,7 +13,7 @@ class Evaluations::Lori < Evaluation
     super
   end
 
-  def self.getLoriItems
+  def self.getItems
     [
       ["Content Quality","Veracity, accuracy, balanced presentation of ideas, and appropriate level of detail"],
       ["Learning Goal Alignment","Alignment among learning goals, activities, assessments, and learner characteristics"],
@@ -25,17 +27,9 @@ class Evaluations::Lori < Evaluation
     ]
   end
 
-  def self.getItemsArray
-    items = []
-    getLoriItems.length.times do |i|
-      items.push(i+1)
-    end
-    items
-  end
-
   def self.representationData(lo)
     representationData = Hash.new
-    iScores = [];
+    iScores = []
 
     evaluations = lo.evaluations.where(:evmethod_id => Evmethod.find_by_name("LORI v1.5").id)
     if evaluations.length == 0
@@ -60,13 +54,13 @@ class Evaluations::Lori < Evaluation
       representationData["averageScore"] = loScoreForAverage.value.round(2)
     end
     representationData["name"] = lo.name
-    representationData["labels"] = getLoriItems.map{|li| li[0]}   
+    representationData["labels"] = getItems.map{|li| li[0]}   
     representationData
   end
 
   def self.representationDataForLos(los)
     representationData = Hash.new
-    iScores = [nil,nil,nil,nil,nil,nil,nil,nil,nil];
+    iScores = [nil,nil,nil,nil,nil,nil,nil,nil,nil]
 
     los.each do |lo|
       rpdLo = representationData(lo)
@@ -93,7 +87,7 @@ class Evaluations::Lori < Evaluation
 
     representationData["iScores"] = iScores
     representationData["averageScore"] = (representationData["iScores"].sum/representationData["iScores"].size.to_f).round(2)
-    representationData["labels"] = getLoriItems.map{|li| li[0]}
+    representationData["labels"] = getItems.map{|li| li[0]}
     representationData
   end
 
@@ -105,7 +99,7 @@ class Evaluations::Lori < Evaluation
         representationData[lo.id] = rpdLo
       end
     end
-    representationData["labels"] = getLoriItems.map{|li| li[0]}
+    representationData["labels"] = getItems.map{|li| li[0]}
     representationData
   end
 

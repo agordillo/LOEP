@@ -55,6 +55,10 @@ class Evaluation < ActiveRecord::Base
 
   def init
   end
+
+  def self.allc
+    Evaluation.where("evmethod_id in (?)",LOEP::Application.config.evmethods.map{|evmethod| evmethod.id})
+  end
   
   def readable_completed_at
     Utils.getReadableDate(self.completed_at)
@@ -113,6 +117,14 @@ class Evaluation < ActiveRecord::Base
       query = query + 'item' + (nItem.to_s) + ' != -1'
     end
     evaluations.where(query)
+  end
+
+  def self.getItemsArray
+    items = []
+    getItems.length.times do |i|
+      items.push(i+1)
+    end
+    items
   end
 
 

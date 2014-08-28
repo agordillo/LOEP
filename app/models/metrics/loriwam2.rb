@@ -1,5 +1,5 @@
-#Weighted arithmetic mean of LORI items.
-#Use the weights inferred from Evaluations
+#LORI WAM with inferred weights (LORI WAM IW)
+#Use the weights inferred from the Evaluations
 
 class Metrics::LORIWAM2 < Metrics::LORIWAM
   # this is for Metrics with type=LORIWAM2
