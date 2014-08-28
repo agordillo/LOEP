@@ -15,10 +15,10 @@ end
 
 #Configure the evaluation models you want to use in your LOEP instance
 #See app/models/evaluations for more possible methods to add
-LOEP::Application.config.evmethod_names = ["LORI v1.5"]
+LOEP::Application.config.evmethod_names = LOEP::Application.config.APP_CONFIG['evmethods']
 LOEP::Application.config.evmethods = LOEP::Application.config.evmethod_names.map{|n| Evmethod.find_by_name(n)}
 
 #Configure the metrics you want to use in your LOEP instance
 #See app/models/metrics for more possible metrics to add
-LOEP::Application.config.metric_names = ["LORI Arithmetic Mean","LORI Weighted Arithmetic Mean"]
+LOEP::Application.config.metric_names = LOEP::Application.config.APP_CONFIG['metrics']
 LOEP::Application.config.metrics = LOEP::Application.config.metric_names.map{|n| Metric.find_by_name(n)}

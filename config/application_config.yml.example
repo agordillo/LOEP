@@ -9,12 +9,15 @@ development:
   # If you change this key, all old signed cookies will become invalid!
   # Make sure the secret is at least 30 characters and all random,
   # no regular words or you'll be exposed to dictionary attacks.
+  # This token is also used as secret key for Devise to generate the random tokens.
   # Execute 'bundle exec rake secret' to generate a new secret_token and copy it here
   secret_token: ""
   #Get your own keys from https://www.google.com/recaptcha
   recaptcha:
     public_key: ""
     private_key: ""
+  evmethods: ["LORI v1.5"]
+  metrics: ["LORI Arithmetic Mean","LORI Weighted Arithmetic Mean"]
 
 production:
   domain: "loep.global.dit.upm.es"
@@ -24,3 +27,5 @@ production:
   recaptcha:
     public_key: ""
     private_key: ""
+  evmethods: ["LORI v1.5"]
+  metrics: ["LORI Arithmetic Mean","LORI Weighted Arithmetic Mean"]
