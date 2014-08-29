@@ -5,13 +5,13 @@
 
   <%= form_for(@evaluation) do |f| %>
 
-    <%= f.hidden_field :user_id, :value => current_user.id%>
+    <%= f.hidden_field :user_id, :value => current_user.id, :class => "skipValidation" %>
 
     <% if !@assignment.nil? %>
-      <%= f.hidden_field :assignment_id, :value => @assignment.id%>
+      <%= f.hidden_field :assignment_id, :value => @assignment.id, :class => "skipValidation" %>
     <% end %>
-    <%= f.hidden_field :lo_id, :value => @lo.id%>
-    <%= f.hidden_field :evmethod_id, :value => @evmethod.id%>
+    <%= f.hidden_field :lo_id, :value => @lo.id, :class => "skipValidation"%>
+    <%= f.hidden_field :evmethod_id, :value => @evmethod.id, :class => "skipValidation"%>
 
     <%= render 'survey', :f => f , :readonly => readonly %>
 
@@ -106,8 +106,8 @@
     }
 
     var _getFieldsOfForm = function(form){
-      //Ignore submit and hidden fields, and also inputs with 'optionalInput' class
-      var inputs = $(form).find(':input:not(.optionalInput)[type!="submit"][type!="hidden"]');
+      //Ignore submit fields, and also inputs with 'optionalInput' or 'skipValidation' class
+      var inputs = $(form).find(':input:not(.optionalInput):not(.skipValidation)[type!="submit"]');
       var fields = [];
 
       $(inputs).each(function(index,input){

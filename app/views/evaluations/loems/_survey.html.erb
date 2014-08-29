@@ -1,1 +1,53 @@
-<p class="survey_title"> LOEM Evaluation Survey </p>
+<p class="survey_title">LOEM Evaluation Survey</p>
+
+<% @evmethodItems.each_with_index do |item,i| %>
+  <%nItem = i+1%>
+  <%itemName = "item" + nItem.to_s%>
+  <%iValue = @evaluation.send(itemName)%>
+
+  <div class="survey_block" item="<%=nItem%>">
+    <p class="survey_question_title"><%=nItem%>. <%=item[0]%></p>
+    <p class="survey_question_subtitle"><%=item[1]%></p>
+    
+    <div class="rating_wrapper">
+      <div class="rating_wrapper_column1">
+        <%= f.hidden_field itemName, :value => iValue %>
+        <%= render itemName, :f => f , :value=> iValue, :readonly => readonly %>
+      </div>
+
+      <div class="rating_wrapper_column2">
+      	<div class='numberCircle'>
+          <span>
+      		  <% unless iValue.nil? %>
+              <%=iValue %>
+            <% end %>
+          </span>
+      	</div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+
+<div class="survey_block">
+  <p class="survey_question_title">Additional Comments</p>
+  <p class="survey_question_subtitle">Please, write here any further comments that you consider relevant and/or necessary for this evaluation</p>
+  <%= f.text_area :comments, :class=>'loep_input optionalInput', :readonly => readonly ? "true" : nil %>
+</div>
+
+<div class="survey_block">
+  <p class="survey_question_title">Overall Score</p>
+  <p class="survey_question_subtitle">Optionally, you may propose an overall score between 0.0 and 10.0 for this Learning Object.</p>
+  <%= f.number_field :score, :class=>'loep_input optionalInput', :step=> 0.1, :min=>0, :max=>10, :readonly => readonly ? "true" : nil %>
+</div>
+
+<% if !readonly %>
+  <script type="text/javascript">
+    var updateCircleForItem = function(item,value){
+      $("div.survey_block[item='"+item+"'] div.numberCircle span").html(value);
+      if(value.trim()!=""){
+        $("#evaluations_loem_item"+item).attr("value",value);
+      } 
+    };
+  </script>
+<% end %>

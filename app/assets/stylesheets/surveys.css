@@ -140,3 +140,25 @@ div.na-check{
 	float: left;
 }
 
+
+/* Styles added for LOEM form */
+
+div.rating_wrapper_column1 {
+	display: inline-block;
+	width: 80%;
+	margin-top: 13px;
+}
+
+div.rating_wrapper_column2 {
+	display: inline-block;
+	width: 18%;
+	margin-top: 13px;
+	vertical-align: top;
+}
+
+div.rating_wrapper_column1 > p.input_wrapper > span {
+	margin-left: 5px;
+}
+
+p.input_wrappers_header {
+}
