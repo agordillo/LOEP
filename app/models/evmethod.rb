@@ -40,40 +40,53 @@ class Evmethod < ActiveRecord::Base
   end
 
   def root_path
-    (Rails.application.routes.url_helpers.evmethods_path + "/" + self.nickname).downcase
+    Rails.application.routes.url_helpers.evmethods_path + "/" + self.shortname
   end
 
   def documentation_path
-    self.root_path
+    # e.g. '/evmethods/lori/documentation'
+    self.root_path + "/documentation"
   end
 
   def representation_path
-    # puts '/evmethods/lori__v1_5'
-    (self.root_path + "_representation").downcase
+    # e.g. '/evmethods/lori/representation'
+    self.root_path + "/representation"
   end
 
   #############
   # Nick Name for Paths
   #############
 
-  def nickname
-    self.class.getNicknameFromName(self.name)
+  def shortname
+    self.module.split("Evaluations::")[1].downcase
   end
 
-  def self.getNicknameFromName(name)
-    name.split(/\s+/).join("__").gsub(/\./, "_")
+  def self.getShortnameFromName(name)
+    Evmethod.find_by_name("LORI v1.5").shortname
   end
 
-  def self.getNameFromNickname(nickname)
-    nickname.gsub(/\_/, ".").split("__").join(" ")
+  def self.getNameFromShortname(shortname)
+    Evmethod.getEvMethodFromShortname(shortname).name
   end
 
-  def self.getEvMethodFromNickname(nickname)
-    Evmethod.find_by_name(getNameFromNickname(nickname))
+  def self.getEvMethodFromShortname(shortname)
+    Evmethod.find_by_module("Evaluations::" + shortname.capitalize)
   end
 
   def getEvaluationModule
     self.module.constantize
+  end
+
+  #############
+  # Utils
+  #############
+
+  def hasDocumentation
+    lookup_context.template_exists?("documentation", "evmethods/"+self.shortname, true)
+  end
+
+  def hasRepresentation
+    lookup_context.template_exists?("representation", "evmethods/"+self.shortname, true)
   end
 
 end

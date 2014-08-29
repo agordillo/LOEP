@@ -25,6 +25,9 @@ LOEP::Application.routes.draw do
     resources :loems
   end
 
+  match '/evmethods/:id/documentation' => 'evmethods#documentation'
+  match '/evmethods/:id/representation' => 'evmethods#representation'
+
   resources :users
   resources :los
   resources :evaluations
