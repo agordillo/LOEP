@@ -13,11 +13,11 @@ class HomeController < ApplicationController
 
 	def index
 		if current_user.role?("Admin")
-			@assignments = Assignment.all.sort{|b,a| a.compareAssignmentForAdmins(b)}.first(5)
+			@assignments = Assignment.allc.sort{|b,a| a.compareAssignmentForAdmins(b)}.first(5)
 			authorize! :index, @assignments
 			@los = Lo.all(:order => 'created_at DESC').first(5)
 			authorize! :index, @los
-			@evaluations = Evaluation.all(:order => 'updated_at DESC').first(5)
+			@evaluations = Evaluation.allc.order('updated_at DESC').first(5)
 			authorize! :index, @evaluations
 			@users = User.all(:order => 'created_at DESC').first(5)
 			authorize! :index, @users

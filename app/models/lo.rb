@@ -164,7 +164,7 @@ class Lo < ActiveRecord::Base
     attrs = self.attributes
     attrs["keywords"] = self.tag_list.to_s
 
-    Evmethod.all.each do |evmethod|
+    Evmethod.allc.each do |evmethod|
       evMethodAssignments = self.assignments.where(:evmethod_id=>evmethod.id)
 
       attrs["Assignments with " + evmethod.name] = evMethodAssignments.length

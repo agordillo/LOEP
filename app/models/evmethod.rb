@@ -69,13 +69,11 @@ class Evmethod < ActiveRecord::Base
   end
 
   def self.getEvMethodFromNickname(nickname)
-    name = getNameFromNickname(nickname)
-    Evmethod.find_by_name(name)
+    Evmethod.find_by_name(getNameFromNickname(nickname))
   end
 
   def getEvaluationModule
-    klass = self.module
-    evaluationModule = klass.singularize.classify.constantize
+    self.module.constantize
   end
 
 end

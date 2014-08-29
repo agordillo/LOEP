@@ -55,7 +55,7 @@
 				<li class="<%='menu_option_selected' if params[:controller] == 'evmethods'%>">
 					<h3><span class="glyphicon glyphicon-book"></span>Documentation</h3>
 					<ul>
-						<% Evmethod.all.each do |evmethod| %>
+						<% Evmethod.allc.each do |evmethod| %>
 							<li><a href="<%=evmethod.documentation_path%>"><%=evmethod.name%></a></li>
 						<% end %>
 					</ul>

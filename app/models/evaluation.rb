@@ -56,7 +56,7 @@ class Evaluation < ActiveRecord::Base
   def init
   end
 
-  def self.allc
+  def self.allc(params = {})
     Evaluation.where("evmethod_id in (?)",LOEP::Application.config.evmethods.map{|evmethod| evmethod.id})
   end
   

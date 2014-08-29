@@ -47,7 +47,7 @@ class Utils
   end
 
   def self.getEvMethods
-    Evmethod.all.map { |evmethod| [evmethod.name,evmethod.id] }
+    Evmethod.allc.map { |evmethod| [evmethod.name,evmethod.id] }
   end
 
   def self.getOptionsForSelectAssignmentStatus

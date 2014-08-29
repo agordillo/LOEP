@@ -9,7 +9,7 @@ class EvaluationsController < ApplicationController
       return
     end
 
-    @evaluations = Evaluation.all
+    @evaluations = Evaluation.allc
     authorize! :show, @evaluations
 
     respond_to do |format|

@@ -92,7 +92,7 @@ class LosController < ApplicationController
     authorize! :rshow, @assignments
     
     @evmethods = []
-    Evmethod.all.each do |ev|
+    Evmethod.allc.each do |ev|
       if can?(:evaluate, @lo, ev)
         @evmethods << ev
       end  
@@ -282,13 +282,13 @@ class LosController < ApplicationController
 
   #Search
   def searchIndex
-    @evmethods = Evmethod.all
+    @evmethods = Evmethod.allc
     render 'search'
   end
 
   def search
     @params = params
-    @evmethods = Evmethod.all
+    @evmethods = Evmethod.allc
 
     #Search Logic
     #Params Example

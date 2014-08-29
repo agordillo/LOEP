@@ -53,6 +53,10 @@ class Assignment < ActiveRecord::Base
 
 #-------------------------------------------------------------------------------------
 
+  def self.allc(params = {})
+    Assignment.where("evmethod_id in (?)",LOEP::Application.config.evmethods.map{|evmethod| evmethod.id})
+  end
+
   def author
   	unless self.author_id.nil?
   		User.find(self.author_id)
