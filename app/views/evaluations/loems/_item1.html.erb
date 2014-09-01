@@ -1,6 +1,6 @@
 <p class="input_wrapper">
   <input value="1" type="checkbox" class="skipValidation" <%= value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Interactions with the learning object are not very meaningful/gratuitous/minimal and are not significantly better than a text‐based medium.</span>
+  <span>Interactions with the learning object are <b>not very meaningful</b>/gratuitous/minimal and are not significantly better than a text‐based medium.</span>
 </p>
 <p class="input_wrapper">
   <input value="2" type="checkbox" class="skipValidation" <%= value==2 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
@@ -11,26 +11,13 @@
   <span>Interactions with the learning object <b>are meaningful</b> and permit the user to have a much greater understanding of the concept/topic than he/she would have if she used a text based medium.</span>
 </p>
 
-<script type="text/javascript">
-  $(document).ready(function(){
-    <% if !readonly %>
-      $("div.survey_block[item='1'] input[type='checkbox']").on("change", function(e){
-        $("div.survey_block[item='1'] input[type='checkbox']").removeClass("checkboxActive");
-        if($(e.target).is(":checked")){
-          $(e.target).addClass("checkboxActive");
-          var item1Value = $(e.target).attr("value");
-        }
-        $("div.survey_block[item='1'] input[type='checkbox']").not(".checkboxActive").removeAttr("checked");
-
-        if(typeof item1Value == "string"){
-          updateValueForItem(1,item1Value);
-        } else {
-          updateValueForItem(1,undefined);
-        }
-      });
-    <% end %>
-  });
-</script>
+<% if !readonly %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      loadEventsForSimpleItem("1");
+    });
+  </script>
+<% end %>
 
 
 

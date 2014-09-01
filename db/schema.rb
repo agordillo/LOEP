@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140317121400) do
+ActiveRecord::Schema.define(:version => 20140901124007) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -34,11 +34,6 @@ ActiveRecord::Schema.define(:version => 20140317121400) do
     t.datetime "updated_at",                       :null => false
     t.integer  "evmethod_id"
     t.integer  "suitability"
-  end
-
-  create_table "assignments_evmethods", :id => false, :force => true do |t|
-    t.integer "assignment_id"
-    t.integer "evmethod_id"
   end
 
   create_table "evaluations", :force => true do |t|
@@ -137,6 +132,65 @@ ActiveRecord::Schema.define(:version => 20140317121400) do
     t.text     "titem39",       :limit => 16777215
     t.text     "titem40",       :limit => 16777215
     t.decimal  "score",                             :precision => 12, :scale => 6
+    t.integer  "item41"
+    t.integer  "item42"
+    t.integer  "item43"
+    t.integer  "item44"
+    t.integer  "item45"
+    t.integer  "item46"
+    t.integer  "item47"
+    t.integer  "item48"
+    t.integer  "item49"
+    t.integer  "item50"
+    t.integer  "item51"
+    t.integer  "item52"
+    t.integer  "item53"
+    t.integer  "item54"
+    t.integer  "item55"
+    t.integer  "item56"
+    t.integer  "item57"
+    t.integer  "item58"
+    t.integer  "item59"
+    t.integer  "item60"
+    t.integer  "item61"
+    t.integer  "item62"
+    t.integer  "item63"
+    t.integer  "item64"
+    t.integer  "item65"
+    t.integer  "item66"
+    t.integer  "item67"
+    t.integer  "item68"
+    t.integer  "item69"
+    t.integer  "item70"
+    t.integer  "item71"
+    t.integer  "item72"
+    t.integer  "item73"
+    t.integer  "item74"
+    t.integer  "item75"
+    t.integer  "item76"
+    t.integer  "item77"
+    t.integer  "item78"
+    t.integer  "item79"
+    t.integer  "item80"
+    t.integer  "item81"
+    t.integer  "item82"
+    t.integer  "item83"
+    t.integer  "item84"
+    t.integer  "item85"
+    t.integer  "item86"
+    t.integer  "item87"
+    t.integer  "item88"
+    t.integer  "item89"
+    t.integer  "item90"
+    t.integer  "item91"
+    t.integer  "item92"
+    t.integer  "item93"
+    t.integer  "item94"
+    t.integer  "item95"
+    t.integer  "item96"
+    t.integer  "item97"
+    t.integer  "item98"
+    t.integer  "item99"
   end
 
   create_table "evmethods", :force => true do |t|
@@ -145,11 +199,6 @@ ActiveRecord::Schema.define(:version => 20140317121400) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.boolean  "allow_multiple_evaluations", :default => false
-  end
-
-  create_table "evmethods_assignments", :id => false, :force => true do |t|
-    t.integer "evmethod_id"
-    t.integer "assignment_id"
   end
 
   create_table "evmethods_metrics", :id => false, :force => true do |t|
@@ -243,6 +292,12 @@ ActiveRecord::Schema.define(:version => 20140317121400) do
     t.integer  "lo_id"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "survey_ranking_a", :force => true do |t|
+    t.text     "results"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "survey_ranking_as", :force => true do |t|

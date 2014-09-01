@@ -12,7 +12,7 @@
     <div class="rating_wrapper">
       <div class="rating_wrapper_column1">
         <%= f.hidden_field itemName, :value => iValue %>
-        <%= render itemName, :f => f , :value=> iValue, :readonly => readonly %>
+        <%= render itemName, :f => f , :item => nItem, :value=> iValue, :readonly => readonly %>
       </div>
 
       <div class="rating_wrapper_column2">
@@ -44,6 +44,8 @@
 
 <% if !readonly %>
   <script type="text/javascript">
+
+    //Update the value for an specific main item.
     var updateValueForItem = function(item,value){
       var circleDOM = $("div.survey_block[item='"+item+"'] div.numberCircle span");
       if((typeof value == "string")&&(value.trim()!="")){
@@ -57,6 +59,7 @@
       }
     };
 
+    //Handle remove button
     var showRemoveButtonForItem = function(item,show){
       show = (typeof show == "boolean" ? show : true);
       var removeButton = $("div.survey_block[item='"+item+"'] div.remove_item-value");
@@ -69,7 +72,7 @@
         if(isVisible){
           $(removeButton).fadeOut();
         }
-      }      
+      }
     };
 
     var onClickRemoveForItem = function(item){
@@ -81,5 +84,112 @@
       //Remove value
       updateValueForItem(item,undefined);
     };
+
+    //Show remove button on init
+    $(document).ready(function(){
+      $("div.rating_wrapper_column2 div.numberCircle").each(function(index,div){
+        var itemValue = $(div).find("span").html();
+        if(itemValue.trim()!=""){
+          $(div).parent().find("div.remove_item-value").show().css("display","inline-block");          
+        }
+      });
+    });
+
+    //Save secondary item values for a specific main item.
+    var saveSecondaryItemsForItem = function(item){
+      $("div.survey_block[item='"+item+"'] input[type='checkbox'][nItem]").each(function(index,input){
+        var checkboxNItem = $(input).attr("nItem");
+        if(typeof checkboxNItem != "undefined"){
+          var checkboxNItemValue = 0;
+          if($(input).is(":checked")){
+            checkboxNItemValue = 1;
+          }
+          $("#evaluations_loem_item"+checkboxNItem).attr("value",checkboxNItemValue);
+        }
+      });
+    };
+
+    //Items with simple scale
+    var loadEventsForSimpleItem = function(item){
+      $("div.survey_block[item='"+item+"'] input[type='checkbox']").on("change", function(e){
+        $("div.survey_block[item='"+item+"'] input[type='checkbox']").removeClass("checkboxActive");
+        if($(e.target).is(":checked")){
+          $(e.target).addClass("checkboxActive");
+          var itemValue = $(e.target).attr("value");
+        }
+        $("div.survey_block[item='"+item+"'] input[type='checkbox']").not(".checkboxActive").removeAttr("checked");
+
+        if(typeof itemValue == "string"){
+          updateValueForItem(item,itemValue);
+        } else {
+          updateValueForItem(item,undefined);
+        }
+      });
+    }; 
+
+    //Items with complex scale (score depends on the quantity of checked checkboxes)
+    var loadEventsForComplexItem = function(item){
+
+      var getItemScore = function(item){
+        var itemsChecked = $("div.survey_block[item='"+item+"'] input[type='checkbox']:checked").length;
+        var score = window["getItem"+item+"Score"](itemsChecked);
+        return score.toString();
+      };
+
+      $("div.survey_block[item='"+item+"'] input[type='checkbox']").on("change", function(e){
+        saveSecondaryItemsForItem(item);
+        var itemValue = getItemScore(item);
+        if(typeof itemValue == "string"){
+          $("#evaluations_loem_item"+item).attr("value",itemValue);
+          updateValueForItem(item,itemValue);
+        } else {
+          updateValueForItem(item,undefined);
+        }
+      });
+    };
+
+    //Items with groups
+    var loadEventsForItemWithGroups = function(item){
+      //Checkboxs: Group
+      $("div.survey_block[item='"+item+"'] input[type='checkbox'][group]").on("change", function(e){
+        var group = $(e.target).attr("group");
+        $("div.survey_block[item='"+item+"'] input[type='checkbox'][group='"+group+"']").removeClass("checkboxActive");
+        if($(e.target).is(":checked")){
+          $(e.target).addClass("checkboxActive");
+        }
+        $("div.survey_block[item='"+item+"'] input[type='checkbox'][group='"+group+"']").not(".checkboxActive").removeAttr("checked");
+        if($(e.target).is(":checked")){
+          updateValueForItemWithGroups(item);
+        };
+
+        saveSecondaryItemsForItem(item);
+      });
+    };
+
+    var updateValueForItemWithGroups = function(item){
+      var groups = [];
+      $("div.survey_block[item='"+item+"'] input[type='checkbox'][group]").each(function(index,input){
+        var groupId = $(input).attr("group");
+        if(groups.indexOf(groupId)==-1){
+          groups.push(groupId);
+        }
+      });
+      var nGroups = groups.length;
+      var groupValues = [];
+      for(var i=0; i<nGroups; i++){
+        groupValues.push(parseInt($("div.survey_block[item='"+item+"'] input[type='checkbox'][group='"+groups[i]+"']:checked").attr("value")));
+      }
+
+      for(var j=0; j<nGroups; j++){
+        if(isNaN(groupValues[j])){
+          updateValueForItem(item,undefined);
+          return;
+        }
+      }
+
+      var itemValue = Math.min.apply(null, groupValues);
+      updateValueForItem(item,itemValue.toString());
+    };
+
   </script>
 <% end %>
