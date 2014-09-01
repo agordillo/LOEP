@@ -23,6 +23,7 @@
             <% end %>
           </span>
       	</div>
+        <div class="remove_item-value" onclick='onClickRemoveForItem(<%=nItem%>)'><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
       </div>
     </div>
   </div>
@@ -43,11 +44,42 @@
 
 <% if !readonly %>
   <script type="text/javascript">
-    var updateCircleForItem = function(item,value){
-      $("div.survey_block[item='"+item+"'] div.numberCircle span").html(value);
-      if(value.trim()!=""){
+    var updateValueForItem = function(item,value){
+      var circleDOM = $("div.survey_block[item='"+item+"'] div.numberCircle span");
+      if((typeof value == "string")&&(value.trim()!="")){
+        $(circleDOM).html(value);
         $("#evaluations_loem_item"+item).attr("value",value);
-      } 
+        showRemoveButtonForItem(item);
+      } else {
+        $(circleDOM).html("");
+        $("#evaluations_loem_item"+item).removeAttr("value");
+        showRemoveButtonForItem(item,false);
+      }
+    };
+
+    var showRemoveButtonForItem = function(item,show){
+      show = (typeof show == "boolean" ? show : true);
+      var removeButton = $("div.survey_block[item='"+item+"'] div.remove_item-value");
+      isVisible = $(removeButton).is(":visible");
+      if(show){
+        if(!isVisible){
+          $(removeButton).fadeIn().css("display","inline-block");
+        }
+      } else {
+        if(isVisible){
+          $(removeButton).fadeOut();
+        }
+      }      
+    };
+
+    var onClickRemoveForItem = function(item){
+      var surveyBlock = $("div.survey_block[item='"+item+"']");
+
+      //Disable checkboxs
+      $("div.survey_block[item='"+item+"']").find("input[type='checkbox']").removeAttr("checked");
+
+      //Remove value
+      updateValueForItem(item,undefined);
     };
   </script>
 <% end %>

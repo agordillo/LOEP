@@ -18,7 +18,7 @@
           <a href="<%=ev.documentation_path%>"><span class="glyphicon glyphicon-book"></span> View</a>
         </td>
         <td class="tdcenter">
-          <a href="<%=ev.new_evaluation_path(@lo)%>"><button class="loep_button"><span class="glyphicon glyphicon-star-empty"></span> Evaluate with <%= ev.name %></button></a>
+          <a href="<%=ev.new_evaluation_path(@lo)%>"><button class="loep_button loep_evaluation_button"><span class="glyphicon glyphicon-star-empty"></span> Evaluate with <%= ev.name %></button></a>
         </td>
       </tr>
       <% end %>

@@ -55,9 +55,9 @@
 
         if(typeof item2Value == "string"){
           $("#evaluations_loem_item1").attr("value",item2Value);
-          updateCircleForItem(2,item2Value);
+          updateValueForItem(2,item2Value);
         } else {
-          updateCircleForItem(2,"");
+          updateValueForItem(2,undefined);
         }
       });
     <% end %>

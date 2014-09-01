@@ -32,7 +32,7 @@
           </div>
         <% end %>
       </div>
-      <div class="remove_hover-start-value"><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
+      <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
     </div>
   </div>
 <% end %>
@@ -82,7 +82,7 @@
             var tip = $(ratingWrapper).find("div.hover-start_text");
             $(tip).attr("selectedValue",value);
 
-            var remove = $(ratingWrapper).find("div.remove_hover-start-value");
+            var remove = $(ratingWrapper).find("div.remove_item-value");
             $(remove).fadeIn().css("display","inline-block");
 
             var naInput = $(ratingWrapper).find("input.na-input");
@@ -91,7 +91,7 @@
           }
       });
   
-      $(document).on('click', 'div.remove_hover-start-value', function(event){
+      $(document).on('click', 'div.remove_item-value', function(event){
           var ratingWrapper = $("div.rating_wrapper").has(this);
 
           var tip = $(ratingWrapper).find("div.hover-start_text");
@@ -123,7 +123,7 @@
           $(tip).attr("selectedValue",$(this).attr("title"));
           updateCircle(tip);
 
-          var remove = $(ratingWrapper).find("div.remove_hover-start-value");
+          var remove = $(ratingWrapper).find("div.remove_item-value");
           $(remove).fadeIn().css("display","inline-block");
         }
       });

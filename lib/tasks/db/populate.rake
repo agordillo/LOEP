@@ -3,7 +3,7 @@
 namespace :db do
 
 	desc 'Populate database with fake data for development'
-  task :populate => 'db:populate:reload'
+	task :populate => 'db:populate:reload'
 
 	namespace :populate do
 
@@ -109,10 +109,10 @@ namespace :db do
 
 			#Admin create an assigment to request the Reviewer to evaluate the Curiosity Flashcard
 			asA = Assignment.new
-		    asA.author_id = user_admin.id
-		    asA.user_id = user_reviewer.id
-		    asA.lo_id = loA.id
-		    asA.evmethod_id = LORI.id
+			asA.author_id = user_admin.id
+			asA.user_id = user_reviewer.id
+			asA.lo_id = loA.id
+			asA.evmethod_id = LORI.id
 			asA.status = "Pending"
 			#Deadline in one week
 			asA.deadline = DateTime.now + 7
@@ -122,10 +122,10 @@ namespace :db do
 			#Also evaluate the LO titled: Chess: The Art of Learning
 			#Admin create an assigment to request the Reviewer to evaluate the Curiosity Flashcard
 			asB = Assignment.new
-		    asB.author_id = user_admin.id
-		    asB.user_id = user_reviewer.id
-		    asB.lo_id = loB.id
-		    asB.evmethod_id = LORI.id
+			asB.author_id = user_admin.id
+			asB.user_id = user_reviewer.id
+			asB.lo_id = loB.id
+			asB.evmethod_id = LORI.id
 			asB.status = "Pending"
 			#Deadline in two weeks
 			asB.deadline = DateTime.now + 14

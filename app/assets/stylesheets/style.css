@@ -166,6 +166,10 @@ li.userbox img {
 	color: white;
 }
 
+.loep_evaluation_button {
+	min-width: 225px;
+}
+
 input.loep_input {
 	width: 50%;
 }

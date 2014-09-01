@@ -95,6 +95,7 @@ div.hover-start_text {
 }
 
 .numberCircle {
+	display: inline-block;
 	-webkit-border-radius: 999px;
 	-moz-border-radius: 999px;
 	border-radius: 999px;
@@ -107,7 +108,6 @@ div.hover-start_text {
 	text-align: center;
 	font-size: 22px;
 	font-weight: bold;
-	display: block;
 }
 
 .numberCircle span {
@@ -120,13 +120,12 @@ div.hover-start_text {
 }
 
 
-div.remove_hover-start-value {
-	display: inline-block;
-	margin-left: 15px;
+div.remove_item-value {
 	display: none;
+	margin-left: 15px;
 	cursor: pointer;
-	float: left;
 	margin-top: 14px;
+	vertical-align: top;
 }
 
 .survey_block .loep_input { 

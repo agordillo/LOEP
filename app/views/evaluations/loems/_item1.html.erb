@@ -23,9 +23,9 @@
         $("div.survey_block[item='1'] input[type='checkbox']").not(".checkboxActive").removeAttr("checked");
 
         if(typeof item1Value == "string"){
-          updateCircleForItem(1,item1Value);
+          updateValueForItem(1,item1Value);
         } else {
-          updateCircleForItem(1,"");
+          updateValueForItem(1,undefined);
         }
       });
     <% end %>
