@@ -163,10 +163,10 @@ class Evaluation < ActiveRecord::Base
     metrics = Metric.allc.select { |m| m.evmethods.include? self.evmethod }
     metrics.each do |m|
       scores = self.lo.scores.where(:metric_id=>m.id)
-      if (scores.length > 0)
+      if scores.length > 0
         #Update Score
         s = scores.first
-        loScore = s.metric.class.getScoreForLo(s.lo)
+        loScore = s.metric.getScoreForLo(s.lo)
         if loScore.nil?
           #Remove Score
           #TODO

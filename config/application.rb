@@ -16,6 +16,9 @@ module LOEP
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    #LOEP version
+    config.version = "1.0"
+
     #Load LOEP configuration
     config.APP_CONFIG = YAML.load_file("config/application_config.yml")[ENV["RAILS_ENV"] || "development"]
 

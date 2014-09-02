@@ -5,29 +5,17 @@ class Metrics::LORIWAM1 < Metrics::LORIWAM
   # this is for Metrics with type=LORIWAM1
 
   def self.itemWeights
-    getItemWeightsFromSurvey
-  end
-
-  def self.getItemWeightsFromSurvey
-    if Surveys::Loric.count == 0
-      return nil
-    end
-
-    itemWs = []
-    9.times do |i|
-      itemWs.push(Surveys::Loric.average("item"+(i+1).to_s).to_f)
-    end
-
-    itemWSum = 0
-    itemWs.each do |w|
-      itemWSum = itemWSum + w
-    end
-
-    9.times do |i|
-      itemWs[i] = (itemWs[i]/itemWSum).round(4)
-    end
-
-    itemWs
+    [
+      BigDecimal(0.1724,4),
+      BigDecimal(0.1207,4),
+      BigDecimal(0.1138,4),
+      BigDecimal(0.1414,4),
+      BigDecimal(0.1379,4),
+      BigDecimal(0.1034,4),
+      BigDecimal(0.0655,4),
+      BigDecimal(0.0759,4),
+      BigDecimal(0.069,4)
+    ]
   end
 
 end

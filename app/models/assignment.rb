@@ -27,7 +27,7 @@ class Assignment < ActiveRecord::Base
 
   def evmethods_blank
     if self.evmethod_id.blank?
-      errors.add(:emethods, 'You should choose at least one evaluation method')
+      errors.add(:evmethods, 'You should choose at least one evaluation method')
     else
       true
     end

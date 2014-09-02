@@ -20,11 +20,8 @@ namespace :db do
 				Rake::Task["db:reset"].invoke
 			end
 
-			#Create Roles
-			Rake::Task["db:populate:roles"].invoke
-
-			#Create Languages
-			Rake::Task["db:populate:languages"].invoke
+			#Create Roles, Languages, Evaluation Methods, Metrics and Scores
+			Rake::Task["db:populate:components"].invoke
 
 			#Create users
 			Rake::Task["db:populate:create_users"].invoke
@@ -97,13 +94,6 @@ namespace :db do
 				end
 			end
 
-			#Create Evaluation Methods
-			Rake::Task["db:populate:evmethods"].invoke
-
-			#Create Metrics
-			Rake::Task["db:populate:metrics"].invoke
-
-
 			#Create Assignments
 			LORI = Evmethod.find_by_name("LORI v1.5")
 
@@ -152,7 +142,7 @@ namespace :db do
 			evA.score = 8 #Propose an score for the LO
 			evA.save!
 
-			#Create Scores
+			#Create (new) Scores
 			Rake::Task["db:populate:scores"].invoke
 
 			puts "Population finished"
@@ -162,20 +152,146 @@ namespace :db do
 			desc 'Populate database for production'
 			puts "Populating database for production"
 
-			#Create Roles
-			Rake::Task["db:populate:roles"].invoke
-			#Create Languages
-			Rake::Task["db:populate:languages"].invoke
+			#Create Roles, Languages, Evaluation Methods, Metrics and Scores
+			Rake::Task["db:populate:components"].invoke
+
 			#Create users
 			Rake::Task["db:populate:create_users"].invoke
-			#Create Evaluation Methods
-			Rake::Task["db:populate:evmethods"].invoke
-			#Create Metrics
-			Rake::Task["db:populate:metrics"].invoke
-			#Create Scores
-			Rake::Task["db:populate:scores"].invoke
 
 			puts "Population finished"
+		end
+
+		task :upgrade => :environment do
+			desc 'Upgrade LOEP to the new version'
+			puts "Upgrading LOEP to the version: " + LOEP::Application.config.version
+
+			#Apply new migrations
+			Rake::Task["db:migrate"].invoke
+
+			#Create new Roles, Languages, Evaluation Methods, Metrics and update scores
+			Rake::Task["db:populate:components"].invoke
+
+			puts "Upgrade finished"
+		end
+
+
+		#############
+		## Subtasks
+		#############
+
+		task :components => :environment do
+			Rake::Task["db:populate:roles"].invoke
+			Rake::Task["db:populate:languages"].invoke
+			Rake::Task["db:populate:evmethods"].invoke
+			Rake::Task["db:populate:metrics"].invoke
+			Rake::Task["db:populate:scores"].invoke
+		end
+
+		task :roles => :environment do
+			roles = [
+				{name:"SuperAdmin"},
+				{name:"Admin"},
+				{name:"Reviewer"},
+				{name:"User"}
+			]
+			roles.each do |role|
+				r = Role.find_by_name(role[:name])
+				if r.nil?
+					puts "Creating new role: " + role[:name]
+					Role.create!  :name  => role[:name]
+				end
+			end
+		end
+
+		task :languages => :environment do
+			desc "Create Languages"
+
+			languages = [
+				{name:"Language independent", code:"lanin"},
+				{name:"Other", code:"lanot"},
+				{name:"English", code:"en"},
+				{name:"Español", code:"es"},
+				{name:"Deutsch", code:"de"},
+				{name:"Français", code:"fr"},
+				{name:"Italiano", code:"it"},
+				{name:"Nederlands", code:"nl"},
+				{name:"Magyar", code:"hu"}
+			]
+
+			languages.each do |language|
+				l = Language.find_by_shortname(language[:code])
+				if l.nil?
+					puts "Creating new language: " + language[:name]
+					l = Language.new
+					l.name = language[:name]
+					l.shortname = language[:code]
+					l.save!
+				end
+			end
+		end
+
+		task :evmethods => :environment do
+			desc "Create Evaluation Methods"
+			
+			#Create the evaluation methods in the database if they are not created
+			LOEP_VANILLA_EvMethods = [
+				{name:"LORI v1.5", module_name:"Evaluations::Lori", multiple:false},
+				{name:"LOEM", module_name:"Evaluations::Loem", multiple:false}
+			]
+
+			LOEP_VANILLA_EvMethods.each do |evmethod|
+				ev = Evmethod.find_by_name(evmethod[:name])
+				if ev.nil?
+					#Create ev method
+					puts "Creating new evaluation method: " + evmethod[:name]
+					ev = Evmethod.new
+					ev.name = evmethod[:name]
+					ev.module = evmethod[:module_name]
+					ev.allow_multiple_evaluations = evmethod[:multiple]
+					ev.save!
+				end
+			end
+		end
+
+		task :metrics => :environment do
+			desc "Create Metrics"
+
+			#Create the metrics in the database if they are not created
+			LOEP_VANILLA_Metrics = [
+				{name:"LORI Arithmetic Mean", module_name:"Metrics::LORIAM", evmethods:["LORI v1.5"]},
+				{name:"LORI WAM CW", module_name:"Metrics::LORIWAM1", evmethods:["LORI v1.5"]},
+				{name:"LORI WAM IW", module_name:"Metrics::LORIWAM2", evmethods:["LORI v1.5"]},
+				{name:"LORI WAM CCW", module_name:"Metrics::LORIWAM3", evmethods:["LORI v1.5"]},
+				{name:"LORI Pedagogical WAM", module_name:"Metrics::LORIPWAM", evmethods:["LORI v1.5"]},
+				{name:"LORI Technological WAM", module_name:"Metrics::LORITWAM", evmethods:["LORI v1.5"]},
+				{name:"LORI Orthogonal Metric", module_name:"Metrics::LORIORT", evmethods:["LORI v1.5"]},
+				{name:"LORI Square Root Metric", module_name:"Metrics::LORISQRT", evmethods:["LORI v1.5"]},
+				{name:"LORI Logarithmic Metric", module_name:"Metrics::LORILOG", evmethods:["LORI v1.5"]},
+				{name:"LOEM Arithmetic Mean", module_name:"Metrics::LOEMAM", evmethods:["LOEM"]}
+			]
+
+			LOEP_VANILLA_Metrics.each do |metric|
+				m = Metric.find_by_name(metric[:name])
+				if m.nil?
+					#Create metric
+					puts "Creating new metric: " + metric[:name]
+					m = metric[:module_name].constantize.new
+					m.name = metric[:name]
+					m.evmethods.push(Evmethod.find_all_by_name(metric[:evmethods]))
+					m.save!
+				end
+			end
+		end
+
+		task :scores => :environment do
+			Metric.allc.each do |m|
+				Lo.all.each do |lo|
+					s = Score.new
+					s.metric_id = m.id
+					s.lo_id = lo.id
+					s.save
+				end
+			end
 		end
 
 		task :create_users => :environment do
@@ -201,6 +317,7 @@ namespace :db do
 			user_admin.roles.push(role_sadmin)
 			user_admin.roles.push(role_admin)
 			user_admin.save!
+			puts "Administrator created with email: '" + user_admin.email + "' and password: '" + user_admin.password + "'."
 
 			user_reviewer = User.new
 			user_reviewer.name = "reviewer"
@@ -215,100 +332,7 @@ namespace :db do
 			user_reviewer.birthday = Time.now
 			user_reviewer.roles.push(role_reviewer)
 			user_reviewer.save!
-		end
-
-		task :roles => :environment do
-			Role.create!  :name  => "SuperAdmin"
-			Role.create!  :name  => "Admin"
-			Role.create!  :name  => "Reviewer"
-			Role.create!  :name  => "User"
-		end
-
-		task :languages => :environment do
-			desc "Create Languages"
-
-			languages = [
-				{name:"Language independent", code:"lanin"},
-				{name:"Other", code:"lanot"},
-				{name:"English", code:"en"},
-				{name:"Español", code:"es"},
-				{name:"Deutsch", code:"de"},
-				{name:"Français", code:"fr"},
-				{name:"Italiano", code:"it"},
-				{name:"Nederlands", code:"nl"},
-				{name:"Magyar", code:"hu"}
-			]
-
-			languages.each do |language|
-				l = Language.find_by_shortname(language[:code])
-				if l.nil?
-					l = Language.new
-					l.name = language[:name]
-					l.shortname = language[:code]
-					l.save!
-				end
-			end
-		end
-
-		task :evmethods => :environment do
-			desc "Create Evaluation Methods"
-			
-			#Create the evaluation methods in the database if they are not created
-			LOEP_VANILLA_EvMethods = [
-				{name:"LORI v1.5", module_name:"Evaluations::Lori", multiple:false},
-				{name:"LOEM", module_name:"Evaluations::Loem", multiple:false}
-			]
-
-			LOEP_VANILLA_EvMethods.each do |evmethod|
-				ev = Evmethod.find_by_name(evmethod[:name])
-				if ev.nil?
-					#Create ev method
-					ev = Evmethod.new
-					ev.name = evmethod[:name]
-					ev.module = evmethod[:module_name]
-					ev.allow_multiple_evaluations = evmethod[:multiple]
-					ev.save!
-				end
-			end
-		end
-
-		task :metrics => :environment do
-			desc "Create Metrics"
-
-			#Create the metrics in the database if they are not created
-			LOEP_VANILLA_Metrics = [
-				{name:"LORI Arithmetic Mean", module_name:"Metrics::LORIAM", evmethods:["LORI v1.5"]},
-				{name:"LORI Weighted Arithmetic Mean", module_name:"Metrics::LORIWAM", evmethods:["LORI v1.5"]},
-				{name:"LORI WAM CW", module_name:"Metrics::LORIWAM1", evmethods:["LORI v1.5"]},
-				{name:"LORI WAM IW", module_name:"Metrics::LORIWAM2", evmethods:["LORI v1.5"]},
-				{name:"LORI Pedagogical WAM", module_name:"Metrics::LORIPWAM", evmethods:["LORI v1.5"]},
-				{name:"LORI Technological WAM", module_name:"Metrics::LORITWAM", evmethods:["LORI v1.5"]},
-				{name:"LORI Orthogonal Metric", module_name:"Metrics::LORIORT", evmethods:["LORI v1.5"]},
-				{name:"LORI Square Root Metric", module_name:"Metrics::LORISQRT", evmethods:["LORI v1.5"]},
-				{name:"LORI Logarithmic Metric", module_name:"Metrics::LORILOG", evmethods:["LORI v1.5"]}
-			]
-
-			LOEP_VANILLA_Metrics.each do |metric|
-				m = Metric.find_by_name(metric[:name])
-				if m.nil?
-					#Create metric
-					m = metric[:module_name].constantize.new
-					m.name = metric[:name]
-					m.evmethods.push(Evmethod.find_all_by_name(metric[:evmethods]))
-					m.save!
-				end
-			end
-		end
-
-		task :scores => :environment do
-			Metric.allc.each do |m|
-				Lo.all.each do |lo|
-					s = Score.new
-					s.metric_id = m.id
-					s.lo_id = lo.id
-					s.save
-				end
-			end
+			puts "Reviewer created with email: '" + user_reviewer.email + "' and password: '" + user_reviewer.password + "'."
 		end
 
 	end

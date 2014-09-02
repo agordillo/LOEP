@@ -12,7 +12,7 @@ namespace :generate do
     puts ""
 
   	if !args[:name]
-  		fail "You need to specify a name for the evmethod: rake generate:evmethod[MethodName]"
+  		fail "You need to specify a name for the evmethod: bundle exec rake generate:evmethod[\"MethodName\",\"ModuleName\",\"Multiple\"]"
   	end
 
     unless args[:multiple]
@@ -49,6 +49,47 @@ namespace :generate do
     else
       puts "Some error has ocurred:"
       puts ev.errors.full_messages
+      puts ""
+      abort("Task aborted")
+    end
+
+  end
+
+
+  # How to use: 
+  # bundle exec rake generate:metric["MetricName","ModuleName","EvMethodNames"]
+  # bundle exec rake generate:metric["MetricName","ModuleName","EvMethodNames"] RAILS_ENV=production
+  # For instance: bundle exec rake generate:metric["LOEM Arithmetic Mean","LOEMAM","LOEM"]
+  task :metric, [:name,:module_name,:evmethodslist] => :environment do |t, args|
+    desc "Generate new metric"
+    puts "Generating new metric"
+    puts ""
+
+    if !args[:name] or !args[:module_name] or !args[:evmethodslist]
+      fail "You need to specify a name, module name and evmethods for the metric: bundle exec rake generate:metric[\"MetricName\",\"ModuleName\",\"EvMethodNames\"]"
+    end
+
+    moduleName = "Metrics::" + args[:module_name]
+
+    #Create metric
+    m = moduleName.constantize.new
+    m.name = args[:name]
+    m.evmethods.push(Evmethod.find_all_by_name(args[:evmethodslist].split("&&").map{|s| s.strip}))
+    m.valid?
+
+    unless m.errors.blank?
+      puts "Some error has ocurred:"
+      puts m.errors.full_messages
+      puts ""
+      abort("Task aborted")
+    end
+
+    if m.save
+      puts "The metric was succesfully generated"
+      puts m.to_json
+    else
+      puts "Some error has ocurred:"
+      puts m.errors.full_messages
       puts ""
       abort("Task aborted")
     end
