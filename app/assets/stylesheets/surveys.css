@@ -61,6 +61,17 @@ span.flagInSurveyBlockTitle img {
 	margin-bottom: 7px;
 }
 
+.survey_question_group_title {
+	font-size: 18px;
+	background-color: black;
+	color: white;
+	border-radius: 0px 5px 5px 0px;
+	padding: 2px 6px;
+	border: 1px solid #373736;
+	margin-bottom: 15px;
+	font-weight: bold;
+}
+
 div.rating_wrapper {
 	display: block;
 	min-height: 44px;
@@ -145,6 +156,7 @@ div.na-check{
 div.rating_wrapper_column1 {
 	display: inline-block;
 	width: 80%;
+	padding-right: 1%;
 	margin-top: 13px;
 }
 
@@ -160,4 +172,15 @@ div.rating_wrapper_column1 > p.input_wrapper > span {
 }
 
 p.input_wrappers_header {
+}
+
+p.or_input_separator {
+	margin-top: -8px;
+	margin-bottom: 2px;
+}
+
+p.or_block_separator {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	height: 10px;
 }

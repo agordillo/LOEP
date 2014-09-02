@@ -6,7 +6,37 @@
   <%iValue = @evaluation.send(itemName)%>
 
   <div class="survey_block" item="<%=nItem%>">
-    <p class="survey_question_title"><%=nItem%>. <%=item[0]%></p>
+    <%
+      case nItem
+      when 1
+        sectionTitle = "A. " + "Interactivity"
+      when 4
+        sectionTitle = "B. " + "Design"
+      when 8
+        sectionTitle = "C. " + "Engagement"
+      when 13
+        sectionTitle = "D. " + "Usability"
+      else
+        sectionTitle = nil
+      end
+    %>
+    <%
+      case nItem
+      when 1,2,3
+        nItemToShow = nItem
+      when 4,5,6,7
+        nItemToShow = nItem-3
+      when 8,9,10,11,12
+        nItemToShow = nItem-7
+      else
+        nItemToShow = nItem-12
+      end
+    %>
+    <% unless sectionTitle.nil? %>
+      <p class="survey_question_group_title"><%=sectionTitle%></p>
+    <% end %>
+
+    <p class="survey_question_title"><%=nItemToShow%>. <%=item[0]%></p>
     <p class="survey_question_subtitle"><%=item[1]%></p>
     
     <div class="rating_wrapper">
@@ -31,6 +61,7 @@
 <% end %>
 
 <div class="survey_block">
+  <p class="survey_question_group_title">E. General</p>
   <p class="survey_question_title">Additional Comments</p>
   <p class="survey_question_subtitle">Please, write here any further comments that you consider relevant and/or necessary for this evaluation</p>
   <%= f.text_area :comments, :class=>'loep_input optionalInput', :readonly => readonly ? "true" : nil %>

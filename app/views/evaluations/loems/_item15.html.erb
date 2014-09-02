@@ -1,0 +1,20 @@
+<p class="input_wrapper">
+  <input value="1" type="checkbox" class="skipValidation" <%= value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span><b>Few/No</b> navigational cues are present.</span>
+</p>
+<p class="input_wrapper">
+  <input value="2" type="checkbox" class="skipValidation" <%= value==2 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span><b>Some navigational cues</b> are present but more are needed.</span>
+</p>
+<p class="input_wrapper">
+  <input value="3" type="checkbox" class="skipValidation" <%= value==3 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>A <b>sufficient number</b> of navigation cues are present.</span>
+</p>
+
+<% if !readonly %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      loadEventsForSimpleItem("15");
+    });
+  </script>
+<% end %>

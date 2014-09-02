@@ -1,0 +1,20 @@
+<p class="input_wrapper">
+  <input value="1" type="checkbox" class="skipValidation" <%= value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>The tools for the user to control the interactive components are <b>not natural, do not make much sense, are not easy to find</b> on the screen and <b>rarely/not natural to use</b>.</span>
+</p>
+<p class="input_wrapper">
+  <input value="2" type="checkbox" class="skipValidation" <%= value==2 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>The tools for the user to control the interactive components are <b>somewhat natural, make some sense, are somewhat easy to find</b> on the screen and <b>are sometimes natural to use</b>.</span>
+</p>
+<p class="input_wrapper">
+  <input value="3" type="checkbox" class="skipValidation" <%= value==3 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>The tools for the user to control the interactive components are <b>natural, make sense, are easy to find</b> on the screen and <b>natural to use</b>.</span>
+</p>
+
+<% if !readonly %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      loadEventsForSimpleItem("13");
+    });
+  </script>
+<% end %>

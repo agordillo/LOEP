@@ -1,0 +1,71 @@
+<!-- The individual checkbox information is stored in the following slots: item60-item68 -->
+<%item14checkbox1Value = @evaluation.send("item60")%>
+<%item14checkbox2Value = @evaluation.send("item61")%>
+<%item14checkbox3Value = @evaluation.send("item62")%>
+<%item14checkbox4Value = @evaluation.send("item63")%>
+<%item14checkbox5Value = @evaluation.send("item64")%>
+<%item14checkbox6Value = @evaluation.send("item65")%>
+<%item14checkbox7Value = @evaluation.send("item66")%>
+<%item14checkbox8Value = @evaluation.send("item67")%>
+<%item14checkbox9Value = @evaluation.send("item68")%>
+
+<%= f.hidden_field "item60", :value => item14checkbox1Value, :class => "skipValidation" %>
+<%= f.hidden_field "item61", :value => item14checkbox2Value, :class => "skipValidation" %>
+<%= f.hidden_field "item62", :value => item14checkbox3Value, :class => "skipValidation" %>
+<%= f.hidden_field "item63", :value => item14checkbox4Value, :class => "skipValidation" %>
+<%= f.hidden_field "item64", :value => item14checkbox5Value, :class => "skipValidation" %>
+<%= f.hidden_field "item65", :value => item14checkbox6Value, :class => "skipValidation" %>
+<%= f.hidden_field "item66", :value => item14checkbox7Value, :class => "skipValidation" %>
+<%= f.hidden_field "item67", :value => item14checkbox8Value, :class => "skipValidation" %>
+<%= f.hidden_field "item68", :value => item14checkbox9Value, :class => "skipValidation" %>
+
+<p class="input_wrapper">
+  <input nItem="60" value="1" group="1" type="checkbox" class="skipValidation" <%= item14checkbox1Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>The user <b>rarely/never</b> knows where they are.</span>
+</p>
+<p class="input_wrapper">
+  <input nItem="61" value="2" group="1" type="checkbox" class="skipValidation" <%= item14checkbox2Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>The user knows where they are at <b>some of the time</b>.</span>
+</p>
+<p class="input_wrapper">
+  <input nItem="62" value="3" group="1" type="checkbox" class="skipValidation" <%= item14checkbox3Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>The user knows where they are at <b>all times</b>.</span>
+</p>
+
+<p class="input_wrappers_header">&nbsp;</p>
+
+<p class="input_wrapper">
+  <input nItem="63" value="1" group="2" type="checkbox" class="skipValidation" <%= item14checkbox4Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span><b>Few/no</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present.</span>
+</p>
+<p class="input_wrapper">
+  <input nItem="64" value="2" group="2" type="checkbox" class="skipValidation" <%= item14checkbox5Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span><b>Some</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present, but not enough.</span>
+</p>
+<p class="input_wrapper">
+  <input nItem="65" value="3" group="2" type="checkbox" class="skipValidation" <%= item14checkbox6Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span><b>Sufficient</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present.</span>
+</p>
+
+<p class="input_wrappers_header">&nbsp;</p>
+
+<p class="input_wrapper">
+  <input nItem="66" value="1" group="3" type="checkbox" class="skipValidation" <%= item14checkbox4Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>Orienting features <b>are not in a consistent location</b>.</span>
+</p>
+<p class="input_wrapper">
+  <input nItem="67" value="2" group="3" type="checkbox" class="skipValidation" <%= item14checkbox5Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>Orienting features are in the same spot <b>sometimes</b>.</span>
+</p>
+<p class="input_wrapper">
+  <input nItem="68" value="3" group="3" type="checkbox" class="skipValidation" <%= item14checkbox6Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
+  <span>Orienting features are in the same spot <b>always</b>.</span>
+</p>
+
+<% if !readonly %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      loadEventsForItemWithGroups("14");
+    });
+  </script>
+<% end %>
