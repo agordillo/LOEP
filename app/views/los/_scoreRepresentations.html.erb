@@ -1,0 +1,28 @@
+<%= render 'application/rgraph' %>
+
+<% 
+  representationData = nil
+  @evmethods.each do |evmethod| 
+    if action=="show" and @lo.hasBeenEvaluatedWithEvmethod(evmethod) and evmethod.getEvaluationModule.methods.include? :representationData
+      representationData = evmethod.getEvaluationModule.representationData(@lo)
+    elsif action=="compare" and evmethod.getEvaluationModule.methods.include? :representationDataForComparingLos
+      representationData = evmethod.getEvaluationModule.representationDataForComparingLos(@los)
+    elsif action =="stats" and evmethod.getEvaluationModule.methods.include? :representationDataForLos
+      representationData = evmethod.getEvaluationModule.representationDataForLos(@los)
+    end
+%>
+  <% unless representationData.nil? %>
+    <p class="space_large"></p>
+    <h1 class="loep_title loep_title_min">
+      <%if action=="show"%>
+        Summary of <%=evmethod.name%> evaluations
+      <%elsif action=="compare"%>
+        Learning Object Comparison based on <%=evmethod.name%> evaluations
+      <%elsif action=="stats"%>
+        Summary of <%=evmethod.name%> evaluations
+      <%end%>
+    </h1>
+    <%= render "evmethods/representation", :representationData => representationData, :evmethod => evmethod %>
+  <%end%>
+<% end %>
+

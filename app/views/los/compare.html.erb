@@ -6,13 +6,6 @@
   <h1 class="loep_title loep_title_min loep_title_with_bottom_margin"> Metrics </h1>
   <%= render '/los/loComparison', :showTools => true, :showToolActions => false, :displayedEntries => 5 %>
 
-  <% @evmethods.each do |evmethod| %>
-    <%if evmethod.getEvaluationModule.methods.include? :representationDataForComparingLos%>
-      <%@representationData = evmethod.getEvaluationModule.representationDataForComparingLos(@los)%>
-      <p class="space_large"></p>
-      <h1 class="loep_title loep_title_min">Learning Object Comparison based on <%=evmethod.name%> evaluations</h1>
-      <%= render evmethod.representation_path %>
-    <%end%>
-  <% end %>
+  <%= render "/los/scoreRepresentations", :action => "compare" %>
 
 </div>

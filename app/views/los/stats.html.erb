@@ -7,14 +7,7 @@
   <%= render '/scores/index' %>
 
   <% if @scores.length > 0 %>
-	  <% @evmethods.each do |evmethod| %>
-	    <%if evmethod.getEvaluationModule.methods.include? :representationDataForLos%>
-	      <%@representationData = evmethod.getEvaluationModule.representationDataForLos(@los)%>
-	      <p class="space_large"></p>
-	      <h1 class="loep_title loep_title_min">Summary of <%=evmethod.name%> evaluations </h1>
-	      <%= render evmethod.representation_path %>
-	    <%end%>
-	  <% end %>
+	  <%= render "/los/scoreRepresentations", :action => "stats" %>
   <% end %>
 
 </div>

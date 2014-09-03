@@ -59,4 +59,13 @@ class Evaluations::Loem < Evaluation
     ]
   end
 
+  #############
+  # Representation Data
+  #############
+
+  def self.representationData(lo)
+    metric = Metric.find_by_type("Metrics::LOEMAM")
+    buildRepresentationDataWithMetric(lo,metric)
+  end
+
 end

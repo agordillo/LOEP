@@ -10,4 +10,33 @@
 <script src="/jslibs/rgraph/RGraph.drawing.rect.js" ></script>
 <script src="/jslibs/rgraph/RGraph.radar.js"></script>
 
-    
+<script type="text/javascript">
+	function construct(constructor, args){
+	    function F(){
+	        return constructor.apply(this, args);
+	    };
+	    F.prototype = constructor.prototype;
+	    return new F();
+	};
+
+	var colors = ["green","red","blue","yellow","grey","orange"];
+	var cL = colors.length;
+
+	var getColor = function(i){
+		return colors[i - cL*(Math.floor(i/cL))];
+	};
+
+	var getGradient = function(i){
+		return 'Gradient(white:'+getColor(i)+':'+getColor(i)+')';
+	};
+
+	var strLMax = 40;
+	var shortString = function(str){
+		var strL = str.length;
+		if(strL>strLMax){
+			str = str.substring(0,strLMax-3)+"...";
+		}
+		return str;
+	};
+</script>
+

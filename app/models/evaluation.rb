@@ -147,6 +147,93 @@ class Evaluation < ActiveRecord::Base
   end
 
 
+  ################################
+  # Method for evaluations to inherit
+  ################################
+
+  def self.buildRepresentationDataWithMetric(lo,metric)
+    evData = metric.getEvaluationData(lo)
+    iScores = evData[:items]
+    if iScores.blank? or iScores.include? nil
+      return nil
+    end
+
+    representationData = Hash.new
+    representationData["iScores"] = iScores
+
+    loScoreForAverage = lo.scores.find_by_metric_id(metric.id)
+    if !loScoreForAverage.nil?
+      representationData["averageScore"] = loScoreForAverage.value.round(2)
+    end
+    representationData["name"] = lo.name
+    representationData["labels"] = getItems.map{|li| li[:name]}
+    representationData["engine"] = "Rgraph"
+    representationData
+  end
+
+  def self.representationDataForLos(los)
+    representationData = Hash.new
+    graphEngine = nil
+    nItems = getItems.length
+
+    iScores =  []
+    nItems.times do |i|
+      iScores.push(nil)
+    end
+    
+    los.each do |lo|
+      rpdLo = representationData(lo)
+      if !graphEngine and !rpdLo["engine"].nil?
+        graphEngine = rpdLo["engine"]
+      end
+      unless rpdLo.nil?
+        iScoresLo = rpdLo["iScores"]
+        nItems.times do |i|
+          unless iScoresLo[i].nil?
+            if iScores[i].nil?
+              iScores[i] = iScoresLo[i]
+            else
+              iScores[i] = iScores[i] + iScoresLo[i]
+            end
+          end
+        end
+      end
+    end
+
+    losL = los.length
+    nItems.times do |i|
+      if !iScores[i].nil?
+        iScores[i] = (iScores[i]/losL).round(2)
+      end
+    end
+
+    representationData["iScores"] = iScores
+    representationData["averageScore"] = (representationData["iScores"].sum/representationData["iScores"].size.to_f).round(2)
+    representationData["labels"] = getItems.map{|li| li[:name]}
+    unless graphEngine.nil?
+      representationData["engine"] = graphEngine
+    end
+    representationData
+  end
+
+  def self.representationDataForComparingLos(los)
+    representationData = Hash.new
+    los.each do |lo|
+      rpdLo = representationData(lo)
+      if !rpdLo.nil? and !rpdLo["iScores"].nil? and !rpdLo["iScores"].include? nil
+        representationData[lo.id] = rpdLo
+      end
+    end
+    representationData["labels"] = getItems.map{|li| li[:name]}
+    
+    if !representationData.values.first.nil? and !representationData.values.first["engine"].nil?
+      representationData["engine"] = representationData.values.first["engine"]
+    end
+
+    representationData
+  end
+
+
   private
 
   #Prevent wrong scores to be saved

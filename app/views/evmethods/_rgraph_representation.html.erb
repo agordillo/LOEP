@@ -1,13 +1,11 @@
-<%= render 'application/rgraph' %>
 <p class="space-large"></p>
-
 <div class="graphWrapper">
-	<canvas id="graphCanvas">[No canvas support]</canvas>
+	<canvas id="<%=evmethod.id%>">[No canvas support]</canvas>
 </div>
 
 <script>
 	$(document).ready(function(){
-		var canvas = $("#graphCanvas");
+		var canvas = $("#<%=evmethod.id%>");
 		var canvasContainer = $(canvas).parent();
 
 		var newWidth = $(canvasContainer).width()*0.8;
@@ -17,39 +15,11 @@
 		$(canvas).width(newWidth);
 		$(canvas).height(newHeight);
 
-		drawCanvas();
-	});
+		/////////////////
+		//Draw Canvas
+		/////////////////
 
-	function construct(constructor, args) {
-	    function F(){
-	        return constructor.apply(this, args);
-	    };
-	    F.prototype = constructor.prototype;
-	    return new F();
-	};
-
-	var colors = ["green","red","blue","yellow","grey","orange"];
-	var cL = colors.length;
-
-	var getColor = function(i){
-		return colors[i - cL*(Math.floor(i/cL))];
-	};
-
-	var getGradient = function(i){
-		return 'Gradient(white:'+getColor(i)+':'+getColor(i)+')';
-	};
-
-	var strLMax = 40;
-	var shortString = function(str){
-		var strL = str.length;
-		if(strL>strLMax){
-			str = str.substring(0,strLMax-3)+"...";
-		}
-		return str;
-	};
-
-	var drawCanvas = function(){
-		RGraphRadarArgs = ['graphCanvas'];
+		RGraphRadarArgs = ['<%=evmethod.id%>'];
 		RGraphRadarTooltipArgs = ['tooltips'];
 		RGraphRadarFillTooltipArgs = ['fill.tooltips',[]];
 		RGraphRadarKeyArgs = ['key',[]];
@@ -57,24 +27,24 @@
 		RGraphRadarKeyColorsArgs = ['key.colors',[]];
 		
 		var graphLabels = [];
-		<%@representationData["labels"].each do |l|%>
+		<%representationData["labels"].each do |l|%>
 			graphLabels.push('<%=l%>');
 		<% end %>
 
-		<% if !@lo.nil? or @representationData["iScores"].is_a? Array %>
+		<% if !@lo.nil? or representationData["iScores"].is_a? Array %>
 			//Common case (one LO)
-			var graphValues = <%=@representationData["iScores"]%>;
+			var graphValues = <%=representationData["iScores"]%>;
 			RGraphRadarArgs.push(graphValues);
 			RGraphRadarTooltipArgs.push(graphValues.map(function(v){return v.toString()}));
-			RGraphRadarFillTooltipArgs[1].push(<%=@representationData["averageScore"]%>.toString());
-			// <%if !@representationData["name"].nil? %>
-			// 	RGraphRadarKeyArgs[1].push(shortString('<%=@representationData["name"]%>'));
+			RGraphRadarFillTooltipArgs[1].push(<%=representationData["averageScore"]%>.toString());
+			// <%if !representationData["name"].nil? %>
+			// 	RGraphRadarKeyArgs[1].push(shortString('<%=representationData["name"]%>'));
 			// <% end %>
 			RGraphRadarColorsArgs[1].push(getGradient(0));
 		<% else %>
 			var keyIndex = 0;
 			//Comparison case (Several LOs)
-			<% @representationData.each do |key, loData|%>
+			<% representationData.each do |key, loData|%>
 				<%if key != "labels"%>
 					var graphValues = <%=loData["iScores"]%>;
 					RGraphRadarArgs.push(graphValues);
@@ -90,7 +60,7 @@
 		<% end %>
 
 		// Usage Example
-	    // var radar = new RGraph.Radar('graphCanvas',[0,2,4,6,8,10,8,6,4],[0,2,4,6,8,10,8,6,4]);
+	    // var radar = new RGraph.Radar('<%=evmethod.id%>',[0,2,4,6,8,10,8,6,4],[0,2,4,6,8,10,8,6,4]);
 
 	    var radar = construct(RGraph.Radar,RGraphRadarArgs);
 	    radar.Set.apply(this,RGraphRadarTooltipArgs);
@@ -115,5 +85,6 @@
 			.Set('gutter.top', 35)
 			.Set('strokestyle', 'black')
 			.Draw();
-	};
+	});
+
 </script>

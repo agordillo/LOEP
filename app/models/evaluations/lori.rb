@@ -47,79 +47,8 @@ class Evaluations::Lori < Evaluation
   #############
 
   def self.representationData(lo)
-    representationData = Hash.new
-    iScores = []
-
-    evaluations = lo.evaluations.where(:evmethod_id => Evmethod.find_by_name("LORI v1.5").id)
-    if evaluations.length == 0
-      return nil
-    end
-
-    9.times do |i|
-      validEvaluations = Evaluation.getValidEvaluationsForItem(evaluations,i+1)
-      if validEvaluations.length == 0
-        #Means that this item has not been evaluated in any evaluation
-        #All evaluations had leave this item in blank
-        iScores.push(nil)
-      else
-        iScore = ((validEvaluations.average("item"+(i+1).to_s).to_f - 1) * 5/2.to_f).round(2)
-        iScores.push(iScore)
-      end
-    end
-
-    representationData["iScores"] = iScores
-    loScoreForAverage = lo.scores.find_by_metric_id(Metric.find_by_type("Metrics::LORIAM").id)
-    if !loScoreForAverage.nil?
-      representationData["averageScore"] = loScoreForAverage.value.round(2)
-    end
-    representationData["name"] = lo.name
-    representationData["labels"] = getItems.map{|li| li[0]}   
-    representationData
-  end
-
-  def self.representationDataForLos(los)
-    representationData = Hash.new
-    iScores = [nil,nil,nil,nil,nil,nil,nil,nil,nil]
-
-    los.each do |lo|
-      rpdLo = representationData(lo)
-      if !rpdLo.nil?
-        iScoresLo = rpdLo["iScores"]
-        9.times do |i|
-          if !iScoresLo[i].nil?
-            if iScores[i].nil?
-              iScores[i] = iScoresLo[i]
-            else
-              iScores[i] = iScores[i] + iScoresLo[i]
-            end
-          end
-        end
-      end
-    end
-
-    losL = los.length
-    9.times do |i|
-      if !iScores[i].nil?
-        iScores[i] = (iScores[i]/losL).round(2)
-      end
-    end
-
-    representationData["iScores"] = iScores
-    representationData["averageScore"] = (representationData["iScores"].sum/representationData["iScores"].size.to_f).round(2)
-    representationData["labels"] = getItems.map{|li| li[0]}
-    representationData
-  end
-
-  def self.representationDataForComparingLos(los)
-    representationData = Hash.new
-    los.each do |lo|
-      rpdLo = representationData(lo)
-      if !rpdLo.nil? and !rpdLo["iScores"].nil? and !rpdLo["iScores"].include? nil
-        representationData[lo.id] = rpdLo
-      end
-    end
-    representationData["labels"] = getItems.map{|li| li[0]}
-    representationData
+    metric = Metric.find_by_type("Metrics::LORIAM")
+    buildRepresentationDataWithMetric(lo,metric)
   end
 
 end
