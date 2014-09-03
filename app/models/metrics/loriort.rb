@@ -4,30 +4,25 @@ class Metrics::LORIORT < Metric
   # this is for Metrics with type=LORIORT
   #Override methods here
 
-  def self.getScoreForEvaluations(evaluations)
-    scores = getLORIPTScores(evaluations)
+  def self.getLoScore(items,evaluations)
+    scores = getLORIPTScores(items)
     if scores.nil? or scores[0].nil? or scores[1].nil?
       return nil
     end
-    loScore = ([[getOverallScore(scores[0],scores[1]),0].max,10].min).round(2)
+    loScore = getOverallScore(scores[0],scores[1])
+    return loScore
   end
 
-  def self.getLORIPTScores(evaluations)
+  def self.getLORIPTScores(items)
     loScorePWAM = 0
     loScoreTWAM = 0
-    9.times do |i|
-      validEvaluations = Evaluation.getValidEvaluationsForItem(evaluations,i+1)
-      if validEvaluations.length == 0
-        #Means that this item has not been evaluated in any evaluation
-        #All evaluations had leave this item in blank
-        return nil
-      end
-      iScore = validEvaluations.average("item"+(i+1).to_s).to_f
+
+    items.each_with_index do |iScore,i|
       if (i+1)<7
-        #Items 1 a 6
+        #Items 1 to 6
         loScorePWAM = loScorePWAM + ((iScore-1) * Metrics::LORIPWAM.itemWeights[i])
       else
-        #Items 7 a 9
+        #Items 7 to 9
         loScoreTWAM = loScoreTWAM + ((iScore-1) * Metrics::LORITWAM.itemWeights[i])
       end
     end

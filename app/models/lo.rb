@@ -131,18 +131,15 @@ class Lo < ActiveRecord::Base
     if evmethod.nil?
       false
     else
-      # This method requires a single evaluation to rate all the LORI items of the LO to considere it as evaluated
-      # !Evaluation.getValidEvaluationsForItems(self.evaluations.where(:evmethod_id => evmethod.id),evmethod.getEvaluationModule.getItemsArray).empty?
-    
+      # This method requires a single evaluation to rate all the EvMethod items of the LO to considere it as evaluated
       #We consider that a LO has been evaluated with a evmethod, if for each item of the method, exists at least one evaluation that rate it with a valid score.
       evMethodEvaluations = self.evaluations.where(:evmethod_id => evmethod.id)
-      evmethod.getEvaluationModule.getItemsArray.each do |nItem|
-        if Evaluation.getValidEvaluationsForItem(evMethodEvaluations,nItem).empty?
+      evmethod.getEvaluationModule.getItems.each_with_index do |item,index|
+        if Evaluation.getValidEvaluationsForItem(evMethodEvaluations,index+1).empty?
           return false
         end
       end
       return true
-      
     end
   end
 

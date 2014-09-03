@@ -55,18 +55,67 @@ class Metric < ActiveRecord::Base
     scores
   end
 
-  def getScoreForLo(lo)
-    evaluations = lo.evaluations.where(:evmethod_id => self.evmethods.map{|ev| ev.id})
+  def getScoreForLo(lo, evaluation=nil)
+    evmethodsData = Hash.new
 
-    if evaluations.length === 0
-      return nil
+    if evaluation.nil?
+      evmethods = self.evmethods
+    else
+      evmethods = [evaluation.evmethod]
     end
 
-    self.class.getScoreForEvaluations(evaluations)
+    evmethods.each do |evmethod|
+      evmethodsData[evmethod.name] = Hash.new
+      if evaluation.nil?
+        evmethodsData[evmethod.name][:evaluations] = lo.evaluations.where(:evmethod_id => evmethod.id)
+      else
+        evmethodsData[evmethod.name][:evaluations] = lo.evaluations.where(:id => evaluation.id)
+      end
+      evmethodsData[evmethod.name][:items] = [] #itemsAverageValue
+
+      nItems = evmethod.module.constantize.getItems.length
+
+      if evmethodsData[evmethod.name][:evaluations].length === 0
+        nItems.times do |i|
+          evmethodsData[evmethod.name][:items].push(nil)
+        end
+        next
+      end
+
+      nItems.times do |i|
+        validEvaluations = Evaluation.getValidEvaluationsForItem(evmethodsData[evmethod.name][:evaluations],i+1)
+        if validEvaluations.length == 0
+          #Means that this item has not been evaluated in any evaluation
+          #All evaluations had leave this item in blank
+          iScore = nil
+        else
+          iScore = validEvaluations.average("item"+(i+1).to_s).to_f
+        end
+        evmethodsData[evmethod.name][:items].push(iScore)
+      end
+    end
+
+    if self.evmethods.length == 1
+      #Metric with only one Evmethod. Keep it simple.
+      itemAverageValues = evmethodsData.values[0][:items]
+      if itemAverageValues.blank? or itemAverageValues.include? nil
+        return nil
+      end
+      loScore = self.class.getLoScore(itemAverageValues,evmethodsData.values[0][:evaluations])
+    else
+      loScore = self.class.getLoScore(evmethodsData)
+    end
+
+    unless loScore.nil?
+      loScore = ([[loScore,0].max,10].min).round(2)
+    end
+
+    return loScore
   end
 
-  def self.getScoreForEvaluation(evaluation)
-    self.class.getScoreForEvaluations([evaluation])
+  #This score only makes sense for metrics that only rely on one evmethod.
+  def getScoreForEvaluation(evaluation)
+    getScoreForLo(evaluation.lo,evaluation)
   end
 
   def self.itemWeights

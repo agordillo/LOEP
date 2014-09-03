@@ -3,8 +3,8 @@
 <% Evaluations::Lori.getItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <div class="survey_block">
-    <p class="survey_question_title"><%=nItem%>. <%=item[0]%></p>
-    <p class="survey_question_subtitle"><%=item[1]%></p>
+    <p class="survey_question_title"><%=nItem%>. <%=item[:name]%></p>
+    <p class="survey_question_subtitle"><%=item[:description]%></p>
     <div class="rating_wrapper">
       <div class="stars_wrapper">
         <span  class="hover-star_legend_left">Low</span>

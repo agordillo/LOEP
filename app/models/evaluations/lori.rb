@@ -9,23 +9,42 @@ class Evaluations::Lori < Evaluation
     super
   end
 
-  def create
-    super
-  end
-
   def self.getItems
     [
-      ["Content Quality","Veracity, accuracy, balanced presentation of ideas, and appropriate level of detail"],
-      ["Learning Goal Alignment","Alignment among learning goals, activities, assessments, and learner characteristics"],
-      ["Feedback and Adaptation","Adaptive content or feedback driven by differential learner input or learner modeling"],
-      ["Motivation","Ability to motivate and interest an identified population of learners"],
-      ["Presentation Design","Design of visual and auditory information for enhanced learning and efficient mental processing"],
-      ["Interaction Usability","Ease of navigation, predictability of the user interface, and quality of the interface help features"],
-      ["Accessibility","Design of controls and presentation formats to accommodate disabled and mobile learners"],
-      ["Reusability","Ability to use in varying learning contexts and with learners from differing backgrounds"],
-      ["Standards Compliance","Adherence to international standards and specifications"]
+      {:name => "Content Quality",
+         :description => "Veracity, accuracy, balanced presentation of ideas, and appropriate level of detail", 
+         :type=> "integer"},
+      {:name => "Learning Goal Alignment",
+        :description => "Alignment among learning goals, activities, assessments, and learner characteristics",
+        :type=> "integer"},
+      {:name => "Feedback and Adaptation",
+        :description => "Adaptive content or feedback driven by differential learner input or learner modeling",
+        :type=> "integer"},
+      {:name => "Motivation",
+        :description => "Ability to motivate and interest an identified population of learners",
+        :type=> "integer"},
+      {:name => "Presentation Design",
+        :description => "Design of visual and auditory information for enhanced learning and efficient mental processing",
+        :type=> "integer"},
+      {:name => "Interaction Usability",
+        :description => "Ease of navigation, predictability of the user interface, and quality of the interface help features",
+        :type=> "integer"},
+      {:name => "Accessibility",
+        :description => "Design of controls and presentation formats to accommodate disabled and mobile learners",
+        :type=> "integer"},
+      {:name => "Reusability",
+        :description => "Ability to use in varying learning contexts and with learners from differing backgrounds",
+        :type=> "integer"},
+      {:name => "Standards Compliance",
+        :description => "Adherence to international standards and specifications",
+        :type=> "integer"}
     ]
   end
+
+
+  #############
+  # Representation Data
+  #############
 
   def self.representationData(lo)
     representationData = Hash.new

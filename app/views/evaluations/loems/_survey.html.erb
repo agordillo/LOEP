@@ -36,8 +36,8 @@
       <p class="survey_question_group_title"><%=sectionTitle%></p>
     <% end %>
 
-    <p class="survey_question_title"><%=nItemToShow%>. <%=item[0]%></p>
-    <p class="survey_question_subtitle"><%=item[1]%></p>
+    <p class="survey_question_title"><%=nItemToShow%>. <%=item[:name]%></p>
+    <p class="survey_question_subtitle"><%=item[:description]%></p>
     
     <div class="rating_wrapper">
       <div class="rating_wrapper_column1">

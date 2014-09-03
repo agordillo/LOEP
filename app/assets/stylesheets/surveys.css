@@ -102,7 +102,11 @@ div.hover-start_text {
 	display: inline-block;
 	margin-left: 15px;
 	cursor: default;
-	float: left;
+}
+
+div.remove_hover-start-value {
+	margin-left: 5px;
+	cursor: pointer;
 }
 
 .numberCircle {

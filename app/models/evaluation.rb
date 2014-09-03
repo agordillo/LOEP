@@ -69,17 +69,32 @@ class Evaluation < ActiveRecord::Base
   #######################
 
   def extended_attributes
-    attrs = self.attributes
+    evModule = self.evmethod.module.constantize
+    nIntegerItems = evModule.getItemsWithType("integer").length
+    nStringItems = evModule.getItemsWithType("string").length
+    nTextItems = evModule.getItemsWithType("text").length
+    itemNamesToReject = []
+    100.times do |i|
+      if i > nIntegerItems
+        itemNamesToReject.push("item"+i.to_s)
+      end
+      if i > nStringItems
+        itemNamesToReject.push("sitem"+i.to_s)
+      end
+      if i > nTextItems
+        itemNamesToReject.push("titem"+i.to_s)
+      end
+    end
+    
+    attrs = self.attributes.reject{ |key,value| (key.start_with?(*itemNamesToReject))}
     attrs["Reviewer"] = self.user.name
     attrs["loName"] = self.lo.name
     attrs["evMethodName"] = self.evmethod.name
     
     Metric.allc.select { |m| m.evmethods == [self.evmethod] }.each do |m|
-      #Metrics that only use the ev method.
-      #In this case, the scores of the metrics may be included in the evaluations
-      if m.class.methods.include? :getScoreForEvaluation
-        attrs[m.name] = m.class.getScoreForEvaluation(self)
-      end
+      #Metrics that only use this ev method.
+      #In this case, the scores of the metrics can be included in the evaluations
+      attrs[m.name] = m.getScoreForEvaluation(self)
     end
     
     attrs
@@ -125,6 +140,10 @@ class Evaluation < ActiveRecord::Base
       items.push(i+1)
     end
     items
+  end
+
+  def self.getItemsWithType(type)
+    getItems.reject{|item| item[:type].nil? or item[:type]!=type}
   end
 
 
