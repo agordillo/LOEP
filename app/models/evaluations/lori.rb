@@ -41,14 +41,25 @@ class Evaluations::Lori < Evaluation
     ]
   end
 
+  def self.getScale
+    return [1,5]
+  end
+
 
   #############
   # Representation Data
   #############
 
   def self.representationData(lo)
-    metric = Metric.find_by_type("Metrics::LORIAM")
-    buildRepresentationDataWithMetric(lo,metric)
+    super(lo,Metric.find_by_type("Metrics::LORIAM"))
+  end
+
+  def self.representationDataForLos(los)
+    super
+  end
+
+  def self.representationDataForComparingLos(los)
+    super
   end
 
 end

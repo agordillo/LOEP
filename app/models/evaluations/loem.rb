@@ -59,13 +59,24 @@ class Evaluations::Loem < Evaluation
     ]
   end
 
+  def self.getScale
+    return [1,3]
+  end
+
   #############
   # Representation Data
   #############
 
   def self.representationData(lo)
-    metric = Metric.find_by_type("Metrics::LOEMAM")
-    buildRepresentationDataWithMetric(lo,metric)
+    super(lo,Metric.find_by_type("Metrics::LOEMAM"))
+  end
+
+  def representationDataForLos(los)
+    super
+  end
+
+  def representationDataForComparingLos(los)
+    super
   end
 
 end

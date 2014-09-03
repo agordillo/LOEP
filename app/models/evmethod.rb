@@ -22,6 +22,115 @@ class Evmethod < ActiveRecord::Base
     Evmethod.where("name in (?)",LOEP::Application.config.evmethod_names)
   end
 
+
+  ################################
+  # Method for represent evaluations of a specific evmethod through graphs
+  ################################
+
+  def buildRepresentationData(lo,metric=nil)
+    if metric.nil?
+      metric = Metric.allc.select{|m| m.evmethods == [self]}.first
+      if metric.nil?
+        return nil
+      end
+    end
+
+    evData = lo.getEvaluationData(self)[self.name]
+
+    iScores = evData[:items]
+    if iScores.blank? or iScores.include? nil
+      return nil
+    end
+
+    scale = self.module.constantize.getScale
+    iScores.each_with_index do |iScore,index|
+      iScores[index] = ((iScore-scale[0]) * 10/(scale[1]-scale[0]).to_f).round(2)
+    end
+
+    representationData = Hash.new
+    representationData["iScores"] = iScores
+
+    loScoreForAverage = lo.scores.find_by_metric_id(metric.id)
+    unless loScoreForAverage.nil?
+      representationData["averageScore"] = loScoreForAverage.value.round(2)
+    end
+    representationData["name"] = lo.name
+    representationData["labels"] = self.module.constantize.getItems.map{|li| li[:name]}
+    representationData["engine"] = "Rgraph"
+    representationData
+  end
+
+  def representationDataForLos(los)
+    representationData = Hash.new
+    evModule = self.module.constantize
+    items = evModule.getItems
+    graphEngine = nil
+    nItems = items.length
+
+    iScores =  []
+    nItems.times do |i|
+      iScores.push(nil)
+    end
+    
+    los.each do |lo|
+      rpdLo = evModule.representationData(lo)
+      if !graphEngine and !rpdLo["engine"].nil?
+        graphEngine = rpdLo["engine"]
+      end
+      unless rpdLo.nil?
+        iScoresLo = rpdLo["iScores"]
+        nItems.times do |i|
+          unless iScoresLo[i].nil?
+            if iScores[i].nil?
+              iScores[i] = iScoresLo[i]
+            else
+              iScores[i] = iScores[i] + iScoresLo[i]
+            end
+          end
+        end
+      end
+    end
+
+    losL = los.length
+    nItems.times do |i|
+      if !iScores[i].nil?
+        iScores[i] = (iScores[i]/losL).round(2)
+      end
+    end
+
+    representationData["iScores"] = iScores
+    representationData["averageScore"] = (representationData["iScores"].sum/representationData["iScores"].size.to_f).round(2)
+    representationData["labels"] = items.map{|li| li[:name]}
+    unless graphEngine.nil?
+      representationData["engine"] = graphEngine
+    end
+    representationData
+  end
+
+  def representationDataForComparingLos(los)
+    representationData = Hash.new
+    evModule = self.module.constantize
+
+    los.each do |lo|
+      rpdLo = evModule.representationData(lo)
+      if !rpdLo.nil? and !rpdLo["iScores"].nil? and !rpdLo["iScores"].include? nil
+        representationData[lo.id] = rpdLo
+      end
+    end
+
+    if representationData.length < 2
+      return nil
+    end
+
+    representationData["labels"] = evModule.getItems.map{|li| li[:name]}
+    
+    if !representationData.values.first.nil? and !representationData.values.first["engine"].nil?
+      representationData["engine"] = representationData.values.first["engine"]
+    end
+
+    representationData
+  end
+
   #############
   #Paths
   #############

@@ -4,7 +4,9 @@ class Metrics::LORIORT < Metric
   # this is for Metrics with type=LORIORT
   #Override methods here
 
-  def self.getLoScore(items,evaluations)
+  def self.getLoScore(evData)
+    items = evData[self.getInstance.evmethods.first.name][:items]
+
     scores = getLORIPTScores(items)
     if scores.nil? or scores[0].nil? or scores[1].nil?
       return nil

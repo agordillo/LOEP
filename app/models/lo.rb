@@ -209,6 +209,51 @@ class Lo < ActiveRecord::Base
   end
 
 
+  ##############
+  # Evaluation Data
+  #############
+
+  #Return the evaluations and average item values, grouped by evaluation methods.
+  def getEvaluationData(evmethod=nil)
+    evData = Hash.new
+
+    if evmethod.nil?
+      loEvmethods = self.evmethods.uniq
+    else
+      loEvmethods = [evmethod]
+    end
+
+    loEvmethods.each do |evmethod|
+      evData[evmethod.name] = Hash.new
+      evData[evmethod.name][:evaluations] = self.evaluations.where(:evmethod_id => evmethod.id)
+      evData[evmethod.name][:items] = [] #itemsAverageValue
+
+      nItems = evmethod.module.constantize.getItems.length
+
+      if evData[evmethod.name][:evaluations].length === 0
+        nItems.times do |i|
+          evData[evmethod.name][:items].push(nil)
+        end
+        next
+      end
+
+      nItems.times do |i|
+        validEvaluations = Evaluation.getValidEvaluationsForItem(evData[evmethod.name][:evaluations],i+1)
+        if validEvaluations.length == 0
+          #Means that this item has not been evaluated in any evaluation
+          #All evaluations had leave this item in blank
+          iScore = nil
+        else
+          iScore = validEvaluations.average("item"+(i+1).to_s).to_f
+        end
+        evData[evmethod.name][:items].push(iScore)
+      end
+    end
+
+    evData
+  end
+
+
   #Class Methods
 
   def self.orderByScore(los,metric)

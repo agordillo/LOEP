@@ -55,78 +55,31 @@ class Metric < ActiveRecord::Base
     scores
   end
 
-  def getScoreForLo(lo, evaluation=nil)
-    evData = getEvaluationData(lo,evaluation)
+  def getScoreForLo(lo)
+    getScoreForEvData(lo.getEvaluationData)
+  end
 
+  #This score only makes sense for metrics that only rely on one evmethod.
+  def getScoreForEvaluation(evaluation)
+    getScoreForEvData(evaluation.getEvaluationData)
+  end
+
+  def getScoreForEvData(evData)
     if self.evmethods.length == 1
-      #Metric with only one Evmethod. Keep it simple.
-      itemAverageValues = evData[:items]
+      #Metric with only one Evmethod.
+      itemAverageValues = evData.values.first[:items]
       if itemAverageValues.blank? or itemAverageValues.include? nil
         return nil
       end
-      loScore = self.class.getLoScore(itemAverageValues,evData[:evaluations])
-    else
-      loScore = self.class.getLoScore(evData)
     end
+
+    loScore = self.class.getLoScore(evData)
 
     unless loScore.nil?
       loScore = ([[loScore,0].max,10].min).round(2)
     end
 
     return loScore
-  end
-
-  #Return the evaluations and average item values, grouped by evaluation methods.
-  def getEvaluationData(lo,evaluation=nil)
-    evData = Hash.new
-
-    if evaluation.nil?
-      evmethods = self.evmethods
-    else
-      evmethods = [evaluation.evmethod]
-    end
-
-    evmethods.each do |evmethod|
-      evData[evmethod.name] = Hash.new
-      if evaluation.nil?
-        evData[evmethod.name][:evaluations] = lo.evaluations.where(:evmethod_id => evmethod.id)
-      else
-        evData[evmethod.name][:evaluations] = lo.evaluations.where(:id => evaluation.id)
-      end
-      evData[evmethod.name][:items] = [] #itemsAverageValue
-
-      nItems = evmethod.module.constantize.getItems.length
-
-      if evData[evmethod.name][:evaluations].length === 0
-        nItems.times do |i|
-          evData[evmethod.name][:items].push(nil)
-        end
-        next
-      end
-
-      nItems.times do |i|
-        validEvaluations = Evaluation.getValidEvaluationsForItem(evData[evmethod.name][:evaluations],i+1)
-        if validEvaluations.length == 0
-          #Means that this item has not been evaluated in any evaluation
-          #All evaluations had leave this item in blank
-          iScore = nil
-        else
-          iScore = validEvaluations.average("item"+(i+1).to_s).to_f
-        end
-        evData[evmethod.name][:items].push(iScore)
-      end
-    end
-
-    if self.evmethods.length == 1
-      evData = evData.values.first
-    end
-
-    evData
-  end
-
-  #This score only makes sense for metrics that only rely on one evmethod.
-  def getScoreForEvaluation(evaluation)
-    getScoreForLo(evaluation.lo,evaluation)
   end
 
   def self.itemWeights
@@ -140,6 +93,14 @@ class Metric < ActiveRecord::Base
       end
     end
     itemWeights
+  end
+
+  ################################
+  # Method for metrics to implement and override
+  ################################
+
+  def self.getLoScore(evData,evaluations=nil)
+    #Override me
   end
 
 end

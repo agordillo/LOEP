@@ -44,6 +44,7 @@
 		<% else %>
 			var keyIndex = 0;
 			//Comparison case (Several LOs)
+			<%representationData.delete("engine")%>
 			<% representationData.each do |key, loData|%>
 				<%if key != "labels"%>
 					var graphValues = <%=loData["iScores"]%>;

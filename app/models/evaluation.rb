@@ -53,16 +53,22 @@ class Evaluation < ActiveRecord::Base
   after_save :updateScores
   after_save :checkCallbacks
 
+
+  ################################
+  # Method to inherit and override
+  ################################
+
   def init
   end
 
-  def self.allc(params = {})
-    Evaluation.where("evmethod_id in (?)",LOEP::Application.config.evmethods.map{|evmethod| evmethod.id})
+  def self.getItems
   end
-  
-  def readable_completed_at
-    Utils.getReadableDate(self.completed_at)
+
+  def self.getScale
+    #Override me
+    return [0,10]
   end
+
 
   #######################
   # Get extended Evaluation Data
@@ -115,7 +121,17 @@ class Evaluation < ActiveRecord::Base
     evaluation_path = Rails.application.routes.url_helpers.send(helper_method_name,self)
   end
 
-  #Utils
+  ###########
+  # Utils
+  ###########
+
+  def self.allc(params = {})
+    Evaluation.where("evmethod_id in (?)",LOEP::Application.config.evmethods.map{|evmethod| evmethod.id})
+  end
+  
+  def readable_completed_at
+    Utils.getReadableDate(self.completed_at)
+  end
 
   def self.getValidEvaluationsForItem(evaluations,nItem)
     getValidEvaluationsForItems(evaluations,[nItem])
@@ -151,86 +167,41 @@ class Evaluation < ActiveRecord::Base
   # Method for evaluations to inherit
   ################################
 
-  def self.buildRepresentationDataWithMetric(lo,metric)
-    evData = metric.getEvaluationData(lo)
-    iScores = evData[:items]
-    if iScores.blank? or iScores.include? nil
-      return nil
+  def getEvaluationData
+    evData = Hash.new
+    evmethodName = self.evmethod.name
+    evmethodModule = self.evmethod.getEvaluationModule
+    evData[evmethodName] = Hash.new
+    evData[evmethodName][:evaluations] = [self]
+    evData[evmethodName][:items] = []
+
+    validEvaluations = Evaluation.getValidEvaluationsForItem([self],evmethodModule.getItemsArray)
+    nItems = evmethodModule.getItems.length
+
+    if validEvaluations.length === 0
+      nItems.times do |i|
+        evData[evmethodName][:items].push(nil)
+      end
+    else
+      nItems.times do |i|
+        iScore = validEvaluations.average("item"+(i+1).to_s).to_f
+        evData[evmethod.name][:items].push(iScore)
+      end
     end
 
-    representationData = Hash.new
-    representationData["iScores"] = iScores
+    evData
+  end
 
-    loScoreForAverage = lo.scores.find_by_metric_id(metric.id)
-    if !loScoreForAverage.nil?
-      representationData["averageScore"] = loScoreForAverage.value.round(2)
-    end
-    representationData["name"] = lo.name
-    representationData["labels"] = getItems.map{|li| li[:name]}
-    representationData["engine"] = "Rgraph"
-    representationData
+  def self.representationData(lo,metric=nil)
+    representationData = Evmethod.find_by_module(self.name).buildRepresentationData(lo,metric)
   end
 
   def self.representationDataForLos(los)
-    representationData = Hash.new
-    graphEngine = nil
-    nItems = getItems.length
-
-    iScores =  []
-    nItems.times do |i|
-      iScores.push(nil)
-    end
-    
-    los.each do |lo|
-      rpdLo = representationData(lo)
-      if !graphEngine and !rpdLo["engine"].nil?
-        graphEngine = rpdLo["engine"]
-      end
-      unless rpdLo.nil?
-        iScoresLo = rpdLo["iScores"]
-        nItems.times do |i|
-          unless iScoresLo[i].nil?
-            if iScores[i].nil?
-              iScores[i] = iScoresLo[i]
-            else
-              iScores[i] = iScores[i] + iScoresLo[i]
-            end
-          end
-        end
-      end
-    end
-
-    losL = los.length
-    nItems.times do |i|
-      if !iScores[i].nil?
-        iScores[i] = (iScores[i]/losL).round(2)
-      end
-    end
-
-    representationData["iScores"] = iScores
-    representationData["averageScore"] = (representationData["iScores"].sum/representationData["iScores"].size.to_f).round(2)
-    representationData["labels"] = getItems.map{|li| li[:name]}
-    unless graphEngine.nil?
-      representationData["engine"] = graphEngine
-    end
-    representationData
+    Evmethod.find_by_module(self.name).representationDataForLos(los)
   end
 
   def self.representationDataForComparingLos(los)
-    representationData = Hash.new
-    los.each do |lo|
-      rpdLo = representationData(lo)
-      if !rpdLo.nil? and !rpdLo["iScores"].nil? and !rpdLo["iScores"].include? nil
-        representationData[lo.id] = rpdLo
-      end
-    end
-    representationData["labels"] = getItems.map{|li| li[:name]}
-    
-    if !representationData.values.first.nil? and !representationData.values.first["engine"].nil?
-      representationData["engine"] = representationData.values.first["engine"]
-    end
-
-    representationData
+    Evmethod.find_by_module(self.name).representationDataForComparingLos(los)
   end
 
 

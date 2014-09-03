@@ -61,8 +61,12 @@ class LosController < ApplicationController
     @assignments = @lo.assignments.sort{|b,a| a.compareAssignmentForAdmins(b)}
     authorize! :index, @assignments
 
-    @evaluations = @lo.evaluations.sort_by{ |ev| ev.updated_at}.reverse
+    @evaluations = @lo.evaluations.sort_by{ |ev| [ev.evmethod.name,ev.updated_at]}
     authorize! :index, @evaluations
+    
+    @scores = @lo.scoresc.sort_by{|s| [s.metric.evmethods.sort_by{|ev| ev.name}.first.name,s.metric.name]}
+
+    @evmethods = @lo.getScoreEvmethods.sort_by{|ev| ev.name}
 
     Utils.update_sessions_paths(session, los_path, request.url)
     @options_select = getOptionsForSelect

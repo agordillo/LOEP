@@ -1,7 +1,7 @@
 #LORI WAM with CURRENT collected weights (LORI WAM CCW)
 #Use the current weights obtained from the LORI survey
 
-class Metrics::LORIWAM3 < Metrics::LORIWAM
+class Metrics::LORIWAM3 < Metrics::WAM
   # this is for Metrics with type=LORIWAM3
 
   def self.itemWeights

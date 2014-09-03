@@ -2,7 +2,7 @@
 #Arithmetic mean of all LORI items.
 #All items have the same importance (same weight)
 
-class Metrics::LORIAM < Metrics::LORIWAM
+class Metrics::LORIAM < Metrics::WAM
   # this is for Metrics with type=LORIAM
 
   def self.itemWeights
