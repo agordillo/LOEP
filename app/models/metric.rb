@@ -58,7 +58,7 @@ class Metric < ActiveRecord::Base
   def getScoreForLo(lo, evaluation=nil)
     evData = getEvaluationData(lo,evaluation)
 
-    if evData.length == 1
+    if self.evmethods.length == 1
       #Metric with only one Evmethod. Keep it simple.
       itemAverageValues = evData[:items]
       if itemAverageValues.blank? or itemAverageValues.include? nil

@@ -7,6 +7,7 @@ namespace :db do
 
 	namespace :populate do
 
+		#bundle exec rake db:populate:reload
 		task :reload => :environment do
 			desc "Populate db"
 			puts "Populating database for development"
@@ -148,6 +149,8 @@ namespace :db do
 			puts "Population finished"
 		end
 
+		#bundle exec rake db:populate:install
+		#bundle exec rake db:populate:install RAILS_ENV=production
 		task :install => :environment do
 			desc 'Populate database for production'
 			puts "Populating database for production"
@@ -161,6 +164,8 @@ namespace :db do
 			puts "Population finished"
 		end
 
+		#bundle exec rake db:populate:upgrade
+		#bundle exec rake db:populate:upgrade RAILS_ENV=production
 		task :upgrade => :environment do
 			desc 'Upgrade LOEP to the new version'
 			puts "Upgrading LOEP to the version: " + LOEP::Application.config.version
