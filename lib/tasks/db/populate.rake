@@ -189,7 +189,6 @@ namespace :db do
 			Rake::Task["db:populate:languages"].invoke
 			Rake::Task["db:populate:evmethods"].invoke
 			Rake::Task["db:populate:metrics"].invoke
-			Rake::Task["db:populate:scores"].invoke
 		end
 
 		task :roles => :environment do
@@ -291,9 +290,13 @@ namespace :db do
 					m.save!
 				end
 			end
+
+			#Create new scores for the metrics
+			Rake::Task["db:populate:scores"].invoke
 		end
 
 		task :scores => :environment do
+			puts "Recalculating scores..."
 			Metric.allc.each do |m|
 				Lo.all.each do |lo|
 					s = Score.new
