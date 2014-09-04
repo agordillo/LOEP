@@ -23,6 +23,7 @@ LOEP::Application.routes.draw do
   namespace :evaluations do
     resources :loris
     resources :loems
+    resources :wbltses
   end
 
   match '/evmethods/:id/documentation' => 'evmethods#documentation'

@@ -188,3 +188,7 @@ p.or_block_separator {
 	margin-bottom: 0px;
 	height: 10px;
 }
+
+textarea.evaluation_survey_text_item_input{
+	margin-bottom: 15px;
+}

@@ -3,6 +3,11 @@
 <div class="show_wrapper">
   <div class="rshow_wrapper">
     <h2><%=@lo.name%></h2>
+
+    <% if iamAdmin? %>
+      <%= link_to 'View as Admin', lo_path(@lo) %>
+    <% end %>
+
     <p class="space_medium"></p>
 
     <p class="show_sublegend">Click on the URL shown below to access the Learning Object</p>

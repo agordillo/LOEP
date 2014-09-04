@@ -158,8 +158,11 @@ class Evaluation < ActiveRecord::Base
     items
   end
 
-  def self.getItemsWithType(type)
-    getItems.reject{|item| item[:type].nil? or item[:type]!=type}
+  def self.getItemsWithType(type,items=nil)
+    if items.nil?
+      items = getItems
+    end
+    items.reject{|item| item[:type].nil? or item[:type]!=type}
   end
 
 
