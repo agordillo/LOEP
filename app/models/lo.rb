@@ -214,13 +214,16 @@ class Lo < ActiveRecord::Base
   #############
 
   #Return the evaluations and average item values, grouped by evaluation methods.
-  def getEvaluationData(evmethod=nil)
+  def getEvaluationData(evmethods=nil)
     evData = Hash.new
 
-    if evmethod.nil?
+    if evmethods.nil?
       loEvmethods = self.evmethods.uniq
     else
-      loEvmethods = [evmethod]
+      unless evmethods.is_a? Array
+        evmethods = [evmethods]
+      end
+      loEvmethods = evmethods
     end
 
     loEvmethods.each do |evmethod|

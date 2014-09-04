@@ -56,7 +56,7 @@ class Metric < ActiveRecord::Base
   end
 
   def getScoreForLo(lo)
-    getScoreForEvData(lo.getEvaluationData)
+    getScoreForEvData(lo.getEvaluationData(self.evmethods))
   end
 
   #This score only makes sense for metrics that only rely on one evmethod.
@@ -65,10 +65,19 @@ class Metric < ActiveRecord::Base
   end
 
   def getScoreForEvData(evData)
-    if self.evmethods.length == 1
-      #Metric with only one Evmethod.
-      itemAverageValues = evData.values.first[:items]
+    if evData.blank?
+      return nil
+    end
+
+    if evData.length < self.evmethods.length
+      #Data about some required evmethod is missing
+      return nil
+    end
+
+    evData.each do |key,value|
+      itemAverageValues = value[:items]
       if itemAverageValues.blank? or itemAverageValues.include? nil
+        #Some evmethod data is missing
         return nil
       end
     end
