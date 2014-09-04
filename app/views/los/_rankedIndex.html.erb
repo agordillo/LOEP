@@ -60,20 +60,6 @@
         scoresArray.push(i);
     }
 
-    //Custom Sorting
-    jQuery.fn.dataTableExt.oSort['scores-asc'] = function(a,b){
-      if(a.indexOf("No")!=-1){
-        return -1;
-      } else if(b.indexOf("No")!=-1){
-        return 1;
-      }
-      return jQuery.fn.dataTableExt.oSort['html-asc'](a,b);
-    };
-
-    jQuery.fn.dataTableExt.oSort['scores-desc'] = function(a,b){
-      return jQuery.fn.dataTableExt.oSort['scores-asc'](a,b)*(-1);
-    };
-
     //DOC: http://datatables.net
     var losTable = $("#rankedLosTable").dataTable({
       "bJQueryUI": true,

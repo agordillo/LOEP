@@ -75,8 +75,12 @@ class Assignment < ActiveRecord::Base
   	Utils.getReadableDate(self.deadline)
   end
 
+  def readable_updated_at
+    Utils.getReadableDate(self.updated_at)
+  end
+
   def readable_completed_at
-  	if !Utils.getReadableDate(self.completed_at).blank?
+  	unless Utils.getReadableDate(self.completed_at).blank?
       Utils.getReadableDate(self.completed_at)
     else
       ("Uncompleted <span class='status_in_completed_at'>(" + readable_status + ")</span>").html_safe

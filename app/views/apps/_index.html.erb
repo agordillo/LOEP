@@ -24,7 +24,7 @@
           <a target="_blank" href="<%=user_path(app.user)%>"><%= app.user.name %></a>
         </td>
         <td class="tdcenter">
-          <%= app.created_at %>
+          <%= Utils.getReadableDate(app.created_at) %>
         </td>
         <td class="tdcenter tdedit">
             <%if can?(:update,app) %>
@@ -62,7 +62,8 @@
       "aaSorting": [[ 0, "asc" ]],
       "aoColumnDefs": [
           { 'bSortable': false, 'aTargets': [ 3,4 ] },
-          { "bSearchable": false, "aTargets": [ 3,4 ] }
+          { "bSearchable": false, "aTargets": [ 3,4 ] },
+          { "sType":"loep-date-dd/mm/yyyy", "aTargets": [2] }
       ],
       "sDom": '<"H"lfr><"F"ip>t',
       "iDisplayLength": iDisplayLength,

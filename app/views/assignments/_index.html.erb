@@ -144,10 +144,11 @@
     var resTable = $("#as_table").dataTable({
       "bJQueryUI": true,
       "sPaginationType": "full_numbers",
-      // "aaSorting": [[ 1, "asc" ]],
+      // "aaSorting": [[ 5, "desc" ]],
       "aoColumnDefs": [
         { 'bSortable': false, 'aTargets': [ 0,6,7,8 ] },
-        { "bSearchable": false, "aTargets": [ 0,5,6,7,8 ] }
+        { "bSearchable": false, "aTargets": [ 0,5,6,7,8 ] },
+        { "sType":"loep-date-dd/mm/yyyy", "aTargets": [5] }
       ],
       "sDom": '<"H"lfr><"F"ip>t',
       "iDisplayLength": iDisplayLength,

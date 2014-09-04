@@ -12097,3 +12097,84 @@
 
 }(window, document));
 
+
+
+/*
+ * JQuery Datatable Plugins
+ */
+
+(function () {
+
+	////////////////////
+	// Dates Sorting
+	///////////////////
+
+ 	var customDateSortNumber = function(date){
+		"use strict"; //let's avoid tom-foolery in this function
+
+		try {
+			date = $(date).html();
+		} catch(e){}
+
+		// Convert dd/mm/yyyy hh:mm zt to a number which we can use to order
+		var firstSplit = date.split(" ");
+
+		var secondSplit = firstSplit[0].split("/");
+		var days = (parseInt(secondSplit[0]) + (parseInt(secondSplit[1])*31) + (parseInt(secondSplit[2])*365));
+
+		var thirdSplit = firstSplit[1].split(":");
+		var minutes = days*24*60 + parseInt(thirdSplit[0])*60 + parseInt(thirdSplit[1]);
+
+		return minutes;
+	};
+
+	jQuery.fn.dataTableExt.oSort['loep-date-dd/mm/yyyy-asc'] = function(a,b){
+		"use strict"; //let's avoid tom-foolery in this function
+		var ordA = customDateSortNumber(a),
+		  ordB = customDateSortNumber(b);
+		return (ordA < ordB) ? -1 : ((ordA > ordB) ? 1 : 0);
+	};
+
+	jQuery.fn.dataTableExt.oSort['loep-date-dd/mm/yyyy-desc'] = function(a,b){
+		"use strict"; //let's avoid tom-foolery in this function
+		var ordA = customDateSortNumber(a),
+		  ordB = customDateSortNumber(b);
+		return (ordA < ordB) ? 1 : ((ordA > ordB) ? -1 : 0);
+	};
+
+	////////////////////
+	// Scores Sorting
+	///////////////////
+
+    jQuery.fn.dataTableExt.oSort['scores-asc'] = function(a,b){
+      if(a.indexOf("No")!=-1){
+        return -1;
+      } else if(b.indexOf("No")!=-1){
+        return 1;
+      }
+      return jQuery.fn.dataTableExt.oSort['html-asc'](a,b);
+    };
+
+    jQuery.fn.dataTableExt.oSort['scores-desc'] = function(a,b){
+      return jQuery.fn.dataTableExt.oSort['scores-asc'](a,b)*(-1);
+    };
+
+
+	////////////////////
+	// Automatic Type Detection (Not working right now)
+	///////////////////
+
+	// // This will help DataTables magic detect the "dd/mm/yyyy" format; Unshift
+	// // so that it's the first data type (so it takes priority over existing)
+	// jQuery.fn.dataTableExt.aTypes.unshift(
+	// 	function (sData) {
+	// 		"use strict"; //let's avoid tom-foolery in this function
+	// 		if (/^(<(.*)>)([0-2]?\d|3[0-1])\/([1][0-2]|[0]?[1-9])\/\d{4} ([1-2][0-3]|[0]?[1-9]):([1-5][0-9]|[0]?[0-9]) (am|pm)(<\/(.*)>)/i.test(sData)){
+	// 			return 'loep-date-dd/mm/yyyy';
+	// 		}
+	// 		return null;
+	// 	}
+	// );
+
+})();
+
