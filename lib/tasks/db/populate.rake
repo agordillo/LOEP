@@ -241,7 +241,9 @@ namespace :db do
 			#Create the evaluation methods in the database if they are not created
 			LOEP_VANILLA_EvMethods = [
 				{name:"LORI v1.5", module_name:"Evaluations::Lori", multiple:false},
-				{name:"LOEM", module_name:"Evaluations::Loem", multiple:false}
+				{name:"LOEM", module_name:"Evaluations::Loem", multiple:false},
+				{name:"WBLT-S", module_name:"Evaluations::Wblts", multiple:true},
+				{name:"WBLT-T", module_name:"Evaluations::Wbltt", multiple:false}
 			]
 
 			LOEP_VANILLA_EvMethods.each do |evmethod|
@@ -272,7 +274,10 @@ namespace :db do
 				{name:"LORI Orthogonal Metric", module_name:"Metrics::LORIORT", evmethods:["LORI v1.5"]},
 				{name:"LORI Square Root Metric", module_name:"Metrics::LORISQRT", evmethods:["LORI v1.5"]},
 				{name:"LORI Logarithmic Metric", module_name:"Metrics::LORILOG", evmethods:["LORI v1.5"]},
-				{name:"LOEM Arithmetic Mean", module_name:"Metrics::LOEMAM", evmethods:["LOEM"]}
+				{name:"LOEM Arithmetic Mean", module_name:"Metrics::LOEMAM", evmethods:["LOEM"]},
+				{name:"WBLT-S Arithmetic Mean", module_name:"Metrics::WBLTSAM", evmethods:["WBLT-S"]},
+				{name:"WBLT-T Arithmetic Mean", module_name:"Metrics::WBLTTAM", evmethods:["WBLT-T"]},
+				{name:"LORIEM", module_name:"Metrics::LORIEM", evmethods:["LORI v1.5","LOEM"]}
 			]
 
 			LOEP_VANILLA_Metrics.each do |metric|
