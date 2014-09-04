@@ -11,6 +11,7 @@ class Metrics::LORIORT < Metric
     if scores.nil? or scores[0].nil? or scores[1].nil?
       return nil
     end
+    
     loScore = getOverallScore(scores[0],scores[1])
     return loScore
   end
