@@ -192,14 +192,17 @@ class Evaluation < ActiveRecord::Base
     evData
   end
 
+  #Data for representing one single LO
   def self.representationData(lo,metric=nil)
     representationData = Evmethod.find_by_module(self.name).buildRepresentationData(lo,metric)
   end
 
+  #Data for representing aggregated stats of a LO group
   def self.representationDataForLos(los)
     Evmethod.find_by_module(self.name).representationDataForLos(los)
   end
 
+  #Data for comparing a LO group among them
   def self.representationDataForComparingLos(los)
     Evmethod.find_by_module(self.name).representationDataForComparingLos(los)
   end
