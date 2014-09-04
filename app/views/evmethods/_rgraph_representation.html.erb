@@ -36,7 +36,9 @@
 			var graphValues = <%=representationData["iScores"]%>;
 			RGraphRadarArgs.push(graphValues);
 			RGraphRadarTooltipArgs.push(graphValues.map(function(v){return v.toString()}));
-			RGraphRadarFillTooltipArgs[1].push(<%=representationData["averageScore"]%>.toString());
+			<%unless representationData["averageScore"].nil? %>
+				RGraphRadarFillTooltipArgs[1].push((<%=representationData["averageScore"]%>).toString());
+			<% end %>
 			// <%if !representationData["name"].nil? %>
 			// 	RGraphRadarKeyArgs[1].push(shortString('<%=representationData["name"]%>'));
 			// <% end %>

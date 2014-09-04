@@ -1,0 +1,159 @@
+<p class="survey_title"> WBLT-T Evaluation Survey </p>
+
+<%integerItemsIndex=0%>
+<%textItemsIndex=0%>
+
+<% @evmethodItems.each_with_index do |item,i| %>
+  <%nItem = i+1%>
+  <div class="survey_block" item="<%=nItem%>">
+    <p class="survey_question_title"><%=nItem%>. <%=item[:name]%></p>
+    <p class="survey_question_subtitle"><%=item[:description]%></p>
+
+    <%if item[:type] == "integer" %>
+      <%integerItemsIndex+=1%>
+      <div class="rating_wrapper">
+        <div class="stars_wrapper">
+          <span  class="hover-star_legend_left">Strongly Disagree</span>
+          <%= f.radio_button "item" + integerItemsIndex.to_s, "1", :class=>'hover-star', :title => "1", :readonly => readonly ? "true" : nil %>
+          <%= f.radio_button "item" + integerItemsIndex.to_s, "2", :class=>'hover-star', :title => "2", :readonly => readonly ? "true" : nil %>
+          <%= f.radio_button "item" + integerItemsIndex.to_s, "3", :class=>'hover-star', :title => "3", :readonly => readonly ? "true" : nil %>
+          <%= f.radio_button "item" + integerItemsIndex.to_s, "4", :class=>'hover-star', :title => "4", :readonly => readonly ? "true" : nil %>
+          <%= f.radio_button "item" + integerItemsIndex.to_s, "5", :class=>'hover-star', :title => "5", :readonly => readonly ? "true" : nil %>
+          <%= f.radio_button "item" + integerItemsIndex.to_s, "6", :class=>'hover-star', :title => "6", :readonly => readonly ? "true" : nil %>
+          <%= f.radio_button "item" + integerItemsIndex.to_s, "7", :class=>'hover-star', :title => "7", :readonly => readonly ? "true" : nil %>
+          <span  class="hover-star_legend_right">Strongly Agree</span>
+        </div>
+        <div class="hover-start_text">
+          <% if readonly %>
+            <% iValue = @evaluation.send("item" + integerItemsIndex.to_s)%>
+            <% if iValue===-1 %>
+              <div class='numberCircle numberCircleSmall'>
+              <span><%="N/A"%></span>
+            <% else %>
+              <div class='numberCircle'>
+              <span><%=iValue %></span>
+            <% end %>
+            </div>
+          <% end %>
+        </div>
+        <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
+      </div>
+    </div>
+  <%elsif item[:type] == "text" %>
+    <%textItemsIndex+=1%>
+    <%= f.text_area "titem" + textItemsIndex.to_s, :class=>'loep_input evaluation_survey_text_item_input optionalInput', :readonly => readonly ? "true" : nil %>
+  <%end%>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    <% if !readonly %>
+
+      $('.hover-star').rating({
+          focus: function(value, link){
+              var ratingWrapper = $("div.rating_wrapper").has(this);
+
+              var tip = $(ratingWrapper).find("div.hover-start_text");
+              var title = $(link).attr("ititle");
+              if(typeof title == "undefined"){
+                title = $(link).attr("title");
+                $(link).removeAttr("title");
+                $(link).attr("ititle",title);
+              }
+              var text = "<div class='numberCircle'>"+title+"</div>";
+              tip.html(text);
+          },
+          blur: function(value, link){
+              var ratingWrapper = $("div.rating_wrapper").has(this);
+              var tip = $(ratingWrapper).find("div.hover-start_text");
+              updateCircle(tip);
+          },
+          callback: function(value, link){
+            if(typeof value == "undefined"){
+              return;
+            }
+
+            var ratingWrapper = $("div.rating_wrapper").has(this);
+
+            var tip = $(ratingWrapper).find("div.hover-start_text");
+            $(tip).attr("selectedValue",value);
+
+            var remove = $(ratingWrapper).find("div.remove_item-value");
+            $(remove).fadeIn().css("display","inline-block");
+
+            var naInput = $(ratingWrapper).find("input.na-input");
+            if($(naInput).length > 0){
+              $(naInput)[0].checked = false
+              $(naInput).trigger("change");
+            }
+
+          }
+      });
+  
+      $(document).on('click', 'div.remove_item-value', function(event){
+          var ratingWrapper = $("div.rating_wrapper").has(this);
+
+          var tip = $(ratingWrapper).find("div.hover-start_text");
+          $(tip).removeAttr("selectedValue");
+
+          var ratingCancelButton = $(ratingWrapper).find("div.rating-cancel > a");
+          $(ratingCancelButton).trigger("click");
+
+          var naInput = $(ratingWrapper).find("input.na-input");
+          if($(naInput).length > 0){
+            $(naInput)[0].checked = false
+            $(naInput).trigger("change");
+          }
+
+          $(tip).fadeOut(function(){
+            $(tip).html("");
+            $(tip).css("display","inline-block");
+          });
+
+          $(this).fadeOut();
+      });
+
+      $(document).on('change', 'input.na-input', function(event){
+        if(this.checked){
+          var ratingWrapper = $("div.rating_wrapper").has(this);
+
+          var ratingCancelButton = $(ratingWrapper).find("div.rating-cancel > a");
+          $(ratingCancelButton).trigger("click")
+
+          var tip = $(ratingWrapper).find("div.hover-start_text");
+          $(tip).attr("selectedValue",$(this).attr("title"));
+          updateCircle(tip);
+
+          var remove = $(ratingWrapper).find("div.remove_item-value");
+          $(remove).fadeIn().css("display","inline-block");
+        }
+      });
+
+      var updateCircle = function(starTextDOM){
+        var selectedValue = $(starTextDOM).attr("selectedValue");
+        if(selectedValue){
+          var classes = 'numberCircle';
+          if(selectedValue == "N/A"){
+            classes = classes + " numberCircleSmall";
+          }
+          var text = "<div class='"+ classes +"'><span>"+selectedValue+"</span></div>";
+        }
+        $(starTextDOM).html(text || '');
+      };
+
+      //Load UI when editing evaluations
+      $(".rating_wrapper").each(function(index,ratingWrapper){
+        $(ratingWrapper).find("input:checked").trigger("change");
+        var tip = $(ratingWrapper).find("div.hover-start_text");
+        updateCircle(tip);
+      });
+
+    <% else %>
+      $('.hover-star').rating();
+      $('.hover-star').rating(
+        'readOnly'
+      );
+    <% end %>
+
+  });
+</script>

@@ -16,7 +16,7 @@ development:
   recaptcha:
     public_key: ""
     private_key: ""
-  evmethods: ["LORI v1.5","LOEM","WBLT-S"]
+  evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T"]
   metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean"]
 
 production:
@@ -27,5 +27,5 @@ production:
   recaptcha:
     public_key: ""
     private_key: ""
-  evmethods: ["LORI v1.5","LOEM","WBLT-S"]
+  evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T"]
   metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean"]

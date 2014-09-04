@@ -30,9 +30,6 @@ class Evmethod < ActiveRecord::Base
   def buildRepresentationData(lo,metric=nil)
     if metric.nil?
       metric = Metric.allc.select{|m| m.evmethods == [self]}.first
-      if metric.nil?
-        return nil
-      end
     end
 
     evData = lo.getEvaluationData(self)[self.name]
@@ -50,10 +47,13 @@ class Evmethod < ActiveRecord::Base
     representationData = Hash.new
     representationData["iScores"] = iScores
 
-    loScoreForAverage = lo.scores.find_by_metric_id(metric.id)
-    unless loScoreForAverage.nil?
-      representationData["averageScore"] = loScoreForAverage.value.round(2)
+    unless metric.nil?
+      loScoreForAverage = lo.scores.find_by_metric_id(metric.id)
+      unless loScoreForAverage.nil?
+        representationData["averageScore"] = loScoreForAverage.value.round(2)
+      end
     end
+
     representationData["name"] = lo.name
     representationData["labels"] = self.module.constantize.getItemsWithType("integer").map{|li| li[:name]}
     representationData["engine"] = "Rgraph"

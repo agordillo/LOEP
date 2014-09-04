@@ -66,7 +66,7 @@ class LosController < ApplicationController
     
     @scores = @lo.scoresc.sort_by{|s| [s.metric.evmethods.sort_by{|ev| ev.name}.first.name,s.metric.name]}
 
-    @evmethods = @lo.getScoreEvmethods.sort_by{|ev| ev.name}
+    @evmethods = @lo.evmethods.uniq.sort_by{|ev| ev.name}
 
     Utils.update_sessions_paths(session, los_path, request.url)
     @options_select = getOptionsForSelect
