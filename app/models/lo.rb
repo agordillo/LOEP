@@ -131,10 +131,10 @@ class Lo < ActiveRecord::Base
     if evmethod.nil?
       false
     else
-      # This method requires a single evaluation to rate all the EvMethod items of the LO to considere it as evaluated
-      #We consider that a LO has been evaluated with a evmethod, if for each item of the method, exists at least one evaluation that rate it with a valid score.
+      # This method requires a single evaluation to rate all the EvMethod numeric items of the LO to considere it as evaluated
+      #We consider that a LO has been evaluated with a evmethod, if for each numeric item of the method, exists at least one evaluation that rate it with a valid score.
       evMethodEvaluations = self.evaluations.where(:evmethod_id => evmethod.id)
-      evmethod.getEvaluationModule.getItems.each_with_index do |item,index|
+      evmethod.getEvaluationModule.getItemsWithType("integer").each_with_index do |item,index|
         if Evaluation.getValidEvaluationsForItem(evMethodEvaluations,index+1).empty?
           return false
         end
@@ -231,7 +231,7 @@ class Lo < ActiveRecord::Base
       evData[evmethod.name][:evaluations] = self.evaluations.where(:evmethod_id => evmethod.id)
       evData[evmethod.name][:items] = [] #itemsAverageValue
 
-      nItems = evmethod.module.constantize.getItems.length
+      nItems = evmethod.module.constantize.getItemsWithType("integer").length
 
       if evData[evmethod.name][:evaluations].length === 0
         nItems.times do |i|

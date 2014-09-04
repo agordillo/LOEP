@@ -1,8 +1,8 @@
 <%= render 'application/rgraph' %>
 
 <% 
-  representationData = nil
   @evmethods.each do |evmethod| 
+    representationData = nil
     if action=="show" and @lo.hasBeenEvaluatedWithEvmethod(evmethod) and evmethod.getEvaluationModule.methods.include? :representationData
       representationData = evmethod.getEvaluationModule.representationData(@lo)
     elsif action=="compare" and evmethod.getEvaluationModule.methods.include? :representationDataForComparingLos

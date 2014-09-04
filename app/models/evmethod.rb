@@ -55,7 +55,7 @@ class Evmethod < ActiveRecord::Base
       representationData["averageScore"] = loScoreForAverage.value.round(2)
     end
     representationData["name"] = lo.name
-    representationData["labels"] = self.module.constantize.getItems.map{|li| li[:name]}
+    representationData["labels"] = self.module.constantize.getItemsWithType("integer").map{|li| li[:name]}
     representationData["engine"] = "Rgraph"
     representationData
   end

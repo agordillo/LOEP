@@ -69,6 +69,13 @@ class Evaluation < ActiveRecord::Base
     return [0,10]
   end
 
+  ################################
+  # Constants
+  ################################
+
+  def self.ALL_ITEM_TYPES
+    ["integer","string","text"]
+  end
 
   #######################
   # Get extended Evaluation Data
@@ -158,11 +165,17 @@ class Evaluation < ActiveRecord::Base
     items
   end
 
-  def self.getItemsWithType(type,items=nil)
+  def self.getItemsWithType(types=nil,items=nil)
+    if types.nil?
+      types = self.ALL_ITEM_TYPES
+    end
+    unless types.is_a? Array
+      types = [types]
+    end
     if items.nil?
       items = getItems
     end
-    items.reject{|item| item[:type].nil? or item[:type]!=type}
+    items.reject{|item| item[:type].nil? or !types.include? item[:type]}
   end
 
 
