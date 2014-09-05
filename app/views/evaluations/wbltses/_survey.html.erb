@@ -9,8 +9,43 @@
 <% @evmethodItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <div class="survey_block" item="<%=nItem%>">
-    <p class="survey_question_title"><%=nItem%>. <%=item[:name]%></p>
-    <p class="survey_question_subtitle"><%=item[:description]%></p>
+    <%
+      case nItem
+      when 1
+        sectionTitle = "1. " + "Quality"
+      when 5
+        sectionTitle = "2. " + "Learning"
+      when 10
+        sectionTitle = "3. " + "Engagement"
+      when 14
+        sectionTitle = "4. " + item[:name]
+      when 15
+        sectionTitle = "5. " + item[:name]
+      else
+        sectionTitle = nil
+      end
+    %>
+    <%
+      case nItem
+      when 1,2,3,4
+        nItemToShow = (nItem+96).chr
+      when 5,6,7,8,9
+        nItemToShow = (nItem-4+96).chr
+      when 10,11,12,13
+        nItemToShow = (nItem-9+96).chr
+      else
+        nItemToShow = nil
+      end
+    %>
+
+    <% unless sectionTitle.nil? %>
+      <p class="survey_question_group_title"><%=sectionTitle%></p>
+    <% end %>
+
+    <% unless nItemToShow.nil? %>
+      <p class="survey_question_title"><%=nItemToShow%>. <%=item[:name]%></p>
+      <p class="survey_question_subtitle"><%=item[:description]%></p>
+    <% end %>
 
     <%if item[:type] == "integer" %>
       <%integerItemsIndex+=1%>

@@ -37,7 +37,7 @@ class Evaluations::Wbltt < Evaluation
         :type=> "text"},
       {:name => "Were there any technology-based problems that you encountered while using your learning object? Please explain.",
         :type=> "text"},
-      {:name => "What advice would you give to future teachers about using learning objects in their lessons?",
+      {:name => "What advice would you give to future teachers about using this learning object in their lessons?",
         :type=> "text"}
     ]
   end
