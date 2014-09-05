@@ -9,7 +9,7 @@ class AssignmentsController < ApplicationController
       return
     end
 
-    @assignments = Assignment.all.sort{|b,a| a.compareAssignmentForAdmins(b)}
+    @assignments = Assignment.allc.sort{|b,a| a.compareAssignmentForAdmins(b)}
     authorize! :index, @assignments
 
     Utils.update_sessions_paths(session, request.url, nil)
@@ -21,7 +21,7 @@ class AssignmentsController < ApplicationController
   end
 
   def rindex
-    @assignments = current_user.assignments.all.sort{|b,a| a.compareAssignmentForReviewers(b)}
+    @assignments = current_user.assignments.allc.sort{|b,a| a.compareAssignmentForReviewers(b)}
     authorize! :rshow, @assignments
 
     Utils.update_sessions_paths(session, nil, nil)

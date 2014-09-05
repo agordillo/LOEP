@@ -60,9 +60,11 @@
 						<% end %>
 					</ul>
 				</li>
-				<li class="<%='menu_option_selected' if params[:controller] == 'surveys'%>">
-					<a href="/surveys"><h3><span class="glyphicon glyphicon-list-alt"></span>Surveys</h3></a>
-				</li>
+				<%if LOEP::Application.config.show_surveys %>
+					<li class="<%='menu_option_selected' if params[:controller] == 'surveys'%>">
+						<a href="/surveys"><h3><span class="glyphicon glyphicon-list-alt"></span>Surveys</h3></a>
+					</li>
+				<% end %>
 <!-- 				<li>
 	      	<a title="Settings" href="%=edit_user_registration_path(current_user)%>"><h3><span class="glyphicon glyphicon-wrench"></span>Settings</h3></a>
 	      </li> -->

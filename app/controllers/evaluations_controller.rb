@@ -19,7 +19,7 @@ class EvaluationsController < ApplicationController
   end
 
   def rindex
-    @evaluations = current_user.evaluations.sort_by{ |ev| ev.updated_at}.reverse
+    @evaluations = current_user.evaluations.allc.sort_by{ |ev| ev.updated_at}.reverse
     authorize! :rshow, @evaluations
 
     Utils.update_sessions_paths(session, nil, nil)
