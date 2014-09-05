@@ -103,14 +103,57 @@ class Evaluation < ActiveRecord::Base
     attrs["Reviewer"] = self.user.name
     attrs["loName"] = self.lo.name
     attrs["evMethodName"] = self.evmethod.name
-    
+
+    attrs["created_at"] = Utils.getReadableDate(attrs["created_at"])
+    attrs["updated_at"] = Utils.getReadableDate(attrs["updated_at"])
+    attrs["completed_at"] = Utils.getReadableDate(attrs["completed_at"])
+
+    commonKeys = attrs.reject{ |key,value| (key.start_with?(*["item","sitem","titem","comments","score"]))}.keys
+    itemKeys = ["item","sitem","titem"]
+    sortedKeys = attrs.keys.sort{ |k1,k2|
+      iK1 = commonKeys.include? k1
+      iK2 = commonKeys.include? k2
+      if iK1
+        if iK2
+          0
+        else
+          -1
+        end
+      else
+        if iK2
+          1
+        else
+          iiK1 = k1.start_with?(*itemKeys)
+          iiK2 = k2.start_with?(*itemKeys)
+          if iiK1
+            if iiK2
+              k1.casecmp(k2)
+            else
+              -1
+            end
+          else
+            if iiK2
+              1
+            else
+              k1.casecmp(k2)
+            end
+          end
+        end
+      end
+    }
+
+    new_attrs = Hash.new
+    sortedKeys.each do |key|
+      new_attrs[key] = attrs[key]
+    end
+
     Metric.allc.select { |m| m.evmethods == [self.evmethod] }.each do |m|
       #Metrics that only use this ev method.
       #In this case, the scores of the metrics can be included in the evaluations
-      attrs[m.name] = m.getScoreForEvaluation(self)
+      new_attrs[m.name] = m.getScoreForEvaluation(self)
     end
     
-    attrs
+    new_attrs
   end
 
 
@@ -141,7 +184,10 @@ class Evaluation < ActiveRecord::Base
   end
 
   def self.getValidEvaluationsForItem(evaluations,nItem)
-    getValidEvaluationsForItems(evaluations,[nItem])
+    unless nItem.is_a? Array
+      nItem = [nItem]
+    end
+    getValidEvaluationsForItems(evaluations,nItem)
   end
 
   def self.getValidEvaluationsForItems(evaluations,nItems)
@@ -154,6 +200,11 @@ class Evaluation < ActiveRecord::Base
       end
       query = query + 'item' + (nItem.to_s) + ' != -1'
     end
+
+    if evaluations.is_a? Array
+      evaluations = Evaluation.where("id in (?)",evaluations.map{|ev| ev.id})
+    end
+
     evaluations.where(query)
   end
 

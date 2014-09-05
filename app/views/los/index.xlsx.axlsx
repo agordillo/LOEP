@@ -28,13 +28,29 @@ wb.add_worksheet(:name => @resourceName) do |sheet|
 
 	rowContents = [];
 	rowContents[0] = @resources.first.extended_attributes.keys
-	@resources.each_with_index do |lo,index|
-		rowContents[index+1] = lo.extended_attributes.values
+	headerIndexs = [0]
+
+	resourceType = @resources.first[:type]
+	useType = !resourceType.nil?
+	offset = 0
+
+	@resources.each_with_index do |resource,index|
+		if useType
+			if resource[:type] != resourceType
+				resourceType = resource[:type]
+				rowContents[index+1+offset] = []
+				offset = offset+1
+				rowContents[index+1+offset] = resource.extended_attributes.keys
+				headerIndexs.push(index+1+offset)
+				offset = offset+1
+			end
+		end
+		rowContents[index+1+offset] = resource.extended_attributes.values
 	end
 
 	rowContents.each_with_index do |rowContent,index|
 		style = odd_row_style
-		if index==0
+		if headerIndexs.include? index
 			style = header_style
 		elsif index%2==0
 			style = even_row_style
@@ -47,15 +63,16 @@ wb.add_worksheet(:name => @resourceName) do |sheet|
 
 	#Get column contents from rowContents
 	columnContents = []
-	unless rowContents.first.nil?
-		rowContents.first.length.times do |i|
-			columnContents[i] = []
-		end
+	nColumns = rowContents.map{|r| r.length}.max
+	nColumns.times do |i|
+		columnContents[i] = []
 	end
 
 	rowContents.each_with_index do |rowContent,index|
 		rowContent.each_with_index do |value,cIndex|
-			columnContents[cIndex] << value
+			unless columnContents[cIndex].nil?
+				columnContents[cIndex] << value
+			end
 		end
 	end
 

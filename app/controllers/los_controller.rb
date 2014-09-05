@@ -441,8 +441,7 @@ class LosController < ApplicationController
   def downloadevs
     @los = Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
     
-    evaluations = []
-    @los.map{|lo| lo.evaluations.map{|ev| evaluations.push(ev)} }
+    evaluations = @los.map{|lo| lo.evaluations.allc}.flatten.sort_by{|ev| ev.evmethod.id}
     
     respond_to do |format|
         format.json {

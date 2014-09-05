@@ -161,6 +161,9 @@ class Lo < ActiveRecord::Base
     attrs = self.attributes
     attrs["keywords"] = self.tag_list.to_s
 
+    attrs["created_at"] = Utils.getReadableDate(attrs["created_at"])
+    attrs["updated_at"] = Utils.getReadableDate(attrs["updated_at"])
+
     Evmethod.allc.each do |evmethod|
       evMethodAssignments = self.assignments.where(:evmethod_id=>evmethod.id)
 
