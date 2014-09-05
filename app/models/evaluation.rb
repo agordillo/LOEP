@@ -127,7 +127,11 @@ class Evaluation < ActiveRecord::Base
           iiK2 = k2.start_with?(*itemKeys)
           if iiK1
             if iiK2
-              k1.casecmp(k2)
+              if k1.match(/[a-z]+/).values_at(0).first == k2.match(/[a-z]+/).values_at(0).first
+                k1.match(/\d+/).values_at(0).first.to_i <=> k2.match(/\d+/).values_at(0).first.to_i
+              else
+                k1.casecmp(k2)
+              end
             else
               -1
             end
