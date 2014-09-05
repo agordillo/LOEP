@@ -63,7 +63,8 @@ class Evmethod < ActiveRecord::Base
   def representationDataForLos(los)
     representationData = Hash.new
     evModule = self.module.constantize
-    items = evModule.getItems
+    items = evModule.getItemsWithType("integer")
+
     graphEngine = nil
     nItems = items.length
 
@@ -100,7 +101,7 @@ class Evmethod < ActiveRecord::Base
 
     representationData["iScores"] = iScores
     representationData["averageScore"] = (representationData["iScores"].sum/representationData["iScores"].size.to_f).round(2)
-    representationData["labels"] = items.map{|li| li[:name]}
+    representationData["labels"] = items.map{|li| li[:shortname] || li[:name]}
     unless graphEngine.nil?
       representationData["engine"] = graphEngine
     end
@@ -122,7 +123,7 @@ class Evmethod < ActiveRecord::Base
       return nil
     end
 
-    representationData["labels"] = evModule.getItems.map{|li| li[:name]}
+    representationData["labels"] = evModule.getItemsWithType("integer").map{|li| li[:shortname] || li[:name]}
     
     if !representationData.values.first.nil? and !representationData.values.first["engine"].nil?
       representationData["engine"] = representationData.values.first["engine"]
