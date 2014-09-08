@@ -1,6 +1,6 @@
 class CreateApps < ActiveRecord::Migration
   def up
-  	create_table :apps do |t|
+    create_table :apps do |t|
       t.string :name
       t.string :auth_token
 
@@ -9,6 +9,6 @@ class CreateApps < ActiveRecord::Migration
   end
 
   def down
-  	drop_table :apps
+    drop_table :apps
   end
 end

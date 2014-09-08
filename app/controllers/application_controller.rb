@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
   def generateToken
     :authenticate_user!
     length = (params[:length].nil? ? 64 : params[:length].to_i)
-    render :json => { :token => Utils.build_token(length)}
+    render :json => { :token => Utils.build_token(App,length)}
   end
 
   private

@@ -12,7 +12,7 @@ namespace :app do
 
   	app = App.new
   	app.name = args[:name]
-  	app.auth_token = Utils.build_token
+  	app.auth_token = Utils.build_token(App)
   	app.save!
 
     puts "Finish"
@@ -49,7 +49,7 @@ namespace :app do
   	if app.nil?
   		fail "App couldn't be found"
   	end
-  	app.auth_token = Utils.build_token
+  	app.auth_token = Utils.build_token(App)
   	app.save!
 
     puts "Finish"

@@ -3,6 +3,7 @@ class App < ActiveRecord::Base
 
   belongs_to :user
   has_many :los
+  has_many :session_token
 
   validates :user_id, :presence => true
 
@@ -40,6 +41,29 @@ class App < ActiveRecord::Base
 
   before_validation :checkAuthToken
 
+  ###########
+  # Methods
+  ###########
+
+  def valid_session_tokens
+    self.session_token.reject{|s| s.expired? }.sort_by{|s| s.expire_at }.reverse
+  end
+
+  def create_session_token
+    s = SessionToken.new
+    s.app_id = self.id
+    s.save!
+    s
+  end
+
+  def current_session_token
+    currentToken = valid_session_tokens.first
+    if currentToken.nil? or ((currentToken.expire_at-Time.now)/(60*60)<6)
+      currentToken = create_session_token
+    end
+    currentToken
+  end
+
 
 #-------------------------------------------------------------------------------------
 
@@ -47,7 +71,7 @@ class App < ActiveRecord::Base
 
   def checkAuthToken
     if self.auth_token.nil?
-      self.auth_token = Utils.build_token(60)
+      self.auth_token = Utils.build_token(App)
     end
   end
 

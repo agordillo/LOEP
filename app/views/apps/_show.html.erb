@@ -20,9 +20,18 @@
 
     <p class="space_small"></p>
 
-    <%if !@app.auth_token.nil? %>
+    <%unless @app.auth_token.nil? %>
       <p class="form_legend">Authentication Token</p>
       <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
+    <% end %>
+
+    <%sessionTokens=@app.valid_session_tokens%>
+    <%unless sessionTokens.blank? %>
+      <p class="form_legend">Active Session Tokens</p>
+      <%sessionTokens.each do |s|%>
+        <%=text_field_tag nil, s.auth_token, class: 'loep_input', readonly: true %>
+        <p class="space_extra_small"></p>
+      <%end%>
     <% end %>
 
     <p class="space_small"></p>
