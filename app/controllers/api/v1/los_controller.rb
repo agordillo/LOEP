@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 class Api::V1::LosController < Api::V1::BaseController
-  before_filter :authenticate_app
   before_filter :filterLOCategories, :only => [:create, :update]
   before_filter :filterLOLanguage, :only => [:create, :update]
-
 
   # API REST for LOs
 

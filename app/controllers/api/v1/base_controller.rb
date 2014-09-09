@@ -4,6 +4,8 @@ class Api::V1::BaseController < ActionController::Base
   # Authentication for Web Apps
   ################
 
+  before_filter :authenticate_app
+
   #The authentication for web apps is performed based on the auth_token, without interact with device or CanCan
   #A web app has the same permissions as its owner
   #Only admins are allowed to use the API
@@ -32,6 +34,9 @@ class Api::V1::BaseController < ActionController::Base
 
     session[:app_id] = app.id
     @current_user = app.user
+
+    #Basic authorization check
+    authorize! :update, current_app
   end
 
   #Access to current app
