@@ -22,9 +22,7 @@
         <td class="tdcenter">
           <a href="<%=ev.evmethod.documentation_path%>"><span><%=ev.evmethod.name%></span></a>
         </td>
-        <td>
-          <a href="<%=user_path(ev.user)%>"><%=ev.user.name%></a>
-        </td>
+        <td><%=ev.readable_reviewer%></td>
         <td class="tdcenter tdrshow">
           <a href="<%=ev.evaluation_path%>"><span class="glyphicon glyphicon-eye-open"></span></a>
         </td>

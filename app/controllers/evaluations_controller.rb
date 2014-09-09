@@ -116,6 +116,7 @@ class EvaluationsController < ApplicationController
     if params[:embed]
       action = "embed"
       @evaluation.anonymous = true
+      @evaluation.app_id = @app.id
     else
       action = "new"
     end

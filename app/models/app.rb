@@ -3,6 +3,7 @@ class App < ActiveRecord::Base
 
   belongs_to :user
   has_many :los
+  has_many :evaluations
   has_many :session_token
 
   validates :user_id, :presence => true

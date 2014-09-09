@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140909123638) do
+ActiveRecord::Schema.define(:version => 20140909130508) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(:version => 20140909123638) do
     t.integer  "item98"
     t.integer  "item99"
     t.boolean  "anonymous",                                                        :default => false
+    t.integer  "app_id"
   end
 
   create_table "evmethods", :force => true do |t|
