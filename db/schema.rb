@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140908123624) do
+ActiveRecord::Schema.define(:version => 20140909115525) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -260,7 +260,7 @@ ActiveRecord::Schema.define(:version => 20140908123624) do
     t.string   "scope",                                 :default => "Private"
     t.integer  "owner_id"
     t.integer  "app_id"
-    t.integer  "id_repository"
+    t.string   "id_repository"
   end
 
   create_table "metrics", :force => true do |t|
