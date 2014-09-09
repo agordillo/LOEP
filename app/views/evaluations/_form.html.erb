@@ -5,7 +5,16 @@
 
   <%= form_for(@evaluation) do |f| %>
 
-    <%= f.hidden_field :user_id, :value => current_user.id, :class => "skipValidation" %>
+    <% if @embed %>
+      <%user = @app.user%>
+      <%= hidden_field_tag "embed", true, class: "skipValidation" %>
+      <%= hidden_field_tag "session_token", @sessionToken, class: "skipValidation" %>
+      <%= hidden_field_tag "app_id", @app.id, class: "skipValidation" %>
+    <% elsif user_signed_in? %>
+      <%user = current_user%>
+    <% end %>
+
+    <%= f.hidden_field :user_id, :value => user.id, :class => "skipValidation" %>
 
     <% if !@assignment.nil? %>
       <%= f.hidden_field :assignment_id, :value => @assignment.id, :class => "skipValidation" %>

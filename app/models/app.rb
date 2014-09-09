@@ -49,6 +49,10 @@ class App < ActiveRecord::Base
     self.session_token.reject{|s| s.expired? }.sort_by{|s| s.expire_at }.reverse
   end
 
+  def isSessionTokenValid(sessionToken)
+    valid_session_tokens.map{ |s| s.auth_token }.include? sessionToken
+  end
+
   def create_session_token
     s = SessionToken.new
     s.app_id = self.id

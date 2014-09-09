@@ -43,10 +43,9 @@ LOEP::Application.routes.draw do
   #Evaluations
   match '/revaluations' => 'evaluations#rindex'
   namespace :evaluations do
-    resources :loris
-    resources :loems
-    resources :wbltses
-    resources :wbltts
+    resources :loems, :loris, :wbltses, :wbltts do
+      get 'embed', :on => :collection
+    end
   end
   resources :evaluations
   

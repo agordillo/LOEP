@@ -59,6 +59,12 @@ class User < ActiveRecord::Base
   # Alias for acts_as_taggable_on :tags
   acts_as_taggable
 
+  #CanCan. Allow to check abilities in the following way: user.can?(:action,@object)
+  def ability
+    @ability ||= Ability.new(self)
+  end
+  delegate :can?, :cannot?, :to => :ability
+
   #---------------------------------------------------------------------------------
 
   #Extra Attrs

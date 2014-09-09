@@ -14,12 +14,12 @@ class Api::V1::LosController < Api::V1::BaseController
       format.any {
         render json: current_app.los.map{ |lo| lo.extended_attributes }
       }
-    end    
+    end
   end
 
   # GET /api/v1/los/:id
   def show
-    unless !params[:use_id_loep].nil?
+    if params[:use_id_loep].nil?
       lo = current_app.los.find_by_id_repository(params[:id])
     else
       lo = Lo.find(params[:id])
@@ -68,7 +68,7 @@ class Api::V1::LosController < Api::V1::BaseController
     respond_to do |format|
         format.any { 
           if lo.update_attributes(params[:lo])
-            render json: lo.extended_attributes 
+            render json: lo.extended_attributes
           else
             render json: lo.errors, status: :unprocessable_entity
           end

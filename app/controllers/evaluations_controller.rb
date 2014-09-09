@@ -1,5 +1,9 @@
 class EvaluationsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:create, :embed]
+  before_filter :authenticate_user_or_session_token, :only => [:create]
+  before_filter :authenticate_session_token, :only => [:embed]
+  before_filter :getEvModel, :only => [:new, :create, :embed]
+  before_filter :getAppLo, :only => [:embed]
   
   # GET /evaluations
   # GET /evaluations.json
@@ -18,6 +22,8 @@ class EvaluationsController < ApplicationController
     end
   end
 
+  # GET /revaluations
+  # GET /revaluations.json
   def rindex
     @evaluations = current_user.evaluations.allc.sort_by{ |ev| ev.updated_at}.reverse
     authorize! :rshow, @evaluations
@@ -29,8 +35,8 @@ class EvaluationsController < ApplicationController
     end
   end
 
-  # GET /evaluations/1
-  # GET /evaluations/1.json
+  # GET /evaluations/:id
+  # GET /evaluations/:id.json
   def show
     @evaluation = Evaluation.find(params[:id])
     authorize! :show, @evaluation
@@ -46,18 +52,14 @@ class EvaluationsController < ApplicationController
   # GET /evaluations/new
   # GET /evaluations/new.json
   def new
-    new(Evaluation)
-  end
-
-  def new(evModel)
-    @evaluation = evModel.new
+    @evaluation = @evModel.new
     authorize! :new, @evaluation
 
     @lo = Lo.find(params[:lo_id])
     authorize! :rshow, @lo
 
     @evmethod = @evaluation.evmethod
-    @evmethodItems = evModel.getItems
+    @evmethodItems = @evModel.getItems
 
     if params[:assignment_id]
       @assignment = Assignment.find(params[:assignment_id])
@@ -82,7 +84,20 @@ class EvaluationsController < ApplicationController
     end
   end
 
-  # GET /evaluations/1/edit
+  # Embed evaluation forms in external apps (similar to new)
+  # GET '/evaluations/:evmethod/embed'
+  def embed
+    @evaluation = @evModel.new
+    @evmethod = @evaluation.evmethod
+    @evmethodItems = @evModel.getItems
+
+    @title = @lo.name
+    @embed = true
+
+    render :embed, :layout => 'embed'
+  end
+
+  # GET /evaluations/:id/edit
   def edit
     @evaluation = Evaluation.find(params[:id])
     authorize! :edit, @evaluation
@@ -94,15 +109,17 @@ class EvaluationsController < ApplicationController
   end
 
   # POST /evaluations
-  # POST /evaluations.json
   def create
-    create(Evaluation)
-  end
-
-  def create(evModel)
+    if params[:embed]
+      action = "embed"
+    else
+      action = "new"
+    end
+    
     evaluationParams = getEvaluationParams
-    @evaluation = evModel.new(evaluationParams)
+    @evaluation = @evModel.new(evaluationParams)
     @evaluation.completed_at = Time.now
+
     authorize! :create, @evaluation
 
     @evaluation.valid?
@@ -110,23 +127,30 @@ class EvaluationsController < ApplicationController
     respond_to do |format|
       if @evaluation.errors.blank?
         if @evaluation.save
-          format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully submitted.' }
+          unless params[:embed]
+            format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully submitted.' }
+          else
+            format.html { 
+              render "embed_finish", :layout => 'embed' 
+            }
+          end
         else
-          format.html { renderError("An error occurred and the evaluation could not be created. Check all the fields and try again.","new") }
+          format.html { renderError("An error occurred and the evaluation could not be created. Check all the fields and try again.",action) }
         end
       else
-        format.html { renderError(@evaluation.errors.full_messages,"new") }
+        format.html { renderError(@evaluation.errors.full_messages,action) }
       end
     end
   end
 
+  # PUT /evaluations/:id
   def update
     @evaluation = Evaluation.find(params[:id])
     authorize! :update, @evaluation
 
     evaluationParams = getEvaluationParams
 
-    if current_user.isAdmin?
+    if !evaluationParams.nil? and current_user.isAdmin?
       evaluationParams.delete("user_id")
     end
 
@@ -139,8 +163,8 @@ class EvaluationsController < ApplicationController
     end
   end
 
-  # DELETE /evaluations/1
-  # DELETE /evaluations/1.json
+  # DELETE /evaluations/:id
+  # DELETE /evaluations/:id.json
   def destroy
     @evaluation = Evaluation.find(params[:id])
     authorize! :destroy, @evaluation
@@ -156,21 +180,32 @@ class EvaluationsController < ApplicationController
 
   private
 
+  def authenticate_user_or_session_token
+    if params[:session_token]
+      #Authenticate via session_token
+      authenticate_session_token
+    else
+      #Authenticate user
+      authenticate_user!
+    end
+  end
+
+  def getEvModel
+    @evModel = self.class.name.sub("Controller", "").singularize.constantize
+  end
+
   def getEvaluationParams
     evaluationParams = nil
-    evaluationParamsKey = nil
-    #evaluationParamsKey = evaluation.class.name.gsub("::","_").underscore
 
     #Look for evaluation params
     params.each do |key,val|
       if val.is_a?(Hash)
-        evaluationParamsKey = key
         evaluationParams = val
       end
     end
 
     #Validate score if present
-    if !evaluationParams["score"].nil? and !Utils.is_numeric?(evaluationParams["score"])
+    if !evaluationParams.nil? and !evaluationParams["score"].nil? and !Utils.is_numeric?(evaluationParams["score"])
       evaluationParams.delete("score")
     end
 
@@ -178,16 +213,77 @@ class EvaluationsController < ApplicationController
   end
 
   def renderError(msg,action)
-    buildViewParamsBeforeRender
+    buildViewParamsBeforeRender(action)
     flash.now[:alert] = msg
-    render action: action
+
+    if action == "embed"
+      layout = "embed"
+    else
+      layout = "application"
+    end
+
+    render action: action, :layout => layout
   end
 
-  def buildViewParamsBeforeRender
+  def buildViewParamsBeforeRender(action=nil)
     @lo = @evaluation.lo
     authorize! :rshow, @lo
     @evmethod = @evaluation.evmethod
     @evmethodItems = @evaluation.class.getItems
+
+    if action=="embed"
+      @title = @lo.name
+      @embed = true
+    end
+  end
+
+
+  ####################
+  # Methods for Embed
+  ####################
+
+  def authenticate_session_token
+    if (params["app_name"].nil? and params["app_id"].nil?) or params["session_token"].nil?
+      @message = "Error: Unauthorized"
+      render :embed_empty, :layout => 'embed'
+      return
+    end
+
+    begin
+      unless params["app_id"].nil?
+        @app = App.find(params["app_id"])
+      else
+        @app = App.find_by_name(params["app_name"])
+      end
+    rescue
+      @message = "Error: Unauthorized"
+      render :embed_empty, :layout => 'embed'
+      return
+    end
+
+    @sessionToken = params["session_token"]
+
+    if @app.nil? or !@app.isSessionTokenValid(@sessionToken) or @app.user.nil? or !@app.user.isAdmin?
+      @message = "Error: Unauthorized"
+      render :embed_empty, :layout => 'embed'
+      return
+    end
+
+    @current_user = @app.user
+  end
+
+  def getAppLo
+    if params[:use_id_loep].nil?
+      @lo = @app.los.find_by_id_repository(params[:lo_id])
+    else
+      @lo = Lo.find_by_id(params[:lo_id])
+    end
+
+    if @lo.nil?
+      @message = "Error: This Learning Object does not exist"
+      render :embed_empty, :layout => 'embed'
+      return
+    end
   end
 
 end

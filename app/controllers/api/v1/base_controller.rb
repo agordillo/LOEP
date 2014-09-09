@@ -17,7 +17,7 @@ class Api::V1::BaseController < ActionController::Base
     end
 
     begin
-      if !params["app_id"].nil?
+      unless params["app_id"].nil?
         app = App.find(params["app_id"])
       else
         app = App.find_by_name(params["app_name"])
