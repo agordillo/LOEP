@@ -109,17 +109,16 @@ class EvaluationsController < ApplicationController
   end
 
   # POST /evaluations
-  def create
-    if params[:embed]
-      action = "embed"
-    else
-      action = "new"
-    end
-    
+  def create  
     evaluationParams = getEvaluationParams
     @evaluation = @evModel.new(evaluationParams)
     @evaluation.completed_at = Time.now
-
+    if params[:embed]
+      action = "embed"
+      @evaluation.anonymous = true
+    else
+      action = "new"
+    end
     authorize! :create, @evaluation
 
     @evaluation.valid?

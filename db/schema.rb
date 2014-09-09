@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140909115525) do
+ActiveRecord::Schema.define(:version => 20140909123638) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(:version => 20140909115525) do
     t.string   "sitem3"
     t.string   "sitem4"
     t.string   "sitem5"
-    t.datetime "created_at",                                                       :null => false
-    t.datetime "updated_at",                                                       :null => false
+    t.datetime "created_at",                                                                          :null => false
+    t.datetime "updated_at",                                                                          :null => false
     t.integer  "item26"
     t.integer  "item27"
     t.integer  "item28"
@@ -191,6 +191,7 @@ ActiveRecord::Schema.define(:version => 20140909115525) do
     t.integer  "item97"
     t.integer  "item98"
     t.integer  "item99"
+    t.boolean  "anonymous",                                                        :default => false
   end
 
   create_table "evmethods", :force => true do |t|
