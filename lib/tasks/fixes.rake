@@ -24,6 +24,19 @@ namespace :fixes do
 		end
 	end
 
+	task :fixViSHLOs => :environment do |t, args|
+		puts "Fixing ViSH Learning Objects"
+		puts "Fix repository id field"
+
+		Lo.where(:repository=>"ViSH").each do |lo|
+			unless lo.url.nil?
+				id = lo.url.split("/").pop
+				idRepository = "Excursion:" + id
+				lo.update_column :id_repository, idRepository
+			end
+		end
+	end
+
 end
 
  

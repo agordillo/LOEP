@@ -12,7 +12,7 @@ class Api::V1::LosController < Api::V1::BaseController
 
     respond_to do |format|
       format.any {
-        render json: current_app.los.map{ |lo| lo.extended_attributes }
+        render json: current_app.los.map{ |lo| lo.extended_attributes }, :content_type => "application/json"
       }
     end
   end
@@ -25,13 +25,12 @@ class Api::V1::LosController < Api::V1::BaseController
       lo = Lo.find(params[:id])
     end
     authorize! :show, lo
-
     respond_to do |format|
       format.any {
-        if !lo.nil?
-          render json: lo.extended_attributes
+        unless lo.nil?
+          render json: lo.extended_attributes, :content_type => "application/json"
         else
-          render json: {"error" => "Learning Object not found"}
+          render json: {"error" => "Learning Object not found"}, :content_type => "application/json"
         end
       }
     end  
@@ -52,9 +51,9 @@ class Api::V1::LosController < Api::V1::BaseController
     respond_to do |format|
       format.any { 
         if @lo.save
-          render :json => @lo.extended_attributes
+          render :json => @lo.extended_attributes, :content_type => "application/json"
         else
-          render json: @lo.errors, status: :unprocessable_entity
+          render json: @lo.errors, status: :unprocessable_entity, :content_type => "application/json"
         end 
       }
     end
@@ -68,9 +67,9 @@ class Api::V1::LosController < Api::V1::BaseController
     respond_to do |format|
         format.any { 
           if lo.update_attributes(params[:lo])
-            render json: lo.extended_attributes
+            render json: lo.extended_attributes, :content_type => "application/json"
           else
-            render json: lo.errors, status: :unprocessable_entity
+            render json: lo.errors, status: :unprocessable_entity, :content_type => "application/json"
           end
         }
     end
@@ -84,7 +83,7 @@ class Api::V1::LosController < Api::V1::BaseController
 
     respond_to do |format|
       format.any { 
-        render json: "Done"
+        render json: "Done", :content_type => "application/json"
       }
     end
   end
