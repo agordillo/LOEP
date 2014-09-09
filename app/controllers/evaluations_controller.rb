@@ -89,6 +89,11 @@ class EvaluationsController < ApplicationController
   def embed
     @evaluation = @evModel.new
     @evmethod = @evaluation.evmethod
+    unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evmethod.name
+      @message = "Error: This evaluation method does not allow external evaluations."
+      render :embed_empty, :layout => 'embed'
+      return
+    end
     @evmethodItems = @evModel.getItems
 
     @title = @lo.name
@@ -113,13 +118,20 @@ class EvaluationsController < ApplicationController
     evaluationParams = getEvaluationParams
     @evaluation = @evModel.new(evaluationParams)
     @evaluation.completed_at = Time.now
+
     if params[:embed]
+      unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evaluation.evmethod.name
+        @message = "Error: This evaluation method does not allow external evaluations."
+        render :embed_empty, :layout => 'embed'
+        return
+      end
       action = "embed"
       @evaluation.anonymous = true
       @evaluation.app_id = @app.id
     else
       action = "new"
     end
+
     authorize! :create, @evaluation
 
     @evaluation.valid?
@@ -280,7 +292,7 @@ class EvaluationsController < ApplicationController
     end
 
     if @lo.nil?
-      @message = "Error: This Learning Object does not exist"
+      @message = "Error: This Learning Object does not exist."
       render :embed_empty, :layout => 'embed'
       return
     end

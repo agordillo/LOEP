@@ -19,6 +19,7 @@ development:
   surveys: "false"
   evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T"]
   metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean"]
+  allow_external_evaluations: ["WBLT-S"]
 
 production:
   domain: "loep.global.dit.upm.es"
@@ -31,3 +32,4 @@ production:
   surveys: "false"
   evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T"]
   metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean"]
+  allow_external_evaluations: ["WBLT-S"]

@@ -1,3 +1,7 @@
-<%unless @message.nil? %>
-	<p style="display:none"><%=@message%></p>
-<%end%>
+<div id="wrapper">
+  <div id='container'>
+    <%unless @message.nil? %>
+		<p><%=@message%></p>
+	<%end%>
+  </div>
+</div>
