@@ -24,9 +24,8 @@ $.rails.showConfirmDialog = function(link){
 
 var _showLOEPDialog = function(msg, showCancelButton, callback){
   var html = '<div id="dialog" title="Basic dialog"><p>'+msg+'</p></div>';
-
   var dialogButtons = {
-    "Ok": function() {
+    '<%=I18n.t("dialog.ok")%>': function() {
       $(this).dialog("close");
       if(typeof callback == "function"){
         callback(true);
@@ -35,7 +34,7 @@ var _showLOEPDialog = function(msg, showCancelButton, callback){
   };
 
   if(showCancelButton===true){
-    dialogButtons["Cancel"] = function(){
+    dialogButtons['<%=I18n.t("dialog.cancel")%>'] = function(){
       $(this).dialog("close");
       if(typeof callback == "function"){
         callback(false);

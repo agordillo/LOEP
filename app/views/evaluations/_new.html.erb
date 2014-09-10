@@ -1,13 +1,13 @@
 <div class="loep_form_wrapper">
-	<h2>Evaluating <a href="<%=rlo_path(@lo)%>"><span class='lo_name_in_evaluation'><%=@lo.name%></span></a> with <%=@evmethod.name%></h1>
+	<h2><%=raw t("forms.evmethod.evaluating_lo_with_evmethod", :lo => '<a href="'+rlo_path(@lo)+'"><span class="lo_name_in_evaluation">'+@lo.name+'</span></a>', :evmethod => @evmethod.name)%></h2>
 	<p class="form_before_button">&nbsp;</p>
-	<p class="form_legend">Learning Object URL: <a target="_blank" href="<%=@lo.url%>"><%=@lo.url%></a></p>
-	<a href="<%=@evmethod.documentation_path%>"><p class="form_legend"><%=@evmethod.name%> documentation</p></a>
+	<p class="form_legend"><%=t("forms.evmethod.loURL")%>: <a target="_blank" href="<%=@lo.url%>"><%=@lo.url%></a></p>
+	<a href="<%=@evmethod.documentation_path%>"><p class="form_legend"><%=t("forms.evmethod.evmethod_documentation", :evmethod => @evmethod.name)%></p></a>
 </div>
 
 <%= render 'form' %>
 
 </br>
 <div class="loep_form_wrapper">
-	<%= link_to 'Back', :back %>
+	<%= link_to t("words.back"), :back %>
 </div>

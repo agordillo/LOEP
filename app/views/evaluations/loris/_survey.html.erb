@@ -1,5 +1,3 @@
-<p class="survey_title"> LORI 1.5 Evaluation Survey </p>
-
 <% @evmethodItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <div class="survey_block" item="<%=nItem%>">
@@ -7,16 +5,16 @@
     <p class="survey_question_subtitle"><%=item[:description]%></p>
     <div class="rating_wrapper">
       <div class="stars_wrapper">
-        <span  class="hover-star_legend_left">Low</span>
+        <span  class="hover-star_legend_left"><%=t("forms.evmethod.low")%></span>
         <%= f.radio_button "item" + nItem.to_s, "1", :class=>'hover-star', :title => "1", :readonly => readonly ? "true" : nil %>
         <%= f.radio_button "item" + nItem.to_s, "2", :class=>'hover-star', :title => "2", :readonly => readonly ? "true" : nil %>
         <%= f.radio_button "item" + nItem.to_s, "3", :class=>'hover-star', :title => "3", :readonly => readonly ? "true" : nil %>
         <%= f.radio_button "item" + nItem.to_s, "4", :class=>'hover-star', :title => "4", :readonly => readonly ? "true" : nil %>
         <%= f.radio_button "item" + nItem.to_s, "5", :class=>'hover-star', :title => "5", :readonly => readonly ? "true" : nil %>
-        <span  class="hover-star_legend_right">High</span>
+        <span  class="hover-star_legend_right"><%=t("forms.evmethod.high")%></span>
       </div>
       <div class="na-check">
-        <span>N/A</span>
+        <span><%=t("forms.evmethod.na")%></span>
         <%= f.radio_button "item" + nItem.to_s, "-1", :class=>'na-input', :title => "N/A", :readonly => readonly ? "true" : nil %>
       </div>
       <div class="hover-start_text">
@@ -32,22 +30,12 @@
           </div>
         <% end %>
       </div>
-      <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
+      <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> <%=t("forms.evmethod.remove")%></div>
     </div>
   </div>
 <% end %>
 
-<div class="survey_block">
-  <p class="survey_question_title">Additional Comments</p>
-  <p class="survey_question_subtitle">Please, write here any further comments that you consider relevant and/or necessary for this evaluation</p>
-  <%= f.text_area :comments, :class=>'loep_input optionalInput', :readonly => readonly ? "true" : nil %>
-</div>
-
-<div class="survey_block">
-  <p class="survey_question_title">Overall Score</p>
-  <p class="survey_question_subtitle">Optionally, you may propose an overall score between 0.0 and 10.0 for this Learning Object.</p>
-  <%= f.number_field :score, :class=>'loep_input optionalInput', :step=> 0.1, :min=>0, :max=>10, :readonly => readonly ? "true" : nil %>
-</div>
+<%= render 'common_items', :f => f , :readonly => readonly %>
 
 <script type="text/javascript">
   $(document).ready(function(){

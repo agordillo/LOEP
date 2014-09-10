@@ -10,8 +10,12 @@
       <%= hidden_field_tag "embed", true, class: "skipValidation" %>
       <%= hidden_field_tag "session_token", @sessionToken, class: "skipValidation" %>
       <%= hidden_field_tag "app_id", @app.id, class: "skipValidation" %>
+      <% surveyTitle = t("forms.evmethod.title_for_embed", lo: @lo.name) %>
+      <% submitButtonText = t("forms.submit") %>
     <% elsif user_signed_in? %>
       <%user = current_user%>
+      <% surveyTitle = t("forms.evmethod.title", evmethod: @evmethod.name) %>
+      <% submitButtonText = t("forms.submit_with_evmethod", evmethod: @evmethod.name) %>
     <% end %>
 
     <%= f.hidden_field :user_id, :value => user.id, :class => "skipValidation" %>
@@ -22,6 +26,8 @@
     <%= f.hidden_field :lo_id, :value => @lo.id, :class => "skipValidation"%>
     <%= f.hidden_field :evmethod_id, :value => @evmethod.id, :class => "skipValidation"%>
 
+    <p class="survey_title"><%=surveyTitle%></p>
+
     <%= render 'survey', :f => f , :readonly => readonly %>
 
     <% if iamAdmin? and !@evaluation.completed_at.nil? %>
@@ -30,8 +36,7 @@
     <% end %>
 
     <p class="form_before_button">&nbsp;</p>
-    <p class="form_before_button">&nbsp;</p>
-    <%= f.submit "Submit  #{@evmethod.name}  Evaluation", :class => 'loep_button' if !readonly %>
+    <%= f.submit "#{submitButtonText}", :class => 'loep_button' if !readonly %>
 
   <% end %>
 </div>
@@ -75,7 +80,7 @@
       }
     });
 
-    var _beforeSubmit = function(form, callback) {
+    var _beforeSubmit = function(form, callback){
       if(typeof callback != "function"){
           return;
       }
@@ -86,7 +91,7 @@
 
       if(numberOfFilledFields == 0){
         var error = {};
-        error.msg = "The evaluation survey is blank. It cannot be sent.";
+        error.msg = '<%=t("forms.validation.blank_form")%>';
         _showLOEPDialog(error.msg,false);
         callback(error);
       } else if (unfilledFields.length > 0){
@@ -94,11 +99,11 @@
 
         var warningDialogMsg;
         if(unfilledFields.length == 1){
-          warningDialogMsg = "There is one question that has not been answered.";
+          warningDialogMsg = '<%=t("forms.validation.question_blank.one")%>';
         } else {
-          warningDialogMsg = "There are " + unfilledFields.length + " questions that have not been answered.";
+          warningDialogMsg = '<%=t("forms.validation.question_blank.several.a")%> ' + unfilledFields.length + ' <%=t("forms.validation.question_blank.several.b")%>';
         }
-        warningDialogMsg += " Are you sure you want to submit the evaluation survey?"
+        warningDialogMsg += ' <%=t("forms.validation.are_you_sure")%>';
 
         _showLOEPDialog(warningDialogMsg, true, function(result){
           if(result==true){
@@ -112,7 +117,7 @@
       } else {
           callback();
       }
-    }
+    };
 
     var _getFieldsOfForm = function(form){
       //Ignore submit fields, and also inputs with 'optionalInput' or 'skipValidation' class
@@ -145,7 +150,7 @@
         }
       });
       return unfilledFields;
-    }
+    };
 
   });
 </script>

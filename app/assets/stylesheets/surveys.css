@@ -28,6 +28,10 @@ div.survey_block {
 	margin-bottom: 40px;
 }
 
+div.survey_block_only_with_title {
+	margin-bottom: 0px !important;
+}
+
 span.flagInSurveyBlockTitle img {
 	margin-top: 5px;
 }

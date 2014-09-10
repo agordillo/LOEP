@@ -1,5 +1,3 @@
-<p class="survey_title">LOEM Evaluation Survey</p>
-
 <% @evmethodItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <%itemName = "item" + nItem.to_s%>
@@ -9,13 +7,13 @@
     <%
       case nItem
       when 1
-        sectionTitle = "A. " + "Interactivity"
+        sectionTitle = "A. " + t("words.interactivity")
       when 4
-        sectionTitle = "B. " + "Design"
+        sectionTitle = "B. " + t("words.design")
       when 8
-        sectionTitle = "C. " + "Engagement"
+        sectionTitle = "C. " + t("words.engagement")
       when 13
-        sectionTitle = "D. " + "Usability"
+        sectionTitle = "D. " + t("words.usability")
       else
         sectionTitle = nil
       end
@@ -53,25 +51,18 @@
             <% end %>
           </span>
       	</div>
-        <div class="remove_item-value" onclick='onClickRemoveForItem(<%=nItem%>)'><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
+        <div class="remove_item-value" onclick='onClickRemoveForItem(<%=nItem%>)'><span class="glyphicon glyphicon glyphicon-remove"></span> <%=t("forms.evmethod.remove")%></div>
       </div>
     </div>
   </div>
 
 <% end %>
 
-<div class="survey_block">
+<div class="survey_block survey_block_only_with_title">
   <p class="survey_question_group_title">E. General</p>
-  <p class="survey_question_title">Additional Comments</p>
-  <p class="survey_question_subtitle">Please, write here any further comments that you consider relevant and/or necessary for this evaluation</p>
-  <%= f.text_area :comments, :class=>'loep_input optionalInput', :readonly => readonly ? "true" : nil %>
 </div>
 
-<div class="survey_block">
-  <p class="survey_question_title">Overall Score</p>
-  <p class="survey_question_subtitle">Optionally, you may propose an overall score between 0.0 and 10.0 for this Learning Object.</p>
-  <%= f.number_field :score, :class=>'loep_input optionalInput', :step=> 0.1, :min=>0, :max=>10, :readonly => readonly ? "true" : nil %>
-</div>
+<%= render 'common_items', :f => f , :readonly => readonly %>
 
 <% if !readonly %>
   <script type="text/javascript">

@@ -1,5 +1,3 @@
-<p class="survey_title"> WBLT-T Evaluation Survey </p>
-
 <%integerItemsIndex=0%>
 <%textItemsIndex=0%>
 
@@ -9,11 +7,11 @@
     <%
       case nItem
       when 1
-        sectionTitle = "1. " + "Quality"
+        sectionTitle = "1. " + t("words.quality")
       when 4
-        sectionTitle = "2. " + "Learning"
+        sectionTitle = "2. " + t("words.learning")
       when 8
-        sectionTitle = "3. " + "Engagement"
+        sectionTitle = "3. " + t("words.engagement")
       when 12
         sectionTitle = "4. " + item[:name]
       when 13
@@ -50,7 +48,7 @@
       <%integerItemsIndex+=1%>
       <div class="rating_wrapper">
         <div class="stars_wrapper">
-          <span  class="hover-star_legend_left">Strongly Disagree</span>
+          <span  class="hover-star_legend_left"><%=t("forms.evmethod.sdagree")%></span>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "1", :class=>'hover-star', :title => "1", :readonly => readonly ? "true" : nil %>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "2", :class=>'hover-star', :title => "2", :readonly => readonly ? "true" : nil %>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "3", :class=>'hover-star', :title => "3", :readonly => readonly ? "true" : nil %>
@@ -58,7 +56,7 @@
           <%= f.radio_button "item" + integerItemsIndex.to_s, "5", :class=>'hover-star', :title => "5", :readonly => readonly ? "true" : nil %>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "6", :class=>'hover-star', :title => "6", :readonly => readonly ? "true" : nil %>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "7", :class=>'hover-star', :title => "7", :readonly => readonly ? "true" : nil %>
-          <span  class="hover-star_legend_right">Strongly Agree</span>
+          <span  class="hover-star_legend_right"><%=t("forms.evmethod.sagree")%></span>
         </div>
         <div class="hover-start_text">
           <% if readonly %>
@@ -73,7 +71,7 @@
             </div>
           <% end %>
         </div>
-        <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
+        <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> <%=t("forms.evmethod.remove")%></div>
       </div>
     </div>
   <%elsif item[:type] == "text" %>

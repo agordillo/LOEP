@@ -1,59 +1,59 @@
 <% if user_signed_in? %>
 	<div id="homemenu_wrapper">
-		<p> Main Menu </p>
+		<p> <%=t("menu.main")%> </p>
 		<div id="homemenu">
 			<ul>
 				<li class="<%='menu_option_selected' if params[:controller] == 'home'%>">
-					<a href="/home"><h3><span class="glyphicon glyphicon-home"></span>Home</h3></a>
+					<a href="/home"><h3><span class="glyphicon glyphicon-home"></span><%=t("menu.home")%></h3></a>
 				</li>
 				<li class="<%='menu_option_selected' if params[:controller] == 'assignments'%>">
 					<% if iamAdmin? %>
-						<h3><span class="glyphicon glyphicon-time"></span>Assignments</h3>
+						<h3><span class="glyphicon glyphicon-time"></span><%=t("menu.assignments")%></h3>
 						<ul>
-							<li><a href="/assignments">List</a></li>
-							<li><a href="/assignments/new">Add New</a></li>
-							<li><a href="/automatic_assignments/new">Automatic Matching</a></li>
+							<li><a href="/assignments"><%=t("menu.actions.list")%></a></li>
+							<li><a href="/assignments/new"><%=t("menu.actions.add_new")%></a></li>
+							<li><a href="/automatic_assignments/new"><%=t("menu.actions.amatching")%></a></li>
 						</ul>
 					<% else %>
-						<a href="<%=loep_asignments_path%>"><h3><span class="glyphicon glyphicon-time"></span>Assignments</h3></a>
+						<a href="<%=loep_asignments_path%>"><h3><span class="glyphicon glyphicon-time"></span><%=t("menu.assignments")%></h3></a>
 					<% end %>
 				</li>
 				<% if iamAdmin? %>
 					<li class="<%='menu_option_selected' if params[:controller] == 'los'%>">
-						<h3><span class="glyphicon glyphiconfull glyphicon-show_big_thumbnails"></span>Learning Objects</h3>
+						<h3><span class="glyphicon glyphiconfull glyphicon-show_big_thumbnails"></span><%=t("menu.learning_objects")%></h3>
 						<ul>
-							<li><a href="/los">List</a></li>
-							<li><a href="/los/rankedIndex">Ranked List</a></li>
-							<li><a href="/los/new">Add New</a></li>
-							<li><a href="/los/search">Search</a></li>
+							<li><a href="/los"><%=t("menu.actions.list")%></a></li>
+							<li><a href="/los/rankedIndex"><%=t("menu.actions.rlist")%></a></li>
+							<li><a href="/los/new"><%=t("menu.actions.add_new")%></a></li>
+							<li><a href="/los/search"><%=t("menu.actions.search")%></a></li>
 						</ul>
 					</li>
 				<% else %>
 					<%if Lo.Public.length > 0 %>
 					<li class="<%='menu_option_selected' if params[:controller] == 'los'%>">
-						<a href="/los/publicIndex"><h3><span class="glyphicon glyphiconfull glyphicon-show_big_thumbnails"></span>Learning Objects</h3></a>
+						<a href="/los/publicIndex"><h3><span class="glyphicon glyphiconfull glyphicon-show_big_thumbnails"></span><%=t("menu.learning_objects")%></h3></a>
 					</li>
 					<% end %>
 				<% end %>
 				<li class="<%='menu_option_selected' if params[:controller] == 'evaluations'%>">
-					<a href="<%=evaluations_path%>"><h3><span class="glyphicon glyphicon-star-empty"></span>Evaluations</h3></a>
+					<a href="<%=evaluations_path%>"><h3><span class="glyphicon glyphicon-star-empty"></span><%=t("menu.evaluations")%></h3></a>
 				</li>
 				<% if iamAdmin? %>
 					<li class="<%='menu_option_selected' if params[:controller] == 'users'%>">
-						<a href="/users"><h3><span class="glyphicon glyphicon-user"></span>Users</h3></a>
+						<a href="/users"><h3><span class="glyphicon glyphicon-user"></span><%=t("menu.users")%></h3></a>
 					</li>
 				<% end %>
 				<% if iamAdmin? %>
 					<li class="<%='menu_option_selected' if params[:controller] == 'apps'%>">
-						<h3><span class="glyphicon glyphiconfull imac"></span>Applications</h3>
+						<h3><span class="glyphicon glyphiconfull imac"></span><%=t("menu.applications")%></h3>
 						<ul>
-							<li><a href="/apps">List</a></li>
-							<li><a href="/apps/new">Add New</a></li>
+							<li><a href="/apps"><%=t("menu.actions.list")%></a></li>
+							<li><a href="/apps/new"><%=t("menu.actions.add_new")%></a></li>
 						</ul>
 					</li>
 				<% end %>
 				<li class="<%='menu_option_selected' if params[:controller] == 'evmethods'%>">
-					<h3><span class="glyphicon glyphicon-book"></span>Documentation</h3>
+					<h3><span class="glyphicon glyphicon-book"></span><%=t("menu.documentation")%></h3>
 					<ul>
 						<% Evmethod.allc.each do |evmethod| %>
 							<li><a href="<%=evmethod.documentation_path%>"><%=evmethod.name%></a></li>
@@ -62,14 +62,14 @@
 				</li>
 				<%if LOEP::Application.config.show_surveys %>
 					<li class="<%='menu_option_selected' if params[:controller] == 'surveys'%>">
-						<a href="/surveys"><h3><span class="glyphicon glyphicon-list-alt"></span>Surveys</h3></a>
+						<a href="/surveys"><h3><span class="glyphicon glyphicon-list-alt"></span><%=t("menu.surveys")%></h3></a>
 					</li>
 				<% end %>
 <!-- 				<li>
-	      	<a title="Settings" href="%=edit_user_registration_path(current_user)%>"><h3><span class="glyphicon glyphicon-wrench"></span>Settings</h3></a>
+	      	<a title="Settings" href="%=edit_user_registration_path(current_user)%>"><h3><span class="glyphicon glyphicon-wrench"></span><%=t("menu.settings")%></h3></a>
 	      </li> -->
 	      <li>
-	      	<a title="Sign out" href="/users/sign_out" data-method="delete" rel="nofollow"><h3><span class="glyphicon glyphicon-log-out"></span>Sign out</h3></a>
+	      	<a title="<%=t("login.sign_out")%>" href="/users/sign_out" data-method="delete" rel="nofollow"><h3><span class="glyphicon glyphicon-log-out"></span><%=t("login.sign_out")%></h3></a>
 	      </li>
 			</ul>
 		</div>

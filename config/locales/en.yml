@@ -1,2 +1,136 @@
 en:
-  hello: "Hello world"
+  dialog:
+    ok: "Ok"
+    cancel: "Cancel"
+  evmethods:
+    all:
+      item_comments:
+        name: "Additional Comments"
+        description: "Please, write here any further comments that you consider relevant and/or necessary for this evaluation."
+      item_score:
+        name: "Overall Score"
+        description: "Optionally, you may propose an overall score between 0.0 and 10.0 for this Learning Object."
+    lori:
+      item1:
+        name: "Content Quality"
+        description: "Veracity, accuracy, balanced presentation of ideas, and appropriate level of detail"
+      item2:
+        name: "Learning Goal Alignment"
+        description: "Alignment among learning goals, activities, assessments, and learner characteristics"
+      item3:
+        name: "Feedback and Adaptation"
+        description: "Adaptive content or feedback driven by differential learner input or learner modeling"
+      item4:
+        name: "Motivation"
+        description: "Ability to motivate and interest an identified population of learners"
+      item5:
+        name: "Presentation Design"
+        description: "Design of visual and auditory information for enhanced learning and efficient mental processing"
+      item6:
+        name: "Interaction Usability"
+        description: "Ease of navigation, predictability of the user interface, and quality of the interface help features"
+      item7:
+        name: "Accessibility"
+        description: "Design of controls and presentation formats to accommodate disabled and mobile learners"
+      item8:
+        name: "Reusability"
+        description: "Ability to use in varying learning contexts and with learners from differing backgrounds"
+      item9:
+        name: "Standards Compliance"
+        description: "Adherence to international standards and specifications"
+    Wblts:
+      item1:
+        name: "The learning object was well organized"
+        shortname: "Organization"
+      item2:
+        name: "The learning object was easy to use"
+        shortname: "Usability"
+      item3:
+        name: "The instructions in the learning object were easy to follow"
+        shortname: "Instructions"
+      item4:
+        name: "The help features of the learning object were useful"
+        shortname: "Help features"
+      item5:
+        name: "Working with the learning object helped me learn"
+        shortname: "Help at learning"
+      item6:
+        name: "The feedback from the learning object helped me learn"
+        shortname: "Feedback"
+      item7:
+        name: "The graphics and animations from the learning object helped me learn"
+        shortname: "Graphics"
+      item8:
+        name: "The learning object helped teach me a new concept"
+        shortname: "Learning new concept"
+      item9:
+        name: "Overall, the learning object helped me learn"
+        shortname: "Learning"
+      item10:
+        name: "I like the overall theme of the learning object"
+        shortname: "Design"
+      item11:
+        name: "I found the learning object to be engaging"
+        shortname: "Engagement"
+      item12:
+        name: "The learning object made learning fun"
+        shortname: "Fun"
+      item13:
+        name: "I would like to use learning objects like this again"
+        shortname: "Reuse"
+      item14:
+        name: "What (if anything) did you LIKE about using the learning object?"
+      item15:
+        name: "What (if anything) did you NOT LIKE about using the learning object?"
+  forms:
+    evmethod:
+      evaluating_lo_with_evmethod: "Evaluating %{lo} with %{evmethod}"
+      evmethod_documentation: "%{evmethod} documentation"
+      high: "High"
+      low: "Low"
+      loURL: "Learning Object URL"
+      na: "N/A"
+      remove: "Remove"
+      sagree: "Strongly Agree"
+      sdagree: "Strongly Disagree"
+      title: "%{evmethod} Evaluation Survey"
+      title_for_embed: "Evaluation Survey: '%{lo}'"
+    submit: "Submit"
+    submit_with_evmethod: "Submit %{evmethod} Evaluation"
+    validation:
+      are_you_sure: "Are you sure you want to submit the evaluation survey?"
+      blank_form: "The evaluation survey is blank. It cannot be sent."
+      question_blank: 
+        one: "There is one question that has not been answered."
+        several:
+          a: "There are"
+          b: "questions that have not been answered."
+  menu:
+    actions:
+      amatching: "Automatic Matching"
+      list: "List"
+      rlist: "Ranked List"
+      add_new: "Add New"
+      search: "Search"
+    main: "Main Menu"
+    home: "Home"
+    assignments: "Assignments"
+    learning_objects: "Learning Objects"
+    evaluations: "Evaluations"
+    users: "Users"
+    applications: "Applications"
+    documentation: "Documentation"
+    surveys: "Surveys"
+    settings: "Settings"
+  login:
+   sign_out: "Sign out"
+  words:
+    back: "Back"
+    design: "Design"
+    engagement: "Engagement"
+    interactivity: "Interactivity"
+    learning: "Learning"
+    quality: "Quality"
+    usability: "Usability"
+    
+
