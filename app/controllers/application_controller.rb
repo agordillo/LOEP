@@ -1,5 +1,15 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :set_locale
+ 
+  ################
+  # I18n support
+  ################
+
+  def set_locale
+    I18n.locale = params[:locale] || user_preferred_locale || session[:locale] || extract_locale_from_accept_language_header || I18n.default_locale
+  end
+
 
   #################
   #Configuration
@@ -22,16 +32,18 @@ class ApplicationController < ActionController::Base
     redirect_to home_path, alert: flash[:alert]
   end
 
-  #Web Services
+
+  ################
+  # Web services
+  ################
 
   def serve_tags
-    term = params["term"].downcase;
+    term = params["term"].downcase
     if term.length < 2
-      render :json => Hash.new
+      render :json => Hash.new, :content_type => "application/json"
       return
     end
-    @tags = _getTags
-    render :json => @tags.reject{|tag| _rejectTag(tag,term) }
+    render :json => getTags.select{|tag| acceptTag(tag,term) }, :content_type => "application/json"
   end
 
   def generateToken
@@ -40,34 +52,47 @@ class ApplicationController < ActionController::Base
     render :json => { :token => Utils.build_token(App,length)}
   end
 
+
   private
 
-  def _getTags
+  ################
+  # I18n support
+  ################
+
+  def extract_locale_from_accept_language_header
+    return nil if request.env['HTTP_ACCEPT_LANGUAGE'].nil?
+    (request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).map{|l| l.to_sym} & I18n.available_locales).first
+  end
+
+  def user_preferred_locale
+    return nil unless user_signed_in?
+    if I18n.available_locales.include? current_user.language.shortname.to_sym
+      current_user.language.shortname.to_sym
+    else
+      (current_user.languages.map{|l| l.shortname.to_sym} & I18n.available_locales).first
+    end
+  end
+
+
+  ################
+  # Utils
+  ################
+
+  def getTags
     constants = JSON(File.read("public/constants.json"))
     staticTags = constants["tags"]
     categoriesTags = constants["categories"]
-    popularTags = _getPopularTags.map { |tag| tag.name }
+    popularTags = getPopularTags.map { |tag| tag.name }
     tags = (staticTags + categoriesTags + popularTags).uniq
     tags.sort_by!{ |tag| tag.downcase } #sort it alphabetically
   end
 
-  def _getPopularTags
+  def getPopularTags
     User.tag_counts.order(:count).limit(80)
-
-    # mtags = ActsAsTaggableOn::Tagging.
-    #         includes(:tag).
-    #         # where(:context => "topics").
-    #         group("tags.name").
-    #         select("tags.name, COUNT(*) as count")
-    # mtags.count
   end
 
-  def _rejectTag(tag,term)
-  	if tag.downcase.include? term
-  		false
-  	else
-  		true
-  	end
+  def acceptTag(tag,term)
+    tag.downcase.include? term
   end
 
 end
