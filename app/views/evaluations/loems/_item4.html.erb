@@ -15,30 +15,30 @@
 
 <p class="input_wrapper">
   <input nItem="21" value="1" group="1" type="checkbox" class="skipValidation" <%= item4checkbox1Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span><b>Few/no</b> pages have a consistent look and feel to it.</span>
+  <span><%=raw I18n.t("evmethods.loem.item4.form.g1.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="22" value="2" group="1" type="checkbox" class="skipValidation" <%= item4checkbox2Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span> <b>Some</b> pages have a consistent look and feel to it.</span>
+  <span><%=raw I18n.t("evmethods.loem.item4.form.g1.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="23" value="3" group="1" type="checkbox" class="skipValidation" <%= item4checkbox3Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span><b>All/most</b> pages have a consistent look and feel to it.</span>
+  <span><%=raw I18n.t("evmethods.loem.item4.form.g1.c")%>.</span>
 </p>
 
 <p class="input_wrappers_header">&nbsp;</p>
 
 <p class="input_wrapper">
   <input nItem="24" value="1" group="2" type="checkbox" class="skipValidation" <%= item4checkbox4Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Text and visual components are in a consistent location <b>rarely/never</b>.</span>
+  <span><%=raw I18n.t("evmethods.loem.item4.form.g2.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="25" value="2" group="2" type="checkbox" class="skipValidation" <%= item4checkbox5Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Text and visual components are in a consistent location <b>sometimes</b>.</span>
+  <span><%=raw I18n.t("evmethods.loem.item4.form.g2.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="26" value="3" group="2" type="checkbox" class="skipValidation" <%= item4checkbox6Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Text and visual components are in a consistent location <b>always</b>.</span>
+  <span><%=raw I18n.t("evmethods.loem.item4.form.g2.c")%>.</span>
 </p>
 
 <% if !readonly %>

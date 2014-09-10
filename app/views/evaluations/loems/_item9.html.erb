@@ -13,30 +13,30 @@
 <%= f.hidden_field "item53", :value => item9checkbox5Value, :class => "skipValidation" %>
 <%= f.hidden_field "item54", :value => item9checkbox6Value, :class => "skipValidation" %>
 
-<p class="input_wrappers_header"> The learning object has:</p>
+<p class="input_wrappers_header"><%=raw I18n.t("evmethods.loem.item9.form.header")%>:</p>
 <p class="input_wrapper">
   <input nItem="49" type="checkbox" class="skipValidation" <%= item9checkbox1Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Attractive select of colours.</span>
+  <span><%=raw I18n.t("evmethods.loem.item9.form.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="50" type="checkbox" class="skipValidation" <%= item9checkbox2Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>No long scrolling pages.</span>
+  <span><%=raw I18n.t("evmethods.loem.item9.form.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="51" type="checkbox" class="skipValidation" <%= item9checkbox3Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Easy to read text.</span>
+  <span><%=raw I18n.t("evmethods.loem.item9.form.c")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="52" type="checkbox" class="skipValidation" <%= item9checkbox4Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Attractive graphics.</span>
+  <span><%=raw I18n.t("evmethods.loem.item9.form.d")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="53" type="checkbox" class="skipValidation" <%= item9checkbox5Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Modern interface.</span>
+  <span><%=raw I18n.t("evmethods.loem.item9.form.e")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="54" type="checkbox" class="skipValidation" <%= item9checkbox6Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Looks like it was professional done.</span>
+  <span><%=raw I18n.t("evmethods.loem.item9.form.f")%>.</span>
 </p>
 
 <% if !readonly %>

@@ -21,45 +21,45 @@
 
 <p class="input_wrapper">
   <input nItem="60" value="1" group="1" type="checkbox" class="skipValidation" <%= item14checkbox1Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>The user <b>rarely/never</b> knows where they are.</span>
+  <span><%=raw I18n.t("evmethods.loem.item14.form.g1.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="61" value="2" group="1" type="checkbox" class="skipValidation" <%= item14checkbox2Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>The user knows where they are at <b>some of the time</b>.</span>
+  <span><%=raw I18n.t("evmethods.loem.item14.form.g1.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="62" value="3" group="1" type="checkbox" class="skipValidation" <%= item14checkbox3Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>The user knows where they are at <b>all times</b>.</span>
+  <span><%=raw I18n.t("evmethods.loem.item14.form.g1.c")%>.</span>
 </p>
 
 <p class="input_wrappers_header">&nbsp;</p>
 
 <p class="input_wrapper">
   <input nItem="63" value="1" group="2" type="checkbox" class="skipValidation" <%= item14checkbox4Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span><b>Few/no</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present.</span>
+  <span><%=raw I18n.t("evmethods.loem.item14.form.g2.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="64" value="2" group="2" type="checkbox" class="skipValidation" <%= item14checkbox5Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span><b>Some</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present, but not enough.</span>
+  <span><%=raw I18n.t("evmethods.loem.item14.form.g2.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="65" value="3" group="2" type="checkbox" class="skipValidation" <%= item14checkbox6Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span><b>Sufficient</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present.</span>
+  <span><%=raw I18n.t("evmethods.loem.item14.form.g2.c")%>.</span>
 </p>
 
 <p class="input_wrappers_header">&nbsp;</p>
 
 <p class="input_wrapper">
   <input nItem="66" value="1" group="3" type="checkbox" class="skipValidation" <%= item14checkbox7Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Orienting features <b>are not in a consistent location</b>.</span>
+  <span><%=raw I18n.t("evmethods.loem.item14.form.g3.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="67" value="2" group="3" type="checkbox" class="skipValidation" <%= item14checkbox8Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Orienting features are in the same spot <b>sometimes</b>.</span>
+  <span><%=raw I18n.t("evmethods.loem.item14.form.g3.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input nItem="68" value="3" group="3" type="checkbox" class="skipValidation" <%= item14checkbox9Value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Orienting features are in the same spot <b>always</b>.</span>
+  <span><%=raw I18n.t("evmethods.loem.item14.form.g3.c")%>.</span>
 </p>
 
 <% if !readonly %>

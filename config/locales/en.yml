@@ -10,6 +10,170 @@ en:
       item_score:
         name: "Overall Score"
         description: "Optionally, you may propose an overall score between 0.0 and 10.0 for this Learning Object."
+    loem:
+      item1:
+        name: "Meaningful Interactions"
+        form:
+          a: "Interactions with the learning object are <b>not very meaningful</b>/gratuitous/minimal and are not significantly better than a text‐based medium"
+          b: "Interactions with the learning object are <b>somewhat meaningful</b> and provide something more than a text based medium"
+          c: "Interactions with the learning object are <b>meaningful</b> and permit the user to have a much greater understanding of the concept/topic than he/she would have if she used a text based medium"
+      item2:
+        name: "Overall Control"
+        form:
+          header: "The user has"
+          a: "Ability to move through instructional elements at own speed"
+          b: "Ability to redo or relearn component before moving on"
+          c: "Ability to make choice about the paths to take so that one can progress at own learning level"
+      item3:
+        name: "Multimedia adds learning value"
+        form:
+          a: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds little</b> to the learning process"
+          b: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds something</b> to the learning process"
+          c: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds significantly</b> to the learning process"
+      item4:
+        name: "Consistency"
+        description: "Pages have consistent look and feel"
+        form:
+          g1:
+            a: "<b>Few/no</b> pages have a consistent look and feel to it"
+            b: "<b>Some</b> pages have a consistent look and feel to it"
+            c: "<b>All/most</b> pages have a consistent look and feel to it"
+          g2:
+            a: "Text and visual components are in a consistent location <b>rarely/never</b>"
+            b: "Text and visual components are in a consistent location <b>sometimes</b>"
+            c: "Text and visual components are in a consistent location <b>always</b>"
+      item5:
+        name: "Layout"
+        description: "Clear and well organized"
+        form:
+          g1:
+            a: "The organization of <b>few/no</b> pages is clear"
+            b: "The organization of <b>some</b> pages is clear"
+            c: "The organization of <b>most/all</b> pages is clear"
+          g2:
+            a: "The pages are <b>very</b> cluttered"
+            b: "The pages are <b>somewhat</b> cluttered"
+            c: "The pages are <b>not at all</b> cluttered"
+          g3:
+            a: "<b>Few/No</b> page components are well placed and easy to see"
+            b: "<b>Some</b> page components are well placed and easy to see"
+            c: "<b>All</b> page components are well placed and easy to see"  
+      item6:
+        name: "Labeling"
+        description: "Title on menu buttons, words on clickable buttons, any labels used to guide navigation"
+        form:
+          g1:
+            a: "Navigation labels are <b>confusing</b>"
+            b: "Navigation labels are <b>somewhat clear</b>"
+            c: "Navigation labels are <b>very clear</b>"
+          g2:
+            a: "<b>Few/No</b> labels are easily understood by the user"
+            b: "<b>Some</b> navigation labels are easily understood by the user"
+            c: "<b>All/Most</b> navigation labels are easily understood by the user"
+      item7:
+        name: "Readability"
+        description: "Look of text"
+        form:
+          header: "The text has"
+          a: "Text is easy to read (e.g., good font size and type, clear, not fuzzy)"
+          b: "Contrast between text and background is easy to read"
+          c: "Text is presented in short, concise segments"
+          d: "White space is used effectively"
+      item8:
+        name: "Quality of Feedback"
+        description: "Refers to feedback given to user to help him/her progress through the learning object"
+        form:
+          header: "The feedback is"
+          a: "an appropriate amount for the user (not too much or too little)"
+          b: "well written with appropriate language for the user"
+          c: "appears when necessary and gives user adequate direction and information for progressing"
+      item9:
+        name: "Attractive"
+        description: "Has modern, appealing look"
+        form:
+          header: "The learning object has"
+          a: "Attractive select of colours"
+          b: "No long scrolling pages"
+          c: "Easy to read text"
+          d: "Attractive graphics"
+          e: "Modern interface"
+          f: "Looks like it was professional done"
+      item10:
+        name: "Graphics"
+        description: "Not video"
+        form:
+          a: "Graphics images are <b>low quality</b> with respect to resolution, size, and accuracy"
+          b: "Graphics images are <b>moderate quality</b> with respect to resolution, size, and accuracy"
+          c: "Graphics images are <b>high quality</b> with respect to resolution, size, and accuracy"
+      item11:
+        name: "Learning Mode"
+        form:
+          header: "The learning object includes"
+          a: "videos"
+          b: "animations"
+          c: "audio"
+          d: "written text, hands"
+          e: "static graphical representations"
+      item12:
+        name: "Motivation"
+        form:
+          a: "Learning object interactions/theme/goals/tasks would <b>not be motivating/engaging</b> for the designated grade level"
+          b: "Learning object interactions/theme/goals/tasks would <b>be somewhat motivating/engaging</b> for the designated grade level"
+          c: "Learning object interactions/theme/goals/tasks would <b>be very motivating/engaging</b> for the designated grade level"    
+      item13:
+        name: "Natural to Use"
+        description: "Intuitiveness of the interface, easy of use"
+        form:
+          a: "The tools for the user to control the interactive components are <b>not natural, do not make much sense, are not easy to find</b> on the screen and <b>are rarely/not natural to use</b>"
+          b: "The tools for the user to control the interactive components are <b>somewhat natural, make some sense, are somewhat easy to find</b> on the screen and <b>are sometimes natural to use</b>"
+          c: "The tools for the user to control the interactive components are <b>natural, make sense, are easy to find</b> on the screen and are <b>natural to use</b>"
+      item14:
+        name: "Orientation"
+        description: "Does the user know where he/she is at all times?"
+        form:
+          g1:
+            a: "The user <b>rarely/never</b> knows where they are"
+            b: "The user knows where they are at <b>some of the time</b>"
+            c: "The user knows where they are at <b>all times</b>"
+          g2:
+            a: "<b>Few/no</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present"
+            b: "<b>Some</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present, but not enough"
+            c: "<b>Sufficient</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present"
+          g3:
+            a: "Orienting features <b>are not in a consistent location</b>"
+            b: "Orienting features are in the same spot <b>sometimes</b>"
+            c: "Orienting features are in the same spot <b>always</b>"
+      item15:
+        name: "Navigation Cues"
+        description: "Breadcrumb paths, page numbering, coloured buttons to indicate change of state, pop‐up boxes or mouseovers" 
+        form:
+          a: "<b>Few/No</b> navigational cues are present"
+          b: "<b>Some navigational cues</b> are present but more are needed"
+          c: "A <b>sufficient number</b> of navigation cues are present"
+      item16:
+        name: "Instructions"
+        form:
+          g1:
+            a:
+              a: "The instructions are <b>confusing</b>"
+              b: "The <b>instructions are absent, but need to be added</b>"
+            b:
+              a: "The instructions are <b>somewhat clear</b> (fairly well written, a bit long and fairly easy to understand but some confusion in spots)"
+              b: "Some instructions are present, but <b>more need to be added</b>"
+            c:
+              a: "The instructions are <b>very clear</b> ( well written, concise and easily understood)"
+              b: "There are no instructions, but <b>it is obvious what needs to be done</b>"
+          g2:
+            a: "Text and visual components are in a consistent location <b>rarely/never</b>"
+            b: "Text and visual components are in a consistent location <b>sometimes</b>"
+            c: "Text and visual components are in a consistent location <b>always</b>"
+      item17:
+        name: "Appropriate Language Level"
+        description: "Appropriate for the user"
+        form:
+          a: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>rarely/ none of the time</b>"
+          b: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>some of the time</b>"
+          c: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>all/most of the time</b>" 
     lori:
       item1:
         name: "Content Quality"
@@ -82,6 +246,46 @@ en:
         name: "What (if anything) did you LIKE about using the learning object?"
       item15:
         name: "What (if anything) did you NOT LIKE about using the learning object?"
+    Wbltt:
+      item1:
+        name: "The learning object was easy for me to use"
+        shortname: "Usability for teachers"
+      item2:
+        name: "The learning object was easy for students to use"
+        shortname: "Usability for students"
+      item3:
+        name: "The students found the learning object instructions clear"
+        shortname: "Instructions"
+      item4:
+        name: "The graphics and animations from the learning object helped students learn"
+        shortname: "Graphics"
+      item5:
+        name: "The learning object enhanced student learning"
+        shortname: "Learning"
+      item6:
+        name: "The learning object helped clarify the concept(s) being taught"
+        shortname: "Help at clarifying concepts"
+      item7:
+        name: "Overall, it was beneficial to us the learning object for teaching"
+        shortname: "Teaching"
+      item8:
+        name: "The students were on task or focused when the learning objects was being used"
+        shortname: "Ability to keep students focused"
+      item9:
+        name: "The students liked the interactive quality of the learning object"
+        shortname: "Interactivity"
+      item10:
+        name: "The students appeared to like the learning object"
+        shortname: "Students opinion"
+      item11:
+        name: "Overall, the students were engaged when the learning object was being used"
+        shortname: "Engagement"
+      item12:
+        name: "What was the overall impact of the learning object on your teaching?"
+      item13:
+        name: "Were there any technology-based problems that you encountered while using your learning object? Please explain."
+      item14:
+        name: "What advice would you give to future teachers about using this learning object in their lessons?"
   forms:
     evmethod:
       evaluating_lo_with_evmethod: "Evaluating %{lo} with %{evmethod}"

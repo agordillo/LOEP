@@ -1,14 +1,14 @@
 <p class="input_wrapper">
   <input value="1" type="checkbox" class="skipValidation" <%= value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Graphics images are <b>low quality</b> with respect to resolution, size, and accuracy.</span>
+  <span><%=raw I18n.t("evmethods.loem.item10.form.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input value="2" type="checkbox" class="skipValidation" <%= value==2 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span> Graphics images are <b>moderate quality</b> with respect to resolution, size, and accuracy.</span>
+  <span><%=raw I18n.t("evmethods.loem.item10.form.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input value="3" type="checkbox" class="skipValidation" <%= value==3 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Graphics images are <b>high quality</b> with respect to resolution, size, and accuracy.</span>
+  <span><%=raw I18n.t("evmethods.loem.item10.form.c")%>.</span>
 </p>
 
 <% if !readonly %>

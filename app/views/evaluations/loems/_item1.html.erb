@@ -1,14 +1,14 @@
 <p class="input_wrapper">
   <input value="1" type="checkbox" class="skipValidation" <%= value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Interactions with the learning object are <b>not very meaningful</b>/gratuitous/minimal and are not significantly better than a text‐based medium.</span>
+  <span><%=raw I18n.t("evmethods.loem.item1.form.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input value="2" type="checkbox" class="skipValidation" <%= value==2 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Interactions with the learning object are <b>somewhat meaningful</b> and provide something more than a text based medium.</span>
+  <span><%=raw I18n.t("evmethods.loem.item1.form.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input value="3" type="checkbox" class="skipValidation" <%= value==3 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Interactions with the learning object are <b>meaningful</b> and permit the user to have a much greater understanding of the concept/topic than he/she would have if she used a text based medium.</span>
+  <span><%=raw I18n.t("evmethods.loem.item1.form.c")%>.</span>
 </p>
 
 <% if !readonly %>

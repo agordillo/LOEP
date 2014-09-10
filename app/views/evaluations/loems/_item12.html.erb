@@ -1,14 +1,14 @@
 <p class="input_wrapper">
   <input value="1" type="checkbox" class="skipValidation" <%= value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Learning object interactions/theme/goals/tasks would <b>not be motivating/engaging</b> for the designated grade level.</span>
+  <span><%=raw I18n.t("evmethods.loem.item12.form.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input value="2" type="checkbox" class="skipValidation" <%= value==2 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Learning object interactions/theme/goals/tasks would <b>be somewhat motivating/engaging</b> for the designated grade level.</span>
+  <span><%=raw I18n.t("evmethods.loem.item12.form.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input value="3" type="checkbox" class="skipValidation" <%= value==3 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>Learning object interactions/theme/goals/tasks would <b>be very motivating/engaging</b> for the designated grade level.</span>
+  <span><%=raw I18n.t("evmethods.loem.item12.form.c")%>.</span>
 </p>
 
 <% if !readonly %>

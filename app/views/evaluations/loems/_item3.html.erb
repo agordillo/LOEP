@@ -1,14 +1,14 @@
 <p class="input_wrapper">
   <input value="1" type="checkbox" class="skipValidation" <%= value==1 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds little</b> to the learning process.</span>
+  <span><%=raw I18n.t("evmethods.loem.item3.form.a")%>.</span>
 </p>
 <p class="input_wrapper">
   <input value="2" type="checkbox" class="skipValidation" <%= value==2 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span> The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds something</b> to the learning process.</span>
+  <span><%=raw I18n.t("evmethods.loem.item3.form.b")%>.</span>
 </p>
 <p class="input_wrapper">
   <input value="3" type="checkbox" class="skipValidation" <%= value==3 ? "checked='checked'" : "" %> <%= readonly ? "disabled=\"disabled\"" : ""%>></input>
-  <span>The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds significantly</b> to the learning process.</span>
+  <span><%=raw I18n.t("evmethods.loem.item3.form.c")%>.</span>
 </p>
 
 <% if !readonly %>
