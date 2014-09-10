@@ -1,5 +1,5 @@
 <div class="loep_form_wrapper">
-  <h2>Settings</h2>
+  <h2><%=t("settings.title")%></h2>
 
   <% devise_error_messages!.each do |msg| %>
       <% if msg.is_a?(String) %>
@@ -9,45 +9,45 @@
 
   <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
 
-      <p class="form_legend">Username</p>
+      <p class="form_legend"><%=t("words.username")%></p>
       <%=text_field_tag "user[name]",@user.name, :class=>'loep_input' %>
 
-      <p class="form_legend">Email</p>
+      <p class="form_legend"><%=t("words.email")%></p>
       <%= f.email_field :email, :class=>'loep_input' %>
 
-      <p class="form_legend">Birthday</p>
+      <p class="form_legend"><%=t("words.birthday")%></p>
       <%=text_field_tag "user[birthday]",@user.readable_birthday, :class=>'loep_input', :id=>"birthday_datepicker" %>
 
-      <p class="form_legend">Gender</p>
+      <p class="form_legend"><%=t("words.gender")%></p>
       <div class="gender_buttons">
-        <%= f.radio_button :gender, 1 %><span class="gender_label">Male</span>
-        <%= f.radio_button :gender, 2 %><span class="gender_label">Female</span>
+        <%= f.radio_button :gender, 1 %><span class="gender_label"><%=t("words.male")%></span>
+        <%= f.radio_button :gender, 2 %><span class="gender_label"><%=t("words.female")%></span>
       </div>
 
-      <p class="form_legend">* Occupation or field of expertise</p>
+      <p class="form_legend">* <%=t("registrations.occupation")%></p>
       <%= f.select :occupation, options_for_select(Utils.getOptionsForOccupation,resource.occupation || "Education"), {} ,{ :class=>'loep_input' } %>
 
-      <p class="form_legend">* Preferred Language</p>
+      <p class="form_legend">* <%=t("registrations.language_preferred")%></p>
       <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan(resource),resource.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 
-      <p class="form_legend">* All Languages</p>
+      <p class="form_legend">* <%=t("registrations.language_all")%></p>
       <%= f.select :languages, options_for_select(Utils.getOptionsForSelectLan(resource,{:multiple => true}),resource.getLanguages), {} ,{ :multiple => 'true' , :size => 6, :class=>'loep_input' } %>
 
 
-      <p class="form_legend">Areas of interest</p>
+      <p class="form_legend"><%=t("registrations.areas")%></p>
       <input name="user[tag_list]" id="tags" value="<%=@user.tag_list.join(",")%>"/>
 
-      <p class="form_legend">Password (leave blank if you don't want to change it)</p>
+      <p class="form_legend"><%=t("login.password_in_settings")%></p>
       <%= f.password_field :password, :autocomplete => "off", :class=>'loep_input' %>
 
-      <p class="form_legend">Password confirmation</p>
+      <p class="form_legend"><%=t("login.password_confirmation")%></p>
       <%= f.password_field :password_confirmation, :class=>'loep_input' %>
 
-      <p class="form_legend">Current password (we need your current password to confirm your changes)</p>
+      <p class="form_legend"><%=t("login.password_current_in_settings")%></p>
       <%= f.password_field :current_password, :class=>'loep_input' %>
 
       <p class="form_before_button">&nbsp;</p>
-      <%= f.submit "Update", :class => 'loep_button update_button' %>
+      <%= f.submit t("words.update"), :class => 'loep_button update_button' %>
 
   <% end %>
 
@@ -56,12 +56,12 @@
 
   </br>
   </br>
-  <h3>Cancel my account</h3>
+  <h3><%=t("registrations.cancel_account")%></h3>
   <p>
     <% unless @user.role?("SuperAdmin") %>
-      <%= button_to "Cancel", registration_path(resource_name), :class => 'loep_button cancel_button', :data => { :confirm => "Are you sure?" }, :method => :delete %>
+      <%= button_to t("words.cancel"), registration_path(resource_name), :class => 'loep_button cancel_button', :data => { :confirm => t("words.are_you_sure") }, :method => :delete %>
     <% else %>
-      <input class="loep_button cancel_button" data-confirm="You are the SuperAdmin, you can't cancel your account." type="submit" promptOkAlertDialog="true" value="Cancel">
+      <input class="loep_button cancel_button" data-confirm="<%=t("registrations.super_admin_alert")%>" type="submit" promptOkAlertDialog="true" value="<%=t("words.cancel")%>">
     <% end %>
   </p>
 </div>
@@ -81,6 +81,7 @@
 
     $('#tags').tagsInput({
       autocomplete_url:'http://localhost:3000/tags',
+      defaultText: '<%=t("tags.add_a_tag")%>',
       'minChars' : 2,
       'maxChars' : 25 //if not provided there is no limit,
     });

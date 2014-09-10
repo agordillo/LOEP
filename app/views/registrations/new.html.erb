@@ -7,44 +7,44 @@
 
   <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
 
-    <p class="form_legend">* Username</p>
+    <p class="form_legend">* <%=t("words.username")%></p>
     <%=f.text_field :name, :class=>'loep_input', :autocomplete => "off" %>
 
-    <p class="form_legend">* Email</p>
+    <p class="form_legend">* <%=t("words.email")%></p>
     <%= f.email_field :email, :class=>'loep_input', :autocomplete => "off" %>
 
-    <p class="form_legend">* Birthday</p>
+    <p class="form_legend">* <%=t("words.birthday")%></p>
     <%=f.text_field :birthday, :class=>'loep_input', :id=>"birthday_datepicker" %>
 
-    <p class="form_legend">* Gender</p>
+    <p class="form_legend">* <%=t("words.gender")%></p>
     <div class="gender_buttons">
-      <%= f.radio_button :gender, 1 %><span class="gender_label">Male</span>
-      <%= f.radio_button :gender, 2 %><span class="gender_label">Female</span>
+      <%= f.radio_button :gender, 1 %><span class="gender_label"><%=t("words.male")%></span>
+      <%= f.radio_button :gender, 2 %><span class="gender_label"><%=t("words.female")%></span>
     </div>
 
-    <p class="form_legend">* Occupation or field of expertise</p>
+    <p class="form_legend">* <%=t("registrations.occupation")%></p>
     <%= f.select :occupation, options_for_select(Utils.getOptionsForOccupation,resource.occupation || "Education"), {} ,{ :class=>'loep_input' } %>
 
-    <p class="form_legend">* Preferred Language</p>
+    <p class="form_legend">* <%=t("registrations.language_preferred")%></p>
     <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan(resource),resource.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 
-    <p class="form_legend">* All Languages</p>
+    <p class="form_legend">* <%=t("registrations.language_all")%></p>
     <%= f.select :languages, options_for_select(Utils.getOptionsForSelectLan(resource,{:multiple => true}),resource.getLanguages), {} ,{ :multiple => 'true' , :size => 6, :class=>'loep_input' } %>
 
-    <p class="form_legend">Areas of interest</p>
+    <p class="form_legend"><%=t("registrations.areas")%></p>
     <input name="user[tag_list]" autocomplete="off" id="tags" value="<%=resource.tag_list.join(",")%>"/>
 
-    <p class="form_legend">* Password</p>
+    <p class="form_legend">* <%=t("login.password")%></p>
     <%= f.password_field :password, :class=>'loep_input', :autocomplete => "off" %>
 
-    <p class="form_legend">* Password confirmation</p>
+    <p class="form_legend">* <%=t("login.password_confirmation")%></p>
     <%= f.password_field :password_confirmation, :class=>'loep_input', :autocomplete => "off" %>
 
     <div class="captcha_wrapper">
       <%= recaptcha_tags %>
     </div>
 
-    <%= f.submit "Sign up", :class => 'loep_button sign_up_button' %>
+    <%= f.submit t("login.sign_up"), :class => 'loep_button sign_up_button' %>
   <% end %>
   </br>
   <%= link_to t("words.back"), :back %>
@@ -65,6 +65,7 @@
 
     $('#tags').tagsInput({
       autocomplete_url:'http://localhost:3000/tags',
+      defaultText: '<%=t("tags.add_a_tag")%>',
       'minChars' : 2,
       'maxChars' : 25 //if not provided there is no limit,
     });

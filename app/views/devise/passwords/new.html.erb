@@ -1,5 +1,5 @@
 <div class="loep_form_wrapper">
-	<h2>Forgot your password?</h2>
+	<h2><%=t("login.password_forgot")%></h2>
 
 	<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
 
@@ -9,11 +9,11 @@
   		<% end %>
   	<% end %>
 
-	  <p class="form_legend">Email</p>
+	  <p class="form_legend"><%=t("words.email")%></p>
 	  <%= f.email_field :email, :autofocus => true, :class=>'loep_input' %>
 
     <p class="form_before_button">&nbsp;</p>
-	  <div><%= f.submit "Send me reset password instructions", :class => 'loep_button update_button' %></div>
+	  <div><%= f.submit t("login.password_reset_instructions"), :class => 'loep_button update_button' %></div>
 	<% end %>
 
   </br>

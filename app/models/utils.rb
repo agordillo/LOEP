@@ -37,7 +37,7 @@ class Utils
     end
 
     if addUnespecified
-      languages.unshift(["Unspecified",-1])
+      languages.unshift([I18n.t("words.unspecified"),-1])
     end
 
     #Add other at the end
@@ -51,15 +51,15 @@ class Utils
   end
 
   def self.getOptionsForSelectAssignmentStatus
-    [["Pending","Pending"],["Completed","Completed"],["Rejected","Rejected"]]
+    [[I18n.t("assignments.status.pending"),"Pending"],[I18n.t("assignments.status.completed"),"Completed"],[I18n.t("assignments.status.rejected"),"Rejected"]]
   end
 
   def self.getOptionsForSelectLOScope
-    [["Private","Private"],["Protected","Protected"],["Public","Public"]]
+    [[I18n.t("scopes.private"),"Private"],[I18n.t("scopes.protected"),"Protected"],[I18n.t("scopes.public"),"Public"]]
   end
 
   def self.getOptionsForOccupation
-    [["Education (teacher, pedagogue, ...)","Education"],["Technology (educational content developer, IT support, ...)","Technology"],["Other","Other"]]
+    [[I18n.t("occupations.education"),"Education"],[I18n.t("occupations.technology"),"Technology"],[I18n.t("words.other"),"Other"]]
   end
 
 

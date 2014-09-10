@@ -5,19 +5,19 @@
 <% unless user_signed_in? %>
   <%= form_for("user", :url => user_session_path) do |f| %>
 
-    <p class="form_legend"> Username or Email </p>
+    <p class="form_legend"><%=t("login.username_or_email")%></p>
     <%= f.text_field :login , :size=>'15',:maxlength=>'32', :class=>'login_email_input' %>
 
-    <p class="form_legend"> Password </p>
+    <p class="form_legend"><%=t("login.password")%></p>
     <%= f.password_field :password , :size=>'15', :maxlength=>'32', :class=>'login_password_input' %>
 	
-    <%= f.submit "Sign in", :class=>'loep_button sign_in_button' %> <br />
+    <%= f.submit t("login.sign_in"), :class=>'loep_button sign_in_button' %> <br />
      
     <div> 
 	    <% if devise_mapping.rememberable? -%>
-	    	<%= f.check_box :remember_me %> <%= f.label :remember_me, :class => "remember_me_label" %>
+	    	<%= f.check_box :remember_me %> <%= f.label t("login.remember_me"), :class => "remember_me_label" %>
 	  	<% end -%>
-	    <%= link_to "Forgot your password?", new_password_path('user'), :class => "forgot_password_label"  %>
+	    <%= link_to t("login.password_forgot"), new_password_path('user'), :class => "forgot_password_label"  %>
     </div>
   <% end %>
 <% end %>

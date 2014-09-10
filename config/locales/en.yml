@@ -1,7 +1,26 @@
 en:
+  applications:
+    name:
+      one: "Application"
+      plural: "Applications"
+      mine: "My Applications"
+  assignments:
+    name:
+      one: "Assignment"
+      plural: "Assignments"
+      mine: "My Assignments"
+    status:
+      completed: "Completed"
+      pending:  "Pending"
+      rejected: "Rejected"
   dialog:
     ok: "Ok"
     cancel: "Cancel"
+  evaluations:
+    name:
+      one: "Evaluation"
+      plural: "Evaluations"
+      mine: "My Evaluations"
   evmethods:
     all:
       item_comments:
@@ -202,6 +221,9 @@ en:
       item9:
         name: "Standards Compliance"
         description: "Adherence to international standards and specifications"
+    name:
+      one: "Evaluation Method"
+      plural: "Evaluation Methods"
     Wblts:
       item1:
         name: "The learning object was well organized"
@@ -286,6 +308,8 @@ en:
         name: "Were there any technology-based problems that you encountered while using your learning object? Please explain."
       item14:
         name: "What advice would you give to future teachers about using this learning object in their lessons?"
+  footer:
+    main: "Learning Object Evaluation Platform. Code avalaible on Github"
   forms:
     evmethod:
       evaluating_lo_with_evmethod: "Evaluating %{lo} with %{evmethod}"
@@ -309,6 +333,15 @@ en:
         several:
           a: "There are"
           b: "questions that have not been answered."
+  frontpage:
+    welcome: "Welcome to the Learning Object Evaluation Platform"
+    description: "This platform aims to provide teachers and educators with a set of tools to facilitate the evaluation of small and self-contained web educational resources, known as Learning Objects. LOEP provides user and Learning Object management functionality, review assignments, a suite of evaluation tools (web and downloadable surveys, peer review mechanisms, ...) to evaluate Learning Objects according to several formal evaluation models, and training material for reviewers and educators."
+    new_to_loep: "New to LOEP?"
+  los:
+    name:
+      one: "Learning Object"
+      plural: "Learning Objects"
+      mine: "My Learning Objects"
   menu:
     actions:
       amatching: "Automatic Matching"
@@ -327,14 +360,60 @@ en:
     surveys: "Surveys"
     settings: "Settings"
   login:
-   sign_out: "Sign out"
+    password: "Password"
+    password_confirmation: "Password confirmation"
+    password_current_in_settings: "Current password (we need your current password to confirm your changes)"
+    password_in_settings: "Password (leave blank if you don't want to change it)"
+    password_forgot: "Forgot your password?"
+    password_reset_instructions: "Send me reset password instructions"
+    remember_me: "Remember me"
+    sign_in: "Sign in"
+    sign_out: "Sign out"
+    sign_up: "Sign up"
+    username_or_email: "Username or Email"
+  occupations:
+    education: "Education (teacher, pedagogue, ...)"
+    technology: "Technology (educational content developer, IT support, ...)"
+  registrations:
+    areas: "Areas of interest"
+    cancel_account: "Cancel my account"
+    language_all: "All Languages"
+    language_preferred: "Preferred Language"
+    occupation: "Occupation or field of expertise"
+    super_admin_alert: "You are the SuperAdmin, you can't cancel your account."
+  scopes:
+    public: "Public"
+    private: "Private"
+    protected: "Protected"
+  settings:
+    title: "Settings"
+  tags:
+    add_a_tag: "add a tag"
+  users:
+    name:
+      one: "User"
+      plural: "Users"
   words:
+    add_new: "Add new"
+    are_you_sure: "Are you sure?"
     back: "Back"
+    birthday: "Birthday"
+    cancel: "Cancel"
     design: "Design"
+    email: "Email"
     engagement: "Engagement"
+    female: "Female"
+    gender: "Gender"
     interactivity: "Interactivity"
     learning: "Learning"
+    male: "Male"
+    ok: "Ok"
+    other: "Other"
     quality: "Quality"
+    unspecified : "Unspecified"
+    update: "Update"
     usability: "Usability"
+    username: "Username"
+    view_all: "View all"
     
 

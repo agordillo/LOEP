@@ -1,15 +1,15 @@
 <div id="front_page_wrapper">
 	<div id="frontpage_C1">
-		<h1> Welcome to the Learning Object Evaluation Platform</h1>
-		<p> This platform aims to provide teachers and educators with a set of tools to facilitate the evaluation of small and self-contained web educational resources, known as Learning Objects. LOEP provides user and Learning Object management functionality, review assignments, a suite of evaluation tools (web and downloadable surveys, peer review mechanisms, ...) to evaluate Learning Objects according to several formal evaluation models, and training material for reviewers and educators. </p>
+		<h1><%=t("frontpage.welcome")%></h1>
+		<p><%=t("frontpage.description")%></p>
 	</div>
 	<div id="frontpage_C2">
 		<div id="frontpage_A">
 			<%= render 'home/login' %>
 		</div>
 		<div id="frontpage_B">
-			<h1>New to LOEP?</h1>
-			<%= link_to "Sign up", new_user_registration_path, :method => :get, :class => 'loep_button sign_up_button'  %>
+			<h1><%=t("frontpage.new_to_loep")%></h1>
+			<%= link_to t("login.sign_up"), new_user_registration_path, :method => :get, :class => 'loep_button sign_up_button'  %>
 		</div>
 	</div>
 </div>
