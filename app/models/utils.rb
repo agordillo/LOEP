@@ -16,8 +16,8 @@ class Utils
     end
 
     #Special languages
-    lOther = Language.find_by_shortname("lanot")
-    lIndependent = Language.find_by_shortname("lanin")
+    lOther = Language.find_by_code("lanot")
+    lIndependent = Language.find_by_code("lanin")
 
     #Get all languages (but other)
     languages = Language.all.map{ |l| [l.name,l.id] }.sort_by{ |l| l[0].downcase }.reject{|l| l[1]==lOther.id}

@@ -110,13 +110,13 @@ class Api::V1::LosController < Api::V1::BaseController
   def filterLOLanguage
     if params[:lo] and params[:lo][:lanCode]
       begin
-      	params[:lo][:language_id] = Language.find_by_shortname(params[:lo][:lanCode]).id
+      	params[:lo][:language_id] = Language.find_by_code(params[:lo][:lanCode]).id
       rescue
-        params[:lo][:language_id] = Language.find_by_shortname("lanot").id
+        params[:lo][:language_id] = Language.find_by_code("lanot").id
       end
       params[:lo].delete :lanCode
     else
-      params[:lo][:language_id] = Language.find_by_shortname("lanot").id
+      params[:lo][:language_id] = Language.find_by_code("lanot").id
     end
   end
 

@@ -66,10 +66,10 @@ class ApplicationController < ActionController::Base
 
   def user_preferred_locale
     return nil unless user_signed_in?
-    if I18n.available_locales.include? current_user.language.shortname.to_sym
-      current_user.language.shortname.to_sym
+    if I18n.available_locales.include? current_user.language.sym
+      current_user.language.sym
     else
-      (current_user.languages.map{|l| l.shortname.to_sym} & I18n.available_locales).first
+      (current_user.languages.map{|l| l.sym} & I18n.available_locales).first
     end
   end
 

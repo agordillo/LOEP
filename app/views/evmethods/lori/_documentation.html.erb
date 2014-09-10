@@ -12,7 +12,7 @@
       <th></th>
       <th></th>
     </tr>
-    <% if current_user.languages.include?(Language.find_by_shortname("es")) %>
+    <% if current_user.languages.include?(Language.find_by_code("es")) %>
       <tr class="trpointer">
         <td class="download_file">
           <a href="/LORI1.5_Manual_es.pdf">

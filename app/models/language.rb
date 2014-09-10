@@ -9,4 +9,9 @@ class Language < ActiveRecord::Base
   :uniqueness => {
     :case_sensitive => false
   }
+
+  def sym
+  	self.code.to_sym
+  end
+
 end

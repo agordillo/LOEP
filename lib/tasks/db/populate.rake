@@ -30,8 +30,8 @@ namespace :db do
 			#Create 10 fake users for development
 			role_reviewer = Role.find_by_name("Reviewer")
 			role_user = Role.find_by_name("User")
-			english = Language.find_by_shortname("en")
-			spanish = Language.find_by_shortname("es")
+			english = Language.find_by_code("en")
+			spanish = Language.find_by_code("es")
 
 			if Rails.env == "development"
 				10.times do |i|
@@ -223,12 +223,12 @@ namespace :db do
 			]
 
 			languages.each do |language|
-				l = Language.find_by_shortname(language[:code])
+				l = Language.find_by_code(language[:code])
 				if l.nil?
 					puts "Creating new language: " + language[:name]
 					l = Language.new
 					l.name = language[:name]
-					l.shortname = language[:code]
+					l.code = language[:code]
 					l.save!
 				end
 			end
@@ -313,8 +313,8 @@ namespace :db do
 			role_sadmin = Role.find_by_name("SuperAdmin")
 			role_admin = Role.find_by_name("Admin")
 			role_reviewer = Role.find_by_name("Reviewer")
-			english = Language.find_by_shortname("en")
-			spanish = Language.find_by_shortname("es")
+			english = Language.find_by_code("en")
+			spanish = Language.find_by_code("es")
 
 			user_admin = User.new
 			user_admin.name = "admin"

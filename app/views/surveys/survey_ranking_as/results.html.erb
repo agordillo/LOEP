@@ -5,8 +5,10 @@
     Clasificación y puntuaciones de los 12 objetos de aprendizaje.
   </p>
   <p> Número total de respuestas: <%=Surveys::SurveyRankingA.count%></p>
-  <p> Última respuesta: <%=Surveys::SurveyRankingA.last.created_at.strftime("%d/%m/%Y %H:%M %P")%></p>
-  <p><a href="/surveys/survey_ranking_as.xlsx">Descargar respuestas</a></p>
+  <%unless Surveys::SurveyRankingA.last.nil? %>
+    <p> Última respuesta: <%=Surveys::SurveyRankingA.last.created_at.strftime("%d/%m/%Y %H:%M %P")%></p>
+    <p><a href="/surveys/survey_ranking_as.xlsx">Descargar respuestas</a></p>
+  <%end%>
   
   <p>&nbsp;</p>
 
