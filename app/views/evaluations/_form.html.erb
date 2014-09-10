@@ -116,7 +116,7 @@
 
     var _getFieldsOfForm = function(form){
       //Ignore submit fields, and also inputs with 'optionalInput' or 'skipValidation' class
-      var inputs = $(form).find(':input:not(.optionalInput):not(.skipValidation)[type!="submit"]');
+      var inputs = $(form).find(':input:not(.optionalInput):not(.skipValidation)[type!="submit"][name!=utf8][name!=authenticity_token]');
       var fields = [];
 
       $(inputs).each(function(index,input){
