@@ -4,16 +4,16 @@
 
   <%= form_for(@app) do |f| %>
 
-    <p class="form_legend">* Name</p>
+    <p class="form_legend">* <%=t("words.name")%></p>
     <%= f.text_field :name, :class=>'loep_input' %>
 
     <%if !@app.auth_token.nil? %>
-      <p class="form_legend">* Authentication Token <span id="refreshAuthToken" class="glyphicon glyphiconfull refresh refreshAuthToken"></span></p>
+      <p class="form_legend">* <%=t("words.auth_token")%> <span id="refreshAuthToken" class="glyphicon glyphiconfull refresh refreshAuthToken"></span></p>
       <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
     <% end %>
 
     <p class="space_XXS">&nbsp;</p>
-    <p class="form_legend">Callback</p>
+    <p class="form_legend"><%=t("words.callback")%></p>
     <%= f.text_field :callback, :class=>'loep_input' %>
     
     <%= f.hidden_field :user_id, :value=>(@app.user.nil? ? current_user.id : @app.user.id)%>
@@ -26,20 +26,20 @@
 </div>
 
 <%if !@app.auth_token.nil? %>
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('#refreshAuthToken').click(function(event){
-      $.ajax({
-        type: "GET",
-        url: "/generateToken.json?length=60",
-        dataType:"json",
-        success:function(response){
-          $("#app_auth_token").val(response.token)
-        },
-        error:function (xhr, ajaxOptions, thrownError){
-        }
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#refreshAuthToken').click(function(event){
+        $.ajax({
+          type: "GET",
+          url: "/generateToken.json?length=60",
+          dataType:"json",
+          success:function(response){
+            $("#app_auth_token").val(response.token)
+          },
+          error:function (xhr, ajaxOptions, thrownError){
+          }
+        });
       });
     });
-  });
-</script>
+  </script>
 <% end %>

@@ -1,2 +1,9 @@
 es:
-  hello: "Hola Mundo"
+  datepicker:
+    closeText: 'Done'
+    currentText: 'Now'
+    firstDay: 1
+    hourText: 'Hours'
+    minuteText: 'Minutes'
+    secondText: 'Seconds'
+    timeText: 'Time'

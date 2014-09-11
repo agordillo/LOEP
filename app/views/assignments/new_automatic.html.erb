@@ -1,7 +1,7 @@
 <div class="loep_form_wrapper new_assignment_form">
 
-  <h2>Automatic Assignments Generation</h2>
-  <h3>The selected Learning Objects will be assigned among the selected reviewers, taking into consideration the criteria chosen in the form, the type of Learning Object and the profile of the reviewer.</h3>
+  <h2><%=t("assignments.automatic.title")%></h2>
+  <h3><%=t("assignments.automatic.description")%></h3>
 
   <p class="form_before_button">&nbsp;</p>
 
@@ -11,7 +11,7 @@
     <input name="utf8" type="hidden" value="✓">
     <%= token_tag form_authenticity_token %>
 
-    <p class="form_legend">Learning Objects</p>
+    <p class="form_legend"><%=t("los.name.plural")%></p>
     <select name="selected_los[]" multiple="true" id="select_los" class="loep_input">
       <% unless @plos.nil? %>
         <% @plos.each do |lo| %>
@@ -23,57 +23,56 @@
       <% end %>
     </select>
 
-    <p class="form_legend">Reviewers</p>
+    <p class="form_legend"><%=t("users.reviewer.plural")%></p>
     <select name="selected_users[]" multiple="true" id="select_users" class="loep_input">
       <% unless @pusers.nil? %>
         <% @pusers.each do |user| %>
           <option value="<%=user.id%>" selected="selected"><%=user.name%></option>
         <% end %>
       <% else %>
-        <option value="all" selected="selected">All Reviewers</option>
+        <option value="all" selected="selected"><%=t("users.reviewer.all")%></option>
       <% end %>
       <% @users.each do |user| %>
         <option value="<%=user.id%>"><%=user.name%></option>
       <% end %>
     </select>
 
-    <p class="form_legend">Evaluation Methods</p>
+    <p class="form_legend"><%=t("evmethods.name.plural")%></p>
     <%= select_tag "selected_evmethods", options_for_select(Utils.getEvMethods,@evmethodids), { :multiple => true, :size => 2, :class=>'loep_input' }  %>
 
-    <p class="form_legend">Description</p>
+    <p class="form_legend"><%=t("words.description")%></p>
     <textarea class="loep_input" cols="40" id="assignment_description" name="assignment[description]" rows="20"></textarea>
 
-    <p class="form_legend">Deadline</p>
+    <p class="form_legend"><%=t("words.deadline")%></p>
     <%=text_field_tag "assignment[deadline]",@assignment.readable_deadline, :class=>'loep_input', :id=>"deadline_datepicker" %>
 
     <input id="assignment_author_id" name="assignment[author_id]" type="hidden" value="<%=current_user.id%>">
 
 
-    <h4>Criteria</h4>
-    <!-- TODO -->
+    <h4><%=t("words.criterion.plural")%></h4>
 
-    <p class="form_legend">Number of evaluations per Learning Object</p>
+    <p class="form_legend"><%=t("assignments.automatic.nepl")%></p>
     <div id="select_NEPL_wrapper">
       <select name="NEPL" id="select_NEPL" class="loep_input">
         <% 5.times do |i| %>
           <option value="<%=i+1%>" <%="selected='selected'" if i+1==3%>><%=i+1%></option>
         <% end %>
-        <option value="other">Other</option>
+        <option value="other"><%=t("words.other")%></option>
       </select>
       <input id="select_NEPL_other" name="NEPL_other" type="text" class="loep_input"></input>
     </div>
 
-    <p class="form_legend">LO-Reviewer Matching Criteria</p>
+    <p class="form_legend"><%=t("assignments.automatic.matching_criteria")%></p>
     <select name="mcriteria" id="select_acriteria" class="loep_input">
-        <option value="pwlRandom" selected='selected'>Prioritize workload balancing: Random Matching</option>
-        <option value="pwlBestEffort">Prioritize workload balancing: Best-effort Matching</option>
-        <option value="pReviewerA">Prioritize reviewer suitability</option>
+        <option value="pwlRandom" selected='selected'><%=t("assignments.automatic.matching_strategies.a")%></option>
+        <option value="pwlBestEffort"><%=t("assignments.automatic.matching_strategies.b")%></option>
+        <option value="pReviewerA"><%=t("assignments.automatic.matching_strategies.c")%></option>
     </select>
 
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
-    <input class="loep_button" name="commit" type="submit" value="Generate Assignments Automatically">
+    <input class="loep_button" name="commit" type="submit" value="<%=t('assignments.automatic.submit')%>">
 
   </form>
 
@@ -85,6 +84,7 @@
 <script type="text/javascript">
   jQuery(document).ready(function($){
     //Datetimepicker Addon: http://trentrichardson.com/examples/timepicker/#basic_examples
+    <%= render "application/datepicker_language" %> //Translate datepicker
     $('#deadline_datepicker').datetimepicker({
       yearRange: "-1:+10",
       showOn: "both",
@@ -94,6 +94,7 @@
       minDate: '0d',
       buttonImage: "/assets/calendar_icon.png", 
       buttonImageOnly: true,
+      firstDay: '<%=t("datepicker.firstDay")%>', //start on monday or sunday regarding the locale
       timeFormat: "HH:mm tt",
       stepHour: 1,
       stepMinute: 15
@@ -115,7 +116,7 @@
     //    }
     // });
 
-    $("#select_users").on("select2-selecting", function(event) {
+    $("#select_users").on("select2-selecting", function(event){
       var valueSelected = event.val;
       if(valueSelected === "all"){
         //When add All Reviewers, remove the rest of the fields
@@ -133,10 +134,9 @@
     $("#select_NEPL").attr("style","width:" + $("#select_NEPL").width() + "px");
     $("#select_NEPL").select2({
         minimumResultsForSearch: -1
-      }
-    );
+    });
 
-    $("#select_NEPL").on("select2-selecting", function(event) {
+    $("#select_NEPL").on("select2-selecting", function(event){
       var valueSelected = event.val;
       if(valueSelected === "other"){
         $("#select_NEPL_other").show();
@@ -148,8 +148,7 @@
     $("#select_acriteria").attr("style","width:" + $("#select_acriteria").width() + "px");
     $("#select_acriteria").select2({
         minimumResultsForSearch: -1
-      }
-    );
+    });
 
     //Add search icon
     $(".select2-container-multi").prepend($("<div class='multiselect2search'><span class='glyphicon glyphicon-search'></span></div>"));

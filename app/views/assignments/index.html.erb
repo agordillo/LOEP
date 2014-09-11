@@ -1,4 +1,4 @@
-<h1 class="loep_title"> Assignments </h1>
+<h1 class="loep_title"><%=t("assignments.name.plural")%></h1>
 <%= render '/assignments/index', :showTools => true %>
-<p class="link_wrapper"><%= link_to "Add new", new_assignment_path %></p>
+<p class="link_wrapper"><%= link_to t("menu.actions.add_new"), new_assignment_path %></p>
 

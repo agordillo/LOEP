@@ -7,9 +7,9 @@
   <table id="app_table" cellspacing='0' class="loep_table">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Owner</th>
-        <th>Creation Date</th>
+        <th><%=t("words.name")%></th>
+        <th><%=t("words.owner")%></th>
+        <th><%=t("words.creation_date")%></th>
         <th></th>
         <th></th>
       </tr>
@@ -28,12 +28,12 @@
         </td>
         <td class="tdcenter tdedit">
             <%if can?(:update,app) %>
-              <a href="<%=edit_app_path(app)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+              <a href="<%=edit_app_path(app)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("words.edit")%></a>
             <% end %>
         </td>
         <td class="tdcenter tddestroy">
           <%if can?(:destroy,app) %>
-            <a href="<%=app_path(app)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> Remove</a>
+            <a href="<%=app_path(app)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.remove")%></a>
           <% end %>
         </td>
       </tr>
@@ -67,16 +67,7 @@
       ],
       "sDom": '<"H"lfr><"F"ip>t',
       "iDisplayLength": iDisplayLength,
-      "oLanguage": {
-        "sLengthMenu": 'Display <select>'+
-          '<option value="5">5</option>'+
-          '<option value="10">10</option>'+
-          '<option value="25">25</option>'+
-          '<option value="50">50</option>'+
-          '<option value="100">100</option>'+
-          '<option value="-1">All</option>'+
-          '</select> records'
-      }
+      "oLanguage": { <%= render "application/oLanguage"%> }
     });
 
     //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page

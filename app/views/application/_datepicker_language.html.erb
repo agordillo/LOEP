@@ -1,0 +1,15 @@
+//Datetimepicker Addon: http://trentrichardson.com/examples/timepicker/#tp-localization
+$.timepicker.regional['loep'] = {
+	timeText: '<%=t("datepicker.timeText")%>',
+	hourText: '<%=t("datepicker.hourText")%>',
+	minuteText: '<%=t("datepicker.minuteText")%>',
+	secondText: '<%=t("datepicker.secondText")%>',
+	currentText: '<%=t("datepicker.currentText")%>',
+	closeText: '<%=t("datepicker.closeText")%>',
+	dayNames: ('<%=t("date.day_names").compact.join(",")%>').split(","),
+	dayNamesShort: ('<%=t("date.abbr_day_names").compact.join(",")%>').split(","),
+	dayNamesMin: ('<%=t("date.min_day_names").compact.join(",")%>').split(","),
+	monthNames: ('<%=t("date.month_names").compact.join(",")%>').split(","),
+	monthNamesShort: ('<%=t("date.abbr_month_names").compact.join(",")%>').split(",")
+};
+$.timepicker.setDefaults($.timepicker.regional['loep']);

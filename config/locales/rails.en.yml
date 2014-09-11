@@ -1,0 +1,10 @@
+en:
+  date:
+    min_day_names:
+    - Su
+    - Mo
+    - Tu
+    - We
+    - Th
+    - Fr
+    - Sa
