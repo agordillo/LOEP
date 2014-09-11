@@ -2,11 +2,11 @@
   <h2><%=@lo.name%></h2>
   
   <% if iamAdmin? %>
-    <%= link_to 'View as Reviewer', rlo_path(@lo) %> |
-    <%= link_to 'Edit', edit_lo_path(@lo) %> |
-    <a href="<%=new_assignment_path_for(@lo.id,nil)%>"> Add assignment </a> |
-    <a href="<%=download_path(@lo,"xlsx")%>">Download</a> |
-    <a href="<%=download_evs_path(@lo,"xlsx")%>">Download Evaluations</a>
+    <%= link_to t("action.view_as_reviewer"), rlo_path(@lo) %> |
+    <%= link_to t("words.edit"), edit_lo_path(@lo) %> |
+    <a href="<%=new_assignment_path_for(@lo.id,nil)%>"><%=t("action.add_assignment")%></a> |
+    <a href="<%=download_path(@lo,"xlsx")%>"><%=t("action.download")%></a> |
+    <a href="<%=download_evs_path(@lo,"xlsx")%>"><%=t("action.download_evaluations")%></a>
   <% end %>
 
   <p class="space_medium"></p>
@@ -14,15 +14,15 @@
   <%= render 'info' %>
 
   <p class="space_large"></p>
-  <h1 class="loep_title loep_title_min"> Assignments </h1>
+  <h1 class="loep_title loep_title_min"><%=t("assignments.name.plural")%></h1>
   <%= render '/assignments/index' %>
 
   <p class="space_large"></p>
-  <h1 class="loep_title loep_title_min"> Evaluations </h1>
+  <h1 class="loep_title loep_title_min"><%=t("evaluations.name.plural")%></h1>
   <%= render '/evaluations/index' %>
 
   <p class="space_large"></p>
-  <h1 class="loep_title loep_title_min"> Metrics </h1>
+  <h1 class="loep_title loep_title_min"><%=t("metrics.name.plural")%></h1>
   <%= render '/scores/index' %>
 
   <%= render "/los/evaluationsRepresentation", :action => "show" %>

@@ -1,38 +1,38 @@
 <div class="show_wrapper loep_form_wrapper">
 
-  <h2>Assignment</h2>
+  <h2><%=t("assignments.name.plural")%></h2>
   <% if iamAdmin? %>
-    <%= link_to 'Edit', edit_assignment_path(@assignment) %>
+    <%= link_to t("words.edit"), edit_assignment_path(@assignment) %>
   <% end %>
   <p class="space_medium"></p>
 
-  <p class="show_legend">Assignment created by:</p>
+  <p class="show_legend"><%=t("words.created_by", :model=> t("assignments.name.one"))%>:</p>
   <a href="<%=user_path(@assignment.author)%>"><p class="show_value"><%=@assignment.author.name%></p></a>
 
-  <p class="show_legend">Learning Object</p>
+  <p class="show_legend"><%=t("los.name.one")%></p>
   <a href="<%=lo_path(@assignment.lo)%>"><p class="show_value"><%=@assignment.lo.name%></p></a>
 
-  <p class="show_legend">Reviewer</p>
+  <p class="show_legend"><%=t("users.reviewer.one")%></p>
   <a href="<%=user_path(@assignment.user)%>"><p class="show_value"><%=@assignment.user.name%></p></a>
 
-  <p class="show_legend">Evaluation Method</p>
+  <p class="show_legend"><%=t("evmethods.name.one")%></p>
   <a href="<%=@assignment.evmethod.documentation_path%>"><p class="show_value"><%=@assignment.readable_evmethod%></p></a>
 
-  <p class="show_legend">Description</p>
+  <p class="show_legend"><%=t("words.description")%></p>
   <p class="show_value"><%=@assignment.description%></p>
 
-  <p class="show_legend">Status</p>
+  <p class="show_legend"><%=t("words.status")%></p>
   <p class="show_value"><%=@assignment.readable_status%></p>
 
-  <p class="show_legend">Deadline</p>
+  <p class="show_legend"><%=t("words.deadline")%></p>
   <p class="show_value"><%=@assignment.deadline%></p>
 
-  <p class="show_legend">Completed at</p>
+  <p class="show_legend"><%=t("words.completed_at")%></p>
   <p class="show_value"><%=@assignment.readable_completed_at%></p>
 
   <% if @evaluations.length > 0 %>
     <p class="space_large"></p>
-    <h1 class="loep_title"> Evaluations </h1>
+    <h1 class="loep_title"><%=t("evaluations.name.plural")%></h1>
     <%= render '/evaluations/index' %>
   <% end %>
   

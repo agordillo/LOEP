@@ -6,26 +6,26 @@
 
 <% rL = @los.length %>
 <% if rL === 0 %>
-  <%= render '/layouts/emptytable', :resources => "learning objects", :fullmessage => fullmessage %>
+  <%= render '/layouts/emptytable', :resources => t("los.name.plural"), :fullmessage => fullmessage %>
 <% else %>
   <% if showToolActions %>
   <div class="loep_table_tools">
     <a id="stat_los">
       <div class="loep_tool_button">
         <span class="glyphicon glyphiconfull charts"></span>
-        <span class="loep_tool_text">Statistics</span>
+        <span class="loep_tool_text"><%=t("words.statistics")%></span>
       </div>
     </a>
     <a id="compare_los">
       <div class="loep_tool_button">
         <span class="glyphicon glyphiconfull vector_path_polygon"></span>
-        <span class="loep_tool_text">Compare</span>
+        <span class="loep_tool_text"><%=t("words.compare")%></span>
       </div>
     </a>
     <a id="automatic_assign_los">
       <div class="loep_tool_button">
         <span class="glyphicon glyphicon-time"></span><span class="glyphicon glyphicon-user"></span>
-        <span class="loep_tool_text">Automatic Matching</span>
+        <span class="loep_tool_text"><%=t("menu.actions.amatching")%></span>
       </div>
     </a>
     <a id="assign_los">
@@ -46,10 +46,10 @@
         <% if showToolActions %>
         <th><input type="checkbox" class="checkalllos" autocomplete="off" value="all"/></th>
         <% end %>
-        <th>Name</th>
-        <th>Url</th>
-        <th>Assign</th>
-        <th class="longhead">View as reviewer</th>
+        <th><%=t("words.name")%></th>
+        <th><%=t("words.url").humanize%></th>
+        <th><%=t("actions.assign")%></th>
+        <th class="longhead"><%=t("actions.view_as_reviewer")%></th>
         <th></th>
         <th></th>
       </tr>
@@ -75,10 +75,10 @@
           <a href="<%=rlo_path(lo)%>"><span class="glyphicon glyphicon-eye-open"></span></a>
         </td>
         <td class="tdcenter tdedit">
-            <a href="<%=edit_lo_path(lo)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+            <a href="<%=edit_lo_path(lo)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("words.edit")%></a>
         </td>
         <td class="tdcenter tddestroy">
-          <a href="<%=lo_path(lo)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> Remove</a>
+          <a href="<%=lo_path(lo)%>" data-confirm="<%=t("words.are_you_sure")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.remove")%></a>
         </td>
       </tr>
     <% end %>
@@ -142,7 +142,7 @@
      $("#stat_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog("You have not selected any item.", false);
+        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/los/stats",[["lo_ids", lo_ids]]);
@@ -152,7 +152,7 @@
      $("#compare_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog("You have not selected any item.", false);
+        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/los/compare",[["lo_ids", lo_ids]]);
@@ -162,7 +162,7 @@
     $("#assign_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog("You have not selected any item.", false);
+        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/assignments/new",[["lo_ids", lo_ids]]);
@@ -182,11 +182,11 @@
     $("#remove_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog("You have not selected any item.", false);
+        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
         return;
       }
 
-     _showLOEPDialog("Are you sure?", true, function(result){
+     _showLOEPDialog('<%t("words.are_you_sure")%>', true, function(result){
         if(result==true){
           var lo_ids = getSelectedLos();
           if(lo_ids.length===0){
@@ -233,16 +233,7 @@
       ],
       "sDom": '<"H"lfr><"F"ip>t',
       "iDisplayLength": iDisplayLength,
-      "oLanguage": {
-        "sLengthMenu": 'Display <select>'+
-          '<option value="5">5</option>'+
-          '<option value="10">10</option>'+
-          '<option value="25">25</option>'+
-          '<option value="50">50</option>'+
-          '<option value="100">100</option>'+
-          '<option value="-1">All</option>'+
-          '</select> records'
-      }
+      "oLanguage": { <%= render "application/oLanguage"%> }
     });
 
     //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page

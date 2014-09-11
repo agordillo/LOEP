@@ -15,11 +15,11 @@
     <p class="space_large"></p>
     <h1 class="loep_title loep_title_min">
       <%if action=="show"%>
-        Summary of <%=evmethod.name%> evaluations
+        <%=t("evaluations.summary.main", :evmethod => evmethod.name)%>
       <%elsif action=="compare"%>
-        Learning Object Comparison based on <%=evmethod.name%> evaluations
+        <%=t("evaluations.summary.comparison", :evmethod => evmethod.name)%>
       <%elsif action=="stats"%>
-        Summary of <%=evmethod.name%> evaluations
+        <%=t("evaluations.summary.stats", :evmethod => evmethod.name)%>
       <%end%>
     </h1>
     <%= render "evmethods/representation", :representationData => representationData, :evmethod => evmethod %>

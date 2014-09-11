@@ -1,4 +1,15 @@
 en:
+  actions:
+    add_assignment: "Add Assignment"
+    assign : "Assign"
+    download: "Download"
+    download_evaluations: "Download Evaluations"
+    evaluate: "Evaluate"
+    evaluate_with_evmethod: "Evaluate with %{evmethod}"
+    reject: "Reject"
+    search: "Search"
+    view_as_admin: "View as Admin"
+    view_as_reviewer: "View as reviewer"
   applications:
     editing: "Editing Application"
     name:
@@ -18,16 +29,29 @@ en:
         c: "Prioritize reviewer suitability"
       nepl: "Number of evaluations per Learning Object"
       submit: "Generate Assignments Automatically"
+    confirmation:
+      mark_as_completed: "Are you sure you want to mark as completed this assignment?"
     editing: "Editing assignment"
     name:
+      all: "All Assignments"
+      his:
+        pending: 
+          one:  "%{user} Pending Assignment"
+          plural: "%{user} Pending Assignments"
+      mine: "My Assignments"
       one: "Assignment"
       plural: "Assignments"
-      mine: "My Assignments"
+      yours:
+        pending:
+          one:  "Your Pending Assignment"
+          plural: "Your Pending Assignments"
     new: "New assignment"
+    no_assignments_for_reviewer: "<p>You don't have any assignments yet.</p><p> When the administrator requests you an evaluation assignment, it will appear in this panel.</p>"
     status:
       completed: "Completed"
       pending:  "Pending"
       rejected: "Rejected"
+      uncompleted: "Uncompleted"
   datepicker:
     closeText: 'Done'
     currentText: 'Now'
@@ -36,15 +60,25 @@ en:
     minuteText: 'Minutes'
     secondText: 'Seconds'
     timeText: 'Time'
-  isRTL: false
   dialog:
     ok: "Ok"
     cancel: "Cancel"
   evaluations:
     name:
+      all: "All Evaluations"
+      his:
+        one:  "%{user} Evaluation"
+        plural: "%{user} Evaluations"
+      mine: "My Evaluations"
       one: "Evaluation"
       plural: "Evaluations"
-      mine: "My Evaluations"
+      yours:
+        one:  "Your Evaluation"
+        plural: "Your Evaluations"
+    summary:
+      main: "Summary of %{evmethod} evaluations"
+      comparison: "Learning Object Comparison based on %{evmethod} evaluations"
+      stats: "Summary of %{evmethod} evaluations"
   evmethods:
     all:
       item_comments:
@@ -53,6 +87,8 @@ en:
       item_score:
         name: "Overall Score"
         description: "Optionally, you may propose an overall score between 0.0 and 10.0 for this Learning Object."
+    form:
+      available: "Available Evaluation Methods"
     loem:
       item1:
         name: "Meaningful Interactions"
@@ -248,6 +284,9 @@ en:
     name:
       one: "Evaluation Method"
       plural: "Evaluation Methods"
+      short:
+        one: "Method"
+        plural: "Methods"
     Wblts:
       item1:
         name: "The learning object was well organized"
@@ -366,10 +405,36 @@ en:
       create: "Create %{model}"
       update: "Update %{model}"
   los:
+    compare:
+      title: "Comparing the following Learning Objects"
+    editing: "Editing Learning Object"
     name:
+      all: "All Learning Objects"
+      mine: "My Learning Objects"
       one: "Learning Object"
       plural: "Learning Objects"
-      mine: "My Learning Objects"
+    new: "New Learning Object"
+    form:
+      access_lo: "Click on the URL shown below to access the Learning Object"
+      info_lo: "Learning Object Information"
+      select_los: "Select the elements included in this Learning Object"
+      selected_los: "Elements included in this Learning Object"
+      technology_or_format: "Technology or Format"
+    ranked:
+      title: "Ranked Learning Objects"
+    search:
+      title: "Search Learning Objects"
+      results: "Search results"
+      search_evaluated_with: "Search Learning Objects evaluated with"
+      search_no_evaluated_with: "Search Learning Objects no evaluated with"
+      search_with: "Search Learning Objects with"
+      sql:
+        description: "Use the value of the search input as the SQL query statement"
+        example: "For instance: %{example}"
+      submit: "Search in LOEP"
+    stats:
+      title: "Stats for the following Learning Objects"
+      metrics:  "Metrics (Average score)"
   menu:
     actions:
       amatching: "Automatic Matching"
@@ -387,6 +452,10 @@ en:
     documentation: "Documentation"
     surveys: "Surveys"
     settings: "Settings"
+  metrics:
+    name:
+      one: "Metric"
+      plural: "Metrics"
   login:
     password: "Password"
     password_confirmation: "Password confirmation"
@@ -439,38 +508,92 @@ en:
   words:
     add_new: "Add new"
     all: "All"
+    applet:
+      one: "Applet"
+      plural: "Applets"
     are_you_sure: "Are you sure?"
+    audio:
+      one: "Audio"
+      plural: "Audios"
     auth_token: "Authentication Token"
     auth_tokens_active: "Active Session Tokens"
+    categories: "Categories"
+    check: "Check"
     back: "Back"
     birthday: "Birthday"
     callback: "Callback"
     cancel: "Cancel"
+    compare: "Compare"
+    completed_at: "Completed at"
+    completion_date: "Completion Date"
+    created_by: "%{model} created by"
     creation_date: "Creation Date"
     criterion:
       one: "Criterion"
       plural: "Criteria"
     deadline: "Deadline"
+    details: "Details"
     description: "Description"
     design: "Design"
+    document:
+      one: "Document"
+      plural: "Documents"
     edit: "Edit"
     email: "Email"
     engagement: "Engagement"
+    enriched_video:
+      one: "Enriched Video"
+      plural: "Enriched Videos"
     female: "Female"
+    flashcard:
+      one: "Flashcard"
+      plural: "Flashcards"
+    flash_object:
+      one: "Flash Object"
+      plural: "Flash Objects"
     gender: "Gender"
+    image:
+      one: "Image"
+      plural: "Images"
     interactivity: "Interactivity"
+    language: "Language"
     learning: "Learning"
     male: "Male"
     name: "Name"
+    no_evaluated: "No evaluated"
+    no_item_selected: "You have not selected any item."
+    no_resources_yet: "There are no %{resources} yet."
     ok: "Ok"
     other: "Other"
     owner: "Owner"
     quality: "Quality"
+    quiz:
+      one: "Quiz"
+      plural: "Quizzes"
     remove: "Remove"
+    repository: "Repository"
+    scope: "Scope"
+    statistics: "Statistics"
+    status: "Status"
+    tags: "Tags"
+    text:
+      one: "Text"
+      plural: "Text"
+    type: "Type"
     unspecified : "Unspecified"
     update: "Update"
+    url: "URL"
     usability: "Usability"
     username: "Username"
+    video:
+      one: "Video"
+      plural: "Videos"
     view_all: "View all"
-    
+    virtual_tour:
+      one: "Virtual Tour"
+      plural: "Virtual Tours"
+    web:
+      one: "Web"
+      plural: "Webs"
+
 

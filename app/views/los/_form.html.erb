@@ -4,56 +4,56 @@
 
   <%= form_for(@lo) do |f| %>
 
-    <p class="form_legend">* Name</p>
+    <p class="form_legend">* <%=t("words.name")%></p>
     <%= f.text_field :name, :class=>'loep_input' %>
     
-    <p class="form_legend">* URL</p>
+    <p class="form_legend">* <%=t("words.url")%></p>
     <%= f.text_field :url, :class=>'loep_input' %>
 
-    <p class="form_legend">Repository</p>
+    <p class="form_legend"><%=t("words.repository")%></p>
     <%= f.text_field :repository, :class=>'loep_input' %>
 
-    <p class="form_legend">* Scope</p>
+    <p class="form_legend">* <%=t("words.scope")%></p>
     <%= f.select :scope, options_for_select(Utils.getOptionsForSelectLOScope,@lo.scope || "Private"), {} ,{ :class=>'loep_input' } %>
 
-    <p class="form_legend">Description</p>
+    <p class="form_legend"><%=t("words.description")%></p>
     <%= f.text_area :description, :class=>'loep_input' %>
 
-    <p class="form_legend">Categories</p>
+    <p class="form_legend"><%=t("words.categories")%></p>
     <%= f.select :categories, options_for_select(@options_select["categories"],@lo.getCategories), {} ,{ :multiple => true, :size => 10, :class=>'loep_input' } %>
 
-    <p class="form_legend">Tags</p>
+    <p class="form_legend"><%=t("words.tags")%></p>
     <input name="lo[tag_list]" id="tags" value="<%=@lo.tag_list.join(",") unless @lo.nil? %>"/>
 
-    <p class="form_legend">* Language</p>
+    <p class="form_legend">* <%=t("words.language")%></p>
     <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan(@lo),@lo.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 
-    <p class="form_legend">* Type</p>
+    <p class="form_legend">* <%=t("words.type")%></p>
     <%= f.select :lotype, options_for_select(@options_select["lotype"],@lo.lotype || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 
-    <p class="form_legend">* Technology or Format</p>
+    <p class="form_legend">* <%=t("los.form.technology_or_format")%></p>
     <%= f.select :technology, options_for_select(@options_select["technology"], @lo.technology || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 
     <div class="form_checkbox_wrapper">
-      <p class="form_legend">Select the elements included in this Learning Object:</p>
+      <p class="form_legend"><%=t("los.form.select_los")%>:</p>
       <table class="loep_table_form">
       <tr>
-        <td><%= f.check_box :hasText %><span>Text</span></td>
-        <td><%= f.check_box :hasImages %><span>Images</span></td>
-        <td><%= f.check_box :hasVideos %><span>Videos</span></td>
-        <td><%= f.check_box :hasAudios %><span>Audios</span></td>
+        <td><%= f.check_box :hasText %><span><%=t("words.text.plural")%></span></td>
+        <td><%= f.check_box :hasImages %><span><%=t("words.image.plural")%></span></td>
+        <td><%= f.check_box :hasVideos %><span><%=t("words.video.plural")%></span></td>
+        <td><%= f.check_box :hasAudios %><span><%=t("words.audio.plural")%></span></td>
       </tr>
       <tr>
-        <td><%= f.check_box :hasQuizzes %><span>Quizzes</span></td>
-        <td><%= f.check_box :hasWebs %><span>Webs</span></td>
-        <td><%= f.check_box :hasFlashObjects %><span>FlashObjects</span></td>
-        <td><%= f.check_box :hasApplets %><span>Applets</span></td>
+        <td><%= f.check_box :hasQuizzes %><span><%=t("words.quiz.plural")%></span></td>
+        <td><%= f.check_box :hasWebs %><span><%=t("words.web.plural")%></span></td>
+        <td><%= f.check_box :hasFlashObjects %><span><%=t("words.flash_object.plural")%></span></td>
+        <td><%= f.check_box :hasApplets %><span><%=t("words.applet.plural")%></span></td>
       </tr>
       <tr>
-        <td><%= f.check_box :hasDocuments %><span>Documents</span></td>
-        <td><%= f.check_box :hasFlashcards %><span>Flashcards</span></td>
-        <td><%= f.check_box :hasVirtualTours %><span>Virtual Tours</span></td>
-        <td><%= f.check_box :hasEnrichedVideos %><span>Enriched Videos</span></td>
+        <td><%= f.check_box :hasDocuments %><span><%=t("words.document.plural")%></span></td>
+        <td><%= f.check_box :hasFlashcards %><span><%=t("words.flashcard.plural")%></span></td>
+        <td><%= f.check_box :hasVirtualTours %><span><%=t("words.virtual_tour.plural")%></span></td>
+        <td><%= f.check_box :hasEnrichedVideos %><span><%=t("words.enriched_video.plural")%></span></td>
       </tr>
       </table>
     </div>
@@ -69,6 +69,7 @@
   $(document).ready(function(){
     $('#tags').tagsInput({ 
       autocomplete_url:'http://localhost:3000/tags',
+      defaultText: '<%=t("tags.add_a_tag")%>',
       'minChars' : 2,
       'maxChars' : 25 //if not provided there is no limit,
     });

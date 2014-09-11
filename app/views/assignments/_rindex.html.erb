@@ -5,18 +5,18 @@
 <% aL = @assignments.length %>
 
 <% if aL === 0 %>
-  <%= render '/layouts/emptytable', :fullHTMLmessage => "<p>You don't have any assignments yet.</p><p> When the administrator requests you an evaluation assignment, it will appear in this panel.</p>" %>
+  <%= render '/layouts/emptytable', :fullHTMLmessage => t("assignments.no_assignments_for_reviewer") %>
 <% else %>
 
   <table cellspacing='0' class="loep_table">
     <tr>
-      <th>Learning Object</th>
+      <th><%=t("los.name.one")%></th>
       <% if showReviewer %>
-      <th>Reviewer</th>
+      <th><%=t("users.reviewer.one")%></th>
       <% end %>
-      <th>Method</th>
-      <th>Status</th>
-      <th>Deadline</th>
+      <th><%=t("evmethods.name.short.one")%></th>
+      <th><%=t("words.status")%></th>
+      <th><%=t("words.deadline")%></th>
       <% if showEvaluationButton %>
         <th></th>
         <th></th>
@@ -48,20 +48,20 @@
         <% if showEvaluationButton %>
           <td class="tdcenter">
             <% if assignment.status == "Pending" and showEvaluationButtonForAssignment %>
-              <a href="<%=assignment.evmethod.new_evaluation_path(assignment.lo)%>"><span class="glyphicon glyphicon-star-empty"></span> Evaluate</a>
+              <a href="<%=assignment.evmethod.new_evaluation_path(assignment.lo)%>"><span class="glyphicon glyphicon-star-empty"></span> <%=t("actions.evaluate")%></a>
             <% end %>
           </td>
           <td class="tdcenter">
             <%if assignment.status == "Pending" and can?(:complete, assignment) %>
-              <%= link_to complete_path(assignment), :data => { :confirm => "Are you sure you want to mark as completed this assignment?", :method => :complete } do %>
-                  <span class="glyphicon glyphicon-ok"></span> Check
+              <%= link_to complete_path(assignment), :data => { :confirm => t("assignments.confirmation.mark_as_completed"), :method => :complete } do %>
+                  <span class="glyphicon glyphicon-ok"></span> <%=t("words.check")%>
               <% end %>
             <% end %>
           </td>
           <td class="tdcenter">
             <%if assignment.status == "Pending" and can?(:reject, assignment) %>
-              <%= link_to reject_path(assignment), :data => { :confirm => "Are you sure?" }, :method => :reject do %>
-                  <span class="glyphicon glyphicon-remove"></span> Reject
+              <%= link_to reject_path(assignment), :data => { :confirm => t("words.are_you_sure") }, :method => :reject do %>
+                  <span class="glyphicon glyphicon-remove"></span> <%=t("actions.reject")%>
               <% end %>
             <% end %>
           </td>
@@ -84,7 +84,7 @@
       <% if showEvaluationBigButtonForAssignment %>
       <tr>
         <td colspan="100%">
-          <span><a href="<%=assignment.evmethod.new_evaluation_path(assignment.lo)%>"><button class="loep_button"><span class="glyphicon glyphicon-star-empty"></span> Evaluate with <%= assignment.evmethod.name %></button></a></span>
+          <span><a href="<%=assignment.evmethod.new_evaluation_path(assignment.lo)%>"><button class="loep_button"><span class="glyphicon glyphicon-star-empty"></span><%=t("actions.evaluate_with_evmethod", :evmethod => assignment.evmethod.name)%></button></a></span>
         </td>
       </tr>
       <% unless i==aL-1 %>

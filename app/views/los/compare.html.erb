@@ -1,11 +1,8 @@
 <div class="show_wrapper loep_form_wrapper">
-  <h2>Comparing the following Learning Objects</h2>
+  <h2><%=t("los.compare.title")%></h2>
   <%= render '/los/index', :showTools => true, :showToolActions => false, :displayedEntries => 5, :download => true %>
-
   <p class="space_large"></p>
-  <h1 class="loep_title loep_title_min loep_title_with_bottom_margin"> Metrics </h1>
+  <h1 class="loep_title loep_title_min loep_title_with_bottom_margin"><%=t("metrics.name.plural")%></h1>
   <%= render '/los/loComparison', :showTools => true, :showToolActions => false, :displayedEntries => 5 %>
-
   <%= render "/los/evaluationsRepresentation", :action => "compare" %>
-
 </div>

@@ -2,7 +2,7 @@
   <p class="form_before_button">&nbsp;</p>
 
   <%= form_for(@assignment) do |f| %>
-    <p class="form_legend">Learning Objects</p>
+    <p class="form_legend"><%=t("los.name.plural")%></p>
     <select name="selected_los[]" <%= 'multiple="true"' if controller.action_name == "new" or controller.action_name == "create"%> id="select_los" class="loep_input">
       <% unless @plos.nil? %>
         <% @plos.each do |lo| %>
@@ -14,7 +14,7 @@
       <% end %>
     </select>
 
-    <p class="form_legend">Reviewers</p>
+    <p class="form_legend"><%=t("users.reviewer.plural")%></p>
     <select name="selected_users[]" <%= 'multiple="true"' if controller.action_name == "new" or controller.action_name == "create"%> id="select_users" class="loep_input">
       <% unless @pusers.nil? %>
         <% @pusers.each do |user| %>
@@ -26,23 +26,23 @@
       <% end %>
     </select>
 
-    <p class="form_legend">Evaluation Methods</p>
+    <p class="form_legend"><%=t("evmethods.name.plural")%></p>
     <%= select_tag "selected_evmethods", options_for_select(Utils.getEvMethods,@evmethodids), { :multiple => true, :size => 2, :class=>'loep_input' }%>
 
-    <p class="form_legend">Description</p>
+    <p class="form_legend"><%=t("words.description")%></p>
     <%= f.text_area :description, :class=>'loep_input' %>
 
     <% if !@assignment.status.nil? %>
-      <p class="form_legend">Status</p>
+      <p class="form_legend"><%=t("words.status")%></p>
       <%= f.select :status, options_for_select(Utils.getOptionsForSelectAssignmentStatus,@assignment.status || "Pending"), {} ,{ :class=>'loep_input' } %>
     <% end %>
 
     <% if !@assignment.completed_at.nil? %>
-      <p class="form_legend">Completion Date</p>
+      <p class="form_legend"><%=t("words.completion_date")%></p>
       <%=text_field_tag "assignment[completed_at]",@assignment.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker" %>
     <% end %>
 
-    <p class="form_legend">Deadline</p>
+    <p class="form_legend"><%=t("words.deadline")%></p>
     <%=text_field_tag "assignment[deadline]",@assignment.readable_deadline, :class=>'loep_input', :id=>"deadline_datepicker" %>
 
     <input id="assignment_author_id" name="assignment[author_id]" type="hidden" value="<%=current_user.id%>">
@@ -57,6 +57,7 @@
 <script type="text/javascript">
   jQuery(document).ready(function($){
     //Datetimepicker Addon: http://trentrichardson.com/examples/timepicker/#basic_examples
+    <%= render "application/datepicker_language" %> //Translate datepicker
     $('#deadline_datepicker').datetimepicker({
       yearRange: "-1:+10",
       showOn: "both",

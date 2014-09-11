@@ -83,18 +83,18 @@ class Assignment < ActiveRecord::Base
   	unless Utils.getReadableDate(self.completed_at).blank?
       Utils.getReadableDate(self.completed_at)
     else
-      ("Uncompleted <span class='status_in_completed_at'>(" + readable_status + ")</span>").html_safe
+      (I18n.t("assignments.status.uncompleted") + " <span class='status_in_completed_at'>(" + readable_status + ")</span>").html_safe
     end
   end
 
   def readable_status
     case self.status
       when "Pending"
-        return "<span class='glyphicon glyphicon-time'></span> Pending".html_safe;
+        return ("<span class='glyphicon glyphicon-time'></span> " + I18n.t("assignments.status.pending")).html_safe;
       when "Completed"
-        return "<span class='glyphicon glyphicon-ok'></span> Completed".html_safe;
+        return ("<span class='glyphicon glyphicon-ok'></span> " + I18n.t("assignments.status.completed")).html_safe;
       when "Rejected"    
-        return "<span class='glyphicon glyphicon-remove'></span> Rejected".html_safe;
+        return ("<span class='glyphicon glyphicon-remove'></span> " + I18n.t("assignments.status.rejected")).html_safe;
       else
         return "";
       end

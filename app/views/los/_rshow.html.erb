@@ -5,29 +5,42 @@
     <h2><%=@lo.name%></h2>
 
     <% if iamAdmin? %>
-      <%= link_to 'View as Admin', lo_path(@lo) %>
+      <%= link_to t("actions.view_as_admin"), lo_path(@lo) %>
     <% end %>
 
     <p class="space_medium"></p>
 
-    <p class="show_sublegend">Click on the URL shown below to access the Learning Object</p>
-    <p class="show_legend"><span class="show_legend">URL: </span> <a target="_blank" href="<%=@lo.url%>"><span class="show_value"><%=@lo.url%></span></a></p>
+    <p class="show_sublegend"><%=t("los.form.access_lo")%></p>
+    <p class="show_legend"><span class="show_legend"><%=t("words.url")%>: </span> <a target="_blank" href="<%=@lo.url%>"><span class="show_value"><%=@lo.url%></span></a></p>
 
     <% nAssignments = @assignments.length %>
     <% if nAssignments > 0 %>
       <p class="space_medium"></p>
       <h1 class="loep_title loep_title_min">
         <% if adminMode %>
-          All Assignments
+          <%=t("assignments.name.all")%>
         <% else %>
-          <%= @represented.nil? ? "Your" : @represented.name %> Pending Assignment<%="s" if @assignments.length > 1%>
+          <%severalAssignments = (@assignments.length > 1)%>
+          <%if @represented.nil? %>
+            <%if severalAssignments%>
+              <%=t("assignments.name.yours.pending.plural")%>
+            <%else%>
+            <%=t("assignments.name.yours.pending.one")%>
+            <%end%>
+          <% else %>
+            <%if severalAssignments%>
+              <%=t("assignments.name.his.pending.plural", :user=>@represented.name)%>
+            <%else%>
+              <%=t("assignments.name.his.pending.one", :user=>@represented.name)%>
+            <%end%>
+          <% end %>
         <% end %>
       </h1>
       <%= render '/assignments/rindex', :showReviewer => adminMode, :showEvaluationBigButton => !adminMode, :showDescription => true %>
     <% end %>
 
     <p class="space_medium"></p>
-    <h1 class="loep_title loep_title_min">Learning Object Information</h1>
+    <h1 class="loep_title loep_title_min"><%=t("los.form.info_lo")%></h1>
     <p class="space_small"></p>
     <div class="identationNone">
       <%= render 'info' %>
@@ -35,28 +48,34 @@
 
     <% if can?(:evaluate, @lo) %>
       <p class="space_large"></p>
-      <h1 class="loep_title loep_title_min">
-        Available Evaluation Methods
-      </h1>
+      <h1 class="loep_title loep_title_min"><%=t("evmethods.form.available")%></h1>
       <%= render '/evmethods/rindex', :showReviewer => adminMode %>
     <% end %>
 
     <% if @evaluations.length > 0 %>
       <p class="space_medium"></p>
       <% if adminMode %>
-          <h1 class="loep_title loep_title_min"> All Evaluations </h1>
+          <h1 class="loep_title loep_title_min"><%=t("evaluations.name.all")%></h1>
           <%= render '/evaluations/index' %>
       <% else %>
-          <h1 class="loep_title loep_title_min"><%= @represented.nil? ? "Your" : @represented.name %> Evaluation<%="s" if @evaluations.length > 1%></h1>
-          <%= render '/evaluations/rindex' %>
+        <h1 class="loep_title loep_title_min">
+        <%severalEvaluations = (@evaluations.length > 1)%>
+          <%if @represented.nil? %>
+            <%if severalEvaluations%>
+              <%=t("evaluations.name.yours.plural")%>
+            <%else%>
+              <%=t("evaluations.name.yours.one")%>
+            <%end%>
+          <% else %>
+            <%if severalEvaluations%>
+              <%=t("evaluations.name.his.plural", :user=>@represented.name)%>
+            <%else%>
+              <%=t("evaluations.name.his.one", :user=>@represented.name)%>
+            <%end%>
+          <% end %>
+        </h1>
+        <%= render '/evaluations/rindex' %>
       <% end %>
     <% end %>
-
   </div>
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function(){
-
-  });
-</script>

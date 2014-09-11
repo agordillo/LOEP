@@ -6,7 +6,7 @@
 				<% if !fullmessage.blank? %>
 					<%= fullmessage %>
 				<% else %>
-					There are no <%=resources=%> yet.
+					<%=t("words.no_resources.yet", :resources => resources)%>
 				<% end %>
 			</p>
 		<% else %>

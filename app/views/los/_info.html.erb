@@ -1,15 +1,15 @@
 <%= form_for(@lo) do |f| %>
-  <p class="show_legend">Name</p>
+  <p class="show_legend"><%=t("words.name")%></p>
   <p class="show_value"><%=@lo.name%></p>
 
-  <p class="show_legend">URL</p>
+  <p class="show_legend"><%=t("words.url")%></p>
   <a target="_blank" href="<%=@lo.url%>"><p class="show_value"><%=@lo.url%></p></a>
 
-  <p class="show_legend">Repository</p>
+  <p class="show_legend"><%=t("words.repository")%></p>
   <p class="show_value"><%=@lo.repository%></p>
 
   <%if iamAdmin? and !@lo.owner.nil? %>
-    <p class="show_legend">Owner</p>
+    <p class="show_legend"><%=t("words.owner")%></p>
     <%if !@lo.app.nil? %>
       <a href="<%=app_path(@lo.app)%>"><p class="show_value"><%=@lo.app.name%></p></a>
     <% else %>
@@ -17,51 +17,51 @@
     <% end %>
   <%end%>
 
-  <p class="show_legend">Scope</p>
+  <p class="show_legend"><%=t("words.scope")%></p>
   <p class="show_value"><%=@lo.scope.humanize%></p>
 
-  <p class="show_legend">Description</p>
+  <p class="show_legend"><%=t("words.description")%></p>
   <p class="show_value"><%=@lo.description%></p>
 
-  <p class="show_legend">Categories</p>
+  <p class="show_legend"><%=t("words.categories")%></p>
   <p class="show_value"><%=@lo.getCategories%></p>
   
-  <p class="show_legend">Tags</p>
+  <p class="show_legend"><%=t("words.tags")%></p>
   <div class="tagsinput">
     <% @lo.tag_list.each do |tag| %>
       <p class="show_value"><span class='tag'><%=tag%></span></p>
     <% end %>
   </div> 
 
-  <p class="show_legend">Language</p>
+  <p class="show_legend"><%=t("words.language")%></p>
   <p class="show_value"><%=@lo.language.name%></p>
 
-  <p class="show_legend">Type</p>
+  <p class="show_legend"><%=t("words.type")%></p>
   <p class="show_value"><%=@lo.lotype%></p>
 
-  <p class="show_legend">Technology or Format</p>
+  <p class="show_legend"><%=t("los.form.technology_or_format")%></p>
   <p class="show_value"><%=@lo.technology%></p>
 
   <div class="form_checkbox_wrapper">
-    <p class="show_legend">Elements included in this Learning Object:</p>
+    <p class="show_legend"><%=t("los.form.selected_los")%>:</p>
     <table class="loep_table_form loep_table_form_view">
       <tr>
-        <td><%= f.check_box :hasText, :disabled => "true" %><span>Text</span></td>
-        <td><%= f.check_box :hasImages, :disabled => "true" %><span>Images</span></td>
-        <td><%= f.check_box :hasVideos, :disabled => "true" %><span>Videos</span></td>
-        <td><%= f.check_box :hasAudios, :disabled => "true" %><span>Audios</span></td>
+        <td><%= f.check_box :hasText, :disabled => "true" %><span><%=t("words.text.plural")%></span></td>
+        <td><%= f.check_box :hasImages, :disabled => "true" %><span><%=t("words.image.plural")%></span></td>
+        <td><%= f.check_box :hasVideos, :disabled => "true" %><span><%=t("words.video.plural")%></span></td>
+        <td><%= f.check_box :hasAudios, :disabled => "true" %><span><%=t("words.audio.plural")%></span></td>
       </tr>
       <tr>
-        <td><%= f.check_box :hasQuizzes, :disabled => "true" %><span>Quizzes</span></td>
-        <td><%= f.check_box :hasWebs, :disabled => "true" %><span>Webs</span></td>
-        <td><%= f.check_box :hasFlashObjects, :disabled => "true" %><span>FlashObjects</span></td>
-        <td><%= f.check_box :hasApplets, :disabled => "true" %><span>Applets</span></td>
+        <td><%= f.check_box :hasQuizzes, :disabled => "true" %><span><%=t("words.quiz.plural")%></span></td>
+        <td><%= f.check_box :hasWebs, :disabled => "true" %><span><%=t("words.web.plural")%></span></td>
+        <td><%= f.check_box :hasFlashObjects, :disabled => "true" %><span><%=t("words.flash_object.plural")%></span></td>
+        <td><%= f.check_box :hasApplets, :disabled => "true" %><span><%=t("words.applet.plural")%></span></td>
       </tr>
       <tr>
-        <td><%= f.check_box :hasDocuments, :disabled => "true" %><span>Documents</span></td>
-        <td><%= f.check_box :hasFlashcards, :disabled => "true" %><span>Flashcards</span></td>
-        <td><%= f.check_box :hasVirtualTours, :disabled => "true" %><span>Virtual Tours</span></td>
-        <td><%= f.check_box :hasEnrichedVideos, :disabled => "true" %><span>Enriched Videos</span></td>
+        <td><%= f.check_box :hasDocuments, :disabled => "true" %><span><%=t("words.document.plural")%></span></td>
+        <td><%= f.check_box :hasFlashcards, :disabled => "true" %><span><%=t("words.flashcard.plural")%></span></td>
+        <td><%= f.check_box :hasVirtualTours, :disabled => "true" %><span><%=t("words.virtual_tour.plural")%></span></td>
+        <td><%= f.check_box :hasEnrichedVideos, :disabled => "true" %><span><%=t("words.enriched_video.plural")%></span></td>
       </tr>
     </table>
   </div>
@@ -69,12 +69,6 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $('#tags').tagsInput({ 
-      autocomplete_url:'http://localhost:3000/tags',
-      'minChars' : 2,
-      'maxChars' : 25 //if not provided there is no limit,
-    });
-
     $("table.loep_table_form_view").find("input[checked]").parent().addClass("tdchecked");
   });
 </script>

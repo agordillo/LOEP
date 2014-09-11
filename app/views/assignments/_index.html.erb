@@ -2,7 +2,7 @@
 
 <% rL = @assignments.length %>
 <% if rL === 0 %>
-  <%= render '/layouts/emptytable', :resources => "assignments" %>
+  <%= render '/layouts/emptytable', :resources => t("assignments.name.plural") %>
 <% else %>
   <% if showTools %>
   <div class="loep_table_tools">
@@ -19,11 +19,11 @@
         <% if showTools %>
           <th><input type="checkbox" class="checkallresources" autocomplete="off" value="all"/></th>
         <% end %>
-        <th>Learning Object</th>
-        <th>Reviewer</th>
-        <th>Method</th>
-        <th>Status</th>
-        <th>Deadline</th>
+        <th><%=t("los.name.one")%></th>
+        <th><%=t("users.reviewer.one")%></th>
+        <th><%=t("evmethods.name.short.one")%></th>
+        <th><%=t("words.status")%></th>
+        <th><%=t("words.deadline")%></th>
         <th></th>
         <th></th>
         <th></th>
@@ -54,13 +54,13 @@
           <span><%= assignment.readable_deadline %></span>
         </td>
         <td class="tdcenter">
-          <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> Details</a>
+          <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> <%=t("words.details")%></a>
         </td>
         <td class="tdcenter">
-            <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+            <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("words.edit")%></a>
         </td>
         <td class="tdcenter">
-          <a href="<%=assignment_path(assignment)%>" data-confirm="Are you sure?" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> Remove</a>
+          <a href="<%=assignment_path(assignment)%>" data-confirm="<%=t("words.are_you_sure")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.Remove")%></a>
         </td>
       </tr>
     <% end %>
@@ -118,11 +118,11 @@
     $("#remove_resources").click(function(){
       var res_ids = getSelectedResources();
       if(res_ids.length===0){
-        _showLOEPDialog("You have not selected any item.", false);
+        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
         return;
       }
 
-     _showLOEPDialog("Are you sure?", true, function(result){
+     _showLOEPDialog('<%t("words.are_you_sure")%>', true, function(result){
         if(result==true){
           var res_ids = getSelectedResources();
           if(res_ids.length===0){
@@ -153,16 +153,7 @@
       ],
       "sDom": '<"H"lfr><"F"ip>t',
       "iDisplayLength": iDisplayLength,
-      "oLanguage": {
-        "sLengthMenu": 'Display <select>'+
-          '<option value="5">5</option>'+
-          '<option value="10">10</option>'+
-          '<option value="25">25</option>'+
-          '<option value="50">50</option>'+
-          '<option value="100">100</option>'+
-          '<option value="-1">All</option>'+
-          '</select> records'
-      }
+      "oLanguage": { <%= render "application/oLanguage"%> }
     });
 
     //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page

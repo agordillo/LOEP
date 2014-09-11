@@ -1,9 +1,9 @@
 <div class="show_wrapper loep_form_wrapper">
-  <h2>Stats for the following Learning Objects</h2>
+  <h2><%=t("los.stats.title")%></h2>
   <%= render '/los/index', :showTools => true, :showToolActions => false, :displayedEntries => 5, :download => true %>
 
   <p class="space_large"></p>
-  <h1 class="loep_title loep_title_min"> Metrics (Average score) </h1>
+  <h1 class="loep_title loep_title_min"><%=t("los.stats.metrics")%></h1>
   <%= render '/scores/index' %>
 
   <% if @scores.length > 0 %>
