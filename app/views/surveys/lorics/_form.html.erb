@@ -2,11 +2,10 @@
 <% edit ||= false %>
 
 <div class="loep_form_wrapper">
-  <h2>LORI v1.5 Items Rating Survey</h1>
-  <a href="<%=@evmethod.documentation_path%>"><p class="form_legend"><%=@evmethod.name%> documentation</p></a>
+  <h2><%=t("surveys.lori_15_items.title")%></h1>
+  <p class="form_legend"><a href="<%=@evmethod.documentation_path%>"><%=t("evmethods.form.documentation", :evmethod => @evmethod.name)%></a></p>
   <p class="form_before_button">&nbsp;</p>
-  <p> The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, a Learning Object LORI Quality Metric is defined, and the scores for the Learning Objects are calculated.</p>
-  <p> For each of the items, rate the importance that it has for you regarding pedagogical quality in a scale from 0 to 10, being 0 valueless and 10 extremely valuable. </p>
+  <p><%=raw t("surveys.lori_15_items.detailed_description")%></p>
 </div>
 
 <div class="loep_form_wrapper">
@@ -16,7 +15,7 @@
     <%= render 'loric_survey', :f => f , :readonly => readonly, :edit => edit %>
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
-    <%= f.submit "Submit Survey", :class => 'loep_button' if !readonly %>
+    <%= f.submit t("surveys.submit"), :class => 'loep_button' if !readonly %>
   <% end %>
 </div>
 
@@ -47,7 +46,7 @@
       }
     });
 
-    var _beforeSubmit = function(form, callback) {
+    var _beforeSubmit = function(form, callback){
       if(typeof callback != "function"){
           return;
       }
@@ -58,7 +57,7 @@
 
       if(numberOfFilledFields == 0){
         var error = {};
-        error.msg = "The evaluation survey is blank. It cannot be sent.";
+        error.msg = '<%=t("forms.validation.blank_form")%>';
         _showLOEPDialog(error.msg,false);
         callback(error);
       } else if (unfilledFields.length > 0){
@@ -66,11 +65,11 @@
 
         var warningDialogMsg;
         if(unfilledFields.length == 1){
-          warningDialogMsg = "There is one question that has not been answered.";
+          warningDialogMsg = '<%=t("forms.validation.question_blank.one")%>';
         } else {
-          warningDialogMsg = "There are " + unfilledFields.length + " questions that have not been answered.";
+          warningDialogMsg = '<%=t("forms.validation.question_blank.several.a")%> ' + unfilledFields.length + ' <%=t("forms.validation.question_blank.several.b")%>';
         }
-        warningDialogMsg += " Are you sure you want to submit the evaluation survey?"
+        warningDialogMsg += ' <%=t("forms.validation.are_you_sure")%>';
 
         _showLOEPDialog(warningDialogMsg, true, function(result){
           if(result==true){
@@ -84,11 +83,11 @@
       } else {
           callback();
       }
-    }
+    };
 
     var _getFieldsOfForm = function(form){
-      //Ignore submit and hidden fields, and also inputs with 'optionalInput' class
-      var inputs = $(form).find(':input:not(.optionalInput)[type!="submit"][type!="hidden"]');
+      //Ignore submit fields, and also inputs with 'optionalInput' or 'skipValidation' class
+      var inputs = $(form).find(':input:not(.optionalInput):not(.skipValidation)[type!="submit"][name!=utf8][name!=authenticity_token][name!=_method]');
       var fields = [];
 
       $(inputs).each(function(index,input){
@@ -117,7 +116,7 @@
         }
       });
       return unfilledFields;
-    }
+    };
 
   });
 </script>

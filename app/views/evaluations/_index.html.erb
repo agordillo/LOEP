@@ -2,7 +2,7 @@
 
 <% rL = @evaluations.length %>
 <% if rL === 0 %>
-  <%= render '/layouts/emptytable', :resources => "evaluations" %>
+  <%= render '/layouts/emptytable', :resources => t("evaluations.name.plural").downcase %>
 <% else %>
   <table id="ev_table" cellspacing='0' class="loep_table">
     <thead>

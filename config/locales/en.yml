@@ -8,6 +8,7 @@ en:
     evaluate_with_evmethod: "Evaluate with %{evmethod}"
     reject: "Reject"
     search: "Search"
+    view: "View"
     view_as_admin: "View as Admin"
     view_as_reviewer: "View as reviewer"
   applications:
@@ -293,6 +294,11 @@ en:
       item9:
         name: "Standards Compliance"
         description: "Adherence to international standards and specifications"
+    message:
+      no_available: "There are no available evaluation methods."
+      no_canvas_support: "[Your web browser has not canvas support]"
+      no_documentation: "There is no documentation available for this evaluation method."
+      no_representation: "There is no representation data available for this evaluation method."
     name:
       one: "Evaluation Method"
       plural: "Evaluation Methods"
@@ -436,7 +442,7 @@ en:
     ranked:
       title: "Ranked Learning Objects"
     search:
-      title: "Search Learning Objects"
+      custom: "LOEP Custom Search"
       results: "Search results"
       search_evaluated_with: "Search Learning Objects evaluated with"
       search_no_evaluated_with: "Search Learning Objects no evaluated with"
@@ -445,6 +451,7 @@ en:
         description: "Use the value of the search input as the SQL query statement"
         example: "For instance: %{example}"
       submit: "Search in LOEP"
+      title: "Search Learning Objects"
     stats:
       title: "Stats for the following Learning Objects"
       metrics:  "Metrics (Average score)"
@@ -496,8 +503,20 @@ en:
     public: "Public"
     private: "Private"
     protected: "Protected"
+  scores:
+    name:
+      one: "Score"
+      plural: "Scores"
   settings:
     title: "Settings"
+  surveys:
+    fill: "Fill Survey"
+    lori_15_items:
+      title: "LORI v1.5 Items Rating Survey"
+      description: "The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, the LORI Score Metric is defined and the LORI scores are calculated."
+      detailed_description: "The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, a Learning Object LORI Quality Metric is defined, and the scores for the Learning Objects are calculated.</p><p>For each of the items, rate the importance that it has for you regarding pedagogical quality in a scale from 0 to 10, being 0 valueless and 10 extremely valuable."
+    submit: "Submit Survey"
+    title: "Available Surveys"
   tables:
     paginate:
       sFirst: "First"
@@ -514,7 +533,7 @@ en:
   users:
     editing: "Editing user"
     edit_profile: "Edit profile"
-    messages:
+    message:
       no_users: "There are no users in the platform."
     name:
       one: "User"
@@ -557,6 +576,7 @@ en:
     document:
       one: "Document"
       plural: "Documents"
+    documentation: "Documentation"
     edit: "Edit"
     email: "Email"
     engagement: "Engagement"

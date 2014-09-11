@@ -22,7 +22,7 @@
           <% iValue = @evaluation.send("item" + nItem.to_s)%>
           <% if iValue===-1 %>
             <div class='numberCircle numberCircleSmall'>
-            <span><%="N/A"%></span>
+            <span><%=t("evmethods.forms.na")%></span>
           <% else %>
             <div class='numberCircle'>
             <span><%=iValue %></span>

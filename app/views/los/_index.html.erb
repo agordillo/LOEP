@@ -6,7 +6,7 @@
 
 <% rL = @los.length %>
 <% if rL === 0 %>
-  <%= render '/layouts/emptytable', :resources => t("los.name.plural"), :fullmessage => fullmessage %>
+  <%= render '/layouts/emptytable', :resources => t("los.name.plural").downcase, :fullmessage => fullmessage %>
 <% else %>
   <% if showToolActions %>
   <div class="loep_table_tools">

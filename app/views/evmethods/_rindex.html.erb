@@ -1,24 +1,28 @@
 <% rL = @evmethods.length %>
 <% if rL === 0 %>
-  <%= render '/layouts/emptytable', :fullmessage => "There are no available evaluation methods." %>
+  <%= render '/layouts/emptytable', :fullmessage => t("evmethods.message.no_available") %>
 <% else %>
   <table cellspacing='0' class="loep_table">
     <tr>
       <th></th>
-      <th>Documentation</th>
-      <th>Evaluate</th>
+      <th><%=t("words.documentation")%></th>
+      <th><%=t("actions.evaluate")%></th>
     </tr>
     <% @evmethods.each_with_index do |ev,i| %>
       <% if can?(:evaluate, @lo, ev) %>
       <tr>
          <td>
-          <a href="<%=ev.documentation_path%>"><span><%= ev.name %></span></a>
+          <a href="<%=ev.documentation_path%>"><span><%=ev.name%></span></a>
         </td>
         <td class="tdcenter">
-          <a href="<%=ev.documentation_path%>"><span class="glyphicon glyphicon-book"></span> View</a>
+          <a href="<%=ev.documentation_path%>"><span class="glyphicon glyphicon-book"></span>&nbsp;&nbsp;<%=t("actions.view")%></a>
         </td>
         <td class="tdcenter">
-          <a href="<%=ev.new_evaluation_path(@lo)%>"><button class="loep_button loep_evaluation_button"><span class="glyphicon glyphicon-star-empty"></span> Evaluate with <%= ev.name %></button></a>
+          <a href="<%=ev.new_evaluation_path(@lo)%>">
+            <button class="loep_button loep_evaluation_button">
+              <span class="glyphicon glyphicon-star-empty"></span> <%=t("actions.evaluate_with_evmethod", :evmethod => ev.name)%>
+            </button>
+          </a>
         </td>
       </tr>
       <% end %>

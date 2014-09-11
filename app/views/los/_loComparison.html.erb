@@ -2,7 +2,7 @@
 
 <% rL = @los.length %>
 <% if rL === 0 %>
-  <%= render '/layouts/emptytable', :resources => t("los.name.plural") %>
+  <%= render '/layouts/emptytable', :resources => t("los.name.plural").downcase %>
 <% else %>
   <table id="locomparison_table" cellspacing='0' class="loep_table">
     <thead>

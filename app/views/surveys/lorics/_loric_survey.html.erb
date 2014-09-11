@@ -1,4 +1,4 @@
-<%= f.hidden_field :user_id, :value=>(@loric.user.nil? ? current_user.id : @loric.user.id)%>
+<%= f.hidden_field :user_id, :value=>(@loric.user.nil? ? current_user.id : @loric.user.id), :class=>'skipValidation'%>
 
 <% Evaluations::Lori.getItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
@@ -7,7 +7,7 @@
     <p class="survey_question_subtitle"><%=item[:description]%></p>
     <div class="rating_wrapper">
       <div class="stars_wrapper">
-        <span  class="hover-star_legend_left">Low</span>
+        <span  class="hover-star_legend_left"><%=t("forms.evmethod.low")%></span>
         <%= f.radio_button "item" + nItem.to_s, "0", :class=>'hover-star', :title => "0", :readonly => readonly ? "true" : nil %>
         <%= f.radio_button "item" + nItem.to_s, "1", :class=>'hover-star', :title => "1", :readonly => readonly ? "true" : nil %>
         <%= f.radio_button "item" + nItem.to_s, "2", :class=>'hover-star', :title => "2", :readonly => readonly ? "true" : nil %>
@@ -19,7 +19,7 @@
         <%= f.radio_button "item" + nItem.to_s, "8", :class=>'hover-star', :title => "8", :readonly => readonly ? "true" : nil %>
         <%= f.radio_button "item" + nItem.to_s, "9", :class=>'hover-star', :title => "9", :readonly => readonly ? "true" : nil %>
         <%= f.radio_button "item" + nItem.to_s, "10", :class=>'hover-star', :title => "10", :readonly => readonly ? "true" : nil %>
-        <span  class="hover-star_legend_right">High</span>
+        <span  class="hover-star_legend_right"><%=t("forms.evmethod.high")%></span>
       </div>
       <div class="hover-start_text">
         <% if readonly or edit %>
@@ -28,14 +28,14 @@
           </div>
         <% end %>
       </div>
-      <div class="remove_hover-start-value"><span class="glyphicon glyphicon glyphicon-remove"></span> Remove</div>
+      <div class="remove_hover-start-value"><span class="glyphicon glyphicon glyphicon-remove"></span> <%=t("words.remove")%></div>
     </div>
   </div>
 <% end %>
 
 <div class="survey_block">
-  <p class="survey_question_title">Additional Comments</p>
-  <p class="survey_question_subtitle">Please, write here any further comments that you consider relevant and/or necessary for this evaluation</p>
+  <p class="survey_question_title"><%=t("evmethods.all.item_comments.name")%></p>
+  <p class="survey_question_subtitle"><%=t("evmethods.all.item_comments.description")%></p>
   <%= f.text_area :comments, :class=>'loep_input optionalInput', :readonly => readonly ? "true" : nil %>
 </div>
 

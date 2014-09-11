@@ -2,14 +2,14 @@
 
 <% sL = @scores.length %>
 <% if sL === 0 %>
-  <%= render '/layouts/emptytable', :resources => "scores" %>
+  <%= render '/layouts/emptytable', :resources => t("scores.name.plural").downcase %>
 <% else %>
   <table id="scores_table" cellspacing='0' class="loep_table">
     <thead>
       <tr>
-        <th>Metric</th>
-        <th>Evaluations Methods</th>
-        <th>Score</th>
+        <th><%=t("metrics.name.one")%></th>
+        <th><%=t("evmethods.name.plural")%></th>
+        <th><%=t("scores.name.one")%></th>
       </tr>
     </thead>
     <tbody>
@@ -40,16 +40,10 @@
 
 <script type="text/javascript">
 
-  //Store the ids
-  //selectedLOs[lo_id] = lo_id
-  var selectedLOs = {};
-
   $(document).ready(function(){
-
     //////////////////
     // Table Sorter
     //////////////////
-
     var iDisplayLength = LOEP.Storage.get("ScoresTable_iDisplayLength") || -1;
 
     //DOC: http://datatables.net
@@ -63,16 +57,7 @@
       ],
       "sDom": '<"H"lfr><"F"ip>t',
       "iDisplayLength": iDisplayLength,
-      "oLanguage": {
-        "sLengthMenu": 'Display <select>'+
-          '<option value="5">5</option>'+
-          '<option value="10">10</option>'+
-          '<option value="25">25</option>'+
-          '<option value="50">50</option>'+
-          '<option value="100">100</option>'+
-          '<option value="-1">All</option>'+
-          '</select> records'
-      }
+      "oLanguage": { <%= render "application/oLanguage"%> }
     });
 
     //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page
@@ -81,7 +66,6 @@
       var iDisplayLength = parseInt($(this).find("select").val());
       LOEP.Storage.add("ScoresTable_iDisplayLength",iDisplayLength);
     });
-
   });
 
 </script>
