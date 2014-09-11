@@ -67,11 +67,6 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $('#tags').tagsInput({ 
-      autocomplete_url:'http://localhost:3000/tags',
-      defaultText: '<%=t("tags.add_a_tag")%>',
-      'minChars' : 2,
-      'maxChars' : 25 //if not provided there is no limit,
-    });
+    <%=render "application/tags"%>
   });
 </script>

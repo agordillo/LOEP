@@ -68,7 +68,9 @@
 
 <script type="text/javascript">
   jQuery(document).ready(function($){
-    $('#birthday_datepicker').datepicker({ 
+    <%= render "application/datepicker_language" %> //Translate datepicker
+
+    $('#birthday_datepicker').datepicker({
       yearRange: "-100:+0", // this is the option you're looking for
       showOn: "both", 
       dateFormat : 'dd/mm/yy',
@@ -76,15 +78,11 @@
       changeYear : true,
       maxDate: '-1d',
       buttonImage: "/assets/calendar_icon.png", 
-      buttonImageOnly: true 
+      buttonImageOnly: true,
+      firstDay: '<%=t("datepicker.firstDay")%>', //start on monday or sunday regarding the locale 
     });
 
-    $('#tags').tagsInput({
-      autocomplete_url:'http://localhost:3000/tags',
-      defaultText: '<%=t("tags.add_a_tag")%>',
-      'minChars' : 2,
-      'maxChars' : 25 //if not provided there is no limit,
-    });
+    <%=render "application/tags"%>
 
     //Little fix for select input
     $("#user_language_id").attr("style","width:" + $("#user_language_id").width() + "px");
@@ -93,7 +91,7 @@
       }
     );
 
-    $("#user_language_id").on("select2-selecting", function(event) {
+    $("#user_language_id").on("select2-selecting", function(event){
       var valueSelected = event.val;
       var userLanguagesVal = $("#user_languages").val();
       if((userLanguagesVal == null) || (userLanguagesVal.indexOf(valueSelected)==-1)){
@@ -103,11 +101,9 @@
         userLanguagesVal.push(valueSelected);
         $("#user_languages").val(userLanguagesVal).trigger("change");
       }
-
     });
 
     $("#user_languages").attr("style","width:" + $("#user_languages").width() + "px");
     $("#user_languages").select2();
-
   });
 </script>

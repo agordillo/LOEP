@@ -487,6 +487,7 @@ en:
   registrations:
     areas: "Areas of interest"
     cancel_account: "Cancel my account"
+    field_expertise: "Field of expertise"
     language_all: "All Languages"
     language_preferred: "Preferred Language"
     occupation: "Occupation or field of expertise"
@@ -511,6 +512,10 @@ en:
   tags:
     add_a_tag: "add a tag"
   users:
+    editing: "Editing user"
+    edit_profile: "Edit profile"
+    messages:
+      no_users: "There are no users in the platform."
     name:
       one: "User"
       plural: "Users"
@@ -520,6 +525,7 @@ en:
       all: "All Reviewers"
   words:
     add_new: "Add new"
+    age: "Age"
     all: "All"
     applet:
       one: "Applet"
@@ -585,6 +591,7 @@ en:
       plural: "Quizzes"
     remove: "Remove"
     repository: "Repository"
+    role: "Role"
     scope: "Scope"
     statistics: "Statistics"
     status: "Status"

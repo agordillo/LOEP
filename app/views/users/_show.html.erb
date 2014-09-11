@@ -2,45 +2,45 @@
 
   <h2><%=@user.name%></h2>
   <% if can?(:update,@user) %>
-    <a href="<%=edit_user_path(@user)%>">Edit profile</a>
+    <a href="<%=edit_user_path(@user)%>"><%=t("users.edit_profile")%></a>
   <% end %>
   <% if iamAdmin? %>
-    | <a href="<%=new_assignment_path_for(nil,@user.id)%>"> Add assignment </a>
+    | <a href="<%=new_assignment_path_for(nil,@user.id)%>"><%=t("actions.add_assignment")%></a>
   <% end %>
   <p class="space_medium"></p>
 
-  <p class="show_legend">Username</p>
+  <p class="show_legend"><%=t("words.username")%></p>
   <p class="show_value"><%=@user.name%></p>
 
-  <p class="show_legend">Role</p>
+  <p class="show_legend"><%=t("words.role")%></p>
   <p class="show_value"><%=@user.role%></p>
 
-  <p class="show_legend">Email</p>
+  <p class="show_legend"><%=t("words.email")%></p>
   <p class="show_value"><%=@user.email%></p>
 
-  <p class="show_legend">Birthday</p>
+  <p class="show_legend"><%=t("words.birthday")%></p>
   <p class="show_value"><%=@user.readable_birthday%></p>
 
-  <p class="show_legend">Age</p>
+  <p class="show_legend"><%=t("words.age")%></p>
   <p class="show_value"><%=@user.age%></p>
 
-  <p class="show_legend">Gender</p>
+  <p class="show_legend"><%=t("words.gender")%></p>
   <% if @user.gender == 1 %>
-    <p class="show_value"><%="Male"%></p>
+    <p class="show_value"><%=t("words.male")%></p>
   <% elsif @user.gender == 2 %>
-    <p class="show_value"><%="Female"%></p>
+    <p class="show_value"><%=t("words.female")%></p>
   <% end %>
 
-  <p class="show_legend">Field of expertise</p>
+  <p class="show_legend"><%=t("registrations.field_expertise")%></p>
   <p class="show_value"><%=@user.occupation%></p>
 
-  <p class="show_legend">Preferred Language</p>
+  <p class="show_legend"><%=t("registrations.language_preferred")%></p>
   <p class="show_value"><%=@user.language.name%></p>
 
-  <p class="show_legend">All Languages</p>
+  <p class="show_legend"><%=t("registrations.language_all")%></p>
   <p class="show_value"><%=@user.languages.map { |l| l.name }.join(", ")%></p>
 
-  <p class="show_legend">Areas of interest</p>
+  <p class="show_legend"><%=t("registrations.areas")%></p>
   <div class="tagsinput">
     <% @user.tag_list.each do |tag| %>
       <p class="show_value"><span class='tag'><%=tag%></span></p>
@@ -49,7 +49,7 @@
 
   <% if iamAdmin? %>
     <p class="space_large"></p>
-    <h1 class="loep_title"> Assignments </h1>
+    <h1 class="loep_title"><%=t("assignments.name.plural")%></h1>
     <% if iamAdmin? %>
       <%= render '/assignments/index' %>
     <% else %>
@@ -60,7 +60,7 @@
   <% if iamAdmin? %>
     <p class="space_large"></p>
     <% if @evaluations.length > 0 %>
-      <h1 class="loep_title"> Evaluations </h1>
+      <h1 class="loep_title"><%=t("evaluations.name.plural")%></h1>
       <% if iamAdmin? %>
         <%= render '/evaluations/index' %>
       <% else %>
@@ -71,24 +71,3 @@
 
   <p class="space_small"></p>
 </div>
-
-<script type="text/javascript">
-  jQuery(document).ready(function($){
-    $('#birthday_datepicker').datepicker({ 
-      yearRange: "-100:+0", // this is the option you're looking for
-      showOn: "both", 
-      dateFormat : 'dd/mm/yy',
-      changeMonth : true,
-      changeYear : true,
-      maxDate: '-1d',
-      buttonImage: "/assets/calendar_icon.png", 
-      buttonImageOnly: true 
-    });
-
-    $('#tags').tagsInput({
-      autocomplete_url:'http://localhost:3000/tags',
-      'minChars' : 2,
-      'maxChars' : 25 //if not provided there is no limit,
-    })
-  });
-</script>

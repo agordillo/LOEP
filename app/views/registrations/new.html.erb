@@ -63,21 +63,15 @@
       buttonImageOnly: true 
     });
 
-    $('#tags').tagsInput({
-      autocomplete_url:'http://localhost:3000/tags',
-      defaultText: '<%=t("tags.add_a_tag")%>',
-      'minChars' : 2,
-      'maxChars' : 25 //if not provided there is no limit,
-    });
+    <%=render "application/tags"%>
 
     //Little fix for select input
     $("#user_language_id").attr("style","width:" + $("#user_language_id").width() + "px");
     $("#user_language_id").select2({
-        minimumResultsForSearch: -1
-      }
-    );
+      minimumResultsForSearch: -1
+    });
 
-    $("#user_language_id").on("select2-selecting", function(event) {
+    $("#user_language_id").on("select2-selecting", function(event){
       var valueSelected = event.val;
       var userLanguagesVal = $("#user_languages").val();
       if((userLanguagesVal == null) || (userLanguagesVal.indexOf(valueSelected)==-1)){
@@ -87,11 +81,9 @@
         userLanguagesVal.push(valueSelected);
         $("#user_languages").val(userLanguagesVal).trigger("change");
       }
-
     });
 
     $("#user_languages").attr("style","width:" + $("#user_languages").width() + "px");
     $("#user_languages").select2();
-
   });
 </script>
