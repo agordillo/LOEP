@@ -3,7 +3,7 @@
   <%= render '/los/index', :showTools => true, :showToolActions => false, :displayedEntries => 5, :download => true %>
 
   <p class="space_large"></p>
-  <h1 class="loep_title loep_title_min"><%=t("los.stats.metrics")%></h1>
+  <h2 class="loep_title loep_title_min"><%=t("los.stats.metrics")%></h2>
   <%= render '/scores/index' %>
 
   <% if @scores.length > 0 %>

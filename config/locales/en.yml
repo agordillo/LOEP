@@ -64,6 +64,17 @@ en:
     ok: "Ok"
     cancel: "Cancel"
   evaluations:
+    embed:
+      message:
+        a: "Your evaluation of the Learning Object %{lo} has been succesfully submitted."
+        b: "Thank you for your collaboration."
+        c: "You may close this window."
+    form:
+      editing_lo_with_evmethod:  "Editing evaluation of the LO %{lo} with %{evmethod}"
+      lo_url: "Learning Object URL"
+      show: "Evaluation of the LO %{lo} with %{evmethod}"
+    message:
+      no_evaluations: "You haven't evaluated any Learning Object yet.</p><p> When you evaluate one, the evaluation will appear in this panel."
     name:
       all: "All Evaluations"
       his:
@@ -89,6 +100,7 @@ en:
         description: "Optionally, you may propose an overall score between 0.0 and 10.0 for this Learning Object."
     form:
       available: "Available Evaluation Methods"
+      documentation: "%{evmethod} documentation"
     loem:
       item1:
         name: "Meaningful Interactions"
@@ -388,6 +400,7 @@ en:
       title_for_embed: "Evaluation Survey: '%{lo}'"
     submit: "Submit"
     submit_with_evmethod: "Submit %{evmethod} Evaluation"
+    submit_edit_with_evmethod: "Edit %{evmethod} Evaluation"
     validation:
       are_you_sure: "Are you sure you want to submit the evaluation survey?"
       blank_form: "The evaluation survey is blank. It cannot be sent."

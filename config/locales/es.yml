@@ -1,9 +1,9 @@
 es:
   datepicker:
-    closeText: 'Done'
-    currentText: 'Now'
+    closeText: 'Ok'
+    currentText: 'Hoy'
     firstDay: 1
-    hourText: 'Hours'
-    minuteText: 'Minutes'
-    secondText: 'Seconds'
-    timeText: 'Time'
+    hourText: 'Horas'
+    minuteText: 'Minutos'
+    secondText: 'Segundos'
+    timeText: 'Hora'

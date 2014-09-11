@@ -15,7 +15,11 @@
     <% elsif user_signed_in? %>
       <%user = current_user%>
       <% surveyTitle = t("forms.evmethod.title", evmethod: @evmethod.name) %>
-      <% submitButtonText = t("forms.submit_with_evmethod", evmethod: @evmethod.name) %>
+      <%unless params["action"] == "edit"%>
+        <% submitButtonText = t("forms.submit_with_evmethod", evmethod: @evmethod.name) %>
+      <% else %>
+        <% submitButtonText = t("forms.submit_edit_with_evmethod", evmethod: @evmethod.name) %>
+      <% end %>
     <% end %>
 
     <%= f.hidden_field :user_id, :value => user.id, :class => "skipValidation" %>
@@ -32,7 +36,7 @@
 
     <% if iamAdmin? and !@evaluation.completed_at.nil? %>
       <p class="form_legend">Completion Date</p>
-      <%= f.text_field :completed_at, :value => @evaluation.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker", :readonly => readonly ? "true" : nil%>
+      <%= f.text_field :completed_at, :value => @evaluation.readable_completed_at, :class=>'loep_input, skipValidation', :id=>"completed_at_datepicker", :readonly => readonly ? "true" : nil%>
     <% end %>
 
     <p class="form_before_button">&nbsp;</p>
@@ -45,6 +49,7 @@
   jQuery(document).ready(function($){
 
     if (($("#completed_at_datepicker").length > 0)&&(typeof $("#completed_at_datepicker").attr("readonly") == "undefined")){
+      <%= render "application/datepicker_language" %> //Translate datepicker
       $('#completed_at_datepicker').datetimepicker({
         yearRange: "-1:+10",
         showOn: "both",
@@ -54,11 +59,12 @@
         minDate: '0d',
         buttonImage: "/assets/calendar_icon.png", 
         buttonImageOnly: true,
+        firstDay: '<%=t("datepicker.firstDay")%>', //start on monday or sunday regarding the locale
         timeFormat: "HH:mm tt",
         stepHour: 1,
         stepMinute: 15
       });
-    }
+    };
 
 
     var validateForm = true;
@@ -121,7 +127,7 @@
 
     var _getFieldsOfForm = function(form){
       //Ignore submit fields, and also inputs with 'optionalInput' or 'skipValidation' class
-      var inputs = $(form).find(':input:not(.optionalInput):not(.skipValidation)[type!="submit"][name!=utf8][name!=authenticity_token]');
+      var inputs = $(form).find(':input:not(.optionalInput):not(.skipValidation)[type!="submit"][name!=utf8][name!=authenticity_token][name!=_method]');
       var fields = [];
 
       $(inputs).each(function(index,input){

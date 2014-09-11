@@ -1,11 +1,11 @@
 <% eL = @evaluations.length %>
 <% if eL === 0 %>
-  <%= render '/layouts/emptytable', :fullHTMLmessage => "<p>You haven't evaluated any Learning Object yet.</p><p> When you evaluate one, the evaluation will appear in this panel.</p>" %>
+  <%= render '/layouts/emptytable', :fullHTMLmessage => ("<p>"+t("evaluations.message.no_evaluations")+"</p>") %>
 <% else %>
   <table cellspacing='0' class="loep_table">
     <tr>
-      <th>Learning Object</th>
-      <th>Evaluation Method</th>
+      <th><%=t("los.name.one")%></th>
+      <th><%=t("evmethods.name.one")%></th>
       <th></th>
       <th></th>
     </tr>
@@ -20,7 +20,7 @@
         </td>
         <td class="tdcenter tdedit">
           <% if can?(:update, ev) %>
-            <a href="<%=ev.edit_evaluation_path%>"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+            <a href="<%=ev.edit_evaluation_path%>"><span class="glyphicon glyphicon-edit"></span> <%=t("words.edit")%></a>
           <% end %>
         </td>
       </tr>

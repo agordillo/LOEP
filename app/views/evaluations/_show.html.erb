@@ -1,12 +1,14 @@
 <div class="loep_form_wrapper">
-  <h2>Evaluation of the LO <a href="<%=(iamAdmin?) ? lo_path(@lo) : rlo_path(@lo)%>"><span class='lo_name_in_evaluation'><%=@lo.name%></span></a> with <%=@evmethod.name%></h1>
+  <h2>
+  	<%=raw t("evaluations.form.show", :lo=>('<a href="'+((iamAdmin?) ? lo_path(@lo) : rlo_path(@lo))+'"><span class="lo_name_in_evaluation">'+@lo.name+'</span></a>'), :evmethod=>@evmethod.name) %>
+  </h2>
   <% if can?(:update, @evaluation) %>
-    <a href="<%=@evaluation.edit_evaluation_path%>"><p class="form_legend">Edit</p></a>
+    <a href="<%=@evaluation.edit_evaluation_path%>"><p class="form_legend"><%=t("words.edit")%></p></a>
   <% end %>
   <p class="form_before_button">&nbsp;</p>
-  <p class="form_legend">Reviewer: <%=@evaluation.readable_reviewer%></p>
-  <p class="form_legend">Learning Object URL: <a target="_blank" href="<%=@lo.url%>"><%=@lo.url%></a></p>
-  <a href="<%=@evmethod.documentation_path%>"><p class="form_legend"><%=@evmethod.name%> documentation</p></a>
+  <p class="form_legend"><%=t("users.reviewer.one")%>: <%=@evaluation.readable_reviewer%></p>
+  <p class="form_legend"><%=t("evaluations.form.lo_url")%>: <a target="_blank" href="<%=@lo.url%>"><%=@lo.url%></a></p>
+  <p class="form_legend"><a href="<%=@evmethod.documentation_path%>"><%=t("evmethods.form.documentation", :evmethod => @evmethod.name)%></a></p>
 </div>
 
 <%= render 'form', :readonly => true %>
