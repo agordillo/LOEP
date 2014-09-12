@@ -60,7 +60,7 @@
             <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("words.edit")%></a>
         </td>
         <td class="tdcenter">
-          <a href="<%=assignment_path(assignment)%>" data-confirm="<%=t("words.are_you_sure")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.Remove")%></a>
+          <a href="<%=assignment_path(assignment)%>" data-confirm="<%=t("words.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.remove")%></a>
         </td>
       </tr>
     <% end %>

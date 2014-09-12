@@ -59,9 +59,9 @@
   <h3><%=t("registrations.cancel_account")%></h3>
   <p>
     <% unless @user.role?("SuperAdmin") %>
-      <%= button_to t("words.cancel"), registration_path(resource_name), :class => 'loep_button cancel_button', :data => { :confirm => t("words.are_you_sure") }, :method => :delete %>
+      <%= button_to t("words.cancel"), registration_path(resource_name), :class => 'loep_button cancel_button', :data => { :confirm => t("words.are_you_sure"), :ok_button => t("words.wyes"), :cancel_button => t("words.wno") }, :method => :delete %>
     <% else %>
-      <input class="loep_button cancel_button" data-confirm="<%=t("registrations.super_admin_alert")%>" type="submit" promptOkAlertDialog="true" value="<%=t("words.cancel")%>">
+      <input class="loep_button cancel_button" data-confirm="<%=t("registrations.super_admin_alert")%>" data-ok-button="<%=t("words.wyes")%>" data-cancel-button="<%=t("words.wno")%>" type="submit" promptOkAlertDialog="true" value="<%=t("words.cancel")%>">
     <% end %>
   </p>
 </div>

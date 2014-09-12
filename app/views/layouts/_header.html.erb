@@ -9,13 +9,13 @@
           </a>
         </li>
 	      <li>
-	      	<a title="Home" href="<%=home_path%>"><span class="glyphicon glyphicon-home"></span></a>
+	      	<a title='<%=t("menu.home")%>' href="<%=home_path%>"><span class="glyphicon glyphicon-home"></span></a>
 	      </li>
 	      <li>
-	      	<a title="Settings" href="<%=edit_user_registration_path(current_user)%>"><span class="glyphicon glyphicon-wrench"></span></a>
+	      	<a title='<%=t("menu.settings")%>' href="<%=edit_user_registration_path(current_user)%>"><span class="glyphicon glyphicon-wrench"></span></a>
 	      </li>
 	      <li>
-	      	<a title="Sign out" href="/users/sign_out" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-log-out"></span></a>
+	      	<a title='<%=t("login.sign_out")%>' href="/users/sign_out" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-log-out"></span></a>
 	      </li>
 	    </ul>
 	</nav>

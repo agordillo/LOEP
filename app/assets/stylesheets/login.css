@@ -17,7 +17,7 @@
 }
 
 .update_button {
-	width: 30%;
+	min-width: 30%;
 }
 
 .cancel_button {

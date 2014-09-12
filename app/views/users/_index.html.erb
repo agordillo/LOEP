@@ -52,7 +52,7 @@
         </td>
         <td class="tdcenter tddestroy">
           <% if current_user.compareRole > user.compareRole %>
-            <a href="<%=user_path(user)%>" data-confirm='<%=t("words.are_you_sure")%>' data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.remove")%></a>
+            <a href="<%=user_path(user)%>" data-confirm="<%=t("words.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.remove")%></a>
           <% end %>
         </td>
       </tr>

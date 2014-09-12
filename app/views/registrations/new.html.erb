@@ -52,6 +52,7 @@
 
 <script type="text/javascript">
   jQuery(document).ready(function($){
+    <%= render "application/datepicker_language" %> //Translate datepicker
     $('#birthday_datepicker').datepicker({
       yearRange: "-100:+0", // this is the option you're looking for
       showOn: "both", 
@@ -60,7 +61,8 @@
       changeYear : true,
       maxDate: '-1d',
       buttonImage: "/assets/calendar_icon.png", 
-      buttonImageOnly: true 
+      buttonImageOnly: true,
+      firstDay: '<%=t("datepicker.firstDay")%>', //start on monday or sunday regarding the locale 
     });
 
     <%=render "application/tags"%>

@@ -1,0 +1,9 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    LOEP.Main.init();
+  });
+
+  var _showLOEPDialog = function(msg,showCancelButton,callback){
+    _showLOEPDialogWithSettings({"msg":msg,"ok_button":'<%=t("dialog.ok")%>',"cancel_button":'<%=t("dialog.cancel")%>'},showCancelButton,callback);
+  };
+ </script>

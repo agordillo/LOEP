@@ -368,7 +368,7 @@ en:
         name: "The learning object helped clarify the concept(s) being taught"
         shortname: "Help at clarifying concepts"
       item7:
-        name: "Overall, it was beneficial to us the learning object for teaching"
+        name: "Overall, it was beneficial to me the learning object for teaching"
         shortname: "Teaching"
       item8:
         name: "The students were on task or focused when the learning object was being used"
@@ -404,8 +404,8 @@ en:
       title: "%{evmethod} Evaluation Form"
       title_for_embed: "Evaluation Form: '%{lo}'"
     submit: "Submit"
-    submit_with_evmethod: "Submit %{evmethod} Evaluation"
-    submit_edit_with_evmethod: "Edit %{evmethod} Evaluation"
+    submit_with_evmethod: "Submit %{evmethod} evaluation"
+    submit_edit_with_evmethod: "Edit %{evmethod} evaluation"
     validation:
       are_you_sure: "Are you sure you want to submit the evaluation form?"
       blank_form: "The evaluation form is blank. It cannot be sent."
@@ -634,5 +634,5 @@ en:
     web:
       one: "Web"
       plural: "Webs"
-
-
+    wno: "No"
+    wyes: "Yes"

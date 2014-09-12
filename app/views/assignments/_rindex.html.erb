@@ -53,14 +53,14 @@
           </td>
           <td class="tdcenter">
             <%if assignment.status == "Pending" and can?(:complete, assignment) %>
-              <%= link_to complete_path(assignment), :data => { :confirm => t("assignments.confirmation.mark_as_completed"), :method => :complete } do %>
+              <%= link_to complete_path(assignment), :data => { :confirm => t("assignments.confirmation.mark_as_completed"), :ok_button => t("words.wyes"), :cancel_button => t("words.wno")}, :method => :complete do %>
                   <span class="glyphicon glyphicon-ok"></span> <%=t("words.check")%>
               <% end %>
             <% end %>
           </td>
           <td class="tdcenter">
             <%if assignment.status == "Pending" and can?(:reject, assignment) %>
-              <%= link_to reject_path(assignment), :data => { :confirm => t("words.are_you_sure") }, :method => :reject do %>
+              <%= link_to reject_path(assignment), :data => { :confirm => t("words.are_you_sure"), :ok_button => t("words.wyes"), :cancel_button => t("words.wno") }, :method => :reject do %>
                   <span class="glyphicon glyphicon-remove"></span> <%=t("actions.reject")%>
               <% end %>
             <% end %>

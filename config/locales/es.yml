@@ -4,7 +4,7 @@ es:
     assign : "Asignar"
     download: "Descargar"
     download_evaluations: "Descargar Evaluaciones"
-    evaluate: "Evaluate"
+    evaluate: "Evaluar"
     evaluate_with_evmethod: "Evaluar con %{evmethod}"
     reject: "Rechazar"
     search: "Buscar"
@@ -94,10 +94,10 @@ es:
     all:
       item_comments:
         name: "Comentarios Adicionales"
-        description: "Por favor, escriba aquí cualquier otra observación que considere pertinente y/o necesaria para esta evaluación."
+        description: "Por favor, escriba aquí cualquier otra observación que considere pertinente y/o necesaria para esta evaluación"
       item_score:
         name: "Puntuación Global"
-        description: "Opcionalmente, puedes proponer una puntuación global entre 0.0 y 10.0 para este Objeto de Aprendizaje."
+        description: "Opcionalmente, puede proponer una puntuación global entre 0.0 y 10.0 para este Objeto de Aprendizaje"
     form:
       available: "Métodos de Evaluación Disponibles"
       documentation: "Documentación de %{evmethod}"
@@ -277,7 +277,7 @@ es:
         description: "Contenido adaptativo o feedback en función de la respuesta de cada alumno/a y su estilo de aprendizaje"
       item4:
         name: "Motivación"
-        description: "Capacidad de motivar y generar interés en un grupo concreto de alumno/as"
+        description: "Capacidad de motivar y generar interés en un grupo concreto de alumnos"
       item5:
         name: "Diseño y presentación"
         description: "El diseño de la información audiovisual favorece el adecuado procesamiento de la información"
@@ -289,7 +289,7 @@ es:
         description: "El diseño de los controles y la presentación de la información están adaptados para discapacitados y dispositivos móviles"
       item8:
         name: "Reusabilidad"
-        description: "Capacidad para usarse en distintos escenarios de aprendizaje y con alumnos/as con distintos bagajes"
+        description: "Capacidad para usarse en distintos escenarios de aprendizaje y con alumnos con distintos bagajes"
       item9:
         name: "Cumplimiento de estándares"
         description: "Adecuación a los estándares y especificaciones internacionales"
@@ -312,7 +312,7 @@ es:
         name: "El objeto de aprendizaje era fácil de usar"
         shortname: "Usabilidad"
       item3:
-        name: "Las instrucciones en el objeto de aprendizaje fueron fáciles de seguir"
+        name: "Las instrucciones del objeto de aprendizaje fueron fáciles de seguir"
         shortname: "Instrucciones"
       item4:
         name: "Las funciones de ayuda del objeto de aprendizaje fueron útiles"
@@ -368,7 +368,7 @@ es:
         name: "El objeto de aprendizaje me ayudó a clarificar el concepto (o conceptos) que estaba enseñando"
         shortname: "Clarificación de conceptos"
       item7:
-        name: "En geneneral, el objeto de aprendizaje nos fue beneficioso para enseñar"
+        name: "En general, el objeto de aprendizaje me fue beneficioso para enseñar"
         shortname: "Enseñanza"
       item8:
         name: "Los estudiantes estuvieron ocupados y/o centrados mientras se utilizaba el objeto de aprendizaje"
@@ -401,14 +401,14 @@ es:
       remove: "Borrar"
       sagree: "Muy de acuerdo"
       sdagree: "Muy en desacuerdo"
-      title: "Formulario de evaluación de %{evmethod}"
+      title: "Formulario de evaluación con %{evmethod}"
       title_for_embed: "Formulario de Evaluación: '%{lo}'"
     submit: "Enviar"
-    submit_with_evmethod: "Enviar Evaluación %{evmethod}"
-    submit_edit_with_evmethod: "Editar Evaluación %{evmethod}"
+    submit_with_evmethod: "Enviar evaluación %{evmethod}"
+    submit_edit_with_evmethod: "Editar evaluación %{evmethod}"
     validation:
       are_you_sure: "¿Estás seguro de que quieres enviar el formulario de evaluación?"
-      blank_form: "El formulario de evaluación está en blanco. No puede ser enviado."
+      blank_form: "El formulario de evaluación está vacío. No puede ser enviado."
       question_blank: 
         one: "Hay una pregunta que no ha sido rellenada."
         several:
@@ -522,7 +522,7 @@ es:
       sLast: "Último"
       sNext: "Siguiente"
       sPrevious: "Anterior"
-    sLengthMenu: "Mostrar %{select} elementos"
+    sLengthMenu: "Mostrar %{select}"
     sInfo: "Mostrando del %{_START_} al %{_END_} de un total de %{_TOTAL_} elementos"
     sInfoEmpty: "Mostrando 0 elementos"
     sSearch: "Buscar"
@@ -634,5 +634,5 @@ es:
     web:
       one: "Web"
       plural: "Webs"
-
-
+    wno: "No"
+    wyes: "Sí"
