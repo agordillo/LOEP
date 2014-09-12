@@ -50,13 +50,14 @@ LOEP::Application.configure do
 
   #Config action mailer
   #(supposing you have a SMTP server on localhost:25)
-  # TODO. Configure SMTP server
-  config.action_mailer.default_url_options = {:host => 'loep.global.dit.upm.es'}
+  #Configure SMTP server
+  ActionMailer::Base.default :from => config.APP_CONFIG["no_reply_mail"]
+  config.action_mailer.default_url_options = {:host => config.APP_CONFIG["domain"]}
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     :address => "127.0.0.1",
     :port    => "25",
-    :domain  => 'loep.global.dit.upm.es',
+    :domain  => config.APP_CONFIG["domain"],
     :enable_starttls_auto => true,
     :openssl_verify_mode  => 'none'
   }

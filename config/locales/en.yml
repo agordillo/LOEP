@@ -60,6 +60,21 @@ en:
     minuteText: 'Minutes'
     secondText: 'Seconds'
     timeText: 'Time'
+  devise:
+    confirmation:
+      confirm_account: "Confirm my account"
+      welcome: "Welcome %{user}!"
+      a: "You can confirm your account email through the link below:"
+    reset_password:
+      change_my_password: "Change my password"
+      hello: "Hello %{user}!"
+      a: "Someone has requested a link to change your password. You can do this through the link below."
+      b: "If you didn't request this, please ignore this email."
+      c: "Your password won't change until you access the link above and create a new one."
+    unlock:
+      unlock_account: "Unlock my account"
+      a: "Your account has been locked due to an excessive number of unsuccessful sign in attempts."
+      b: "Click the link below to unlock your account:"
   dialog:
     ok: "Ok"
     cancel: "Cancel"

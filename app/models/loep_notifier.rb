@@ -2,7 +2,7 @@ class LoepNotifier
 
 	# Notify an app that a LO has new information available
 	# Request example
-	# PUT http://localhost:3000/loep/los/55?app_name=MyLORApp&auth_token=tokenOfMyLORApp
+	# PUT http://localhost:8080/loep/los/55?app_name=MyLORApp&auth_token=tokenOfMyLORApp
 	def self.notifyLoUpdate(app,lo)
 		if app.callback.blank? or app.auth_token.blank? or lo.id_repository.blank?
 			return

@@ -15,16 +15,20 @@ LOEP::Application.configure do
 
   #Config action mailer
   #http://edgeguides.rubyonrails.org/action_mailer_basics.html
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address => "jungla.dit.upm.es",
-    :port    => "25",
-    :domain  => 'loep.global.dit.upm.es'
+  ActionMailer::Base.default :from => config.APP_CONFIG["no_reply_mail"]
+  config.action_mailer.default_url_options = { :host => config.APP_CONFIG["domain"] }
+  
+  config.action_mailer.delivery_method = :sendmail
+  ActionMailer::Base.sendmail_settings = {
+    :location => "/usr/sbin/sendmail",
+    :arguments => "-i -t"
   }
 
+  #Perform deliveries
+  config.action_mailer.perform_deliveries = true
+
   # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
