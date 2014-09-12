@@ -10,7 +10,7 @@ en:
     search: "Search"
     view: "View"
     view_as_admin: "View as Admin"
-    view_as_reviewer: "View as reviewer"
+    view_as_reviewer: "View as Reviewer"
   applications:
     editing: "Editing Application"
     name:
@@ -18,7 +18,6 @@ en:
       plural: "Applications"
       mine: "My Applications"
     new: "Register new Application"
-    update: "Update Application"
   assignments:
     automatic:
       title: "Automatic Assignments Generation"
@@ -335,7 +334,7 @@ en:
         shortname: "Learning"
       item10:
         name: "I like the overall theme of the learning object"
-        shortname: "Design"
+        shortname: "Theme"
       item11:
         name: "I found the learning object to be engaging"
         shortname: "Engagement"
@@ -372,7 +371,7 @@ en:
         name: "Overall, it was beneficial to us the learning object for teaching"
         shortname: "Teaching"
       item8:
-        name: "The students were on task or focused when the learning objects was being used"
+        name: "The students were on task or focused when the learning object was being used"
         shortname: "Ability to keep students focused"
       item9:
         name: "The students liked the interactive quality of the learning object"
@@ -402,14 +401,14 @@ en:
       remove: "Remove"
       sagree: "Strongly Agree"
       sdagree: "Strongly Disagree"
-      title: "%{evmethod} Evaluation Survey"
-      title_for_embed: "Evaluation Survey: '%{lo}'"
+      title: "%{evmethod} Evaluation Form"
+      title_for_embed: "Evaluation Form: '%{lo}'"
     submit: "Submit"
     submit_with_evmethod: "Submit %{evmethod} Evaluation"
     submit_edit_with_evmethod: "Edit %{evmethod} Evaluation"
     validation:
-      are_you_sure: "Are you sure you want to submit the evaluation survey?"
-      blank_form: "The evaluation survey is blank. It cannot be sent."
+      are_you_sure: "Are you sure you want to submit the evaluation form?"
+      blank_form: "The evaluation form is blank. It cannot be sent."
       question_blank: 
         one: "There is one question that has not been answered."
         several:
@@ -417,7 +416,7 @@ en:
           b: "questions that have not been answered."
   frontpage:
     welcome: "Welcome to the Learning Object Evaluation Platform"
-    description: "This platform aims to provide teachers and educators with a set of tools to facilitate the evaluation of small and self-contained web educational resources, known as Learning Objects. LOEP provides user and Learning Object management functionality, review assignments, a suite of evaluation tools (web and downloadable surveys, peer review mechanisms, ...) to evaluate Learning Objects according to several formal evaluation models, and training material for reviewers and educators."
+    description: "This platform aims to provide teachers and educators with a set of tools to facilitate the evaluation of small and self-contained web educational resources, known as Learning Objects. LOEP provides user and Learning Object management functionality, review assignments, a suite of evaluation tools (web and downloadable forms, peer review mechanisms, ...) to evaluate Learning Objects according to several formal evaluation models, and training material for reviewers and educators."
     new_to_loep: "New to LOEP?"
   helpers:
     submit:
@@ -513,8 +512,8 @@ en:
     fill: "Fill Survey"
     lori_15_items:
       title: "LORI v1.5 Items Rating Survey"
-      description: "The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, the LORI Score Metric is defined and the LORI scores are calculated."
-      detailed_description: "The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, a Learning Object LORI Quality Metric is defined, and the scores for the Learning Objects are calculated.</p><p>For each of the items, rate the importance that it has for you regarding pedagogical quality in a scale from 0 to 10, being 0 valueless and 10 extremely valuable."
+      description: "The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, the LORI WAM CW Metric is defined and their scores are calculated."
+      detailed_description: "The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, the LORI WAM CW Metric is defined and their scores are calculated.</p><p>For each of the items, rate the importance that it has for you regarding pedagogical quality in a scale from 0 to 10, being 0 valueless and 10 extremely valuable."
     submit: "Submit Survey"
     title: "Available Surveys"
   tables:
@@ -558,7 +557,7 @@ en:
     categories: "Categories"
     check: "Check"
     back: "Back"
-    birthday: "Birthday"
+    birthday: "Date of birth"
     callback: "Callback"
     cancel: "Cancel"
     compare: "Compare"

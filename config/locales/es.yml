@@ -1,4 +1,57 @@
 es:
+  actions:
+    add_assignment: "Añadir Asignación"
+    assign : "Asignar"
+    download: "Descargar"
+    download_evaluations: "Descargar Evaluaciones"
+    evaluate: "Evaluate"
+    evaluate_with_evmethod: "Evaluar con %{evmethod}"
+    reject: "Rechazar"
+    search: "Buscar"
+    view: "Ver"
+    view_as_admin: "Ver como Admin"
+    view_as_reviewer: "Ver como Revisor"
+  applications:
+    editing: "Editando Aplicación"
+    name:
+      one: "Aplicación"
+      plural: "Aplicaciones"
+      mine: "Mis Aplicaciones"
+    new: "Registrar nueva Aplicación"
+  assignments:
+    automatic:
+      title: "Generación Automática de Asignaciones"
+      description: "Los Objetos de Aprendizaje seleccionados serán asignados entre todos los revisores seleccionados, tomando en consideración los criterios elegidos en el formulario, el tipo de Objeto de Aprendizaje y el perfil del revisor."
+      matching_criteria: "Criterios de Emparejamiento OA-Revisor"
+      matching_strategies:
+        a: "Priorizar carga de trabajo: Emparejamiento Aleatorio"
+        b: "Priorizar carga de trabajo: Emparejamiento Best-effort"
+        c: "Priorizar adecuación del revisor"
+      nepl: "Número de evaluaciones por Objeto de Aprendizaje"
+      submit: "Generar Asignaciones Automáticamente"
+    confirmation:
+      mark_as_completed: "¿Estás seguro de que quieres marcar esta asignación como completada?"
+    editing: "Editando asignación"
+    name:
+      all: "Todas las Asignaciones"
+      his:
+        pending: 
+          one:  "La Asignación Pendiente de %{user}"
+          plural: "Las Asignaciones Pendientes de %{user}"
+      mine: "Mis Asignaciones"
+      one: "Asignación"
+      plural: "Asignaciones"
+      yours:
+        pending:
+          one:  "Tu Asignación Pendiente"
+          plural: "Tu Asignaciones Pendientes"
+    new: "Nueva asignación"
+    no_assignments_for_reviewer: "<p>No tienes asignaciones todavía.</p><p>Cuando el administrador te solicite una tarea de evaluación (es decir, una asignación), esta aparecerá en este panel.</p>"
+    status:
+      completed: "Completada"
+      pending:  "Pendiente"
+      rejected: "Rechazada"
+      uncompleted: "Incompleta"
   datepicker:
     closeText: 'Ok'
     currentText: 'Hoy'
@@ -7,3 +60,579 @@ es:
     minuteText: 'Minutos'
     secondText: 'Segundos'
     timeText: 'Hora'
+  dialog:
+    ok: "Ok"
+    cancel: "Cancelar"
+  evaluations:
+    embed:
+      message:
+        a: "Tu evaluación del Objeto de Aprendizaje %{lo} ha sido correctamente entregada."
+        b: "Gracias por tu colaboración."
+        c: "Puedes cerrar esta ventana."
+    form:
+      editing_lo_with_evmethod:  "Editando la evaluación del OA %{lo} con %{evmethod}"
+      lo_url: "URL del Objeto de Aprendizaje"
+      show: "Evaluación del OA %{lo} con %{evmethod}"
+    message:
+      no_evaluations: "Todavía no has evaluado ningún Objeto de Aprendizaje.</p><p>Cuando evalues uno, la evaluación aparecerá en este panel."
+    name:
+      all: "Todas las Evaluaciones"
+      his:
+        one:  "La Evaluación de %{user}"
+        plural: "Las Evaluaciones de %{user}"
+      mine: "Mis Evaluaciones"
+      one: "Evaluación"
+      plural: "Evaluaciones"
+      yours:
+        one:  "Tu Evaluación"
+        plural: "Tus Evaluaciones"
+    summary:
+      main: "Sumario de las evaluaciones de %{evmethod}"
+      comparison: "Comparación de Objetos de Aprendizaje basada en las evaluaciones de %{evmethod}"
+      stats: "Sumario de las evaluaciones de %{evmethod}"
+  evmethods:
+    all:
+      item_comments:
+        name: "Comentarios Adicionales"
+        description: "Por favor, escriba aquí cualquier otra observación que considere pertinente y/o necesaria para esta evaluación."
+      item_score:
+        name: "Puntuación Global"
+        description: "Opcionalmente, puedes proponer una puntuación global entre 0.0 y 10.0 para este Objeto de Aprendizaje."
+    form:
+      available: "Métodos de Evaluación Disponibles"
+      documentation: "Documentación de %{evmethod}"
+    loem:
+      item1:
+        name: "Meaningful Interactions"
+        form:
+          a: "Interactions with the learning object are <b>not very meaningful</b>/gratuitous/minimal and are not significantly better than a text‐based medium"
+          b: "Interactions with the learning object are <b>somewhat meaningful</b> and provide something more than a text based medium"
+          c: "Interactions with the learning object are <b>meaningful</b> and permit the user to have a much greater understanding of the concept/topic than he/she would have if she used a text based medium"
+      item2:
+        name: "Overall Control"
+        form:
+          header: "The user has"
+          a: "Ability to move through instructional elements at own speed"
+          b: "Ability to redo or relearn component before moving on"
+          c: "Ability to make choice about the paths to take so that one can progress at own learning level"
+      item3:
+        name: "Multimedia adds learning value"
+        form:
+          a: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds little</b> to the learning process"
+          b: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds something</b> to the learning process"
+          c: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds significantly</b> to the learning process"
+      item4:
+        name: "Consistency"
+        description: "Pages have consistent look and feel"
+        form:
+          g1:
+            a: "<b>Few/no</b> pages have a consistent look and feel to it"
+            b: "<b>Some</b> pages have a consistent look and feel to it"
+            c: "<b>All/most</b> pages have a consistent look and feel to it"
+          g2:
+            a: "Text and visual components are in a consistent location <b>rarely/never</b>"
+            b: "Text and visual components are in a consistent location <b>sometimes</b>"
+            c: "Text and visual components are in a consistent location <b>always</b>"
+      item5:
+        name: "Layout"
+        description: "Clear and well organized"
+        form:
+          g1:
+            a: "The organization of <b>few/no</b> pages is clear"
+            b: "The organization of <b>some</b> pages is clear"
+            c: "The organization of <b>most/all</b> pages is clear"
+          g2:
+            a: "The pages are <b>very</b> cluttered"
+            b: "The pages are <b>somewhat</b> cluttered"
+            c: "The pages are <b>not at all</b> cluttered"
+          g3:
+            a: "<b>Few/No</b> page components are well placed and easy to see"
+            b: "<b>Some</b> page components are well placed and easy to see"
+            c: "<b>All</b> page components are well placed and easy to see"  
+      item6:
+        name: "Labeling"
+        description: "Title on menu buttons, words on clickable buttons, any labels used to guide navigation"
+        form:
+          g1:
+            a: "Navigation labels are <b>confusing</b>"
+            b: "Navigation labels are <b>somewhat clear</b>"
+            c: "Navigation labels are <b>very clear</b>"
+          g2:
+            a: "<b>Few/No</b> labels are easily understood by the user"
+            b: "<b>Some</b> navigation labels are easily understood by the user"
+            c: "<b>All/Most</b> navigation labels are easily understood by the user"
+      item7:
+        name: "Readability"
+        description: "Look of text"
+        form:
+          header: "The text has"
+          a: "Text is easy to read (e.g., good font size and type, clear, not fuzzy)"
+          b: "Contrast between text and background is easy to read"
+          c: "Text is presented in short, concise segments"
+          d: "White space is used effectively"
+      item8:
+        name: "Quality of Feedback"
+        description: "Refers to feedback given to user to help him/her progress through the learning object"
+        form:
+          header: "The feedback is"
+          a: "an appropriate amount for the user (not too much or too little)"
+          b: "well written with appropriate language for the user"
+          c: "appears when necessary and gives user adequate direction and information for progressing"
+      item9:
+        name: "Attractive"
+        description: "Has modern, appealing look"
+        form:
+          header: "The learning object has"
+          a: "Attractive select of colours"
+          b: "No long scrolling pages"
+          c: "Easy to read text"
+          d: "Attractive graphics"
+          e: "Modern interface"
+          f: "Looks like it was professional done"
+      item10:
+        name: "Graphics"
+        description: "Not video"
+        form:
+          a: "Graphics images are <b>low quality</b> with respect to resolution, size, and accuracy"
+          b: "Graphics images are <b>moderate quality</b> with respect to resolution, size, and accuracy"
+          c: "Graphics images are <b>high quality</b> with respect to resolution, size, and accuracy"
+      item11:
+        name: "Learning Mode"
+        form:
+          header: "The learning object includes"
+          a: "videos"
+          b: "animations"
+          c: "audio"
+          d: "written text, hands"
+          e: "static graphical representations"
+      item12:
+        name: "Motivation"
+        form:
+          a: "Learning object interactions/theme/goals/tasks would <b>not be motivating/engaging</b> for the designated grade level"
+          b: "Learning object interactions/theme/goals/tasks would <b>be somewhat motivating/engaging</b> for the designated grade level"
+          c: "Learning object interactions/theme/goals/tasks would <b>be very motivating/engaging</b> for the designated grade level"    
+      item13:
+        name: "Natural to Use"
+        description: "Intuitiveness of the interface, easy of use"
+        form:
+          a: "The tools for the user to control the interactive components are <b>not natural, do not make much sense, are not easy to find</b> on the screen and <b>are rarely/not natural to use</b>"
+          b: "The tools for the user to control the interactive components are <b>somewhat natural, make some sense, are somewhat easy to find</b> on the screen and <b>are sometimes natural to use</b>"
+          c: "The tools for the user to control the interactive components are <b>natural, make sense, are easy to find</b> on the screen and are <b>natural to use</b>"
+      item14:
+        name: "Orientation"
+        description: "Does the user know where he/she is at all times?"
+        form:
+          g1:
+            a: "The user <b>rarely/never</b> knows where they are"
+            b: "The user knows where they are at <b>some of the time</b>"
+            c: "The user knows where they are at <b>all times</b>"
+          g2:
+            a: "<b>Few/no</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present"
+            b: "<b>Some</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present, but not enough"
+            c: "<b>Sufficient</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present"
+          g3:
+            a: "Orienting features <b>are not in a consistent location</b>"
+            b: "Orienting features are in the same spot <b>sometimes</b>"
+            c: "Orienting features are in the same spot <b>always</b>"
+      item15:
+        name: "Navigation Cues"
+        description: "Breadcrumb paths, page numbering, coloured buttons to indicate change of state, pop‐up boxes or mouseovers" 
+        form:
+          a: "<b>Few/No</b> navigational cues are present"
+          b: "<b>Some navigational cues</b> are present but more are needed"
+          c: "A <b>sufficient number</b> of navigation cues are present"
+      item16:
+        name: "Instructions"
+        form:
+          g1:
+            a:
+              a: "The instructions are <b>confusing</b>"
+              b: "The <b>instructions are absent, but need to be added</b>"
+            b:
+              a: "The instructions are <b>somewhat clear</b> (fairly well written, a bit long and fairly easy to understand but some confusion in spots)"
+              b: "Some instructions are present, but <b>more need to be added</b>"
+            c:
+              a: "The instructions are <b>very clear</b> ( well written, concise and easily understood)"
+              b: "There are no instructions, but <b>it is obvious what needs to be done</b>"
+          g2:
+            a: "Text and visual components are in a consistent location <b>rarely/never</b>"
+            b: "Text and visual components are in a consistent location <b>sometimes</b>"
+            c: "Text and visual components are in a consistent location <b>always</b>"
+      item17:
+        name: "Appropriate Language Level"
+        description: "Appropriate for the user"
+        form:
+          a: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>rarely/ none of the time</b>"
+          b: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>some of the time</b>"
+          c: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>all/most of the time</b>" 
+    lori:
+      item1:
+        name: "Calidad de los contenidos"
+        description: "Veracidad, exactitud, presentación equilibrada de ideas y nivel adecuado de detalle"
+      item2:
+        name: "Adecuación de los objetivos de aprendizaje"
+        description: "Coherencia entre los objetivos, actividades, evaluaciones y perfil del alumnado"
+      item3:
+        name: "Feedback y Adaptabilidad"
+        description: "Contenido adaptativo o feedback en función de la respuesta de cada alumno/a y su estilo de aprendizaje"
+      item4:
+        name: "Motivación"
+        description: "Capacidad de motivar y generar interés en un grupo concreto de alumno/as"
+      item5:
+        name: "Diseño y presentación"
+        description: "El diseño de la información audiovisual favorece el adecuado procesamiento de la información"
+      item6:
+        name: "Usabilidad e Interactividad"
+        description: "Facilidad de navegación, interfaz predictiva para el usuario y calidad de los recursos de ayuda de la interfaz"
+      item7:
+        name: "Accesibilidad"
+        description: "El diseño de los controles y la presentación de la información están adaptados para discapacitados y dispositivos móviles"
+      item8:
+        name: "Reusabilidad"
+        description: "Capacidad para usarse en distintos escenarios de aprendizaje y con alumnos/as con distintos bagajes"
+      item9:
+        name: "Cumplimiento de estándares"
+        description: "Adecuación a los estándares y especificaciones internacionales"
+    message:
+      no_available: "No hay métodos de evaluación disponibles."
+      no_canvas_support: "[Tu navegador web no tiene soporte de canvas]"
+      no_documentation: "No hay documentación disponible para este método de evaluación."
+      no_representation: "No hay datos de representación disponibles para este método de evaluación."
+    name:
+      one: "Método de Evaluación"
+      plural: "Métodos de Evaluación"
+      short:
+        one: "Método"
+        plural: "Métodos"
+    Wblts:
+      item1:
+        name: "El objeto de aprendizaje estaba bien organizado"
+        shortname: "Organización"
+      item2:
+        name: "El objeto de aprendizaje era fácil de usar"
+        shortname: "Usabilidad"
+      item3:
+        name: "Las instrucciones en el objeto de aprendizaje fueron fáciles de seguir"
+        shortname: "Instrucciones"
+      item4:
+        name: "Las funciones de ayuda del objeto de aprendizaje fueron útiles"
+        shortname: "Funciones de ayuda"
+      item5:
+        name: "Trabajar con el objeto de aprendizaje me ayudó a aprender"
+        shortname: "Ayuda al aprendizaje"
+      item6:
+        name: "El feedback del objeto de aprendizaje me ayudó a aprender"
+        shortname: "Feedback"
+      item7:
+        name: "Los gráficos y animaciones del objeto de aprendizaje me ayudaron a aprender"
+        shortname: "Gráficos"
+      item8:
+        name: "El objeto de aprendizaje ayudó a enseñarme un nuevo concepto"
+        shortname: "Aprender nuevo concepto"
+      item9:
+        name: "En general, el objeto de aprendizaje me ayudó a aprender"
+        shortname: "Aprendizaje"
+      item10:
+        name: "Me gusta el tema general del objeto de aprendizaje"
+        shortname: "Tema"
+      item11:
+        name: "El objeto de aprendizaje me pareció atractivo y motivador"
+        shortname: "Motivación"
+      item12:
+        name: "El objeto de aprendizaje hizo que aprender fuese divertido"
+        shortname: "Diversión"
+      item13:
+        name: "Me gustaría usar objetos de aprendizaje como este otra vez"
+        shortname: "Reuso"
+      item14:
+        name: "¿Qué (si hubo algo) TE GUSTÓ del objeto de aprendizaje?"
+      item15:
+        name: "¿Qué (si hubo algo) NO TE GUSTÓ del objeto de aprendizaje?"
+    Wbltt:
+      item1:
+        name: "El objeto de aprendizaje fue facil de usar para mí"
+        shortname: "Usabilidad para profesores"
+      item2:
+        name: "El objeto de aprendizaje fue facil de usar para los estudiantes"
+        shortname: "Usabilidad para estudiantes"
+      item3:
+        name: "Los estudiantes encontraron las instrucciones del objeto de aprendizaje claras y concisas"
+        shortname: "Instrucciones"
+      item4:
+        name: "Los gráficos y animaciones del objeto de aprendizaje ayudaron a los estudiantes a aprender"
+        shortname: "Gráficos"
+      item5:
+        name: "El objeto de aprendizaje mejoró el aprendizaje de los estudiantes"
+        shortname: "Aprendizaje"
+      item6:
+        name: "El objeto de aprendizaje me ayudó a clarificar el concepto (o conceptos) que estaba enseñando"
+        shortname: "Clarificación de conceptos"
+      item7:
+        name: "En geneneral, el objeto de aprendizaje nos fue beneficioso para enseñar"
+        shortname: "Enseñanza"
+      item8:
+        name: "Los estudiantes estuvieron ocupados y/o centrados mientras se utilizaba el objeto de aprendizaje"
+        shortname: "Habilidad para Amenizar"
+      item9:
+        name: "A los estudiantes les gustó la interactividad del objeto de aprendizaje"
+        shortname: "Interactividad"
+      item10:
+        name: "A los estudiantes parecía gustarles el objeto de aprendizaje"
+        shortname: "Opinión de los estudiantes"
+      item11:
+        name: "En general, los estudiantes estuvieron motivados mientras se utilizaba el objeto de aprendizaje"
+        shortname: "Motivación"
+      item12:
+        name: "¿Cuál fue el impacto global del objeto de aprendizaje en su enseñanza?"
+      item13:
+        name: "¿Se encontró con algún problema de base tecnológica al utilizar el objeto de aprendizaje? Por favor, explique."
+      item14:
+        name: "¿Qué consejo le darías a futuros docentes sobre el uso de este objeto de aprendizaje en sus clases?"
+  footer:
+    main: "Learning Object Evaluation Platform. Código disponible en Github"
+  forms:
+    evmethod:
+      evaluating_lo_with_evmethod: "Evaluando %{lo} con %{evmethod}"
+      evmethod_documentation: "Documentación de %{evmethod}"
+      high: "Alto"
+      low: "Bajo"
+      loURL: "URL del Objeto de Aprendizaje"
+      na: "N/A"
+      remove: "Borrar"
+      sagree: "Muy de acuerdo"
+      sdagree: "Muy en desacuerdo"
+      title: "Formulario de evaluación de %{evmethod}"
+      title_for_embed: "Formulario de Evaluación: '%{lo}'"
+    submit: "Enviar"
+    submit_with_evmethod: "Enviar Evaluación %{evmethod}"
+    submit_edit_with_evmethod: "Editar Evaluación %{evmethod}"
+    validation:
+      are_you_sure: "¿Estás seguro de que quieres enviar el formulario de evaluación?"
+      blank_form: "El formulario de evaluación está en blanco. No puede ser enviado."
+      question_blank: 
+        one: "Hay una pregunta que no ha sido rellenada."
+        several:
+          a: "Hay"
+          b: "preguntas que no han sido rellenadas."
+  frontpage:
+    welcome: "Bienvenido a LOEP, la Plataforma de Evaluación de Objetos de Aprendizaje"
+    description: "Esta plataforma tiene como objetivo proporcionar a profesores y docentes un conjunto de herramientas para facilitar la evaluación de recursos educativos web pequeños y autocontenidos, conocidos como Objetos de Aprendizaje (OAs) en español o Learning Objects (LOs) en inglés. LOEP proporciona funcionalidades de gestión de usuarios y Objetos de Aprendizaje, asignaciones de revisiones, un conjunto de herramientas de evaluación (formularios en formato web y descargables, mecanismos de revisión por pares, ...) para evaluar Objetos de Aprendizaje conforme a varios modelos de evaluación formales, y material de formación para revisores y educadores."
+    new_to_loep: "¿Nuevo en LOEP?"
+  helpers:
+    submit:
+      create: "Crear %{model}"
+      update: "Actualizar %{model}"
+  los:
+    compare:
+      title: "Comparando los siguientes Objetos de Aprendizaje"
+    editing: "Editando Objeto de Aprendizaje"
+    name:
+      all: "Todos los Objetos de Aprendizaje"
+      mine: "Mis Objetos de Aprendizaje"
+      one: "Objeto de Aprendizaje"
+      plural: "Objetos de Aprendizaje"
+    new: "Nuevo Objeto de Aprendizaje"
+    form:
+      access_lo: "Haga click en la URL  que aparece a continuación para acceder al Objeto de Aprendizaje"
+      info_lo: "Información del Objeto de Aprendizaje"
+      select_los: "Selecciona los elementos incluidos en este Objeto de Aprendizaje"
+      selected_los: "Elementos incluidos en este Objeto de Aprendizaje"
+      technology_or_format: "Tecnología o Formato"
+    ranked:
+      title: "Objetos de Aprendizaje Rankeados"
+    search:
+      custom: "LOEP: Búsqueda Personalizada"
+      results: "Resultados de búsqueda"
+      search_evaluated_with: "Buscar Objetos de Aprendizaje evaluados con"
+      search_no_evaluated_with: "Buscar Objetos de Aprendizaje no evaluados con"
+      search_with: "Buscar Objetos de Aprendizaje con"
+      sql:
+        description: "Usar el valor de la caja de búsqueda como sentencia de consulta SQL"
+        example: "Por ejemplo: %{example}"
+      submit: "Buscar en LOEP"
+      title: "Buscar Objetos de Aprendizaje"
+    stats:
+      title: "Estadísticas para los siguientes Objetos de Aprendizaje"
+      metrics:  "Metricas (Puntuación media)"
+  menu:
+    actions:
+      amatching: "Emparejamiento Automático"
+      list: "Lista"
+      rlist: "Ranking"
+      add_new: "Añadir Nuevo"
+      search: "Buscar"
+    main: "Menu Principal"
+    home: "Inicio"
+    assignments: "Asignaciones"
+    learning_objects: "Objetos de Aprendizaje"
+    evaluations: "Evaluaciones"
+    users: "Usuarios"
+    applications: "Aplicaciones"
+    documentation: "Documentación"
+    surveys: "Encuestas"
+    settings: "Ajustes"
+  metrics:
+    name:
+      one: "Métrica"
+      plural: "Métricas"
+  login:
+    password: "Contraseña"
+    password_confirmation: "Confirmación de contraseña"
+    password_current_in_settings: "Contraseña actual (la contraseña es necesaria para confirmar tus cambios)"
+    password_in_settings: "Contraseña (dejar en blanco si no deseas cambiarla)"
+    password_forgot: "¿Olvidaste tu contraseña?"
+    password_reset_instructions: "Enviame instrucciones para reestablecer mi contraseña"
+    remember_me: "Recuérdame"
+    sign_in: "Iniciar sesión"
+    sign_out: "Cerrar sesión"
+    sign_up: "Regístrate"
+    username_or_email: "Nombre de usuario o Correo electrónico"
+  occupations:
+    education: "Educación (profesor, pedagogo, ...)"
+    technology: "Tecnología (desarrollador de contenidos educativos, soporte TIC, ...)"
+  registrations:
+    areas: "Áreas de interés"
+    cancel_account: "Cancelar mi cuenta"
+    field_expertise: "Campo de especialización"
+    language_all: "Todos los Idiomas"
+    language_preferred: "Idioma Preferido"
+    occupation: "Ocupación o campo de especialización"
+    super_admin_alert: "Tu eres el Super Administrador, no puedes cancelar tu cuenta."
+  scopes:
+    public: "Público"
+    private: "Privado"
+    protected: "Protegido"
+  scores:
+    name:
+      one: "Puntuación"
+      plural: "Puntuaciones"
+  settings:
+    title: "Ajustes"
+  surveys:
+    fill: "Rellenar Encuesta"
+    lori_15_items:
+      title: "Encuesta de valoración de los Items de LORI v1.5"
+      description: "El siguiente formulario pretende evaluar la importancia de los diferentes Items de LORI v1.5. En base a los resultados de esta encuesta, la métrica 'LORI WAM CW' es definida y sus puntuaciones son calculadas."
+      detailed_description: "El siguiente formulario pretende evaluar la importancia de los diferentes elementos o Items de LORI v1.5. En base a los resultados de esta encuesta, la métrica 'LORI WAM CW' es definida y sus puntuaciones son calculadas.</p><p>Para cada uno de los elementos, valore la importancia y valor que tiene para usted en relación a la calidad pedagógica en una escala de 0 a 10, siendo 0 sin valor y 10 extremadamente valioso."
+    submit: "Enviar Encuesta"
+    title: "Encuestas Disponibles"
+  tables:
+    paginate:
+      sFirst: "Primero"
+      sLast: "Último"
+      sNext: "Siguiente"
+      sPrevious: "Anterior"
+    sLengthMenu: "Mostrar %{select} elementos"
+    sInfo: "Mostrando del %{_START_} al %{_END_} de un total de %{_TOTAL_} elementos"
+    sInfoEmpty: "Mostrando 0 elementos"
+    sSearch: "Buscar"
+    sZeroRecords: "No se encontró ningún elemento"
+  tags:
+    add_a_tag: "añadir etiqueta"
+  users:
+    editing: "Editando usuario"
+    edit_profile: "Editar perfil"
+    message:
+      no_users: "No hay usuarios en la plataforma."
+    name:
+      one: "Usuario"
+      plural: "Usuarios"
+    reviewer:
+      one: "Revisor"
+      plural: "Revisores"
+      all: "Todos los Revisores"
+  words:
+    add_new: "Añadir nuevo"
+    age: "Edad"
+    all: "Todos"
+    applet:
+      one: "Applet"
+      plural: "Applets"
+    are_you_sure: "¿Estás seguro?"
+    audio:
+      one: "Audio"
+      plural: "Audios"
+    auth_token: "Token de Autenticación"
+    auth_tokens_active: "Tokens de Sesión Activos"
+    categories: "Categorias"
+    check: "Marcar"
+    back: "Volver"
+    birthday: "Fecha de nacimiento"
+    callback: "Callback"
+    cancel: "Cancelar"
+    compare: "Comparar"
+    completed_at: "Completado el"
+    completion_date: "Fecha de Terminación"
+    created_by: "%{model} creado por"
+    creation_date: "Fecha de Creación"
+    criterion:
+      one: "Criterio"
+      plural: "Criterios"
+    deadline: "Fecha Límite (Deadline)"
+    details: "Detalles"
+    description: "Descripción"
+    design: "Diseño"
+    document:
+      one: "Documento"
+      plural: "Documentos"
+    documentation: "Documentación"
+    edit: "Editar"
+    email: "Correo Electrónico"
+    engagement: "Motivación"
+    enriched_video:
+      one: "Video Enriquecido"
+      plural: "Videos Enriquecidos"
+    female: "Mujer"
+    flashcard:
+      one: "Flashcard"
+      plural: "Flashcards"
+    flash_object:
+      one: "Objecto Flash"
+      plural: "Objectos Flash"
+    gender: "Género"
+    image:
+      one: "Imagen"
+      plural: "Imágenes"
+    interactivity: "Interactividad"
+    language: "Idioma"
+    learning: "Aprendizaje"
+    male: "Hombre"
+    name: "Nombre"
+    no_evaluated: "No evaluado"
+    no_item_selected: "No has seleccionado ningún elemento."
+    no_resources_yet: "No hay %{resources} todavía."
+    ok: "Ok"
+    other: "Otro"
+    owner: "Dueño"
+    quality: "Calidad"
+    quiz:
+      one: "Cuestionario"
+      plural: "Cuestionarios"
+    remove: "Borrar"
+    repository: "Repositorio"
+    role: "Rol"
+    scope: "Ámbito"
+    statistics: "Estadísticas"
+    status: "Estado"
+    tags: "Etiquetas"
+    text:
+      one: "Texto"
+      plural: "Textos"
+    type: "Tipo"
+    unspecified : "Sin especificar"
+    update: "Actualizar"
+    url: "URL"
+    usability: "Usabilidad"
+    username: "Nombre de usuario"
+    video:
+      one: "Vídeo"
+      plural: "Vídeos"
+    view_all: "Ver Todos"
+    virtual_tour:
+      one: "Tour Virtual"
+      plural: "Tours Virtuales"
+    web:
+      one: "Web"
+      plural: "Webs"
+
+
