@@ -9,7 +9,7 @@ es:
     reject: "Rechazar"
     search: "Buscar"
     view: "Ver"
-    view_as_admin: "Ver como Admin"
+    view_as_admin: "Ver como Administrador"
     view_as_reviewer: "Ver como Revisor"
   applications:
     editing: "Editando Aplicación"
@@ -74,7 +74,7 @@ es:
       lo_url: "URL del Objeto de Aprendizaje"
       show: "Evaluación del OA %{lo} con %{evmethod}"
     message:
-      no_evaluations: "Todavía no has evaluado ningún Objeto de Aprendizaje.</p><p>Cuando evalues uno, la evaluación aparecerá en este panel."
+      no_evaluations: "Todavía no has evaluado ningún Objeto de Aprendizaje.</p><p>Cuando evalúes uno, la evaluación aparecerá en este panel."
     name:
       all: "Todas las Evaluaciones"
       his:
@@ -94,177 +94,177 @@ es:
     all:
       item_comments:
         name: "Comentarios Adicionales"
-        description: "Por favor, escriba aquí cualquier otra observación que considere pertinente y/o necesaria para esta evaluación"
+        description: "Por favor, escriba aquí cualquier otra observación que considere pertinente y/o necesaria para esta evaluación."
       item_score:
         name: "Puntuación Global"
-        description: "Opcionalmente, puede proponer una puntuación global entre 0.0 y 10.0 para este Objeto de Aprendizaje"
+        description: "De forma opcional, puede proponer una puntuación global entre 0.0 y 10.0 para este Objeto de Aprendizaje."
     form:
       available: "Métodos de Evaluación Disponibles"
       documentation: "Documentación de %{evmethod}"
     loem:
       item1:
-        name: "Meaningful Interactions"
+        name: "Interacciones Significativas"
         form:
-          a: "Interactions with the learning object are <b>not very meaningful</b>/gratuitous/minimal and are not significantly better than a text‐based medium"
-          b: "Interactions with the learning object are <b>somewhat meaningful</b> and provide something more than a text based medium"
-          c: "Interactions with the learning object are <b>meaningful</b> and permit the user to have a much greater understanding of the concept/topic than he/she would have if she used a text based medium"
+          a: "Las interacciones con el objeto de aprendizaje <b>no son muy significativas</b> o son mínimas y no son significativamente mejores que las de un medio basado en texto"
+          b: "Las interacciones con el objeto de aprendizaje <b>son algo significativas</b> y proporcionan algo más que un medio basado en texto"
+          c: "Las interacciones con el objeto de aprendizaje <b>son significativas</b> y permiten al usuario obtener una mayor compresión del concepto/tema que la que hubiese obtenido si hubiera usado un medio basado en texto"
       item2:
-        name: "Overall Control"
+        name: "Control General"
         form:
-          header: "The user has"
-          a: "Ability to move through instructional elements at own speed"
-          b: "Ability to redo or relearn component before moving on"
-          c: "Ability to make choice about the paths to take so that one can progress at own learning level"
+          header: "El usuario tiene"
+          a: "Capacidad para moverse a través de los elementos de instrucción a su propio ritmo"
+          b: "Capacidad para reintentar o reaprender un componente antes de continuar"
+          c: "Capacidad para tomar su propio camino de forma que pueda progresar conforme a su propio nivel de aprendizaje"
       item3:
-        name: "Multimedia adds learning value"
+        name: "Contenidos Multimedia"
         form:
-          a: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds little</b> to the learning process"
-          b: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds something</b> to the learning process"
-          c: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds significantly</b> to the learning process"
+          a: "El contenido multimedia (ej: gráficos, animaciones, videos, audios) del objeto de aprendizaje <b>añade poco valor</b> al proceso de aprendizaje"
+          b: "El contenido multimedia (ej: gráficos, animaciones, videos, audios) del objeto de aprendizaje <b>añade algo de valor</b> al proceso de aprendizaje"
+          c: "El contenido multimedia (ej: gráficos, animaciones, videos, audios) del objeto de aprendizaje <b>añade valor de forma significativa</b> al proceso de aprendizaje"
       item4:
-        name: "Consistency"
-        description: "Pages have consistent look and feel"
+        name: "Consistencia"
+        description: "Las páginas tienen una apariencia consistente"
         form:
           g1:
-            a: "<b>Few/no</b> pages have a consistent look and feel to it"
-            b: "<b>Some</b> pages have a consistent look and feel to it"
-            c: "<b>All/most</b> pages have a consistent look and feel to it"
+            a: "<b>Pocas (o ninguna)</b> páginas tienen una apariencia consistente"
+            b: "<b>Algunas</b> páginas tienen una apariencia consistente"
+            c: "<b>Todas o casi todas</b> las páginas tienen una apariencia consistente"
           g2:
-            a: "Text and visual components are in a consistent location <b>rarely/never</b>"
-            b: "Text and visual components are in a consistent location <b>sometimes</b>"
-            c: "Text and visual components are in a consistent location <b>always</b>"
+            a: "El texto y los componentes visuales están en una ubicación coherente <b>casi nunca/nunca</b>"
+            b: "El texto y los componentes visuales están en una ubicación coherente <b>algunas veces</b>"
+            c: "El texto y los componentes visuales están en una ubicación coherente <b>siempre</b>"
       item5:
-        name: "Layout"
-        description: "Clear and well organized"
+        name: "Disposición"
+        description: "Claridad y organización"
         form:
           g1:
-            a: "The organization of <b>few/no</b> pages is clear"
-            b: "The organization of <b>some</b> pages is clear"
-            c: "The organization of <b>most/all</b> pages is clear"
+            a: "La organización de <b>pocas (o ninguna)</b> páginas es clara"
+            b: "La organización de <b>algunas</b> páginas es clara"
+            c: "La organización de <b>todas/casi todas</b> las páginas es clara"
           g2:
-            a: "The pages are <b>very</b> cluttered"
-            b: "The pages are <b>somewhat</b> cluttered"
-            c: "The pages are <b>not at all</b> cluttered"
+            a: "Las páginas <b>están muy</b> desordenadas"
+            b: "Las páginas <b>están algo</b> desordenadas"
+            c: "Las páginas <b>no están nada</b> desordenadas"
           g3:
-            a: "<b>Few/No</b> page components are well placed and easy to see"
-            b: "<b>Some</b> page components are well placed and easy to see"
-            c: "<b>All</b> page components are well placed and easy to see"  
+            a: "<b>Pocos (o ningún)</b> componentes de la página están bien situados y son fáciles de ver"
+            b: "<b>Algunos</b> componentes de la página están bien situados y son fáciles de ver"
+            c: "<b>Todos</b> los componentes de la página están bien situados y son fáciles de ver"
       item6:
-        name: "Labeling"
-        description: "Title on menu buttons, words on clickable buttons, any labels used to guide navigation"
+        name: "Etiquetado"
+        description: "Título en los botones del menú, palabras en los botones clicables, etiquetas usadas para guiar la navegación"
         form:
           g1:
-            a: "Navigation labels are <b>confusing</b>"
-            b: "Navigation labels are <b>somewhat clear</b>"
-            c: "Navigation labels are <b>very clear</b>"
+            a: "Las etiquetas de navegación son <b>confusas</b>"
+            b: "Las etiquetas de navegación son <b>algo claras</b>"
+            c: "Las etiquetas de navegación son <b>muy claras</b>"
           g2:
-            a: "<b>Few/No</b> labels are easily understood by the user"
-            b: "<b>Some</b> navigation labels are easily understood by the user"
-            c: "<b>All/Most</b> navigation labels are easily understood by the user"
+            a: "<b>Pocas (o ninguna)</b> etiquetas de navegación son fácilmente entendibles por el usuario"
+            b: "<b>Algunas</b> etiquetas de navegación son fácilmente entendibles por el usuario"
+            c: "<b>Todas o casi todas</b> las etiquetas de navegación son fácilmente entendibles por el usuario"
       item7:
-        name: "Readability"
-        description: "Look of text"
+        name: "Legibilidad"
+        description: "Apariencia del texto"
         form:
-          header: "The text has"
-          a: "Text is easy to read (e.g., good font size and type, clear, not fuzzy)"
-          b: "Contrast between text and background is easy to read"
-          c: "Text is presented in short, concise segments"
-          d: "White space is used effectively"
+          header: ""
+          a: "El texto es fácil de leer (ej: tamaño y tipo de fuente apropiado, claro, no borroso)"
+          b: "El contraste entre el texto y el fondo es apropiado"
+          c: "El texto se presenta en segmentos cortos y concisos"
+          d: "El espaciado es apropiado"
       item8:
-        name: "Quality of Feedback"
-        description: "Refers to feedback given to user to help him/her progress through the learning object"
+        name: "Calidad del Feedback"
+        description: "Se refiere a la información dada al usuario para ayudarle a progresar a lo largo del objeto de aprendizaje"
         form:
-          header: "The feedback is"
-          a: "an appropriate amount for the user (not too much or too little)"
-          b: "well written with appropriate language for the user"
-          c: "appears when necessary and gives user adequate direction and information for progressing"
+          header: "El feedback"
+          a: "es una cantidad adecuada para el usuario (ni excesivo ni demasiado poco)"
+          b: "está bien escrito y con un lenguaje apropiado para el usuario"
+          c: "aparece cuando es necesario y le da al usuario información adecuada para progresar"
       item9:
-        name: "Attractive"
-        description: "Has modern, appealing look"
+        name: "Atractivo"
+        description: "Tiene un aspecto moderno y atractivo"
         form:
-          header: "The learning object has"
-          a: "Attractive select of colours"
-          b: "No long scrolling pages"
-          c: "Easy to read text"
-          d: "Attractive graphics"
-          e: "Modern interface"
-          f: "Looks like it was professional done"
+          header: "El objeto de aprendizaje"
+          a: "Tiene una selección atractiva de colores"
+          b: "No tiene páginas con barras de scroll/desplazamiento muy largas"
+          c: "Tiene textos fáciles de leer"
+          d: "Tiene gráficos atractivos"
+          e: "Tiene una interfaz moderna"
+          f: "Parece que ha sido hecho de forma profesional"
       item10:
-        name: "Graphics"
-        description: "Not video"
+        name: "Gráficos"
+        description: "No considerar vídeos"
         form:
-          a: "Graphics images are <b>low quality</b> with respect to resolution, size, and accuracy"
-          b: "Graphics images are <b>moderate quality</b> with respect to resolution, size, and accuracy"
-          c: "Graphics images are <b>high quality</b> with respect to resolution, size, and accuracy"
+          a: "Las imágenes gráficas son de <b>baja calidad</b> con respecto a resolución, tamaño y exactitud"
+          b: "Las imágenes gráficas son de <b>moderada calidad</b> con respecto a resolución, tamaño y exactitud"
+          c: "Las imágenes gráficas son de <b>alta calidad</b> con respecto a resolución, tamaño y exactitud"
       item11:
-        name: "Learning Mode"
+        name: "Modo de Aprendizaje"
         form:
-          header: "The learning object includes"
-          a: "videos"
-          b: "animations"
-          c: "audio"
-          d: "written text, hands"
-          e: "static graphical representations"
+          header: "El objeto de aprendizaje incluye"
+          a: "vídeos"
+          b: "animaciones"
+          c: "audios"
+          d: "texto escrito"
+          e: "representaciones gráficas estáticas"
       item12:
-        name: "Motivation"
+        name: "Motivación"
         form:
-          a: "Learning object interactions/theme/goals/tasks would <b>not be motivating/engaging</b> for the designated grade level"
-          b: "Learning object interactions/theme/goals/tasks would <b>be somewhat motivating/engaging</b> for the designated grade level"
-          c: "Learning object interactions/theme/goals/tasks would <b>be very motivating/engaging</b> for the designated grade level"    
+          a: "Las interacciones/tema/objetivos/tareas del objeto de aprendizaje <b>no son motivadoras</b> para el nivel académico designado"
+          b: "Las interacciones/tema/objetivos/tareas del objeto de aprendizaje <b>son algo motivadoras</b> para el nivel académico designado"
+          c: "Las interacciones/tema/objetivos/tareas del objeto de aprendizaje <b>son muy motivadoras</b> para el nivel académico designado"   
       item13:
-        name: "Natural to Use"
-        description: "Intuitiveness of the interface, easy of use"
+        name: "Usabilidad"
+        description: "Interfaz intuitiva, facilidad de uso"
         form:
-          a: "The tools for the user to control the interactive components are <b>not natural, do not make much sense, are not easy to find</b> on the screen and <b>are rarely/not natural to use</b>"
-          b: "The tools for the user to control the interactive components are <b>somewhat natural, make some sense, are somewhat easy to find</b> on the screen and <b>are sometimes natural to use</b>"
-          c: "The tools for the user to control the interactive components are <b>natural, make sense, are easy to find</b> on the screen and are <b>natural to use</b>"
+          a: "Las herramientas del usuario para controlar los componentes interactivos <b>no son intuitivas, no tienen mucho sentido, no son fáciles de encontrar</b> en la pantalla, y <b>no son (o rara vez son) fáciles de usar</b>"
+          b: "Las herramientas del usuario para controlar los componentes interactivos <b>son algo intuitivas, tienen cierto sentido, son relativamente fáciles de encontrar</b> en la pantalla, y <b>algunas veces son fáciles de usar</b>"
+          c: "Las herramientas del usuario para controlar los componentes interactivos <b>son intuitivas, tienen sentido, son fáciles de encontrar</b> en la pantalla, y <b>son fáciles de usar</b>"
       item14:
-        name: "Orientation"
-        description: "Does the user know where he/she is at all times?"
+        name: "Orientación"
+        description: "¿Sabe el usuario donde está en todo momento?"
         form:
           g1:
-            a: "The user <b>rarely/never</b> knows where they are"
-            b: "The user knows where they are at <b>some of the time</b>"
-            c: "The user knows where they are at <b>all times</b>"
+            a: "El usuario <b>rara vez/nunca</b> sabe donde está"
+            b: "El usuario sabe donde está <b>algunas veces</b>"
+            c: "El usuario sabe donde está <b>en todo momento</b>"
           g2:
-            a: "<b>Few/no</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present"
-            b: "<b>Some</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present, but not enough"
-            c: "<b>Sufficient</b> orienting features like breadcrumb navigation, menu highlighting, appropriate page titles, home, exit, previous, next buttons are present"
+            a: "El objeto de aprendizaje presenta <b>pocas (o ninguna)</b> funciones de orientación como navegación de migas de pan, resaltación de menús, títulos apropiados de página, botones de inicio, salida, anterior y siguiente"
+            b: "El objeto de aprendizaje presenta <b>algunas</b> funciones de orientación como navegación de migas de pan, resaltación de menús, títulos apropiados de página, botones de inicio, salida, anterior y siguiente, pero no son suficientes"
+            c: "El objeto de aprendizaje presenta <b>suficientes</b> funciones de orientación como navegación de migas de pan, resaltación de menús, títulos apropiados de página, botones de inicio, salida, anterior y siguiente"
           g3:
-            a: "Orienting features <b>are not in a consistent location</b>"
-            b: "Orienting features are in the same spot <b>sometimes</b>"
-            c: "Orienting features are in the same spot <b>always</b>"
+            a: "Las funciones de orientación <b>no están en una localización consistente</b>"
+            b: "Las funciones de orientación están en el mismo lugar <b>en algunas ocasiones</b>"
+            c: "Las funciones de orientación están en el mismo lugar <b>siempre</b>"
       item15:
-        name: "Navigation Cues"
-        description: "Breadcrumb paths, page numbering, coloured buttons to indicate change of state, pop‐up boxes or mouseovers" 
+        name: "Señales de navegación"
+        description: "Caminos de migas de pan, numeración de las páginas, botones de colores para indicar cambios de estado, pop-ups o tooltips" 
         form:
-          a: "<b>Few/No</b> navigational cues are present"
-          b: "<b>Some navigational cues</b> are present but more are needed"
-          c: "A <b>sufficient number</b> of navigation cues are present"
+          a: "<b>Pocas (o ninguna)</b> señales de navegación están presentes"
+          b: "<b>Algunas</b> señales de navegación están presentes pero necesitan añadirse más"
+          c: "<b>Suficientes</b> señales de navegación están presentes"
       item16:
-        name: "Instructions"
+        name: "Instrucciones"
         form:
           g1:
             a:
-              a: "The instructions are <b>confusing</b>"
-              b: "The <b>instructions are absent, but need to be added</b>"
+              a: "Las instrucciones son <b>confusas</b>"
+              b: "<b>No hay instrucciones, pero necesitan ser añadidas</b>"
             b:
-              a: "The instructions are <b>somewhat clear</b> (fairly well written, a bit long and fairly easy to understand but some confusion in spots)"
-              b: "Some instructions are present, but <b>more need to be added</b>"
+              a: "Las instrucciones son <b>relativamente claras</b> (bastante bien escritas y fáciles de entender, pero un poco largas y algo confusas en algunos puntos)"
+              b: "Hay algunas instrucciones, pero <b>necesitan añadirse más</b>"
             c:
-              a: "The instructions are <b>very clear</b> ( well written, concise and easily understood)"
-              b: "There are no instructions, but <b>it is obvious what needs to be done</b>"
+              a: "Las instrucciones son <b>muy claras</b> (bien escritas, fáciles de entender y concisas)"
+              b: "No hay instrucciones, pero <b>resulta obvio lo que hay que hacer</b>"
           g2:
-            a: "Text and visual components are in a consistent location <b>rarely/never</b>"
-            b: "Text and visual components are in a consistent location <b>sometimes</b>"
-            c: "Text and visual components are in a consistent location <b>always</b>"
+            a: "El texto y los componentes visuales están en una ubicación coherente <b>casi nunca/nunca</b>"
+            b: "El texto y los componentes visuales están en una ubicación coherente <b>algunas veces</b>"
+            c: "El texto y los componentes visuales están en una ubicación coherente <b>siempre</b>"
       item17:
-        name: "Appropriate Language Level"
-        description: "Appropriate for the user"
+        name: "Nivel de Lenguaje Apropiado"
+        description: "Apropiado para el usuario"
         form:
-          a: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>rarely/ none of the time</b>"
-          b: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>some of the time</b>"
-          c: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>all/most of the time</b>" 
+          a: "El lenguaje (palabras usadas, vocabulario, estructura de las oraciones) es apropiado para la edad, nivel de lectura y los intereses de los usuarios previstos <b>rara vez/nunca</b>"
+          b: "El lenguaje (palabras usadas, vocabulario, estructura de las oraciones) es apropiado para la edad, nivel de lectura y los intereses de los usuarios previstos <b>algunas veces</b>"
+          c: "El lenguaje (palabras usadas, vocabulario, estructura de las oraciones) es apropiado para la edad, nivel de lectura y los intereses de los usuarios previstos <b>siempre/la mayoría de las veces</b>"
     lori:
       item1:
         name: "Calidad de los contenidos"
@@ -343,17 +343,17 @@ es:
         shortname: "Diversión"
       item13:
         name: "Me gustaría usar objetos de aprendizaje como este otra vez"
-        shortname: "Reuso"
+        shortname: "Reutilización"
       item14:
         name: "¿Qué (si hubo algo) TE GUSTÓ del objeto de aprendizaje?"
       item15:
         name: "¿Qué (si hubo algo) NO TE GUSTÓ del objeto de aprendizaje?"
     Wbltt:
       item1:
-        name: "El objeto de aprendizaje fue facil de usar para mí"
+        name: "El objeto de aprendizaje fue fácil de usar para mí"
         shortname: "Usabilidad para profesores"
       item2:
-        name: "El objeto de aprendizaje fue facil de usar para los estudiantes"
+        name: "El objeto de aprendizaje fue fácil de usar para los estudiantes"
         shortname: "Usabilidad para estudiantes"
       item3:
         name: "Los estudiantes encontraron las instrucciones del objeto de aprendizaje claras y concisas"
@@ -365,8 +365,8 @@ es:
         name: "El objeto de aprendizaje mejoró el aprendizaje de los estudiantes"
         shortname: "Aprendizaje"
       item6:
-        name: "El objeto de aprendizaje me ayudó a clarificar el concepto (o conceptos) que estaba enseñando"
-        shortname: "Clarificación de conceptos"
+        name: "El objeto de aprendizaje me ayudó a aclarar el concepto (o conceptos) que estaba enseñando"
+        shortname: "Aclaración de conceptos"
       item7:
         name: "En general, el objeto de aprendizaje me fue beneficioso para enseñar"
         shortname: "Enseñanza"
@@ -416,7 +416,7 @@ es:
           b: "preguntas que no han sido rellenadas."
   frontpage:
     welcome: "Bienvenido a LOEP, la Plataforma de Evaluación de Objetos de Aprendizaje"
-    description: "Esta plataforma tiene como objetivo proporcionar a profesores y docentes un conjunto de herramientas para facilitar la evaluación de recursos educativos web pequeños y autocontenidos, conocidos como Objetos de Aprendizaje (OAs) en español o Learning Objects (LOs) en inglés. LOEP proporciona funcionalidades de gestión de usuarios y Objetos de Aprendizaje, asignaciones de revisiones, un conjunto de herramientas de evaluación (formularios en formato web y descargables, mecanismos de revisión por pares, ...) para evaluar Objetos de Aprendizaje conforme a varios modelos de evaluación formales, y material de formación para revisores y educadores."
+    description: "Esta plataforma tiene como objetivo proporcionar a profesores y docentes un conjunto de herramientas para fácilitar la evaluación de recursos educativos web pequeños y autocontenidos, conocidos como Objetos de Aprendizaje (OAs) en español o Learning Objects (LOs) en inglés. LOEP proporciona funcionalidades de gestión de usuarios y Objetos de Aprendizaje, asignaciones de revisiones, un conjunto de herramientas de evaluación (formularios en formato web y descargables, mecanismos de revisión por pares, ...) para evaluar Objetos de Aprendizaje conforme a varios modelos de evaluación formales, y material de formación para revisores y educadores."
     new_to_loep: "¿Nuevo en LOEP?"
   helpers:
     submit:
@@ -453,7 +453,7 @@ es:
       title: "Buscar Objetos de Aprendizaje"
     stats:
       title: "Estadísticas para los siguientes Objetos de Aprendizaje"
-      metrics:  "Metricas (Puntuación media)"
+      metrics:  "Métricas (Puntuación media)"
   menu:
     actions:
       amatching: "Emparejamiento Automático"
@@ -461,7 +461,7 @@ es:
       rlist: "Ranking"
       add_new: "Añadir Nuevo"
       search: "Buscar"
-    main: "Menu Principal"
+    main: "Menú Principal"
     home: "Inicio"
     assignments: "Asignaciones"
     learning_objects: "Objetos de Aprendizaje"
@@ -481,7 +481,7 @@ es:
     password_current_in_settings: "Contraseña actual (la contraseña es necesaria para confirmar tus cambios)"
     password_in_settings: "Contraseña (dejar en blanco si no deseas cambiarla)"
     password_forgot: "¿Olvidaste tu contraseña?"
-    password_reset_instructions: "Enviame instrucciones para reestablecer mi contraseña"
+    password_reset_instructions: "Envíame instrucciones para reestablecer mi contraseña"
     remember_me: "Recuérdame"
     sign_in: "Iniciar sesión"
     sign_out: "Cerrar sesión"
@@ -602,6 +602,7 @@ es:
     no_item_selected: "No has seleccionado ningún elemento."
     no_resources_yet: "No hay %{resources} todavía."
     ok: "Ok"
+    or: "O"
     other: "Otro"
     owner: "Dueño"
     quality: "Calidad"

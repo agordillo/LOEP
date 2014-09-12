@@ -118,9 +118,9 @@ en:
       item3:
         name: "Multimedia adds learning value"
         form:
-          a: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds little</b> to the learning process"
-          b: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds something</b> to the learning process"
-          c: "The multimedia content (e.g., graphics, animations, video, audio) of the learning object <b>adds significantly</b> to the learning process"
+          a: "The multimedia content (e.g., graphics, animations, videos, audios) of the learning object <b>adds little</b> to the learning process"
+          b: "The multimedia content (e.g., graphics, animations, videos, audios) of the learning object <b>adds something</b> to the learning process"
+          c: "The multimedia content (e.g., graphics, animations, videos, audios) of the learning object <b>adds significantly</b> to the learning process"
       item4:
         name: "Consistency"
         description: "Pages have consistent look and feel"
@@ -158,16 +158,16 @@ en:
             b: "Navigation labels are <b>somewhat clear</b>"
             c: "Navigation labels are <b>very clear</b>"
           g2:
-            a: "<b>Few/No</b> labels are easily understood by the user"
+            a: "<b>Few/No</b> navigation labels are easily understood by the user"
             b: "<b>Some</b> navigation labels are easily understood by the user"
             c: "<b>All/Most</b> navigation labels are easily understood by the user"
       item7:
         name: "Readability"
         description: "Look of text"
         form:
-          header: "The text has"
+          header: ""
           a: "Text is easy to read (e.g., good font size and type, clear, not fuzzy)"
-          b: "Contrast between text and background is easy to read"
+          b: "Contrast between text and background is appropriate"
           c: "Text is presented in short, concise segments"
           d: "White space is used effectively"
       item8:
@@ -212,8 +212,8 @@ en:
           b: "Learning object interactions/theme/goals/tasks would <b>be somewhat motivating/engaging</b> for the designated grade level"
           c: "Learning object interactions/theme/goals/tasks would <b>be very motivating/engaging</b> for the designated grade level"    
       item13:
-        name: "Natural to Use"
-        description: "Intuitiveness of the interface, easy of use"
+        name: "Usability"
+        description: "Intuitiveness of the interface, ease of use"
         form:
           a: "The tools for the user to control the interactive components are <b>not natural, do not make much sense, are not easy to find</b> on the screen and <b>are rarely/not natural to use</b>"
           b: "The tools for the user to control the interactive components are <b>somewhat natural, make some sense, are somewhat easy to find</b> on the screen and <b>are sometimes natural to use</b>"
@@ -239,7 +239,7 @@ en:
         description: "Breadcrumb paths, page numbering, coloured buttons to indicate change of state, pop‐up boxes or mouseovers" 
         form:
           a: "<b>Few/No</b> navigational cues are present"
-          b: "<b>Some navigational cues</b> are present but more are needed"
+          b: "<b>Some</b> navigational cues are present but more are needed"
           c: "A <b>sufficient number</b> of navigation cues are present"
       item16:
         name: "Instructions"
@@ -249,10 +249,10 @@ en:
               a: "The instructions are <b>confusing</b>"
               b: "The <b>instructions are absent, but need to be added</b>"
             b:
-              a: "The instructions are <b>somewhat clear</b> (fairly well written, a bit long and fairly easy to understand but some confusion in spots)"
+              a: "The instructions are <b>somewhat clear</b> (fairly well written and easy to understand, but a bit long and some confusion in spots)"
               b: "Some instructions are present, but <b>more need to be added</b>"
             c:
-              a: "The instructions are <b>very clear</b> ( well written, concise and easily understood)"
+              a: "The instructions are <b>very clear</b> (well written, easily understood and concise)"
               b: "There are no instructions, but <b>it is obvious what needs to be done</b>"
           g2:
             a: "Text and visual components are in a consistent location <b>rarely/never</b>"
@@ -262,9 +262,9 @@ en:
         name: "Appropriate Language Level"
         description: "Appropriate for the user"
         form:
-          a: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>rarely/ none of the time</b>"
-          b: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>some of the time</b>"
-          c: "The language (words used, vocabulary, sentence structure)  is appropriate for the age , reading level and interests of the expected users <b>all/most of the time</b>" 
+          a: "The language (words used, vocabulary, sentence structure) is appropriate for the age, reading level and interests of the expected users <b>rarely/none of the time</b>"
+          b: "The language (words used, vocabulary, sentence structure) is appropriate for the age, reading level and interests of the expected users <b>some of the time</b>"
+          c: "The language (words used, vocabulary, sentence structure) is appropriate for the age, reading level and interests of the expected users <b>all/most of the time</b>"
     lori:
       item1:
         name: "Content Quality"
@@ -602,6 +602,7 @@ en:
     no_item_selected: "You have not selected any item."
     no_resources_yet: "There are no %{resources} yet."
     ok: "Ok"
+    or: "OR"
     other: "Other"
     owner: "Owner"
     quality: "Quality"
