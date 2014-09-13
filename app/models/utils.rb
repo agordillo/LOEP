@@ -21,7 +21,7 @@ class Utils
     lIndependent = Language.find_by_code("lanin")
 
     #Get all languages (but other)
-    languages = Language.all.map{ |l| [(translate ? l.translated_name : l.name),l.id] }.sort_by{ |l| l[0].downcase }.reject{|l| l[1]==lOther.id or l[1]==lIndependent.id}
+    languages = Language.all.reject{|l| [lOther.id,lIndependent.id].include? l.id}.map{ |l| [(translate ? l.translated_name : l.name),l.id] }.sort_by{ |l| l[0].downcase }
 
     if addLIndependent
       languages = languages.push([lIndependent.translated_name,lIndependent.id])
