@@ -41,7 +41,7 @@ module LOEP
     # rails will fallback to config.i18n.default_locale translation
     config.i18n.fallbacks = true
     # rails will fallback to en, no matter what is set as config.i18n.default_locale
-    config.i18n.fallbacks = [:en]
+    # config.i18n.fallbacks = [:en]
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"

@@ -1,0 +1,9 @@
+# Used with rake i18n:missing_keys
+
+en:
+- "activerecord.*"
+- "devise.*"
+- "errors.*"
+- "faker.*"
+es:
+- "faker.*"
