@@ -1,6 +1,6 @@
 <div class="loep_form_wrapper">
   <% if iamAdmin? %>
-    <h2><%=t("users.editing")%>: <%=@user.name%></h2>
+    <h2><%=t("words.editing_model", :model => t("users.name.one")).humanize%>: <%=@user.name%></h2>
   <% else %>
     <h2><%=@user.name%></h2>
   <% end %>

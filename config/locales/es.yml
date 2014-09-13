@@ -12,7 +12,6 @@ es:
     view_as_admin: "Ver como Administrador"
     view_as_reviewer: "Ver como Revisor"
   applications:
-    editing: "Editando Aplicación"
     name:
       one: "Aplicación"
       plural: "Aplicaciones"
@@ -31,7 +30,6 @@ es:
       submit: "Generar Asignaciones Automáticamente"
     confirmation:
       mark_as_completed: "¿Estás seguro de que quieres marcar esta asignación como completada?"
-    editing: "Editando asignación"
     name:
       all: "Todas las Asignaciones"
       his:
@@ -441,7 +439,6 @@ es:
   los:
     compare:
       title: "Comparando los siguientes Objetos de Aprendizaje"
-    editing: "Editando Objeto de Aprendizaje"
     name:
       all: "Todos los Objetos de Aprendizaje"
       mine: "Mis Objetos de Aprendizaje"
@@ -553,7 +550,6 @@ es:
   tags:
     add_a_tag: "añadir etiqueta"
   users:
-    editing: "Editando usuario"
     edit_profile: "Editar perfil"
     message:
       no_users: "No hay usuarios en la plataforma."
@@ -579,6 +575,7 @@ es:
     auth_tokens_active: "Tokens de Sesión Activos"
     categories: "Categorias"
     check: "Marcar"
+    create_model: "Crear %{model}"
     back: "Volver"
     birthday: "Fecha de nacimiento"
     callback: "Callback"
@@ -600,6 +597,7 @@ es:
       plural: "Documentos"
     documentation: "Documentación"
     edit: "Editar"
+    editing_model: "Editando %{model}"
     email: "Correo Electrónico"
     engagement: "Motivación"
     enriched_video:
@@ -621,6 +619,7 @@ es:
     learning: "Aprendizaje"
     male: "Hombre"
     name: "Nombre"
+    new_model: "Nuevo %{model}"
     no_evaluated: "No evaluado"
     no_item_selected: "No has seleccionado ningún elemento."
     no_resources_yet: "No hay %{resources} todavía."
@@ -645,6 +644,7 @@ es:
     type: "Tipo"
     unspecified : "Sin especificar"
     update: "Actualizar"
+    update_model: "Actualizar %{model}"
     url: "URL"
     usability: "Usabilidad"
     username: "Nombre de usuario"

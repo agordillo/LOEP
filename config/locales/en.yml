@@ -12,7 +12,6 @@ en:
     view_as_admin: "View as Admin"
     view_as_reviewer: "View as Reviewer"
   applications:
-    editing: "Editing Application"
     name:
       one: "Application"
       plural: "Applications"
@@ -31,7 +30,6 @@ en:
       submit: "Generate Assignments Automatically"
     confirmation:
       mark_as_completed: "Are you sure you want to mark as completed this assignment?"
-    editing: "Editing assignment"
     name:
       all: "All Assignments"
       his:
@@ -441,7 +439,6 @@ en:
   los:
     compare:
       title: "Comparing the following Learning Objects"
-    editing: "Editing Learning Object"
     name:
       all: "All Learning Objects"
       mine: "My Learning Objects"
@@ -553,7 +550,6 @@ en:
   tags:
     add_a_tag: "add a tag"
   users:
-    editing: "Editing user"
     edit_profile: "Edit profile"
     message:
       no_users: "There are no users in the platform."
@@ -579,6 +575,7 @@ en:
     auth_tokens_active: "Active Session Tokens"
     categories: "Categories"
     check: "Check"
+    create_model: "Create %{model}"
     back: "Back"
     birthday: "Date of birth"
     callback: "Callback"
@@ -600,6 +597,7 @@ en:
       plural: "Documents"
     documentation: "Documentation"
     edit: "Edit"
+    editing_model: "Editing %{model}"
     email: "Email"
     engagement: "Engagement"
     enriched_video:
@@ -621,6 +619,7 @@ en:
     learning: "Learning"
     male: "Male"
     name: "Name"
+    new_model: "New %{model}"
     no_evaluated: "No evaluated"
     no_item_selected: "You have not selected any item."
     no_resources_yet: "There are no %{resources} yet."
@@ -645,6 +644,7 @@ en:
     type: "Type"
     unspecified : "Unspecified"
     update: "Update"
+    update_model: "Update %{model}"
     url: "URL"
     usability: "Usability"
     username: "Username"

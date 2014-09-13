@@ -20,7 +20,12 @@
 
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
-    <%= f.submit :class => 'loep_button' %>
+    <%unless params["action"]=="edit"%>
+      <%submitButtonText = t("words.create_model", :model => t("applications.name.one"))%>
+    <% else %>
+      <%submitButtonText = t("words.update_model", :model => t("applications.name.one"))%>
+    <% end %>
+    <%= f.submit submitButtonText, :class => 'loep_button' %>
 
   <% end %>
 </div>
