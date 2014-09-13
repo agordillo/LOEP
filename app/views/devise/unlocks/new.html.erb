@@ -1,12 +1,12 @@
-<h2>Resend unlock instructions</h2>
+<h2><%=t("login.unlock_instructions_resend")%></h2>
 
 <%= form_for(resource, :as => resource_name, :url => unlock_path(resource_name), :html => { :method => :post }) do |f| %>
   <%= devise_error_messages! %>
 
-  <div><%= f.label :email %><br />
+  <div><%=t("words.email")%<br />
   <%= f.email_field :email, :autofocus => true %></div>
 
-  <div><%= f.submit "Resend unlock instructions" %></div>
+  <div><%= f.submit t("login.unlock_instructions_resend") %></div>
 <% end %>
 
 <%= render "devise/shared/links" %>

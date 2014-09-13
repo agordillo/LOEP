@@ -60,6 +60,22 @@ es:
     minuteText: 'Minutos'
     secondText: 'Segundos'
     timeText: 'Hora'
+  devise:
+    confirmation:
+      confirm_account: "Confirmar mi cuenta"
+      resend_instructions: "Reenviar instrucciones de confirmación"
+      welcome: "Bienvenido %{user}!"
+      a: "Puedes confirmar tu cuenta de correo mediante el siguiente enlace:"
+    reset_password:
+      change_my_password: "Cambiar mi contraseña"
+      hello: "Hola %{user}!"
+      a: "Alguien ha solicitado un enlace para cambiar tu contraseña. Puedes hacer esto mediante el siguiente enlace."
+      b: "Si tu no solicitaste esto, por favor ignora este correo electrónico."
+      c: "Tu contraseña no cambiará hasta que no accedas al enlace anterior y crees una nueva."
+    unlock:
+      unlock_account: "Desbloquer mi cuenta"
+      a: "Tu cuenta ha sido bloqueada debido a un número excesivo de intentos fallidos de inicio de sesión."
+      b: "Haga click en el siguiente enlace para desbloquear su cuenta:"
   dialog:
     ok: "Ok"
     cancel: "Cancelar"
@@ -476,16 +492,23 @@ es:
       one: "Métrica"
       plural: "Métricas"
   login:
+    confirmation_instructions: "¿No has recibido las instrucciones de confirmación?"
     password: "Contraseña"
+    password_change: "Cambia tu contraseña"
     password_confirmation: "Confirmación de contraseña"
     password_current_in_settings: "Contraseña actual (la contraseña es necesaria para confirmar tus cambios)"
     password_in_settings: "Contraseña (dejar en blanco si no deseas cambiarla)"
+    password_new: "Nueva contraseña"
+    password_new_confirmation: "Confirmar nueva contraseña"
     password_forgot: "¿Olvidaste tu contraseña?"
     password_reset_instructions: "Envíame instrucciones para reestablecer mi contraseña"
     remember_me: "Recuérdame"
     sign_in: "Iniciar sesión"
+    sign_in_with: "Iniciar sesión con %{provider}"
     sign_out: "Cerrar sesión"
     sign_up: "Regístrate"
+    unlock_instructions: "¿No has recibido las instrucciones para desbloquear la cuenta?"
+    unlock_instructions_resend: "Reenviar instrucciones para desbloquear la cuenta"
     username_or_email: "Nombre de usuario o Correo electrónico"
   occupations:
     education: "Educación (profesor, pedagogo, ...)"

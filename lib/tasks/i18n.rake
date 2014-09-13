@@ -1,6 +1,7 @@
 # Fetched from: http://github.com/koppen/i18n_missing_keys.git
 
 namespace :i18n do
+  #Usage example bundle exec rake i18n:missing_keys
   desc "Find and list translation keys that do not exist in all locales"
   task :missing_keys => :environment do
     finder = MissingKeysFinder.new(I18n.backend)

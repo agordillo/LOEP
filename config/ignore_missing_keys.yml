@@ -6,4 +6,6 @@ en:
 - "errors.*"
 - "faker.*"
 es:
+- "activerecord.*"
 - "faker.*"
+- "helpers.*"

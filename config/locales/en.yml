@@ -63,6 +63,7 @@ en:
   devise:
     confirmation:
       confirm_account: "Confirm my account"
+      resend_instructions: "Resend confirmation instructions"
       welcome: "Welcome %{user}!"
       a: "You can confirm your account email through the link below:"
     reset_password:
@@ -491,6 +492,7 @@ en:
       one: "Metric"
       plural: "Metrics"
   login:
+    confirmation_instructions: "Didn't receive confirmation instructions?"
     password: "Password"
     password_change: "Change your password"
     password_confirmation: "Password confirmation"
@@ -502,8 +504,11 @@ en:
     password_reset_instructions: "Send me reset password instructions"
     remember_me: "Remember me"
     sign_in: "Sign in"
+    sign_in_with: "Sign in with %{provider}"
     sign_out: "Sign out"
     sign_up: "Sign up"
+    unlock_instructions: "Didn't receive unlock instructions?"
+    unlock_instructions_resend: "Resend unlock instructions"
     username_or_email: "Username or Email"
   occupations:
     education: "Education (teacher, pedagogue, ...)"
