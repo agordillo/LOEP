@@ -152,6 +152,10 @@ class Lo < ActiveRecord::Base
     self.scores.where("metric_id in (?)", Metric.allc.map{|m| m.id})
   end
 
+  def readable_scope
+    I18n.t("scopes."+self.scope.downcase) unless self.scope.nil?
+  end
+
 
   #######################
   # Get extended LO Data

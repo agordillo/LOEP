@@ -12,12 +12,16 @@ es:
     view_as_admin: "Ver como Administrador"
     view_as_reviewer: "Ver como Revisor"
   applications:
+    actions:
+      add_new: "Añadir Nueva"
     name:
       one: "Aplicación"
       plural: "Aplicaciones"
       mine: "Mis Aplicaciones"
     new: "Registrar nueva Aplicación"
   assignments:
+    actions:
+      add_new: "Añadir Nueva"
     automatic:
       title: "Generación Automática de Asignaciones"
       description: "Los Objetos de Aprendizaje seleccionados serán asignados entre todos los revisores seleccionados, tomando en consideración los criterios elegidos en el formulario, el tipo de Objeto de Aprendizaje y el perfil del revisor."
@@ -437,6 +441,8 @@ es:
       create: "Crear %{model}"
       update: "Actualizar %{model}"
   los:
+    actions:
+      add_new: "Añadir Nuevo"
     compare:
       title: "Comparando los siguientes Objetos de Aprendizaje"
     name:
@@ -488,6 +494,16 @@ es:
     name:
       one: "Métrica"
       plural: "Métricas"
+  language:
+    de: "Alemán"
+    en: "Español"
+    es: "Inglés"
+    fr: "Francés"
+    hu: "Húngaro"
+    it: "Italiano"
+    lanin: "Independiente del idioma"
+    lanot: "Otro"
+    nl: "Holandés"
   login:
     confirmation_instructions: "¿No has recibido las instrucciones de confirmación?"
     password: "Contraseña"
@@ -518,6 +534,11 @@ es:
     language_preferred: "Idioma Preferido"
     occupation: "Ocupación o campo de especialización"
     super_admin_alert: "Tu eres el Super Administrador, no puedes cancelar tu cuenta."
+  roles:
+    superadmin: "Super Administrador"
+    admin: "Administrador"
+    reviewer: "Revisor"
+    user: "Usuario"
   scopes:
     public: "Público"
     private: "Privado"
@@ -561,7 +582,6 @@ es:
       plural: "Revisores"
       all: "Todos los Revisores"
   words:
-    add_new: "Añadir nuevo"
     age: "Edad"
     all: "Todos"
     applet:

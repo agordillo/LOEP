@@ -12,12 +12,16 @@ en:
     view_as_admin: "View as Admin"
     view_as_reviewer: "View as Reviewer"
   applications:
+    actions:
+      add_new: "Add New"
     name:
       one: "Application"
       plural: "Applications"
       mine: "My Applications"
     new: "Register new Application"
   assignments:
+    actions:
+      add_new: "Add New"
     automatic:
       title: "Automatic Assignments Generation"
       description: "The selected Learning Objects will be assigned among the selected reviewers, taking into consideration the criteria chosen in the form, the type of Learning Object and the profile of the reviewer."
@@ -437,6 +441,8 @@ en:
       create: "Create %{model}"
       update: "Update %{model}"
   los:
+    actions:
+      add_new: "Add New"
     compare:
       title: "Comparing the following Learning Objects"
     name:
@@ -488,6 +494,16 @@ en:
     name:
       one: "Metric"
       plural: "Metrics"
+  language:
+    de: "German"
+    en: "Spanish"
+    es: "English"
+    fr: "French"
+    hu: "Hungarian"
+    it: "Italian"
+    lanin: "Language independent"
+    lanot: "Other"
+    nl: "Dutch"
   login:
     confirmation_instructions: "Didn't receive confirmation instructions?"
     password: "Password"
@@ -518,6 +534,11 @@ en:
     language_preferred: "Preferred Language"
     occupation: "Occupation or field of expertise"
     super_admin_alert: "You are the SuperAdmin, you can't cancel your account."
+  roles:
+    superadmin: "Super Admin"
+    admin: "Admin"
+    reviewer: "Reviewer"
+    user: "User"
   scopes:
     public: "Public"
     private: "Private"
@@ -561,7 +582,6 @@ en:
       plural: "Reviewers"
       all: "All Reviewers"
   words:
-    add_new: "Add new"
     age: "Age"
     all: "All"
     applet:

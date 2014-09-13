@@ -5,8 +5,9 @@ class Utils
   def self.getOptionsForSelectLan(resource,options=nil)
     addUnespecified = false
     addLIndependent = false
+    translate = (!options.nil? and !options[:current_user].nil?)
 
-    if !resource.nil?
+    unless resource.nil?
       if resource.class.name == "User"
         addUnespecified = (resource.language.nil? and (options.nil? or options[:multiple]!=true))
       elsif resource.class.name == "Lo"
@@ -20,11 +21,10 @@ class Utils
     lIndependent = Language.find_by_code("lanin")
 
     #Get all languages (but other)
-    languages = Language.all.map{ |l| [l.name,l.id] }.sort_by{ |l| l[0].downcase }.reject{|l| l[1]==lOther.id}
+    languages = Language.all.map{ |l| [(translate ? l.translated_name : l.name),l.id] }.sort_by{ |l| l[0].downcase }.reject{|l| l[1]==lOther.id or l[1]==lIndependent.id}
 
-    if !addLIndependent
-      languages = languages.reject{|l| l[1]==lIndependent.id}
-    else
+    if addLIndependent
+      languages = languages.push([lIndependent.translated_name,lIndependent.id])
       languages = languages.sort{ |a,b|
         if a[1]==lIndependent.id
           -1
@@ -41,7 +41,7 @@ class Utils
     end
 
     #Add other at the end
-    languages.push([lOther.name,lOther.id])
+    languages.push([lOther.translated_name,lOther.id])
 
     languages
   end

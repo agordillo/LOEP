@@ -10,8 +10,18 @@ class Language < ActiveRecord::Base
     :case_sensitive => false
   }
 
+  validates :code,
+  :presence => true,
+  :uniqueness => {
+    :case_sensitive => false
+  }
+
   def sym
   	self.code.to_sym
+  end
+
+  def translated_name
+    I18n.t("language."+self.code, :default => self.name)
   end
 
 end

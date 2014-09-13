@@ -28,10 +28,10 @@
       <%= f.select :occupation, options_for_select(Utils.getOptionsForOccupation,resource.occupation || "Education"), {} ,{ :class=>'loep_input' } %>
 
       <p class="form_legend">* <%=t("registrations.language_preferred")%></p>
-      <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan(resource),resource.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
+      <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan(resource,{:current_user=>current_user}),resource.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 
       <p class="form_legend">* <%=t("registrations.language_all")%></p>
-      <%= f.select :languages, options_for_select(Utils.getOptionsForSelectLan(resource,{:multiple => true}),resource.getLanguages), {} ,{ :multiple => 'true' , :size => 6, :class=>'loep_input' } %>
+      <%= f.select :languages, options_for_select(Utils.getOptionsForSelectLan(resource,{:current_user=>current_user,:multiple => true}),resource.getLanguages), {} ,{ :multiple => 'true' , :size => 6, :class=>'loep_input' } %>
 
 
       <p class="form_legend"><%=t("registrations.areas")%></p>

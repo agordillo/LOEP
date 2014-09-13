@@ -12146,45 +12146,23 @@
 	// Scores Sorting
 	///////////////////
 
-    jQuery.fn.dataTableExt.oSort['scores-asc'] = function(a,b){
-      if(a.indexOf("No")!=-1){
-        return -1;
-      } else if(b.indexOf("No")!=-1){
-        return 1;
-      }
-      return jQuery.fn.dataTableExt.oSort['html-asc'](a,b);
-    };
+  jQuery.fn.dataTableExt.oSort['scores-asc'] = function(a,b){
+    if(a.indexOf("No")!=-1){
+      return -1;
+    } else if(b.indexOf("No")!=-1){
+      return 1;
+    }
+    return jQuery.fn.dataTableExt.oSort['html-asc'](a,b);
+  };
 
-    jQuery.fn.dataTableExt.oSort['scores-desc'] = function(a,b){
-      return jQuery.fn.dataTableExt.oSort['scores-asc'](a,b)*(-1);
-    };
+  jQuery.fn.dataTableExt.oSort['scores-desc'] = function(a,b){
+    return jQuery.fn.dataTableExt.oSort['scores-asc'](a,b)*(-1);
+  };
 
-	////////////////////
-	// Roles Sorting
-	///////////////////
-    jQuery.fn.dataTableExt.oSort['roles-asc'] = function(a,b){
-      return jQuery.fn.dataTableExt.oSort['roles-desc'](a,b)*(-1);
-    };
-
-    jQuery.fn.dataTableExt.oSort['roles-desc'] = function(a,b){
-      if(a==b){
-        return 0;
-      }
-
-      if(a=="SuperAdmin"){
-        return 1;
-      } else if(b=="SuperAdmin"){
-        return -1;
-      }
-
-      if(a=="Admin"){
-        return 1;
-      }else if(b=="Admin"){
-        return -1;
-      }
-
-      return 0;
-    };
+  ////////////////////
+  // Roles Sorting
+  ///////////////////
+  //This code its included in views/application/_common_js.html.erb because it needs to be reloaded in each request
 
 	////////////////////
 	// Automatic Type Detection (Not working right now)
