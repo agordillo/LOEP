@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
 
   #Wildcard route rescue
   def page_not_found
-    flash[:alert] = "This page does not exists"
+    flash[:alert] = I18n.t("dictionary.errors.page_not_found")
     redirect_to home_path, alert: flash[:alert]
   end
 
