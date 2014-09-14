@@ -13,7 +13,7 @@ class Score < ActiveRecord::Base
     if self.id.nil?
       scores = Score.where(:metric_id => self.metric.id, :lo_id => self.lo_id)
       if scores.length > 0
-        errors.add(:duplicated_score, ": This score already exists.")
+        errors.add(:duplicated_score, ": " + I18n.t("scores.message.error.duplicated"))
       else
         true
       end

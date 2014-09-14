@@ -116,6 +116,10 @@ es:
   applications:
     actions:
       add_new: "Añadir Nueva"
+    message:
+      success:
+        create: "La aplicación ha sido registrada con éxito en LOEP."
+        update: "La aplicación ha sido correctamente actualizada."
     name:
       one: "Aplicación"
       plural: "Aplicaciones"

@@ -13,22 +13,22 @@ class Lo < ActiveRecord::Base
   :presence => true,
   :length => { :in => 3..255 }
 
-  validates :language_id, :presence => { :message => "has to be specified" }
-  validates :language_id, :exclusion => { :in => [-1], :message => "has to be specified."}
+  validates :language_id, :presence => { :message => I18n.t("dictionary.errors.unspecified") }
+  validates :language_id, :exclusion => { :in => [-1], :message => I18n.t("dictionary.errors.unspecified")}
 
   validates :lotype,
   :presence => true,
-  :exclusion => { in: "Unspecified", message: "has to be specified" }
+  :exclusion => { in: "Unspecified", message: I18n.t("dictionary.errors.unspecified") }
 
   validates :technology,
   :presence => true,
-  :exclusion => { in: "Unspecified", message: "has to be specified" }
+  :exclusion => { in: "Unspecified", message: I18n.t("dictionary.errors.unspecified") }
 
   validates :scope,
   :presence => true
-  validates_inclusion_of :scope, :in => ["Private", "Protected", "Public"], :allow_nil => false, :message => ": Invalid scope value"
+  validates_inclusion_of :scope, :in => ["Private", "Protected", "Public"], :allow_nil => false, :message => ": " + I18n.t("dictionary.invalid")
 
-  validates :owner_id, :presence => { :message => "has to be specified" }
+  validates :owner_id, :presence => { :message => I18n.t("dictionary.errors.unspecified") }
 
   validate :checkRepositoryId
 
@@ -37,7 +37,7 @@ class Lo < ActiveRecord::Base
       #Create a new LO with repository and repository ID
       #Check if the ID is uniq for this repository
       if Lo.where(:repository => self.repository, :id_repository => self.id_repository).length > 0
-        errors.add(:repository, 'If the repository identifier is included, it must be unique')
+        errors.add(:repository, I18n.t("los.message.error.repository_id"))
         return
       end
     end

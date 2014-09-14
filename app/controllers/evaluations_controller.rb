@@ -90,7 +90,7 @@ class EvaluationsController < ApplicationController
     @evaluation = @evModel.new
     @evmethod = @evaluation.evmethod
     unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evmethod.name
-      @message = "Error: This evaluation method does not allow external evaluations."
+      @message = I18n.t("evaluations.message.error.external_evaluations_disabled")
       render :embed_empty, :layout => 'embed'
       return
     end
@@ -121,7 +121,7 @@ class EvaluationsController < ApplicationController
 
     if params[:embed]
       unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evaluation.evmethod.name
-        @message = "Error: This evaluation method does not allow external evaluations."
+        @message = I18n.t("evaluations.message.error.external_evaluations_disabled")
         render :embed_empty, :layout => 'embed'
         return
       end
@@ -140,14 +140,14 @@ class EvaluationsController < ApplicationController
       if @evaluation.errors.blank?
         if @evaluation.save
           unless params[:embed]
-            format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully submitted.' }
+            format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("evaluations.message.success.create") }
           else
             format.html { 
               render "embed_finish", :layout => 'embed' 
             }
           end
         else
-          format.html { renderError("An error occurred and the evaluation could not be created. Check all the fields and try again.",action) }
+          format.html { renderError(I18n.t("evaluations.message.error.generic_create"),action) }
         end
       else
         format.html { renderError(@evaluation.errors.full_messages,action) }
@@ -168,9 +168,9 @@ class EvaluationsController < ApplicationController
 
     respond_to do |format|
       if @evaluation.update_attributes(evaluationParams)
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The evaluation was successfully updated.' }
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("evaluations.message.success.update") }
       else
-        format.html { renderError("Evaluation cannot be updated. Wrong params.","edit") }
+        format.html { renderError(I18n.t("evaluations.message.error.generic_update"),"edit") }
       end
     end
   end
@@ -256,7 +256,7 @@ class EvaluationsController < ApplicationController
 
   def authenticate_session_token
     if (params["app_name"].nil? and params["app_id"].nil?) or params["session_token"].nil?
-      @message = "Error: Unauthorized"
+      @message = I18n.t("api.message.error.unauthorized")
       render :embed_empty, :layout => 'embed'
       return
     end
@@ -268,7 +268,7 @@ class EvaluationsController < ApplicationController
         @app = App.find_by_name(params["app_name"])
       end
     rescue
-      @message = "Error: Unauthorized"
+      @message = I18n.t("api.message.error.unauthorized")
       render :embed_empty, :layout => 'embed'
       return
     end
@@ -276,7 +276,7 @@ class EvaluationsController < ApplicationController
     @sessionToken = params["session_token"]
 
     if @app.nil? or !@app.isSessionTokenValid(@sessionToken) or @app.user.nil? or !@app.user.isAdmin?
-      @message = "Error: Unauthorized"
+      @message = I18n.t("api.message.error.unauthorized")
       render :embed_empty, :layout => 'embed'
       return
     end
@@ -292,7 +292,7 @@ class EvaluationsController < ApplicationController
     end
 
     if @lo.nil?
-      @message = "Error: This Learning Object does not exist."
+      @message = I18n.t("api.message.error.lo_unexists")
       render :embed_empty, :layout => 'embed'
       return
     end

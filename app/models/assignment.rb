@@ -27,7 +27,7 @@ class Assignment < ActiveRecord::Base
 
   def evmethods_blank
     if self.evmethod_id.blank?
-      errors.add(:evmethods, 'You should choose at least one evaluation method')
+      errors.add(:evmethods, I18n.t("assignments.message.error.at_least_one_evmethod"))
     else
       true
     end
@@ -39,7 +39,7 @@ class Assignment < ActiveRecord::Base
     if self.id.nil?
       assignments = Assignment.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
       if assignments.length > 0
-        errors.add(:duplicated_assignments, ": Some assignments haven't been created because there are assignments already created with the same Learning Object, Evaluation Method and Reviewer.")
+        errors.add(:duplicated_assignments, ": " + I18n.t("assignments.message.warning.duplicated"))
       else
         true
       end

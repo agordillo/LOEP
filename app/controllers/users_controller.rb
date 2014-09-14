@@ -66,7 +66,7 @@ class UsersController < ApplicationController
 
 		if params["role"]
 			if !@user.check_permissions_to_change_role(current_user, params["role"])
-				flash.now[:alert] = "Forbidden action"
+				flash.now[:alert] = I18n.t("dictionary.forbidden_action")
 				render :action => "edit"
 				return
 			else
@@ -79,7 +79,7 @@ class UsersController < ApplicationController
 
   		if @user.errors.blank?
   			@user.save
-  			flash[:notice] = "User updated succesfully"
+  			flash[:notice] = I18n.t("users.message.success.update")
   			redirect_to Utils.return_after_create_or_update(session)
   		else
   			flash.now[:alert] = @user.errors.full_messages.to_sentence

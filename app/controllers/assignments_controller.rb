@@ -118,15 +118,15 @@ class AssignmentsController < ApplicationController
     authorize! :create, @assignment
     
     if params[:selected_los].blank?
-      return renderError("You must select at least one Learning Object to create an assignment.",action)
+      return renderError(I18n.t("assignments.message.error.at_least_one_lo"),action)
     end
 
     if params[:selected_users].blank?
-      return renderError("You must select at least one Reviewer to create an assignment.",action)
+      return renderError(I18n.t("assignments.message.error.at_least_one_reviewer"),action)
     end
 
     if params[:selected_evmethods].blank?
-      return renderError("You must select at least one Evaluation Method to create an assignment.",action)
+      return renderError(I18n.t("assignments.message.error.at_least_one_evmethod"),action)
     end
 
     assignments = [];
@@ -144,12 +144,12 @@ class AssignmentsController < ApplicationController
 
       nepl = getNEPL
       if nepl.blank?
-        return renderError("You need to specify the number of evaluations per Learning Object","new_automatic")
+        return renderError(I18n.t("assignments.message.error.nepl_unspecified"),"new_automatic")
       end
 
       #LO-Reviewer Matching Criteria
       if params["mcriteria"].blank?
-        return renderError("Invalid LO-Reviewer Matching Criteria","new_automatic")
+        return renderError(I18n.t("assignments.message.error.mcriteria_unspecified"),"new_automatic")
       end
 
       @los = Lo.find(params[:selected_los])
@@ -188,7 +188,7 @@ class AssignmentsController < ApplicationController
     end
 
     if assignments.blank?
-      return renderError("An error ocurred in the automatic assignments generation",action)
+      return renderError(I18n.t("assignments.message.error.automatic_generic"),action)
     end
 
     #Include an error on the errors Array will cause the massive assignment creation to fail
@@ -224,10 +224,10 @@ class AssignmentsController < ApplicationController
           end
         end
         returnPath = (action=="new_automatic") ? Utils.return_after_create_or_update(session) : assignments_path
-        flash[:notice] = 'Assignments were successfully created.'
+        flash[:notice] = I18n.t("assignments.message.success.create")
         flash[:warning] = warnings.uniq
         format.html { redirect_to returnPath }
-        format.json { render json: "Process completed", status: :created, location: returnPath }
+        format.json { render json: I18n.t("dictionary.process_completed"), status: :created, location: returnPath }
       else
         format.html { return renderError(errors[0].full_messages,action) }
         format.json { render json: errors[0], status: :unprocessable_entity }
@@ -268,7 +268,7 @@ class AssignmentsController < ApplicationController
       if @assignment.update_attributes(params[:assignment])
         format.html { 
           redirect_to Utils.return_after_create_or_update(session),
-          notice: 'Assignment was successfully updated.' 
+          notice: I18n.t("assignments.message.success.update") 
         }
         format.json { head :no_content }
       else
@@ -327,7 +327,7 @@ class AssignmentsController < ApplicationController
       @assignment.markAsComplete
       @assignment.save!
     else
-      flash[:alert] = "The assignment cannot be mark as completed. You must evaluate the corresponding Learning Object before that."
+      flash[:alert] = I18n.t("assignments.message.error.mark_as_completed_without_evaluations")
     end
 
     respond_to do |format|

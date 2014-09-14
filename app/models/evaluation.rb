@@ -23,7 +23,7 @@ class Evaluation < ActiveRecord::Base
 
   def is_score_wrong
     if !self.score.nil? and !Utils.is_numeric?(self.score)
-      errors.add(:score, 'The proposed overall score is not valid. Please, check it.')
+      errors.add(:score, I18n.t("evaluations.message.error.overall_score"))
     else
       true
     end
@@ -35,7 +35,7 @@ class Evaluation < ActiveRecord::Base
     if self.id.nil? and !self.evmethod.allow_multiple_evaluations and !user.isAdmin?
       evaluations = Evaluation.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
       if evaluations.length > 0
-        errors.add(:duplicated_evaluation, ": The evaluation wasn't been created because this user had already evaluated this Learning Object.")
+        errors.add(:duplicated_evaluation, ": " + I18n.t("evaluations.message.error.duplicated"))
       else
         true
       end

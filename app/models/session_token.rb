@@ -16,9 +16,9 @@ class SessionToken < ActiveRecord::Base
 
   def check_auth_token
     if !self.auth_token.is_a? String
-      errors.add(:authentication_token, "invalid")
+      errors.add(:authentication_token, I18n.t("dictionary.invalid").downcase)
     elsif self.auth_token.length < 32
-      errors.add(:authentication_token, "is too short")
+      errors.add(:authentication_token, I18n.t("dictionary.errors.too_short"))
     else
       true
     end

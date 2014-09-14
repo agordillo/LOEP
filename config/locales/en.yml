@@ -42,18 +42,26 @@ en:
     enriched_video:
       one: &evideo "Enriched Video"
       plural: "Enriched Videos"
+    errors:
+      blank: "can't be blank"
+      name_blank: "Name can't be blank"
+      reserved_word: "is a reserved word"
+      too_short: "is too short"
+      unspecified: "has to be specified"
     female: "Female"
     flashcard:
       one: &flashcard "Flashcard"
       plural: "Flashcards"
     flash_object:
       one: "Flash Object"
-      plural: "Flash Objects"
+      plural: "Flash Objects" 
+    forbidden_action: "Forbidden action"
     gender: "Gender"
     image:
       one: &image "Image"
       plural: "Images"
     interactivity: "Interactivity"
+    invalid: "Invalid"
     language: "Language"
     learning: "Learning"
     male: "Male"
@@ -66,6 +74,7 @@ en:
     or: "OR"
     other: &other "Other"
     owner: "Owner"
+    process_completed: "Process completed"
     quality: "Quality"
     quiz:
       one: &quiz "Quiz"
@@ -113,9 +122,18 @@ en:
     view: "View"
     view_as_admin: "View as Admin"
     view_as_reviewer: "View as Reviewer"
+  api:
+    message:
+      error:
+        lo_unexists: "Error: This Learning Object does not exist."
+        unauthorized: "Error: Unauthorized"
   applications:
     actions:
       add_new: "Add New"
+    message:
+      success:
+        create: "The application was successfully registered in LOEP."
+        update: "The application was successfully updated."
     name:
       one: "Application"
       plural: "Applications"
@@ -136,6 +154,20 @@ en:
       submit: "Generate Assignments Automatically"
     confirmation:
       mark_as_completed: "Are you sure you want to mark as completed this assignment?"
+    message:
+      error:
+        at_least_one_evmethod: "You must select at least one Evaluation Method to create an assignment."
+        at_least_one_lo: "You must select at least one Learning Object to create an assignment."
+        at_least_one_reviewer: "You must select at least one Reviewer to create an assignment."
+        automatic_generic: "An error ocurred in the automatic assignments generation"
+        mark_as_completed_without_evaluations: "The assignment cannot be mark as completed. You must evaluate the corresponding Learning Object before that."
+        mcriteria_unspecified: "Invalid LO-Reviewer Matching Criteria"
+        nepl_unspecified: "You need to specify the number of evaluations per Learning Object"
+      success:
+        create: "Assignments were successfully created."
+        update: "Assignment was successfully updated."
+      warning:
+        duplicated: "Some assignments haven't been created because there are assignments already created with the same Learning Object, Evaluation Method and Reviewer."
     name:
       all: "All Assignments"
       his:
@@ -235,7 +267,16 @@ en:
       lo_url: "Learning Object URL"
       show: "Evaluation of the LO %{lo} with %{evmethod}"
     message:
+      error:
+        duplicated: "The evaluation hasn't been created because this user had already evaluated this Learning Object."
+        external_evaluations_disabled: "Error: This evaluation method does not allow external evaluations."
+        generic_create: "An error occurred and the evaluation could not be created. Check all the fields and try again."
+        generic_update: "Evaluation cannot be updated. Wrong params."
+        overall_score: "The proposed overall score is not valid. Please, check it."
       no_evaluations: "You haven't evaluated any Learning Object yet.</p><p> When you evaluate one, the evaluation will appear in this panel."
+      success:
+        create: "The evaluation was successfully submitted."
+        update: "The evaluation was successfully updated."
     name:
       all: "All Evaluations"
       his:
@@ -588,6 +629,12 @@ en:
       add_new: "Add New"
     compare:
       title: "Comparing the following Learning Objects"
+    message:
+      error:
+        repository_id: "If the repository identifier is included, it must be unique"
+      success:
+        create: "Lo was successfully created."
+        update: "Lo was successfully updated."
     name:
       all: "All Learning Objects"
       mine: "My Learning Objects"
@@ -660,6 +707,9 @@ en:
     surveys: "Surveys"
     settings: "Settings"
   metrics:
+    message:
+      error:
+        one_evmethod_at_least: "A metric should have at least one evaluation method."
     name:
       one: "Metric"
       plural: "Metrics"
@@ -675,6 +725,9 @@ en:
     nl: "Dutch"
   login:
     confirmation_instructions: "Didn't receive confirmation instructions?"
+    message:
+      error:
+        captcha: "There was an error with the recaptcha code below. Please re-enter the code and click submit."
     password: "Password"
     password_change: "Change your password"
     password_confirmation: "Password confirmation"
@@ -713,6 +766,9 @@ en:
     private: "Private"
     protected: "Protected"
   scores:
+    message:
+      error:
+        duplicated: "This score already exists"
     name:
       one: "Score"
       plural: "Scores"
@@ -743,6 +799,8 @@ en:
     edit_profile: "Edit profile"
     message:
       no_users: "There are no users in the platform."
+      success:
+        update: "User updated succesfully"
     name:
       one: "User"
       plural: "Users"

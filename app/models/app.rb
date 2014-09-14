@@ -18,7 +18,7 @@ class App < ActiveRecord::Base
 
   def name_blank
     if self.name.blank?
-      errors.add(:emethods, "Name can't be blank")
+      errors.add(:emethods, I18n.t("dictionary.errors.name_blank"))
     else
       true
     end
@@ -32,9 +32,9 @@ class App < ActiveRecord::Base
 
   def check_auth_token
     if !self.auth_token.is_a? String
-      errors.add(:authentication_token, "invalid")
+      errors.add(:authentication_token, I18n.t("dictionary.invalid").downcase)
     elsif self.auth_token.length < 32
-      errors.add(:authentication_token, "is too short")
+      errors.add(:authentication_token, I18n.t("dictionary.errors.too_short"))
     else
       true
     end

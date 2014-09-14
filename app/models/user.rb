@@ -24,15 +24,15 @@ class User < ActiveRecord::Base
   :uniqueness => {
     :case_sensitive => false
   },
-  :exclusion => { in: "all", message: "is a reserved word" }
+  :exclusion => { in: "all", message: I18n.t("dictionary.errors.reserved_word") }
 
-  validates :birthday, :presence => { :message => "can't be blank" }
-  validates :gender, :presence => { :message => "can't be blank" }
-  validates :roles, :presence => { :message => "can't be blank" }
-  validates :language_id, :presence => { :message => "can't be blank" }
-  validates :language_id, :exclusion => { :in => [-1], :message => "has to be specified."}
-  validates :occupation, :presence => { :message => "can't be blank" }
-  validates_inclusion_of :occupation, :in => ["Education", "Technology", "Other"], :allow_nil => false, :message => ": Invalid field of expertise"
+  validates :birthday, :presence => { :message => I18n.t("dictionary.errors.blank") }
+  validates :gender, :presence => { :message => I18n.t("dictionary.errors.blank") }
+  validates :roles, :presence => { :message => I18n.t("dictionary.errors.blank") }
+  validates :language_id, :presence => { :message => I18n.t("dictionary.errors.blank") }
+  validates :language_id, :exclusion => { :in => [-1], :message => I18n.t("dictionary.errors.unspecified")}
+  validates :occupation, :presence => { :message => I18n.t("dictionary.errors.blank") }
+  validates_inclusion_of :occupation, :in => ["Education", "Technology", "Other"], :allow_nil => false, :message => ": " + I18n.t("dictionary.invalid")
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'

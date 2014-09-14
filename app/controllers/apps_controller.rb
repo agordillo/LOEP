@@ -64,7 +64,7 @@ class AppsController < ApplicationController
 
     respond_to do |format|
       if @app.save 
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The application was successfully registered in LOEP.' }
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("applications.message.success.create") }
         format.json { render json: @app, status: :created, location: @app }
       else
         format.html { 
@@ -84,7 +84,7 @@ class AppsController < ApplicationController
 
     respond_to do |format|
       if @app.update_attributes(params[:app])
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'The application was successfully updated.' }
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("applications.message.success.update") }
         format.json { head :no_content }
       else
         format.html { 

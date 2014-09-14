@@ -158,7 +158,7 @@ class LosController < ApplicationController
 
     respond_to do |format|
       if @lo.save 
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully created.' }
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("los.message.success.create") }
         format.json { render json: @lo.extended_attributes, status: :created, location: @lo }
       else
         format.html { 
@@ -180,7 +180,7 @@ class LosController < ApplicationController
 
     respond_to do |format|
       if @lo.update_attributes(params[:lo])
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: 'Lo was successfully updated.' }
+        format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("los.message.success.update") }
         format.json { head @lo.extended_attributes }
       else
         format.html { 

@@ -17,7 +17,7 @@ class Metric < ActiveRecord::Base
 
   def evmethods_blank
     if self.evmethods.blank?
-      errors.add(:evmethods, 'A metric should have at least one evaluation method.')
+      errors.add(:evmethods, I18n.t("metrics.message.error.one_evmethod_at_least"))
     else
       true
     end
