@@ -42,6 +42,12 @@ es:
     enriched_video:
       one: &evideo "Video Enriquecido"
       plural: "Videos Enriquecidos"
+    errors:
+      blank: "no puede estar en blanco"
+      name_blank: "El nombre no puede estar en blanco"
+      reserved_word: "es una palabra reservada"
+      too_short: "es demasiado corto"
+      unspecified: "tiene que ser especificado"
     female: "Mujer"
     flashcard:
       one: &flashcard "Flashcard"
@@ -49,11 +55,13 @@ es:
     flash_object:
       one: "Objecto Flash"
       plural: "Objectos Flash"
+    forbidden_action: "Acción prohibida"
     gender: "Género"
     image:
       one: &image "Imagen"
       plural: "Imágenes"
     interactivity: "Interactividad"
+    invalid: "Inválido"
     language: "Idioma"
     learning: "Aprendizaje"
     male: "Hombre"
@@ -66,6 +74,7 @@ es:
     or: "O"
     other: &other "Otro"
     owner: "Dueño"
+    process_completed: "Proceso completado"
     quality: "Calidad"
     quiz:
       one: &quiz "Cuestionario"
@@ -113,6 +122,11 @@ es:
     view: "Ver"
     view_as_admin: "Ver como Administrador"
     view_as_reviewer: "Ver como Revisor"
+  api:
+    message:
+      error:
+        lo_unexists: "Error: Este Objeto de Aprendizaje no existe."
+        unauthorized: "Error: No Autorizado"
   applications:
     actions:
       add_new: "Añadir Nueva"
@@ -140,6 +154,20 @@ es:
       submit: "Generar Asignaciones Automáticamente"
     confirmation:
       mark_as_completed: "¿Estás seguro de que quieres marcar esta asignación como completada?"
+    message:
+      error:
+        at_least_one_evmethod: "Debes seleccionar al menos un método de evaluación para crear una asignación."
+        at_least_one_lo: "Debes seleccionar al menos un Objeto de Aprendizaje para crear una asignación."
+        at_least_one_reviewer: "Debes seleccionar al menos un revisor para crear una asignación."
+        automatic_generic: "Ocurrió un error en la generación automática de asignaciones"
+        mark_as_completed_without_evaluations: "La asignación no puede ser marcada como completada. Antes debes evaluar el correspodiente Objeto de Aprendizaje."
+        mcriteria_unspecified: "Criterio de emparejamiento OA-Revisor inválido"
+        nepl_unspecified: "Necesitas especificar el número de evaluaciones por Objeto de Aprendizaje"
+      success:
+        create: "Las asignaciones fueron creadas correctamente."
+        update: "La asignación fue actualizada correctamente."
+      warning:
+        duplicated: "Algunas asignaciones no fueron creadas porque ya se habian creado asignaciones con el mismo Objeto de Aprendizaje, Método de Evaluación y Revisor."
     name:
       all: "Todas las Asignaciones"
       his:
@@ -236,7 +264,16 @@ es:
       lo_url: "URL del Objeto de Aprendizaje"
       show: "Evaluación del OA %{lo} con %{evmethod}"
     message:
+      error:
+        duplicated: "La evaluación no fue creada porque este usuario ya había evaluado el Objeto de Aprendizaje."
+        external_evaluations_disabled: "Error: Este método de evaluación no admite evaluaciones externas."
+        generic_create: "Ocurrió un error y la evaluación no pudo ser creada. Comprueba todos los campos y vuelve a intentarlo."
+        generic_update: "La evaluación no pudo ser actualizada. Los parámetros eran incorrectos."
+        overall_score: "La puntuación global propuesta no es válida. Por favor, revisela."
       no_evaluations: "Todavía no has evaluado ningún Objeto de Aprendizaje.</p><p>Cuando evalúes uno, la evaluación aparecerá en este panel."
+      success:
+        create: "La evaluación fue enviada correctamente."
+        update: "La evaluación fue actualizada correctamente."
     name:
       all: "Todas las Evaluaciones"
       his:
@@ -589,6 +626,12 @@ es:
       add_new: "Añadir Nuevo"
     compare:
       title: "Comparando los siguientes Objetos de Aprendizaje"
+    message:
+      error:
+        repository_id: "Si se incluye el identificador del OA del repositorio, este debe ser único"
+      success:
+        create: "El Objeto de Aprendizaje se creó correctamente."
+        update: "El Objeto de Aprendizaje se actualizó correctamente."
     name:
       all: "Todos los Objetos de Aprendizaje"
       mine: "Mis Objetos de Aprendizaje"
@@ -661,6 +704,9 @@ es:
     surveys: "Encuestas"
     settings: "Ajustes"
   metrics:
+    message:
+      error:
+        one_evmethod_at_least: "Una métrica debe tener por lo menos un método de evaluación."
     name:
       one: "Métrica"
       plural: "Métricas"
@@ -676,6 +722,9 @@ es:
     nl: "Holandés"
   login:
     confirmation_instructions: "¿No has recibido las instrucciones de confirmación?"
+    message:
+      error:
+        captcha: "Hubo un error con el código captcha. Por favor, vuelve a introducir el código."
     password: "Contraseña"
     password_change: "Cambia tu contraseña"
     password_confirmation: "Confirmación de contraseña"
@@ -714,6 +763,9 @@ es:
     private: "Privado"
     protected: "Protegido"
   scores:
+    message:
+      error:
+        duplicated: "Esta puntuación ya existe"
     name:
       one: "Puntuación"
       plural: "Puntuaciones"
@@ -744,6 +796,8 @@ es:
     edit_profile: "Editar perfil"
     message:
       no_users: "No hay usuarios en la plataforma."
+      success:
+        update: "El usuario se actualizó correctamente"
     name:
       one: "Usuario"
       plural: "Usuarios"
