@@ -37,7 +37,7 @@ class Utils
     end
 
     if addUnespecified
-      languages.unshift([I18n.t("words.unspecified"),-1])
+      languages.unshift([I18n.t("dictionary.unspecified"),-1])
     end
 
     #Add other at the end
@@ -59,7 +59,7 @@ class Utils
   end
 
   def self.getOptionsForOccupation
-    [[I18n.t("occupations.education"),"Education"],[I18n.t("occupations.technology"),"Technology"],[I18n.t("words.other"),"Other"]]
+    [[I18n.t("occupations.education"),"Education"],[I18n.t("occupations.technology"),"Technology"],[I18n.t("dictionary.other"),"Other"]]
   end
 
 

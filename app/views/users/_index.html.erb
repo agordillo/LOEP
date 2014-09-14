@@ -25,8 +25,8 @@
       <% if showTools %>
         <th><input type="checkbox" class="checkallresources" autocomplete="off" value="all"/></th>
       <% end %>
-      <th><%=t("words.username")%></th>
-      <th><%=t("words.role")%></th>
+      <th><%=t("dictionary.username")%></th>
+      <th><%=t("dictionary.role")%></th>
       <th><%=t("actions.assign")%></th>
       <th></th>
       <th></th>
@@ -47,12 +47,12 @@
         </td>
         <td class="tdcenter tdedit">
           <% if current_user.compareRole > user.compareRole || current_user.id == user.id %>
-            <a href="<%=edit_user_path(user)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("words.edit")%></a>
+            <a href="<%=edit_user_path(user)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("dictionary.edit")%></a>
           <% end %>
         </td>
         <td class="tdcenter tddestroy">
           <% if current_user.compareRole > user.compareRole %>
-            <a href="<%=user_path(user)%>" data-confirm="<%=t("words.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.remove")%></a>
+            <a href="<%=user_path(user)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("dictionary.remove")%></a>
           <% end %>
         </td>
       </tr>
@@ -111,7 +111,7 @@
     $("#assign_users").click(function(){
       var res_ids = getSelectedResources();
       if(res_ids.length===0){
-        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
+        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/assignments/new",[["user_ids", res_ids]]);

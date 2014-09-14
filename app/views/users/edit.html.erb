@@ -1,16 +1,16 @@
 <div class="loep_form_wrapper">
   <% if iamAdmin? %>
-    <h2><%=t("words.editing_model", :model => t("users.name.one")).humanize%>: <%=@user.name%></h2>
+    <h2><%=t("dictionary.editing_model", :model => t("users.name.one")).humanize%>: <%=@user.name%></h2>
   <% else %>
     <h2><%=@user.name%></h2>
   <% end %>
 
   <%= form_for @user do |f| %>
-      <p class="form_legend"><%=t("words.username")%></p>
+      <p class="form_legend"><%=t("dictionary.username")%></p>
       <%= f.text_field :name, :class=>'loep_input' %>
 
       <% if iamSuperAdmin? || (iamAdmin? and !isAdmin?(@user)) %>
-        <p class="form_legend"><%=t("words.role")%></p>
+        <p class="form_legend"><%=t("dictionary.role")%></p>
         <select id="user_role" name="role">
           <option value="SuperAdmin" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "SuperAdmin")%> <%="selected=true" if @user.role=="SuperAdmin"%>><%=t("roles.superadmin")%></option>
           <option value="Admin" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "Admin")%> <%="selected=true" if @user.role=="Admin"%>><%=t("roles.admin")%></option>
@@ -19,16 +19,16 @@
         </select>
       <% end %>
 
-      <p class="form_legend"><%=t("words.email")%></p>
+      <p class="form_legend"><%=t("dictionary.email")%></p>
       <%= f.email_field :email, :class=>'loep_input' %>
 
-      <p class="form_legend"><%=t("words.birthday")%></p>
+      <p class="form_legend"><%=t("dictionary.birthday")%></p>
       <%=text_field_tag "user[birthday]",@user.readable_birthday, :class=>'loep_input', :id=>"birthday_datepicker" %>
 
-      <p class="form_legend"><%=t("words.gender")%></p>
+      <p class="form_legend"><%=t("dictionary.gender")%></p>
       <div class="gender_buttons">
-        <%= f.radio_button :gender, 1 %><span class="gender_label"><%=t("words.male")%></span>
-        <%= f.radio_button :gender, 2 %><span class="gender_label"><%=t("words.female")%></span>
+        <%= f.radio_button :gender, 1 %><span class="gender_label"><%=t("dictionary.male")%></span>
+        <%= f.radio_button :gender, 2 %><span class="gender_label"><%=t("dictionary.female")%></span>
       </div>
 
       <p class="form_legend">* <%=t("registrations.occupation")%></p>
@@ -44,7 +44,7 @@
       <input name="user[tag_list]" id="tags" value="<%=@user.tag_list.join(",")%>"/>
 
       <p class="form_before_button">&nbsp;</p>
-      <%= f.submit t("words.update"), :class => 'loep_button update_button' %>
+      <%= f.submit t("dictionary.update"), :class => 'loep_button update_button' %>
   <% end %>
 
   </br>

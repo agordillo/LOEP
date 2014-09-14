@@ -9,26 +9,26 @@
   <% end %>
   <p class="space_medium"></p>
 
-  <p class="show_legend"><%=t("words.username")%></p>
+  <p class="show_legend"><%=t("dictionary.username")%></p>
   <p class="show_value"><%=@user.name%></p>
 
-  <p class="show_legend"><%=t("words.role")%></p>
+  <p class="show_legend"><%=t("dictionary.role")%></p>
   <p class="show_value"><%=@user.readable_role%></p>
 
-  <p class="show_legend"><%=t("words.email")%></p>
+  <p class="show_legend"><%=t("dictionary.email")%></p>
   <p class="show_value"><%=@user.email%></p>
 
-  <p class="show_legend"><%=t("words.birthday")%></p>
+  <p class="show_legend"><%=t("dictionary.birthday")%></p>
   <p class="show_value"><%=@user.readable_birthday%></p>
 
-  <p class="show_legend"><%=t("words.age")%></p>
+  <p class="show_legend"><%=t("dictionary.age")%></p>
   <p class="show_value"><%=@user.age%></p>
 
-  <p class="show_legend"><%=t("words.gender")%></p>
+  <p class="show_legend"><%=t("dictionary.gender")%></p>
   <% if @user.gender == 1 %>
-    <p class="show_value"><%=t("words.male")%></p>
+    <p class="show_value"><%=t("dictionary.male")%></p>
   <% elsif @user.gender == 2 %>
-    <p class="show_value"><%=t("words.female")%></p>
+    <p class="show_value"><%=t("dictionary.female")%></p>
   <% end %>
 
   <p class="show_legend"><%=t("registrations.field_expertise")%></p>

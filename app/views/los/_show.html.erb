@@ -3,7 +3,7 @@
   
   <% if iamAdmin? %>
     <%= link_to t("actions.view_as_reviewer"), rlo_path(@lo) %> |
-    <%= link_to t("words.edit"), edit_lo_path(@lo) %> |
+    <%= link_to t("dictionary.edit"), edit_lo_path(@lo) %> |
     <a href="<%=new_assignment_path_for(@lo.id,nil)%>"><%=t("actions.add_assignment")%></a> |
     <a href="<%=download_path(@lo,"xlsx")%>"><%=t("actions.download")%></a> |
     <a href="<%=download_evs_path(@lo,"xlsx")%>"><%=t("actions.download_evaluations")%></a>

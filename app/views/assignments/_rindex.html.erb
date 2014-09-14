@@ -15,8 +15,8 @@
       <th><%=t("users.reviewer.one")%></th>
       <% end %>
       <th><%=t("evmethods.name.short.one")%></th>
-      <th><%=t("words.status")%></th>
-      <th><%=t("words.deadline")%></th>
+      <th><%=t("dictionary.status")%></th>
+      <th><%=t("dictionary.deadline")%></th>
       <% if showEvaluationButton %>
         <th></th>
         <th></th>
@@ -53,14 +53,14 @@
           </td>
           <td class="tdcenter">
             <%if assignment.status == "Pending" and can?(:complete, assignment) %>
-              <%= link_to complete_path(assignment), :data => { :confirm => t("assignments.confirmation.mark_as_completed"), :ok_button => t("words.wyes"), :cancel_button => t("words.wno")}, :method => :complete do %>
-                  <span class="glyphicon glyphicon-ok"></span> <%=t("words.check")%>
+              <%= link_to complete_path(assignment), :data => { :confirm => t("assignments.confirmation.mark_as_completed"), :ok_button => t("dictionary.wyes"), :cancel_button => t("dictionary.wno")}, :method => :complete do %>
+                  <span class="glyphicon glyphicon-ok"></span> <%=t("dictionary.check")%>
               <% end %>
             <% end %>
           </td>
           <td class="tdcenter">
             <%if assignment.status == "Pending" and can?(:reject, assignment) %>
-              <%= link_to reject_path(assignment), :data => { :confirm => t("words.are_you_sure"), :ok_button => t("words.wyes"), :cancel_button => t("words.wno") }, :method => :reject do %>
+              <%= link_to reject_path(assignment), :data => { :confirm => t("dictionary.are_you_sure"), :ok_button => t("dictionary.wyes"), :cancel_button => t("dictionary.wno") }, :method => :reject do %>
                   <span class="glyphicon glyphicon-remove"></span> <%=t("actions.reject")%>
               <% end %>
             <% end %>

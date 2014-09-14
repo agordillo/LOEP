@@ -1,4 +1,106 @@
 es:
+  #'Dictionary' debe ser el primer bloque.
+  dictionary:
+    age: "Edad"
+    all: "Todos"
+    applet:
+      one: "Applet"
+      plural: "Applets"
+    are_you_sure: "¿Estás seguro?"
+    audio:
+      one: &audio "Audio"
+      plural: "Audios"
+    auth_token: "Token de Autenticación"
+    auth_tokens_active: "Tokens de Sesión Activos"
+    categories: "Categorias"
+    check: "Marcar"
+    create_model: "Crear %{model}"
+    back: "Volver"
+    birthday: "Fecha de nacimiento"
+    callback: "Callback"
+    cancel: "Cancelar"
+    compare: "Comparar"
+    completed_at: "Completado el"
+    completion_date: "Fecha de Terminación"
+    created_by: "%{model} creado por"
+    creation_date: "Fecha de Creación"
+    criterion:
+      one: "Criterio"
+      plural: "Criterios"
+    deadline: "Fecha Límite (Deadline)"
+    details: "Detalles"
+    description: "Descripción"
+    design: "Diseño"
+    document:
+      one: "Documento"
+      plural: "Documentos"
+    documentation: "Documentación"
+    edit: "Editar"
+    editing_model: "Editando %{model}"
+    email: "Correo Electrónico"
+    engagement: "Motivación"
+    enriched_video:
+      one: &evideo "Video Enriquecido"
+      plural: "Videos Enriquecidos"
+    female: "Mujer"
+    flashcard:
+      one: &flashcard "Flashcard"
+      plural: "Flashcards"
+    flash_object:
+      one: "Objecto Flash"
+      plural: "Objectos Flash"
+    gender: "Género"
+    image:
+      one: &image "Imagen"
+      plural: "Imágenes"
+    interactivity: "Interactividad"
+    language: "Idioma"
+    learning: "Aprendizaje"
+    male: "Hombre"
+    name: "Nombre"
+    new_model: "Nuevo %{model}"
+    no_evaluated: "No evaluado"
+    no_item_selected: "No ha seleccionado ningún elemento."
+    no_resources_yet: "No hay %{resources} todavía."
+    ok: "Ok"
+    or: "O"
+    other: &other "Otro"
+    owner: "Dueño"
+    quality: "Calidad"
+    quiz:
+      one: &quiz "Cuestionario"
+      plural: "Cuestionarios"
+    remove: "Borrar"
+    repository: "Repositorio"
+    role: "Rol"
+    scope: "Ámbito"
+    statistics: "Estadísticas"
+    status: "Estado"
+    tags: "Etiquetas"
+    text:
+      one: &text "Texto"
+      plural: "Textos"
+    type: "Tipo"
+    unspecified: &unspecified "Sin especificar"
+    update: "Actualizar"
+    update_model: "Actualizar %{model}"
+    url: "URL"
+    usability: "Usabilidad"
+    username: "Nombre de usuario"
+    video:
+      one: &video "Vídeo"
+      plural: "Vídeos"
+    view_all: "Ver Todos"
+    virtual_tour:
+      one: &vtour "Tour Virtual"
+      plural: "Tours Virtuales"
+    web:
+      one: &web "Web"
+      plural: "Webs"
+    wno: &no "No"
+    wyes: &yes "Sí"
+
+  #Resto de los bloques (ordenados alfabeticamente).
   actions:
     add_assignment: "Añadir Asignación"
     assign : "Asignar"
@@ -54,6 +156,44 @@ es:
       pending:  "Pendiente"
       rejected: "Rechazada"
       uncompleted: "Incompleta"
+  constants:
+    tags:
+        - "Arte"
+        - "Astronomía"
+        - "Astrología"
+        - "Biología"
+        - "Química"
+        - "Informática"
+        - "Educación para la ciudadanía"
+        - "Lenguas clásicas"
+        - "Matemáticas"
+        - "Musica"
+        - "Física"
+        - "Geografía"
+        - "Geología"
+        - "Ingeniería"
+        - "Economía"
+        - "Humanidades"
+        - "Historia"
+        - "Literatura"
+        - "Filosofía"
+        - "Educación Física"
+        - "Ciencias Naturales"
+        - "Ingeniería del Software"
+        - "Tecnología"
+        - "Idiomas"
+        - "Ciencias Sociales"
+
+        - "Educación Preescolar"
+        - "Educación Primaria"
+        - "Educación Secundaria"
+        - "Educación Universitaria"
+        - "Formación Profesional"
+
+        - "Aprendizaje potenciado por la tecnología"
+        - "Aprendizaje basado en Juegos"
+        - "Objetos de Aprendizaje"
+        - "OA"
   datepicker:
     closeText: 'Ok'
     currentText: 'Hoy'
@@ -454,7 +594,7 @@ es:
     form:
       access_lo: "Haga click en la URL  que aparece a continuación para acceder al Objeto de Aprendizaje"
       info_lo: "Información del Objeto de Aprendizaje"
-      select_los: "Selecciona los elementos incluidos en este Objeto de Aprendizaje"
+      select_los: "Seleccione los elementos que incluye este Objeto de Aprendizaje"
       selected_los: "Elementos incluidos en este Objeto de Aprendizaje"
       technology_or_format: "Tecnología o Formato"
     ranked:
@@ -473,6 +613,32 @@ es:
     stats:
       title: "Estadísticas para los siguientes Objetos de Aprendizaje"
       metrics:  "Métricas (Puntuación media)"
+    technology_or_format:
+      unspecified: *unspecified
+      html: "HTML"
+      flash: "Flash"
+      japplet: "Applet de Java"
+      file: "Archivo (pdf,doc,jpg,etc.)"
+      analog: "Analógico"
+      other: *other
+    types:
+      unspecified: *unspecified
+      text: *text
+      image: *image
+      video: *video
+      audio: *audio
+      web: *web
+      quiz: *quiz
+      document: "Documento (pdf,doc)"
+      slideshow: "Presentación de diapositivas"
+      veslideshow: "Presentación ViSH Editor"
+      flashcard: *flashcard
+      vtour: *vtour
+      evideo: *evideo
+      egame: "Juego Educativo"
+      aegame: "Juegado Educativo Adaptativo"
+      oilo: "Otro OA interactivo"
+      oslo: "Otro OA estático"
   menu:
     actions:
       amatching: "Emparejamiento Automático"
@@ -581,102 +747,3 @@ es:
       one: "Revisor"
       plural: "Revisores"
       all: "Todos los Revisores"
-  words:
-    age: "Edad"
-    all: "Todos"
-    applet:
-      one: "Applet"
-      plural: "Applets"
-    are_you_sure: "¿Estás seguro?"
-    audio:
-      one: "Audio"
-      plural: "Audios"
-    auth_token: "Token de Autenticación"
-    auth_tokens_active: "Tokens de Sesión Activos"
-    categories: "Categorias"
-    check: "Marcar"
-    create_model: "Crear %{model}"
-    back: "Volver"
-    birthday: "Fecha de nacimiento"
-    callback: "Callback"
-    cancel: "Cancelar"
-    compare: "Comparar"
-    completed_at: "Completado el"
-    completion_date: "Fecha de Terminación"
-    created_by: "%{model} creado por"
-    creation_date: "Fecha de Creación"
-    criterion:
-      one: "Criterio"
-      plural: "Criterios"
-    deadline: "Fecha Límite (Deadline)"
-    details: "Detalles"
-    description: "Descripción"
-    design: "Diseño"
-    document:
-      one: "Documento"
-      plural: "Documentos"
-    documentation: "Documentación"
-    edit: "Editar"
-    editing_model: "Editando %{model}"
-    email: "Correo Electrónico"
-    engagement: "Motivación"
-    enriched_video:
-      one: "Video Enriquecido"
-      plural: "Videos Enriquecidos"
-    female: "Mujer"
-    flashcard:
-      one: "Flashcard"
-      plural: "Flashcards"
-    flash_object:
-      one: "Objecto Flash"
-      plural: "Objectos Flash"
-    gender: "Género"
-    image:
-      one: "Imagen"
-      plural: "Imágenes"
-    interactivity: "Interactividad"
-    language: "Idioma"
-    learning: "Aprendizaje"
-    male: "Hombre"
-    name: "Nombre"
-    new_model: "Nuevo %{model}"
-    no_evaluated: "No evaluado"
-    no_item_selected: "No has seleccionado ningún elemento."
-    no_resources_yet: "No hay %{resources} todavía."
-    ok: "Ok"
-    or: "O"
-    other: "Otro"
-    owner: "Dueño"
-    quality: "Calidad"
-    quiz:
-      one: "Cuestionario"
-      plural: "Cuestionarios"
-    remove: "Borrar"
-    repository: "Repositorio"
-    role: "Rol"
-    scope: "Ámbito"
-    statistics: "Estadísticas"
-    status: "Estado"
-    tags: "Etiquetas"
-    text:
-      one: "Texto"
-      plural: "Textos"
-    type: "Tipo"
-    unspecified : "Sin especificar"
-    update: "Actualizar"
-    update_model: "Actualizar %{model}"
-    url: "URL"
-    usability: "Usabilidad"
-    username: "Nombre de usuario"
-    video:
-      one: "Vídeo"
-      plural: "Vídeos"
-    view_all: "Ver Todos"
-    virtual_tour:
-      one: "Tour Virtual"
-      plural: "Tours Virtuales"
-    web:
-      one: "Web"
-      plural: "Webs"
-    wno: "No"
-    wyes: "Sí"

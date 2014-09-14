@@ -2,7 +2,7 @@
 	<h1 class="loep_title"><%=t("assignments.name.mine")%></h1>
 	<%= render '/assignments/rindex', :showEvaluationButton => true %>
 	<% unless @assignments.length === 0 %>
-		<p class="link_wrapper"><%= link_to t("words.view_all"), assignments_path %></p>
+		<p class="link_wrapper"><%= link_to t("dictionary.view_all"), assignments_path %></p>
 	<% end %>
 </div>
 
@@ -10,6 +10,6 @@
 	<div class="home_block">
 		<h1 class="loep_title"><%=t("evaluations.name.mine")%></h1>
 		<%= render :partial => '/evaluations/rindex' %>
-		<p class="link_wrapper"><%= link_to t("words.view_all"), evaluations_path %></p>
+		<p class="link_wrapper"><%= link_to t("dictionary.view_all"), evaluations_path %></p>
 	</div>
 <% end %>

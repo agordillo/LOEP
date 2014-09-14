@@ -29,20 +29,20 @@
     <p class="form_legend"><%=t("evmethods.name.plural")%></p>
     <%= select_tag "selected_evmethods", options_for_select(Utils.getEvMethods,@evmethodids), { :multiple => true, :size => 2, :class=>'loep_input' }%>
 
-    <p class="form_legend"><%=t("words.description")%></p>
+    <p class="form_legend"><%=t("dictionary.description")%></p>
     <%= f.text_area :description, :class=>'loep_input' %>
 
     <% if !@assignment.status.nil? %>
-      <p class="form_legend"><%=t("words.status")%></p>
+      <p class="form_legend"><%=t("dictionary.status")%></p>
       <%= f.select :status, options_for_select(Utils.getOptionsForSelectAssignmentStatus,@assignment.status || "Pending"), {} ,{ :class=>'loep_input' } %>
     <% end %>
 
     <% if !@assignment.completed_at.nil? %>
-      <p class="form_legend"><%=t("words.completion_date")%></p>
+      <p class="form_legend"><%=t("dictionary.completion_date")%></p>
       <%=text_field_tag "assignment[completed_at]",@assignment.readable_completed_at, :class=>'loep_input', :id=>"completed_at_datepicker" %>
     <% end %>
 
-    <p class="form_legend"><%=t("words.deadline")%></p>
+    <p class="form_legend"><%=t("dictionary.deadline")%></p>
     <%=text_field_tag "assignment[deadline]",@assignment.readable_deadline, :class=>'loep_input', :id=>"deadline_datepicker" %>
 
     <input id="assignment_author_id" name="assignment[author_id]" type="hidden" value="<%=current_user.id%>">
@@ -50,9 +50,9 @@
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
     <%unless params["action"]=="edit"%>
-      <%submitButtonText = t("words.create_model", :model => t("assignments.name.one"))%>
+      <%submitButtonText = t("dictionary.create_model", :model => t("assignments.name.one"))%>
     <% else %>
-      <%submitButtonText = t("words.update_model", :model => t("assignments.name.one"))%>
+      <%submitButtonText = t("dictionary.update_model", :model => t("assignments.name.one"))%>
     <% end %>
     <%= f.submit submitButtonText, :class => 'loep_button' %>
 

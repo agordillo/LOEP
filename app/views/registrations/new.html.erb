@@ -7,19 +7,19 @@
 
   <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
 
-    <p class="form_legend">* <%=t("words.username")%></p>
+    <p class="form_legend">* <%=t("dictionary.username")%></p>
     <%=f.text_field :name, :class=>'loep_input', :autocomplete => "off" %>
 
-    <p class="form_legend">* <%=t("words.email")%></p>
+    <p class="form_legend">* <%=t("dictionary.email")%></p>
     <%= f.email_field :email, :class=>'loep_input', :autocomplete => "off" %>
 
-    <p class="form_legend">* <%=t("words.birthday")%></p>
+    <p class="form_legend">* <%=t("dictionary.birthday")%></p>
     <%=f.text_field :birthday, :class=>'loep_input', :id=>"birthday_datepicker" %>
 
-    <p class="form_legend">* <%=t("words.gender")%></p>
+    <p class="form_legend">* <%=t("dictionary.gender")%></p>
     <div class="gender_buttons">
-      <%= f.radio_button :gender, 1 %><span class="gender_label"><%=t("words.male")%></span>
-      <%= f.radio_button :gender, 2 %><span class="gender_label"><%=t("words.female")%></span>
+      <%= f.radio_button :gender, 1 %><span class="gender_label"><%=t("dictionary.male")%></span>
+      <%= f.radio_button :gender, 2 %><span class="gender_label"><%=t("dictionary.female")%></span>
     </div>
 
     <p class="form_legend">* <%=t("registrations.occupation")%></p>
@@ -47,7 +47,7 @@
     <%= f.submit t("login.sign_up"), :class => 'loep_button sign_up_button' %>
   <% end %>
   </br>
-  <%= link_to t("words.back"), :back %>
+  <%= link_to t("dictionary.back"), :back %>
 </div>
 
 <script type="text/javascript">

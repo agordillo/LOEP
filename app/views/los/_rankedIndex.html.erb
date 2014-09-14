@@ -7,9 +7,9 @@
   <table id="rankedLosTable" cellspacing='0' class="loep_table">
     <thead>
       <tr>
-        <th><%=t("words.name")%></th>
-        <th><%=t("words.url").humanize%></th>
-        <th><%=t("words.tags")%></th>
+        <th><%=t("dictionary.name")%></th>
+        <th><%=t("dictionary.url").humanize%></th>
+        <th><%=t("dictionary.tags")%></th>
         <% @metrics.each do |metric| %>
         <th><%=metric.name=%></th>
         <% end %>
@@ -29,7 +29,7 @@
         </td>
         <% @metrics.each do |metric| %>
         <td class="tdcenter">
-          <p> <%= lo.hasBeenEvaluatedWithMetric(metric) ? lo.getScoreForMetric(metric).value : t("words.no_evaluated") %></p>
+          <p> <%= lo.hasBeenEvaluatedWithMetric(metric) ? lo.getScoreForMetric(metric).value : t("dictionary.no_evaluated") %></p>
         </td>
         <%end%>
       </tr>

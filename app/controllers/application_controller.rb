@@ -79,11 +79,9 @@ class ApplicationController < ActionController::Base
   ################
 
   def getTags
-    constants = JSON(File.read("public/constants.json"))
-    staticTags = constants["tags"]
-    categoriesTags = constants["categories"]
+    staticTags = I18n.translate("constants.tags")
     popularTags = getPopularTags.map { |tag| tag.name }
-    tags = (staticTags + categoriesTags + popularTags).uniq
+    tags = (staticTags + popularTags).uniq
     tags.sort_by!{ |tag| tag.downcase } #sort it alphabetically
   end
 

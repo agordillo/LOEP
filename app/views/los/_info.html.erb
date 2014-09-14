@@ -1,15 +1,15 @@
 <%= form_for(@lo) do |f| %>
-  <p class="show_legend"><%=t("words.name")%></p>
+  <p class="show_legend"><%=t("dictionary.name")%></p>
   <p class="show_value"><%=@lo.name%></p>
 
-  <p class="show_legend"><%=t("words.url")%></p>
+  <p class="show_legend"><%=t("dictionary.url")%></p>
   <a target="_blank" href="<%=@lo.url%>"><p class="show_value"><%=@lo.url%></p></a>
 
-  <p class="show_legend"><%=t("words.repository")%></p>
+  <p class="show_legend"><%=t("dictionary.repository")%></p>
   <p class="show_value"><%=@lo.repository%></p>
 
   <%if iamAdmin? and !@lo.owner.nil? %>
-    <p class="show_legend"><%=t("words.owner")%></p>
+    <p class="show_legend"><%=t("dictionary.owner")%></p>
     <%if !@lo.app.nil? %>
       <a href="<%=app_path(@lo.app)%>"><p class="show_value"><%=@lo.app.name%></p></a>
     <% else %>
@@ -17,26 +17,23 @@
     <% end %>
   <%end%>
 
-  <p class="show_legend"><%=t("words.scope")%></p>
+  <p class="show_legend"><%=t("dictionary.scope")%></p>
   <p class="show_value"><%=@lo.readable_scope%></p>
 
-  <p class="show_legend"><%=t("words.description")%></p>
+  <p class="show_legend"><%=t("dictionary.description")%></p>
   <p class="show_value"><%=@lo.description%></p>
-
-  <p class="show_legend"><%=t("words.categories")%></p>
-  <p class="show_value"><%=@lo.getCategories%></p>
   
-  <p class="show_legend"><%=t("words.tags")%></p>
+  <p class="show_legend"><%=t("dictionary.tags")%></p>
   <div class="tagsinput">
     <% @lo.tag_list.each do |tag| %>
       <p class="show_value"><span class='tag'><%=tag%></span></p>
     <% end %>
   </div> 
 
-  <p class="show_legend"><%=t("words.language")%></p>
+  <p class="show_legend"><%=t("dictionary.language")%></p>
   <p class="show_value"><%=@lo.language.name%></p>
 
-  <p class="show_legend"><%=t("words.type")%></p>
+  <p class="show_legend"><%=t("dictionary.type")%></p>
   <p class="show_value"><%=@lo.lotype%></p>
 
   <p class="show_legend"><%=t("los.form.technology_or_format")%></p>
@@ -46,22 +43,22 @@
     <p class="show_legend"><%=t("los.form.selected_los")%>:</p>
     <table class="loep_table_form loep_table_form_view">
       <tr>
-        <td><%= f.check_box :hasText, :disabled => "true" %><span><%=t("words.text.plural")%></span></td>
-        <td><%= f.check_box :hasImages, :disabled => "true" %><span><%=t("words.image.plural")%></span></td>
-        <td><%= f.check_box :hasVideos, :disabled => "true" %><span><%=t("words.video.plural")%></span></td>
-        <td><%= f.check_box :hasAudios, :disabled => "true" %><span><%=t("words.audio.plural")%></span></td>
+        <td><%= f.check_box :hasText, :disabled => "true" %><span><%=t("dictionary.text.plural")%></span></td>
+        <td><%= f.check_box :hasImages, :disabled => "true" %><span><%=t("dictionary.image.plural")%></span></td>
+        <td><%= f.check_box :hasVideos, :disabled => "true" %><span><%=t("dictionary.video.plural")%></span></td>
+        <td><%= f.check_box :hasAudios, :disabled => "true" %><span><%=t("dictionary.audio.plural")%></span></td>
       </tr>
       <tr>
-        <td><%= f.check_box :hasQuizzes, :disabled => "true" %><span><%=t("words.quiz.plural")%></span></td>
-        <td><%= f.check_box :hasWebs, :disabled => "true" %><span><%=t("words.web.plural")%></span></td>
-        <td><%= f.check_box :hasFlashObjects, :disabled => "true" %><span><%=t("words.flash_object.plural")%></span></td>
-        <td><%= f.check_box :hasApplets, :disabled => "true" %><span><%=t("words.applet.plural")%></span></td>
+        <td><%= f.check_box :hasQuizzes, :disabled => "true" %><span><%=t("dictionary.quiz.plural")%></span></td>
+        <td><%= f.check_box :hasWebs, :disabled => "true" %><span><%=t("dictionary.web.plural")%></span></td>
+        <td><%= f.check_box :hasFlashObjects, :disabled => "true" %><span><%=t("dictionary.flash_object.plural")%></span></td>
+        <td><%= f.check_box :hasApplets, :disabled => "true" %><span><%=t("dictionary.applet.plural")%></span></td>
       </tr>
       <tr>
-        <td><%= f.check_box :hasDocuments, :disabled => "true" %><span><%=t("words.document.plural")%></span></td>
-        <td><%= f.check_box :hasFlashcards, :disabled => "true" %><span><%=t("words.flashcard.plural")%></span></td>
-        <td><%= f.check_box :hasVirtualTours, :disabled => "true" %><span><%=t("words.virtual_tour.plural")%></span></td>
-        <td><%= f.check_box :hasEnrichedVideos, :disabled => "true" %><span><%=t("words.enriched_video.plural")%></span></td>
+        <td><%= f.check_box :hasDocuments, :disabled => "true" %><span><%=t("dictionary.document.plural")%></span></td>
+        <td><%= f.check_box :hasFlashcards, :disabled => "true" %><span><%=t("dictionary.flashcard.plural")%></span></td>
+        <td><%= f.check_box :hasVirtualTours, :disabled => "true" %><span><%=t("dictionary.virtual_tour.plural")%></span></td>
+        <td><%= f.check_box :hasEnrichedVideos, :disabled => "true" %><span><%=t("dictionary.enriched_video.plural")%></span></td>
       </tr>
     </table>
   </div>

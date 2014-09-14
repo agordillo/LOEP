@@ -4,16 +4,16 @@
 
   <%= form_for(@app) do |f| %>
 
-    <p class="form_legend">* <%=t("words.name")%></p>
+    <p class="form_legend">* <%=t("dictionary.name")%></p>
     <%= f.text_field :name, :class=>'loep_input' %>
 
     <%if !@app.auth_token.nil? %>
-      <p class="form_legend">* <%=t("words.auth_token")%> <span id="refreshAuthToken" class="glyphicon glyphiconfull refresh refreshAuthToken"></span></p>
+      <p class="form_legend">* <%=t("dictionary.auth_token")%> <span id="refreshAuthToken" class="glyphicon glyphiconfull refresh refreshAuthToken"></span></p>
       <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
     <% end %>
 
     <p class="space_XXS">&nbsp;</p>
-    <p class="form_legend"><%=t("words.callback")%></p>
+    <p class="form_legend"><%=t("dictionary.callback")%></p>
     <%= f.text_field :callback, :class=>'loep_input' %>
     
     <%= f.hidden_field :user_id, :value=>(@app.user.nil? ? current_user.id : @app.user.id)%>
@@ -21,9 +21,9 @@
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
     <%unless params["action"]=="edit"%>
-      <%submitButtonText = t("words.create_model", :model => t("applications.name.one"))%>
+      <%submitButtonText = t("dictionary.create_model", :model => t("applications.name.one"))%>
     <% else %>
-      <%submitButtonText = t("words.update_model", :model => t("applications.name.one"))%>
+      <%submitButtonText = t("dictionary.update_model", :model => t("applications.name.one"))%>
     <% end %>
     <%= f.submit submitButtonText, :class => 'loep_button' %>
 

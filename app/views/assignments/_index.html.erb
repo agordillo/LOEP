@@ -22,8 +22,8 @@
         <th><%=t("los.name.one")%></th>
         <th><%=t("users.reviewer.one")%></th>
         <th><%=t("evmethods.name.short.one")%></th>
-        <th><%=t("words.status")%></th>
-        <th><%=t("words.deadline")%></th>
+        <th><%=t("dictionary.status")%></th>
+        <th><%=t("dictionary.deadline")%></th>
         <th></th>
         <th></th>
         <th></th>
@@ -54,13 +54,13 @@
           <span><%= assignment.readable_deadline %></span>
         </td>
         <td class="tdcenter">
-          <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> <%=t("words.details")%></a>
+          <a href="<%=assignment_path(assignment)%>"><span class="glyphicon glyphicon-eye-open"></span> <%=t("dictionary.details")%></a>
         </td>
         <td class="tdcenter">
-            <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("words.edit")%></a>
+            <a href="<%=edit_assignment_path(assignment)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("dictionary.edit")%></a>
         </td>
         <td class="tdcenter">
-          <a href="<%=assignment_path(assignment)%>" data-confirm="<%=t("words.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.remove")%></a>
+          <a href="<%=assignment_path(assignment)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("dictionary.remove")%></a>
         </td>
       </tr>
     <% end %>
@@ -118,11 +118,11 @@
     $("#remove_resources").click(function(){
       var res_ids = getSelectedResources();
       if(res_ids.length===0){
-        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
+        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
         return;
       }
 
-     _showLOEPDialog('<%t("words.are_you_sure")%>', true, function(result){
+     _showLOEPDialog('<%t("dictionary.are_you_sure")%>', true, function(result){
         if(result==true){
           var res_ids = getSelectedResources();
           if(res_ids.length===0){

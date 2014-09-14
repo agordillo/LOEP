@@ -4,31 +4,28 @@
 
   <%= form_for(@lo) do |f| %>
 
-    <p class="form_legend">* <%=t("words.name")%></p>
+    <p class="form_legend">* <%=t("dictionary.name")%></p>
     <%= f.text_field :name, :class=>'loep_input' %>
     
-    <p class="form_legend">* <%=t("words.url")%></p>
+    <p class="form_legend">* <%=t("dictionary.url")%></p>
     <%= f.text_field :url, :class=>'loep_input' %>
 
-    <p class="form_legend"><%=t("words.repository")%></p>
+    <p class="form_legend"><%=t("dictionary.repository")%></p>
     <%= f.text_field :repository, :class=>'loep_input' %>
 
-    <p class="form_legend">* <%=t("words.scope")%></p>
+    <p class="form_legend">* <%=t("dictionary.scope")%></p>
     <%= f.select :scope, options_for_select(Utils.getOptionsForSelectLOScope,@lo.scope || "Private"), {} ,{ :class=>'loep_input' } %>
 
-    <p class="form_legend"><%=t("words.description")%></p>
+    <p class="form_legend"><%=t("dictionary.description")%></p>
     <%= f.text_area :description, :class=>'loep_input' %>
 
-    <p class="form_legend"><%=t("words.categories")%></p>
-    <%= f.select :categories, options_for_select(@options_select["categories"],@lo.getCategories), {} ,{ :multiple => true, :size => 10, :class=>'loep_input' } %>
-
-    <p class="form_legend"><%=t("words.tags")%></p>
+    <p class="form_legend"><%=t("dictionary.tags")%></p>
     <input name="lo[tag_list]" id="tags" value="<%=@lo.tag_list.join(",") unless @lo.nil? %>"/>
 
-    <p class="form_legend">* <%=t("words.language")%></p>
+    <p class="form_legend">* <%=t("dictionary.language")%></p>
     <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan(@lo,{:current_user => current_user}),@lo.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 
-    <p class="form_legend">* <%=t("words.type")%></p>
+    <p class="form_legend">* <%=t("dictionary.type")%></p>
     <%= f.select :lotype, options_for_select(@options_select["lotype"],@lo.lotype || "Unspecified"), {} ,{ :class=>'loep_input' } %>
 
     <p class="form_legend">* <%=t("los.form.technology_or_format")%></p>
@@ -38,22 +35,22 @@
       <p class="form_legend"><%=t("los.form.select_los")%>:</p>
       <table class="loep_table_form">
       <tr>
-        <td><%= f.check_box :hasText %><span><%=t("words.text.plural")%></span></td>
-        <td><%= f.check_box :hasImages %><span><%=t("words.image.plural")%></span></td>
-        <td><%= f.check_box :hasVideos %><span><%=t("words.video.plural")%></span></td>
-        <td><%= f.check_box :hasAudios %><span><%=t("words.audio.plural")%></span></td>
+        <td><%= f.check_box :hasText %><span><%=t("dictionary.text.plural")%></span></td>
+        <td><%= f.check_box :hasImages %><span><%=t("dictionary.image.plural")%></span></td>
+        <td><%= f.check_box :hasVideos %><span><%=t("dictionary.video.plural")%></span></td>
+        <td><%= f.check_box :hasAudios %><span><%=t("dictionary.audio.plural")%></span></td>
       </tr>
       <tr>
-        <td><%= f.check_box :hasQuizzes %><span><%=t("words.quiz.plural")%></span></td>
-        <td><%= f.check_box :hasWebs %><span><%=t("words.web.plural")%></span></td>
-        <td><%= f.check_box :hasFlashObjects %><span><%=t("words.flash_object.plural")%></span></td>
-        <td><%= f.check_box :hasApplets %><span><%=t("words.applet.plural")%></span></td>
+        <td><%= f.check_box :hasQuizzes %><span><%=t("dictionary.quiz.plural")%></span></td>
+        <td><%= f.check_box :hasWebs %><span><%=t("dictionary.web.plural")%></span></td>
+        <td><%= f.check_box :hasFlashObjects %><span><%=t("dictionary.flash_object.plural")%></span></td>
+        <td><%= f.check_box :hasApplets %><span><%=t("dictionary.applet.plural")%></span></td>
       </tr>
       <tr>
-        <td><%= f.check_box :hasDocuments %><span><%=t("words.document.plural")%></span></td>
-        <td><%= f.check_box :hasFlashcards %><span><%=t("words.flashcard.plural")%></span></td>
-        <td><%= f.check_box :hasVirtualTours %><span><%=t("words.virtual_tour.plural")%></span></td>
-        <td><%= f.check_box :hasEnrichedVideos %><span><%=t("words.enriched_video.plural")%></span></td>
+        <td><%= f.check_box :hasDocuments %><span><%=t("dictionary.document.plural")%></span></td>
+        <td><%= f.check_box :hasFlashcards %><span><%=t("dictionary.flashcard.plural")%></span></td>
+        <td><%= f.check_box :hasVirtualTours %><span><%=t("dictionary.virtual_tour.plural")%></span></td>
+        <td><%= f.check_box :hasEnrichedVideos %><span><%=t("dictionary.enriched_video.plural")%></span></td>
       </tr>
       </table>
     </div>
@@ -61,9 +58,9 @@
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
     <%unless params["action"]=="edit"%>
-      <%submitButtonText = t("words.create_model", :model => t("los.name.one"))%>
+      <%submitButtonText = t("dictionary.create_model", :model => t("los.name.one"))%>
     <% else %>
-      <%submitButtonText = t("words.update_model", :model => t("los.name.one"))%>
+      <%submitButtonText = t("dictionary.update_model", :model => t("los.name.one"))%>
     <% end %>
     <%= f.submit submitButtonText, :class => 'loep_button' %>
 

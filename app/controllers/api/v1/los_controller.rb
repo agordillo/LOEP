@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Api::V1::LosController < Api::V1::BaseController
-  before_filter :filterLOCategories, :only => [:create, :update]
   before_filter :filterLOLanguage, :only => [:create, :update]
 
   # API REST for LOs
@@ -90,22 +89,6 @@ class Api::V1::LosController < Api::V1::BaseController
 
 
   private
-
-  def filterLOCategories
-    if params[:lo] and params[:lo][:categories]
-      if params[:lo][:categories].is_a? String
-        if !params[:lo][:categories].blank?
-          params[:lo][:categories] = [params[:lo][:categories]].to_json
-        else
-          params[:lo].delete [:categories]
-        end       
-      elsif params[:lo][:categories].is_a? Array
-        params[:lo][:categories] = params[:lo][:categories].reject{|c| c.empty? }.to_json
-      else
-        params[:lo].delete [:categories]
-      end
-    end
-  end
 
   def filterLOLanguage
     if params[:lo] and params[:lo][:lanCode]

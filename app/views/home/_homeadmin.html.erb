@@ -1,27 +1,27 @@
 <div class="home_block">
 	<h1 class="loep_title"><%=t("assignments.name.plural")%></h1>
 	<%= render :partial => '/assignments/index' %>
-	<p class="link_wrapper"><%= link_to t("assignments.actions.add_new"), new_assignment_path %> | <%= link_to t("words.view_all"), assignments_path %></p>
+	<p class="link_wrapper"><%= link_to t("assignments.actions.add_new"), new_assignment_path %> | <%= link_to t("dictionary.view_all"), assignments_path %></p>
 </div>
 <div class="home_block">
 	<h1 class="loep_title"><%=t("los.name.plural")%></h1>
 	<%= render :partial => '/los/index' %>
-	<p class="link_wrapper"><%= link_to t("los.actions.add_new"), new_lo_path %> | <%= link_to t("words.view_all"), los_path %></p>
+	<p class="link_wrapper"><%= link_to t("los.actions.add_new"), new_lo_path %> | <%= link_to t("dictionary.view_all"), los_path %></p>
 </div>
 <div class="home_block">
 	<h1 class="loep_title"><%=t("evaluations.name.plural")%></h1>
 	<%= render :partial => '/evaluations/index' %>
-	<p class="link_wrapper"><%= link_to t("words.view_all"), evaluations_path %></p>
+	<p class="link_wrapper"><%= link_to t("dictionary.view_all"), evaluations_path %></p>
 </div>
 <div class="home_block">
 	<h1 class="loep_title"><%=t("users.name.plural")%></h1>
 	<%= render :partial => '/users/index' %>
-	<p class="link_wrapper"><%= link_to t("words.view_all"), users_path %></p>
+	<p class="link_wrapper"><%= link_to t("dictionary.view_all"), users_path %></p>
 </div>
 <%if @apps.length > 0 %>
 <div class="home_block">
 	<h1 class="loep_title"><%=t("applications.name.plural")%></h1>
 	<%= render :partial => '/apps/index' %>
-	<p class="link_wrapper"><%= link_to t("words.view_all"), apps_path %></p>
+	<p class="link_wrapper"><%= link_to t("dictionary.view_all"), apps_path %></p>
 </div>
 <%end%>

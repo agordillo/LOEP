@@ -2,32 +2,32 @@
   <h2><%=@app.name%></h2>
   
   <% if can?(:update,@app) %>
-    <%= link_to t("words.edit"), edit_app_path(@app) %>
+    <%= link_to t("dictionary.edit"), edit_app_path(@app) %>
   <% end %>
 
   <p class="space_small"></p>
 
   <%= form_for(@app) do |f| %>
-    <p class="show_legend"><%=t("words.name")%></p>
+    <p class="show_legend"><%=t("dictionary.name")%></p>
     <p class="show_value"><%=@app.name%></p>
 
     <p class="space_small"></p>
 
     <%if !@app.user.nil? %>
-      <p class="show_legend"><%=t("words.owner")%></p>
+      <p class="show_legend"><%=t("dictionary.owner")%></p>
       <a href="<%=user_path(@app.user)=%>"><p class="show_value"><%=@app.user.name%></p></a>
     <%end%>
 
     <p class="space_small"></p>
 
     <%unless @app.auth_token.nil? %>
-      <p class="form_legend"><%=t("words.auth_token")%></p>
+      <p class="form_legend"><%=t("dictionary.auth_token")%></p>
       <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
     <% end %>
 
     <%sessionTokens=@app.valid_session_tokens%>
     <%unless sessionTokens.blank? %>
-      <p class="form_legend"><%=t("words.auth_tokens_active")%></p>
+      <p class="form_legend"><%=t("dictionary.auth_tokens_active")%></p>
       <%sessionTokens.each do |s|%>
         <%=text_field_tag nil, s.auth_token, class: 'loep_input', readonly: true %>
         <p class="space_extra_small"></p>
@@ -37,7 +37,7 @@
     <p class="space_small"></p>
 
     <%if !@app.callback.nil? %>
-      <p class="show_legend"><%=t("words.callback")%></p>
+      <p class="show_legend"><%=t("dictionary.callback")%></p>
       <p class="show_value"><%=@app.callback%></p>
     <%end%>
   

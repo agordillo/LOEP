@@ -1,4 +1,106 @@
 en:
+  #Dictionary should be the first block.
+  dictionary:
+    age: "Age"
+    all: "All"
+    applet:
+      one: "Applet"
+      plural: "Applets"
+    are_you_sure: "Are you sure?"
+    audio:
+      one: &audio "Audio"
+      plural: "Audios"
+    auth_token: "Authentication Token"
+    auth_tokens_active: "Active Session Tokens"
+    categories: "Categories"
+    check: "Check"
+    create_model: "Create %{model}"
+    back: "Back"
+    birthday: "Date of birth"
+    callback: "Callback"
+    cancel: "Cancel"
+    compare: "Compare"
+    completed_at: "Completed at"
+    completion_date: "Completion Date"
+    created_by: "%{model} created by"
+    creation_date: "Creation Date"
+    criterion:
+      one: "Criterion"
+      plural: "Criteria"
+    deadline: "Deadline"
+    details: "Details"
+    description: "Description"
+    design: "Design"
+    document:
+      one: "Document"
+      plural: "Documents"
+    documentation: "Documentation"
+    edit: "Edit"
+    editing_model: "Editing %{model}"
+    email: "Email"
+    engagement: "Engagement"
+    enriched_video:
+      one: &evideo "Enriched Video"
+      plural: "Enriched Videos"
+    female: "Female"
+    flashcard:
+      one: &flashcard "Flashcard"
+      plural: "Flashcards"
+    flash_object:
+      one: "Flash Object"
+      plural: "Flash Objects"
+    gender: "Gender"
+    image:
+      one: &image "Image"
+      plural: "Images"
+    interactivity: "Interactivity"
+    language: "Language"
+    learning: "Learning"
+    male: "Male"
+    name: "Name"
+    new_model: "New %{model}"
+    no_evaluated: "No evaluated"
+    no_item_selected: "You have not selected any item."
+    no_resources_yet: "There are no %{resources} yet."
+    ok: "Ok"
+    or: "OR"
+    other: &other "Other"
+    owner: "Owner"
+    quality: "Quality"
+    quiz:
+      one: &quiz "Quiz"
+      plural: "Quizzes"
+    remove: "Remove"
+    repository: "Repository"
+    role: "Role"
+    scope: "Scope"
+    statistics: "Statistics"
+    status: "Status"
+    tags: "Tags"
+    text:
+      one: &text "Text"
+      plural: "Text"
+    type: "Type"
+    unspecified: &unspecified "Unspecified"
+    update: "Update"
+    update_model: "Update %{model}"
+    url: "URL"
+    usability: "Usability"
+    username: "Username"
+    video:
+      one: &video "Video"
+      plural: "Videos"
+    view_all: "View all"
+    virtual_tour:
+      one: &vtour "Virtual Tour"
+      plural: "Virtual Tours"
+    web:
+      one: &web "Web"
+      plural: "Webs"
+    wno: &no "No"
+    wyes: &yes "Yes"
+
+  #Rest of the blocks (sorted alphabetically).
   actions:
     add_assignment: "Add Assignment"
     assign : "Assign"
@@ -54,6 +156,47 @@ en:
       pending:  "Pending"
       rejected: "Rejected"
       uncompleted: "Uncompleted"
+  constants:
+    tags:
+        - "Art"
+        - "Astronomy"
+        - "Astrology"
+        - "Biology"
+        - "Chemistry"
+        - "Computer Science"
+        - "Citizenship"
+        - "Classical Languages"
+        - "Maths"
+        - "Music"
+        - "Physics"
+        - "Geography"
+        - "Geology"
+        - "Engineering"
+        - "Economics"
+        - "Humanities"
+        - "History"
+        - "Literature"
+        - "Philosophy"
+        - "Physical Education"
+        - "Natural Sciences"
+        - "Software Engineering"
+        - "Technology"
+        - "Foreign Languages"
+        - "Social Sciences"
+
+        - "Preschool Education"
+        - "Elementary School Education"
+        - "Middle School Education"
+        - "High School Education"
+        - "Higher Education"
+        - "Professional Training"
+
+        - "Technology Enhanced Learning"
+        - "TEL"
+        - "Game-Based Learning"
+        - "GBL"
+        - "Learning Objects"
+        - "LO"
   datepicker:
     closeText: 'Done'
     currentText: 'Now'
@@ -473,6 +616,32 @@ en:
     stats:
       title: "Stats for the following Learning Objects"
       metrics:  "Metrics (Average score)"
+    technology_or_format:
+      unspecified: *unspecified
+      html: "HTML"
+      flash: "Flash"
+      japplet: "Java Applet"
+      file: "File (pdf,doc,jpg,etc.)"
+      analog: "Analog"
+      other: *other
+    types:
+      unspecified: *unspecified
+      text: *text
+      image: *image
+      video: *video
+      audio: *audio
+      web: *web
+      quiz: *quiz
+      document: "Document (pdf,doc)"
+      slideshow: "Slideshow"
+      veslideshow: "VE Slideshow"
+      flashcard: *flashcard
+      vtour: *vtour
+      evideo: *evideo
+      egame: "Educational Game"
+      aegame: "Adaptive Educational Game"
+      oilo: "Other interactive LO"
+      oslo: "Other static LO"
   menu:
     actions:
       amatching: "Automatic Matching"
@@ -581,102 +750,3 @@ en:
       one: "Reviewer"
       plural: "Reviewers"
       all: "All Reviewers"
-  words:
-    age: "Age"
-    all: "All"
-    applet:
-      one: "Applet"
-      plural: "Applets"
-    are_you_sure: "Are you sure?"
-    audio:
-      one: "Audio"
-      plural: "Audios"
-    auth_token: "Authentication Token"
-    auth_tokens_active: "Active Session Tokens"
-    categories: "Categories"
-    check: "Check"
-    create_model: "Create %{model}"
-    back: "Back"
-    birthday: "Date of birth"
-    callback: "Callback"
-    cancel: "Cancel"
-    compare: "Compare"
-    completed_at: "Completed at"
-    completion_date: "Completion Date"
-    created_by: "%{model} created by"
-    creation_date: "Creation Date"
-    criterion:
-      one: "Criterion"
-      plural: "Criteria"
-    deadline: "Deadline"
-    details: "Details"
-    description: "Description"
-    design: "Design"
-    document:
-      one: "Document"
-      plural: "Documents"
-    documentation: "Documentation"
-    edit: "Edit"
-    editing_model: "Editing %{model}"
-    email: "Email"
-    engagement: "Engagement"
-    enriched_video:
-      one: "Enriched Video"
-      plural: "Enriched Videos"
-    female: "Female"
-    flashcard:
-      one: "Flashcard"
-      plural: "Flashcards"
-    flash_object:
-      one: "Flash Object"
-      plural: "Flash Objects"
-    gender: "Gender"
-    image:
-      one: "Image"
-      plural: "Images"
-    interactivity: "Interactivity"
-    language: "Language"
-    learning: "Learning"
-    male: "Male"
-    name: "Name"
-    new_model: "New %{model}"
-    no_evaluated: "No evaluated"
-    no_item_selected: "You have not selected any item."
-    no_resources_yet: "There are no %{resources} yet."
-    ok: "Ok"
-    or: "OR"
-    other: "Other"
-    owner: "Owner"
-    quality: "Quality"
-    quiz:
-      one: "Quiz"
-      plural: "Quizzes"
-    remove: "Remove"
-    repository: "Repository"
-    role: "Role"
-    scope: "Scope"
-    statistics: "Statistics"
-    status: "Status"
-    tags: "Tags"
-    text:
-      one: "Text"
-      plural: "Text"
-    type: "Type"
-    unspecified : "Unspecified"
-    update: "Update"
-    update_model: "Update %{model}"
-    url: "URL"
-    usability: "Usability"
-    username: "Username"
-    video:
-      one: "Video"
-      plural: "Videos"
-    view_all: "View all"
-    virtual_tour:
-      one: "Virtual Tour"
-      plural: "Virtual Tours"
-    web:
-      one: "Web"
-      plural: "Webs"
-    wno: "No"
-    wyes: "Yes"

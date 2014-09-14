@@ -13,13 +13,13 @@
     <a id="stat_los">
       <div class="loep_tool_button">
         <span class="glyphicon glyphiconfull charts"></span>
-        <span class="loep_tool_text"><%=t("words.statistics")%></span>
+        <span class="loep_tool_text"><%=t("dictionary.statistics")%></span>
       </div>
     </a>
     <a id="compare_los">
       <div class="loep_tool_button">
         <span class="glyphicon glyphiconfull vector_path_polygon"></span>
-        <span class="loep_tool_text"><%=t("words.compare")%></span>
+        <span class="loep_tool_text"><%=t("dictionary.compare")%></span>
       </div>
     </a>
     <a id="automatic_assign_los">
@@ -46,8 +46,8 @@
         <% if showToolActions %>
         <th><input type="checkbox" class="checkalllos" autocomplete="off" value="all"/></th>
         <% end %>
-        <th><%=t("words.name")%></th>
-        <th><%=t("words.url").humanize%></th>
+        <th><%=t("dictionary.name")%></th>
+        <th><%=t("dictionary.url").humanize%></th>
         <th><%=t("actions.assign")%></th>
         <th class="longhead"><%=t("actions.view_as_reviewer")%></th>
         <th></th>
@@ -75,10 +75,10 @@
           <a href="<%=rlo_path(lo)%>"><span class="glyphicon glyphicon-eye-open"></span></a>
         </td>
         <td class="tdcenter tdedit">
-            <a href="<%=edit_lo_path(lo)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("words.edit")%></a>
+            <a href="<%=edit_lo_path(lo)%>"><span class="glyphicon glyphicon-edit"></span> <%=t("dictionary.edit")%></a>
         </td>
         <td class="tdcenter tddestroy">
-          <a href="<%=lo_path(lo)%>" data-confirm="<%=t("words.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("words.remove")%></a>
+          <a href="<%=lo_path(lo)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("dictionary.remove")%></a>
         </td>
       </tr>
     <% end %>
@@ -142,7 +142,7 @@
      $("#stat_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
+        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/los/stats",[["lo_ids", lo_ids]]);
@@ -152,7 +152,7 @@
      $("#compare_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
+        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/los/compare",[["lo_ids", lo_ids]]);
@@ -162,7 +162,7 @@
     $("#assign_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
+        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/assignments/new",[["lo_ids", lo_ids]]);
@@ -182,11 +182,11 @@
     $("#remove_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog('<%t("words.no_item_selected")%>', false);
+        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
         return;
       }
 
-     _showLOEPDialog('<%t("words.are_you_sure")%>', true, function(result){
+     _showLOEPDialog('<%t("dictionary.are_you_sure")%>', true, function(result){
         if(result==true){
           var lo_ids = getSelectedLos();
           if(lo_ids.length===0){

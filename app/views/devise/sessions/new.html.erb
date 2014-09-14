@@ -1,7 +1,7 @@
 <h2><%=t("login.sign_in")%></h2>
 
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div><%=t("words.email")%><br />
+  <div><%=t("dictionary.email")%><br />
   <%= f.email_field :email, :autofocus => true %></div>
 
   <div><%=t("login.password")%><br />

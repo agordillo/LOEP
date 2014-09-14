@@ -21,7 +21,7 @@ module ApplicationHelper
 
 	def generic_back_link
 	    if iamAdmin?
-	      link_to t("words.back"), :back
+	      link_to t("dictionary.back"), :back
 	    else
 	      link_to t("menu.home"), home_path 
 	    end

@@ -3,7 +3,7 @@
 <%= form_for(resource, :as => resource_name, :url => unlock_path(resource_name), :html => { :method => :post }) do |f| %>
   <%= devise_error_messages! %>
 
-  <div><%=t("words.email")%<br />
+  <div><%=t("dictionary.email")%<br />
   <%= f.email_field :email, :autofocus => true %></div>
 
   <div><%= f.submit t("login.unlock_instructions_resend") %></div>

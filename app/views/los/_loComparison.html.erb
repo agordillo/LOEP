@@ -7,7 +7,7 @@
   <table id="locomparison_table" cellspacing='0' class="loep_table">
     <thead>
       <tr>
-        <th><%=t("words.name")%></th>
+        <th><%=t("dictionary.name")%></th>
         <% @metrics.each do |metric| %>
         <th><%=metric.name=%></th>
         <% end %>
@@ -22,7 +22,7 @@
         <% @metrics.each do |metric| %>
         <% loScore = lo.scores.where(:metric_id => metric.id).first %>
         <td class="tdcenter">
-          <p> <%= loScore.nil? ? t("words.no_evaluated") : loScore.value %></p>
+          <p> <%= loScore.nil? ? t("dictionary.no_evaluated") : loScore.value %></p>
         </td>
         <%end%>
       </tr>

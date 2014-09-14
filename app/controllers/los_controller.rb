@@ -1,6 +1,5 @@
 class LosController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :filterCategories
   before_filter :filterLanguage
 
   # GET /los
@@ -460,11 +459,8 @@ class LosController < ApplicationController
 
   def getOptionsForSelect
     optionsForSelect = Hash.new
-    constants = JSON(File.read("public/constants.json"))
-    optionsForSelect["categories"] = getOptionsForSelectFromArray(constants["categories"].uniq.sort_by!{ |tag| tag.downcase })
-    optionsForSelect["lotype"] = getOptionsForSelectFromArray(constants["lotype"].uniq)
-    optionsForSelect["technology"] = getOptionsForSelectFromArray(constants["technology"].uniq)
-    optionsForSelect["eltype"] = constants["eltype"].uniq
+    optionsForSelect["lotype"] = I18n.t("los.types").map{|k,v| [v,k.to_s]}
+    optionsForSelect["technology"] = I18n.t("los.technology_or_format").map{|k,v| [v,k.to_s]}
     optionsForSelect
   end
 
@@ -474,12 +470,6 @@ class LosController < ApplicationController
       options_select.push([e,e])
     end
     options_select
-  end
-
-  def filterCategories
-    if params[:lo] and params[:lo][:categories]
-      params[:lo][:categories] = params[:lo][:categories].reject{|c| c.empty? }.to_json
-    end
   end
 
   def filterLanguage

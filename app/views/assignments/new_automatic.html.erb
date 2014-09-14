@@ -40,16 +40,16 @@
     <p class="form_legend"><%=t("evmethods.name.plural")%></p>
     <%= select_tag "selected_evmethods", options_for_select(Utils.getEvMethods,@evmethodids), { :multiple => true, :size => 2, :class=>'loep_input' }  %>
 
-    <p class="form_legend"><%=t("words.description")%></p>
+    <p class="form_legend"><%=t("dictionary.description")%></p>
     <textarea class="loep_input" cols="40" id="assignment_description" name="assignment[description]" rows="20"></textarea>
 
-    <p class="form_legend"><%=t("words.deadline")%></p>
+    <p class="form_legend"><%=t("dictionary.deadline")%></p>
     <%=text_field_tag "assignment[deadline]",@assignment.readable_deadline, :class=>'loep_input', :id=>"deadline_datepicker" %>
 
     <input id="assignment_author_id" name="assignment[author_id]" type="hidden" value="<%=current_user.id%>">
 
 
-    <h4><%=t("words.criterion.plural")%></h4>
+    <h4><%=t("dictionary.criterion.plural")%></h4>
 
     <p class="form_legend"><%=t("assignments.automatic.nepl")%></p>
     <div id="select_NEPL_wrapper">
@@ -57,7 +57,7 @@
         <% 5.times do |i| %>
           <option value="<%=i+1%>" <%="selected='selected'" if i+1==3%>><%=i+1%></option>
         <% end %>
-        <option value="other"><%=t("words.other")%></option>
+        <option value="other"><%=t("dictionary.other")%></option>
       </select>
       <input id="select_NEPL_other" name="NEPL_other" type="text" class="loep_input"></input>
     </div>

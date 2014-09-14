@@ -9,19 +9,19 @@
 
   <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
 
-      <p class="form_legend"><%=t("words.username")%></p>
+      <p class="form_legend"><%=t("dictionary.username")%></p>
       <%=text_field_tag "user[name]",@user.name, :class=>'loep_input' %>
 
-      <p class="form_legend"><%=t("words.email")%></p>
+      <p class="form_legend"><%=t("dictionary.email")%></p>
       <%= f.email_field :email, :class=>'loep_input' %>
 
-      <p class="form_legend"><%=t("words.birthday")%></p>
+      <p class="form_legend"><%=t("dictionary.birthday")%></p>
       <%=text_field_tag "user[birthday]",@user.readable_birthday, :class=>'loep_input', :id=>"birthday_datepicker" %>
 
-      <p class="form_legend"><%=t("words.gender")%></p>
+      <p class="form_legend"><%=t("dictionary.gender")%></p>
       <div class="gender_buttons">
-        <%= f.radio_button :gender, 1 %><span class="gender_label"><%=t("words.male")%></span>
-        <%= f.radio_button :gender, 2 %><span class="gender_label"><%=t("words.female")%></span>
+        <%= f.radio_button :gender, 1 %><span class="gender_label"><%=t("dictionary.male")%></span>
+        <%= f.radio_button :gender, 2 %><span class="gender_label"><%=t("dictionary.female")%></span>
       </div>
 
       <p class="form_legend">* <%=t("registrations.occupation")%></p>
@@ -47,21 +47,21 @@
       <%= f.password_field :current_password, :class=>'loep_input' %>
 
       <p class="form_before_button">&nbsp;</p>
-      <%= f.submit t("words.update"), :class => 'loep_button update_button' %>
+      <%= f.submit t("dictionary.update"), :class => 'loep_button update_button' %>
 
   <% end %>
 
   </br>
-  <%= link_to t("words.back"), :back %>
+  <%= link_to t("dictionary.back"), :back %>
 
   </br>
   </br>
   <h3><%=t("registrations.cancel_account")%></h3>
   <p>
     <% unless @user.role?("SuperAdmin") %>
-      <%= button_to t("words.cancel"), registration_path(resource_name), :class => 'loep_button cancel_button', :data => { :confirm => t("words.are_you_sure"), :ok_button => t("words.wyes"), :cancel_button => t("words.wno") }, :method => :delete %>
+      <%= button_to t("dictionary.cancel"), registration_path(resource_name), :class => 'loep_button cancel_button', :data => { :confirm => t("dictionary.are_you_sure"), :ok_button => t("dictionary.wyes"), :cancel_button => t("dictionary.wno") }, :method => :delete %>
     <% else %>
-      <input class="loep_button cancel_button" data-confirm="<%=t("registrations.super_admin_alert")%>" data-ok-button="<%=t("words.wyes")%>" data-cancel-button="<%=t("words.wno")%>" type="submit" promptOkAlertDialog="true" value="<%=t("words.cancel")%>">
+      <input class="loep_button cancel_button" data-confirm="<%=t("registrations.super_admin_alert")%>" data-ok-button="<%=t("dictionary.wyes")%>" data-cancel-button="<%=t("dictionary.wno")%>" type="submit" promptOkAlertDialog="true" value="<%=t("dictionary.cancel")%>">
     <% end %>
   </p>
 </div>
