@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   ################
 
   def set_locale
-    I18n.locale = params[:locale] || user_preferred_locale || session[:locale] || extract_locale_from_accept_language_header || I18n.default_locale
+    I18n.locale = available_locale_or_nil(params[:locale]) || user_preferred_locale || available_locale_or_nil(session[:locale]) || extract_locale_from_accept_language_header || I18n.default_locale
   end
 
 
@@ -58,6 +58,11 @@ class ApplicationController < ActionController::Base
   ################
   # I18n support
   ################
+
+  def available_locale_or_nil(locale)
+    stringLocale = ([locale] & I18n.available_locales.map{|l| l.to_s}).first
+    stringLocale.to_sym unless stringLocale.nil?
+  end
 
   def extract_locale_from_accept_language_header
     return nil if request.env['HTTP_ACCEPT_LANGUAGE'].nil?
