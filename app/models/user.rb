@@ -97,6 +97,10 @@ class User < ActiveRecord::Base
     I18n.t("roles."+self.role.downcase, :default => self.role) unless self.role.nil?
   end
 
+  def readable_occupation
+    I18n.t("occupations."+self.occupation.downcase) unless self.occupation.nil?
+  end
+
   #Get Learning Objects evaluated by this user
   def evLos
     self.los.uniq

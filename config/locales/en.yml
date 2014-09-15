@@ -748,6 +748,7 @@ en:
     username_or_email: "Username or Email"
   occupations:
     education: "Education (teacher, pedagogue, ...)"
+    other: *other
     technology: "Technology (educational content developer, IT support, ...)"
   registrations:
     areas: "Areas of interest"

@@ -32,13 +32,13 @@
   <% end %>
 
   <p class="show_legend"><%=t("registrations.field_expertise")%></p>
-  <p class="show_value"><%=@user.occupation%></p>
+  <p class="show_value"><%=@user.readable_occupation%></p>
 
   <p class="show_legend"><%=t("registrations.language_preferred")%></p>
-  <p class="show_value"><%=@user.language.name%></p>
+  <p class="show_value"><%=@user.language.translated_name%></p>
 
   <p class="show_legend"><%=t("registrations.language_all")%></p>
-  <p class="show_value"><%=@user.languages.map { |l| l.name }.join(", ")%></p>
+  <p class="show_value"><%=@user.languages.map { |l| l.translated_name }.join(", ")%></p>
 
   <p class="show_legend"><%=t("registrations.areas")%></p>
   <div class="tagsinput">
