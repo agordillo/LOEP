@@ -47,6 +47,14 @@ class Api::V1::LosController < Api::V1::BaseController
       @lo.scope = "Private"
     end
 
+    if @lo.lotype.nil? or !I18n.t("los.types").map{|k,v| k.to_s}.include? @lo.lotype
+      @lo.lotype = "unspecified"
+    end
+
+    if @lo.technology.nil? or !I18n.t("los.technology_or_format").map{|k,v| k.to_s}.include? @lo.technology
+      @lo.technology = "unspecified"
+    end
+
     respond_to do |format|
       format.any { 
         if @lo.save
