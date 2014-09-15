@@ -146,6 +146,14 @@ class Lo < ActiveRecord::Base
     I18n.t("scopes."+self.scope.downcase) unless self.scope.nil?
   end
 
+  def readable_lotype
+    I18n.t("los.types." + self.lotype) unless self.lotype.nil?
+  end
+
+  def readable_technology_or_format
+    I18n.t("los.technology_or_format." + self.technology) unless self.technology.nil?
+  end
+
 
   #######################
   # Get extended LO Data
