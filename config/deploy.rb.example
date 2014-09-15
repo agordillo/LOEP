@@ -13,12 +13,12 @@ default_run_options[:pty] = true
 
 role :web, "your HTTP server"                          # Your HTTP server, Apache/etc
 role :app, "your HTTP server"                          # This may be the same as your `Web` server
+role :db,  "your HTTP server", :primary => true        # This is where Rails migrations will run
 
 # if you want to clean up old releases on each deploy uncomment this:
 after "deploy:restart", "deploy:cleanup"
 
-# before 'deploy:assets:precompile', 'deploy:link_files'
-after 'deploy:create_symlink', 'deploy:link_files'
+after 'deploy:update_code', 'deploy:link_files'
 after 'deploy:restart', 'deploy:precompile_assets'
 
 # If you are using Passenger mod_rails uncomment this:
