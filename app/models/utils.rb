@@ -59,7 +59,7 @@ class Utils
   end
 
   def self.getOptionsForOccupation
-    [[I18n.t("occupations.education"),"Education"],[I18n.t("occupations.technology"),"Technology"],[I18n.t("dictionary.other"),"Other"]]
+    I18n.t("occupations").map{|k,v| [v,k.to_s]}
   end
 
 

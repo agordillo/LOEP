@@ -745,8 +745,8 @@ es:
     username_or_email: "Nombre de usuario o Correo electrónico"
   occupations:
     education: "Educación (profesor, pedagogo, ...)"
-    other: *other
     technology: "Tecnología (desarrollador de contenidos educativos, soporte TIC, ...)"
+    other: *other
   registrations:
     areas: "Áreas de interés"
     cancel_account: "Cancelar mi cuenta"
