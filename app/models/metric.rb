@@ -95,10 +95,10 @@ class Metric < ActiveRecord::Base
     evmethods = getEvmethods
     itemWeights = []
     unless evmethods.blank?
-      itemsLength = evmethods.map{|ev| ev.module.constantize.getItems.length}.sum
+      itemsLength = evmethods.map{|ev| ev.module.constantize.getItemsWithType("integer").length}.sum
       itemWeight = 1/itemsLength.to_f
       itemsLength.times do |i|
-        itemWeights.push(BigDecimal(itemWeight,6));
+        itemWeights.push(BigDecimal(itemWeight,6))
       end
     end
     itemWeights
