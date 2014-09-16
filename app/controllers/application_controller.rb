@@ -22,14 +22,28 @@ class ApplicationController < ActionController::Base
 
   #CanCan Rescue
   rescue_from CanCan::AccessDenied do |exception|
-    flash[:alert] = exception.message
-    redirect_to home_path, alert: exception.message
+    respond_to do |format|
+      format.html {
+        flash[:alert] = exception.message
+        redirect_to home_path, alert: exception.message
+      }
+      format.json { 
+        render json: I18n.t("api.message.error.unauthorized")
+      }
+    end
   end
 
   #Wildcard route rescue
   def page_not_found
-    flash[:alert] = I18n.t("dictionary.errors.page_not_found")
-    redirect_to home_path, alert: flash[:alert]
+    respond_to do |format|
+      format.html {
+        flash[:alert] = I18n.t("dictionary.errors.page_not_found")
+        redirect_to home_path, alert: flash[:alert]
+      }
+      format.json {
+        render json: I18n.t("dictionary.errors.page_not_found")
+      }
+    end
   end
 
 

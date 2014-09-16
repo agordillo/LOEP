@@ -67,9 +67,12 @@ LOEP::Application.routes.draw do
   #LOEP API
   namespace :api do
     namespace :v1 do
-      resources :los
-      match'/session_token/current' => 'session_token#current'
+      match '/tokens' => 'tokens#destroy_my_token', :via => :delete, :format => :json
+      resources :tokens,:only => [:create, :destroy]
+      match '/session_token/current' => 'session_token#current'
       resources :session_token
+
+      resources :los
     end
   end
 

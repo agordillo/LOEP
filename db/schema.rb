@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140914134816) do
+ActiveRecord::Schema.define(:version => 20140916151715) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -355,6 +355,7 @@ ActiveRecord::Schema.define(:version => 20140914134816) do
     t.integer  "language_id"
     t.integer  "loric_id"
     t.string   "occupation",             :default => "Education"
+    t.string   "authentication_token"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
