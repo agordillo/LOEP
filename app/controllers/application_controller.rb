@@ -17,8 +17,38 @@ class ApplicationController < ActionController::Base
 
   #Device path
   def after_sign_in_path_for(resource)
-	  sign_in_url = "/home"
+    sign_in_url = "/home"
   end
+
+  #Override CanCan defaults
+  def current_ability
+    #An application has the same permissions as its owner
+    @current_ability ||= Ability.new(current_owner)
+  end
+
+  def current_subject
+    if user_signed_in?
+      @current_subject = current_user
+    elsif app_signed_in?
+      @current_subject = current_app
+    else
+      @current_subject = nil
+    end
+    @current_subject
+  end
+  helper_method :current_subject
+
+  def current_owner
+    if app_signed_in?
+      @current_owner = current_app.user
+    elsif user_signed_in?
+       @current_owner = current_user
+    else
+      @current_owner = nil
+    end
+    @current_owner
+  end
+  helper_method :current_owner
 
   #CanCan Rescue
   rescue_from CanCan::AccessDenied do |exception|

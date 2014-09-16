@@ -50,6 +50,7 @@ LOEP::Application.routes.draw do
   resources :evaluations
   
   #Applications
+  devise_for :apps
   resources :apps
   
   #Surveys
@@ -69,6 +70,8 @@ LOEP::Application.routes.draw do
     namespace :v1 do
       match '/tokens' => 'tokens#destroy_my_token', :via => :delete, :format => :json
       resources :tokens,:only => [:create, :destroy]
+      match '/app_tokens' => 'app_tokens#destroy_my_token', :via => :delete, :format => :json
+      resources :app_tokens,:only => [:create, :destroy]
       match '/session_token/current' => 'session_token#current'
       resources :session_token
 

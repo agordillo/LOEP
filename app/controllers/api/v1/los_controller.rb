@@ -21,9 +21,10 @@ class Api::V1::LosController < Api::V1::BaseController
     if params[:use_id_loep].nil?
       lo = current_app.los.find_by_id_repository(params[:id])
     else
-      lo = Lo.find(params[:id])
+      lo = current_app.los.find_by_id(params[:id])
     end
     authorize! :show, lo
+
     respond_to do |format|
       format.any {
         unless lo.nil?

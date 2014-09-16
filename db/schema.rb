@@ -11,15 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140916151715) do
+ActiveRecord::Schema.define(:version => 20140916164550) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
     t.string   "auth_token"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
     t.integer  "user_id"
-    t.text     "callback",   :limit => 16777215
+    t.text     "callback",             :limit => 16777215
+    t.string   "authentication_token"
   end
 
   create_table "assignments", :force => true do |t|

@@ -1,4 +1,7 @@
 class App < ActiveRecord::Base
+  # Devise modules.
+  devise :token_authenticatable
+
   attr_accessible :user_id, :name, :auth_token, :callback
 
   belongs_to :user
