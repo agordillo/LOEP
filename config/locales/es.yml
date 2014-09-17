@@ -257,7 +257,7 @@ es:
   evaluations:
     embed:
       message:
-        a: "Tu evaluación del Objeto de Aprendizaje %{lo} ha sido correctamente entregada."
+        a: "Tu evaluación del Objeto de Aprendizaje '%{lo}' ha sido correctamente entregada."
         b: "Gracias por tu colaboración."
         c: "Puedes cerrar esta ventana."
     form:

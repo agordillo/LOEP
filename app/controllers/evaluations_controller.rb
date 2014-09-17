@@ -137,20 +137,28 @@ class EvaluationsController < ApplicationController
     @evaluation.valid?
 
     respond_to do |format|
-      if @evaluation.errors.blank?
-        if @evaluation.save
-          unless params[:embed]
-            format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("evaluations.message.success.create") }
-          else
-            format.html { 
-              render "embed_finish", :layout => 'embed' 
-            }
-          end
+      if @evaluation.errors.blank? and @evaluation.save
+        unless params[:embed]
+          format.html { 
+            redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("evaluations.message.success.create") 
+          }
         else
-          format.html { renderError(I18n.t("evaluations.message.error.generic_create"),action) }
+          format.html {
+            render "embed_finish", :layout => 'embed' 
+          }
+          format.js {
+            #Ajax
+            render json: @evaluation, status: :created
+          }
         end
       else
-        format.html { renderError(@evaluation.errors.full_messages,action) }
+        format.html {
+          renderError(@evaluation.errors.full_messages,action)
+        }
+        format.js {
+            #Ajax
+            render json: @evaluation.errors, status: :bad_request
+          }
       end
     end
   end

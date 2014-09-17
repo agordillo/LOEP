@@ -260,7 +260,7 @@ en:
   evaluations:
     embed:
       message:
-        a: "Your evaluation of the Learning Object %{lo} has been succesfully submitted."
+        a: "Your evaluation of the Learning Object '%{lo}' has been succesfully submitted."
         b: "Thank you for your collaboration."
         c: "You may close this window."
     form:

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LOEP: Embed Testing</title>
+</head>
+<body>
+<script type="text/javascript">
+	window.onload = function(){
+		window.addEventListener("message", _onLOEPMessage, false);
+	}
+	var _onLOEPMessage = function(msg){
+		if((msg)&&(msg.data)&&(msg.data.type=="LOEPMessage")){
+			//LOEP message received
+			var LOEPdata = msg.data;
+			if(LOEPdata.success===true){
+				//Form submited successfuly. We can close the iframe.
+				var form = document.getElementById("loep_form");
+				form.style.opacity = "0.1";
+			}
+		}
+	};
+</script>
+
+<!-- The iframe URL should be the URL of the embeded form. Include a session token for passing authorization filter -->
+<div style="width:90%; height:800px; margin:0 auto; display:block">
+	<iframe id="loep_form" src="http://localhost:8080/evaluations/wbltses/embed?lo_id=Excursion:377&app_name=ViSH&session_token=GO7_TyuktFuErm-QDDPHAk24NtMGC6w8KpXj5RgWD-6pgUBd5Wg_No3CrGCC0PTqxEPJ8sEGuOVpDTvv&ajax=true" width="100%" height="100%" style="border:0" iframeborder="0" frameborder="0" iframeElement.frameBorder = 0;></iframe>
+</div>
+  
+</body>
+</html>

@@ -1,9 +1,10 @@
 <% readonly ||= false %>
+<% ajax ||= (@embed and (params["ajax"]=="true")) %>
 
 <div class="loep_form_wrapper">
   <p class="form_before_button">&nbsp;</p>
 
-  <%= form_for(@evaluation) do |f| %>
+  <%= form_for(@evaluation, remote: ajax, :html => {:'data-type' => (ajax ? "json" : "html")}) do |f| %>
 
     <% if @embed %>
       <%user = @app.user%>
@@ -72,6 +73,7 @@
     $('form').submit(function(event){
       if(validateForm==true){
         event.preventDefault();
+        event.stopPropagation(); //Neccesary for Ajax forms
         _beforeSubmit($(this), function(error){
           if(typeof error != "undefined"){
             //onError or Cancel
@@ -160,3 +162,23 @@
 
   });
 </script>
+
+<%if ajax%>
+  <script type="text/javascript">
+    $(document).ajaxSuccess( function(data){
+      //Ajax Success
+      _showLOEPDialog('<%=t("evaluations.message.success.create")%>', false, function(result){
+          _sendLOEPMessage({"type": "LOEPMessage","success": true});
+      });
+    });
+    $(document).ajaxError( function(data){
+      //Ajax Error
+      _showLOEPDialog('<%=t("evaluations.message.error.generic_create")%>', false)
+    });
+
+    var _sendLOEPMessage = function(msg){
+      window.parent.postMessage(msg,'*');
+    }
+  </script>
+<%end%>
+  
