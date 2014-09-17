@@ -1,6 +1,6 @@
 class App < ActiveRecord::Base
   # Devise modules.
-  devise :token_authenticatable
+  devise :token_authenticatable, :database_authenticatable, :authentication_keys => [:name]
 
   attr_accessible :user_id, :name, :auth_token, :callback
 
@@ -81,6 +81,7 @@ class App < ActiveRecord::Base
     if self.auth_token.nil?
       self.auth_token = Utils.build_token(App)
     end
+    self.password = self.auth_token
   end
 
 end
