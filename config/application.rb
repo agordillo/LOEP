@@ -43,6 +43,13 @@ module LOEP
     # rails will fallback to en, no matter what is set as config.i18n.default_locale
     # config.i18n.fallbacks = [:en]
 
+    # When I18n.config.enforce_available_locales is true we'll raise an I18n::InvalidLocale exception if the passed locale is unavailable.
+    # The default is set to nil which will display a deprecation error.
+    # If set to false we'll skip enforcing available locales altogether (old behaviour).
+    config.i18n.enforce_available_locales = false
+    # if one of the gems compete for pre-loading, we need to use
+    I18n.config.enforce_available_locales = false
+
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
