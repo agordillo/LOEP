@@ -160,6 +160,7 @@ class Lo < ActiveRecord::Base
   def extended_attributes
     attrs = self.attributes
     attrs["keywords"] = self.tag_list.to_s
+    attrs["language"] = self.language.translated_name
 
     attrs["created_at"] = Utils.getReadableDate(attrs["created_at"])
     attrs["updated_at"] = Utils.getReadableDate(attrs["updated_at"])
