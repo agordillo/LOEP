@@ -27,7 +27,7 @@ class Api::V1::SessionTokenController < Api::V1::BaseController
         unless sessionToken.nil?
           render :json => sessionToken
         else
-          render json: {error:"Error creating session token"}, status: :unprocessable_entity
+          render json: {error:"Error creating session token"}, status: :bad_request
         end 
       }
     end

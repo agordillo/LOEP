@@ -30,7 +30,7 @@ class Api::V1::LosController < Api::V1::BaseController
         unless lo.nil?
           render json: lo.extended_attributes, :content_type => "application/json"
         else
-          render json: {"error" => "Learning Object not found"}, :content_type => "application/json"
+          render json: {"error" => "Learning Object not found"}, status: :not_found, :content_type => "application/json"
         end
       }
     end  
@@ -56,12 +56,14 @@ class Api::V1::LosController < Api::V1::BaseController
       @lo.technology = "unspecified"
     end
 
+    @lo.valid?
+
     respond_to do |format|
       format.any { 
-        if @lo.save
+        if @lo.errors.blank? and @lo.save
           render :json => @lo.extended_attributes, :content_type => "application/json"
         else
-          render json: @lo.errors, status: :unprocessable_entity, :content_type => "application/json"
+          render json: @lo.errors, status: :bad_request, :content_type => "application/json"
         end 
       }
     end
@@ -77,7 +79,7 @@ class Api::V1::LosController < Api::V1::BaseController
           if lo.update_attributes(params[:lo])
             render json: lo.extended_attributes, :content_type => "application/json"
           else
-            render json: lo.errors, status: :unprocessable_entity, :content_type => "application/json"
+            render json: lo.errors, status: :bad_request, :content_type => "application/json"
           end
         }
     end
@@ -100,15 +102,17 @@ class Api::V1::LosController < Api::V1::BaseController
   private
 
   def filterLOLanguage
-    if params[:lo] and params[:lo][:lanCode]
-      begin
-      	params[:lo][:language_id] = Language.find_by_code(params[:lo][:lanCode]).id
-      rescue
+    if params[:lo]
+      if params[:lo][:lanCode]
+        begin
+        	params[:lo][:language_id] = Language.find_by_code(params[:lo][:lanCode]).id
+        rescue
+          params[:lo][:language_id] = Language.find_by_code("lanot").id
+        end
+        params[:lo].delete :lanCode
+      else
         params[:lo][:language_id] = Language.find_by_code("lanot").id
       end
-      params[:lo].delete :lanCode
-    else
-      params[:lo][:language_id] = Language.find_by_code("lanot").id
     end
   end
 
