@@ -25,9 +25,9 @@ class Api::V1::SessionTokenController < Api::V1::BaseController
     respond_to do |format|
       format.any {
         unless sessionToken.nil?
-          render :json => {auth_token: sessionToken.auth_token}
+          render :json => {auth_token: sessionToken.auth_token}, :content_type => "application/json"
         else
-          render json: {error:"Error creating session token"}, status: :bad_request
+          render json: {error:"Error creating session token"}, status: :bad_request, :content_type => "application/json"
         end 
       }
     end

@@ -164,6 +164,7 @@ DEPENDENCIES
   devise-token_authenticatable (= 0.1.0)
   execjs (= 2.0.2)
   faker (= 1.2.0)
+  i18n (= 0.6.11)
   jquery-rails (= 3.0.4)
   mysql2 (= 0.3.14)
   pry-rails (= 0.3.2)
