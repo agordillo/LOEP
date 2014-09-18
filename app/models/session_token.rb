@@ -38,6 +38,11 @@ class SessionToken < ActiveRecord::Base
     self.expire_at < Time.now
   end
 
+  def invalidate
+    self.expire_at = Time.now
+    self.save!
+  end
+
   def self.deleteExpiredTokens
     expiredSessionTokens = SessionToken.all.select{|s| s.expired?}
     expiredSessionTokens.each do |s|

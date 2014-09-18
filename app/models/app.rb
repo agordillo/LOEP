@@ -66,7 +66,7 @@ class App < ActiveRecord::Base
 
   def current_session_token
     currentToken = valid_session_tokens.first
-    if currentToken.nil? or ((currentToken.expire_at-Time.now)/(60*60)<6)
+    if currentToken.nil? or ((currentToken.expire_at-Time.now)/60 < 1)
       currentToken = create_session_token
     end
     currentToken

@@ -143,6 +143,10 @@ class EvaluationsController < ApplicationController
             redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("evaluations.message.success.create") 
           }
         else
+          #Invalidate session Token (Only 1 evaluation can be created with a session token)
+          sessionToken = SessionToken.find_by_auth_token(params["session_token"])
+          sessionToken.invalidate unless sessionToken.nil?
+
           format.html {
             render "embed_finish", :layout => 'embed' 
           }
