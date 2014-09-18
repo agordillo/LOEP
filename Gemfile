@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.12'
+gem 'rake', '10.3.2'
 
 # DBMS
 # gem 'sqlite3'
@@ -13,12 +14,23 @@ gem 'recaptcha', '0.3.5', :require => 'recaptcha/rails'
 gem 'devise', '3.2.0'
 gem 'devise-token_authenticatable', '0.1.0'
 gem 'cancan', '1.6.10'
+gem 'warden', '1.2.3'
+
+gem 'bcrypt', '3.1.7'
+gem 'bcrypt-ruby', '3.1.5'
 
 gem 'acts-as-taggable-on', '2.2.2'
+gem 'multi_json', '1.10.1'
+gem 'rubyzip', '1.0.0'
 
 group :development do
   # Deploy with Capistrano
   gem 'capistrano', '2.15.5'
+  gem 'net-ssh', '2.6.5'
+  gem 'net-scp', '1.2.1'
+  gem 'net-sftp', '2.1.2'
+  gem 'net-ssh-gateway', '1.2.0'
+
   gem 'pry-rails', '0.3.2'
   gem 'faker', '1.2.0'
   gem 'yard', '0.8.7.3'
