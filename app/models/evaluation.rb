@@ -187,7 +187,7 @@ class Evaluation < ActiveRecord::Base
   #Get the real reviewer of the Evaluation
   def readable_reviewer
     unless self.app.nil? or !self.anonymous
-      ('Anonymous (<a href="'+Rails.application.routes.url_helpers.app_path(self.app)+'">'+self.app.name+'</a>)').html_safe
+      (I18n.t("dictionary.anonymous") + ' (<a href="'+Rails.application.routes.url_helpers.app_path(self.app)+'">'+self.app.name+'</a>)').html_safe
     else
       ('<a href="'+Rails.application.routes.url_helpers.user_path(self.user)+'">'+self.user.name+'</a>').html_safe
     end

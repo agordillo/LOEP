@@ -3,6 +3,7 @@ en:
   dictionary:
     age: "Age"
     all: "All"
+    anonymous: "Anonymous"
     applet:
       one: "Applet"
       plural: "Applets"
