@@ -22,12 +22,13 @@
           <% iValue = @evaluation.send("item" + nItem.to_s)%>
           <% if iValue===-1 %>
             <div class='numberCircle numberCircleSmall'>
-            <span><%=t("evmethods.forms.na")%></span>
+              <span><%=t("evmethods.forms.na")%></span>
+            </div>
           <% else %>
             <div class='numberCircle'>
-            <span><%=iValue %></span>
+              <span><%=iValue %></span>
+            </div>
           <% end %>
-          </div>
         <% end %>
       </div>
       <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> <%=t("forms.evmethod.remove")%></div>

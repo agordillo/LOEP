@@ -1,8 +1,6 @@
 <% readonly ||= false %>
 <% ajax ||= (@embed and (params["ajax"]=="true")) %>
-
-<div class="loep_form_wrapper">
-  <p class="form_before_button">&nbsp;</p>
+<div class="loep_form_wrapper <%=@evaluation.evmethod.shortname%>_evmethod_form_wrapper">
 
   <%= form_for(@evaluation, remote: ajax, :html => {:'data-type' => (ajax ? "json" : "html")}) do |f| %>
 

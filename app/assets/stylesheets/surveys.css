@@ -7,33 +7,37 @@
 }
 
 #surveys h1 {
-	font-size: 30px;
+  font-size: 30px;
 }
 
 #surveys h2 {
-	font-size: 23px;
+  font-size: 23px;
 }
 
 #surveys p {
-	color: #999;
-	font-size: 15px;
+  color: #999;
+  font-size: 15px;
 }
 
 #surveys .loep_button {
-	min-width: 200px;
-	padding: 2px 6px;
+  min-width: 200px;
+  padding: 2px 6px;
 }
 
 div.survey_block {
-	margin-bottom: 40px;
+  margin-bottom: 30px;
+}
+
+div.loem_evmethod_form_wrapper div.survey_block{
+  margin-bottom: 40px !important;
 }
 
 div.survey_block_only_with_title {
-	margin-bottom: 0px !important;
+  margin-bottom: 0px !important;
 }
 
 span.flagInSurveyBlockTitle img {
-	margin-top: 5px;
+  margin-top: 5px;
 }
 
 
@@ -42,157 +46,156 @@ span.flagInSurveyBlockTitle img {
  */
 
 .survey_title {
-	font-size: 25px;
-	font-weight: bold;
-	margin-bottom: 20px;
-	margin-top: 20px;
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .survey_question_title {
-	font-size: 18px;
-	background-color: #2B4923;
-	color: white;
-	border-radius: 0px 5px 5px 0px;
-	padding: 2px 6px;
-	border: 1px solid #373736;
-	margin-bottom: 5px;
-	font-weight: bold;
+  font-size: 18px;
+  background-color: #2B4923;
+  color: white;
+  border-radius: 0px 5px 5px 0px;
+  padding: 2px 6px;
+  border: 1px solid #373736;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .survey_question_subtitle {
-	font-size: 15px;
-	color: #666;
-	margin-bottom: 7px;
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 7px;
 }
 
 .survey_question_group_title {
-	font-size: 18px;
-	background-color: black;
-	color: white;
-	border-radius: 0px 5px 5px 0px;
-	padding: 2px 6px;
-	border: 1px solid #373736;
-	margin-bottom: 15px;
-	font-weight: bold;
+  font-size: 18px;
+  background-color: black;
+  color: white;
+  border-radius: 0px 5px 5px 0px;
+  padding: 2px 6px;
+  border: 1px solid #373736;
+  margin-bottom: 15px;
+  font-weight: bold;
 }
 
 div.rating_wrapper {
-	display: block;
-	min-height: 44px;
-	overflow: hidden;
+  display: block;
+  min-height: 44px;
+  overflow: hidden;
 }
 
 div.stars_wrapper {
-	display: inline-block;
-	float: left;
-	margin-top: 13px;
+  display: inline-block;
+  float: left;
+  margin-top: 13px;
 }
 
 .hover-star_legend_left {
-	float: left;
-	margin-right: 10px;
+  float: left;
+  margin-right: 10px;
 }
 
 .hover-star_legend_right {
-	margin-left: 10px;
-	margin-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 div.rating-cancel, div.rating-cancel a {
-	display: none !important;
+  display: none !important;
 }
 
 div.hover-start_text {
-	display: inline-block;
-	margin-left: 15px;
-	cursor: default;
+  display: inline-block;
+  margin-left: 15px;
+  cursor: default;
 }
 
 div.remove_hover-start-value {
-	margin-left: 5px;
-	cursor: pointer;
+  margin-left: 5px;
+  cursor: pointer;
 }
 
 .numberCircle {
-	display: inline-block;
-	-webkit-border-radius: 999px;
-	-moz-border-radius: 999px;
-	border-radius: 999px;
-	width: 40px;
-	height: 40px;
-	padding: 2px;
-	background: #fff;
-	border: 3px solid black;
-	color: black;
-	text-align: center;
-	font-size: 22px;
-	font-weight: bold;
+  display: inline-block;
+  -webkit-border-radius: 999px;
+  -moz-border-radius: 999px;
+  border-radius: 999px;
+  width: 40px;
+  height: 40px;
+  padding: 2px;
+  background: #fff;
+  border: 3px solid black;
+  color: black;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 .numberCircle span {
-	display: block;
+  display: block;
 }
 
 .numberCircleSmall span {
-	margin-top: 5px;
-	font-size: 16px;
+  margin-top: 5px;
+  font-size: 16px;
 }
 
-
 div.remove_item-value {
-	display: none;
-	margin-left: 15px;
-	cursor: pointer;
-	margin-top: 14px;
-	vertical-align: top;
+  display: none;
+  margin-left: 15px;
+  cursor: pointer;
+  margin-top: 14px;
+  vertical-align: top;
 }
 
 .survey_block .loep_input { 
-	width: 100%;
+  width: 100%;
 }
 
 div.na-check{
-	display: inline-block;
-	margin-top: 11px;
-	margin-left: 10px;
-	float: left;
+  display: inline-block;
+  margin-top: 11px;
+  margin-left: 10px;
+  float: left;
 }
 
 
 /* Styles added for LOEM form */
 
 div.rating_wrapper_column1 {
-	display: inline-block;
-	width: 80%;
-	padding-right: 1%;
-	margin-top: 13px;
+  display: inline-block;
+  width: 80%;
+  padding-right: 1%;
+  margin-top: 13px;
 }
 
 div.rating_wrapper_column2 {
-	display: inline-block;
-	width: 18%;
-	margin-top: 13px;
-	vertical-align: top;
+  display: inline-block;
+  width: 18%;
+  margin-top: 13px;
+  vertical-align: top;
 }
 
 div.rating_wrapper_column1 > p.input_wrapper > span {
-	margin-left: 5px;
+  margin-left: 5px;
 }
 
 p.input_wrappers_header {
 }
 
 p.or_input_separator {
-	margin-top: -8px;
-	margin-bottom: 2px;
+  margin-top: -8px;
+  margin-bottom: 2px;
 }
 
 p.or_block_separator {
-	margin-top: 0px;
-	margin-bottom: 0px;
-	height: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 10px;
 }
 
 textarea.evaluation_survey_text_item_input{
-	margin-bottom: 15px;
+  margin-bottom: 15px;
 }

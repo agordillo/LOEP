@@ -63,21 +63,22 @@
             <% iValue = @evaluation.send("item" + integerItemsIndex.to_s)%>
             <% if iValue===-1 %>
               <div class='numberCircle numberCircleSmall'>
-              <span><%="N/A"%></span>
+                <span><%="N/A"%></span>
+              </div>
             <% else %>
               <div class='numberCircle'>
-              <span><%=iValue %></span>
+                <span><%=iValue %></span>
+              </div>
             <% end %>
-            </div>
           <% end %>
         </div>
         <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> <%=t("forms.evmethod.remove")%></div>
       </div>
-    </div>
   <%elsif item[:type] == "text" %>
     <%textItemsIndex+=1%>
     <%= f.text_area "titem" + textItemsIndex.to_s, :class=>'loep_input evaluation_survey_text_item_input optionalInput', :readonly => readonly ? "true" : nil %>
   <%end%>
+  </div>
 <% end %>
 
 <script type="text/javascript">
