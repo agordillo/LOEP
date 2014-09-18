@@ -1,46 +1,50 @@
+# encoding: utf-8
+require 'restclient'
+require 'json'
+require 'base64'
+
 class LoepNotifier
 
-	# Notify an app that a LO has new information available
-	# Request example
-	# PUT http://localhost:8080/loep/los/55?app_name=MyLORApp&auth_token=tokenOfMyLORApp
-	def self.notifyLoUpdate(app,lo)
-		if app.callback.blank? or app.auth_token.blank? or lo.id_repository.blank?
-			return
-		end
+  # Notify an app that a LO has new information available
+  # Request example
+  # PUT http://localhost:3000/loep/los/Excursion:55
+  # Use HTTP Basic Authentication (App Name and App Auth Token are sent in the Authorization header)
+  def self.notifyLoUpdate(app,lo)
+    if app.callback.blank? or app.auth_token.blank? or lo.id_repository.blank?
+      return
+    end
 
-		basePath = app.callback
-		if app.callback.last != "/"
-			basePath = app.callback + "/"
-		end
-		appURI = URI(basePath)
+    basePath = app.callback
+    if app.callback.last != "/"
+      basePath = app.callback + "/"
+    end
+    fullPath = basePath + "los/" + lo.id_repository.to_s
 
-		host = appURI.host
-		port = appURI.port
-		path = appURI.path + "los/" + lo.id_repository.to_s
+    #Build params
+    params = Hash.new
+    params["id_loep"] = lo.id
+    params["id_repository"] = lo.id_repository
+    params["lo"] = lo.extended_attributes.to_json
 
-		if host.blank?
-			return
-		end
+    require 'thread'
+    Thread.new {
+      begin
+        response = RestClient::Request.execute(
+          :method => :put,
+          :url => fullPath,
+          :payload => params,
+          :headers => {:'Authorization' => getBasicAuthHeader(app)}
+        )
+      rescue Exception => e
+        # puts e.message
+      end
+    }
+    end
 
-		#Build params
-		params = Hash.new
-		params["app_name"] = app.name
-		params["auth_token"] = app.auth_token
-		params["id_loep"] = lo.id
-		params["id_repository"] = lo.id_repository
-		params["lo"] = lo.extended_attributes.to_json
+  private
 
-		require 'thread'
-		Thread.new {
-			begin 
-				req = Net::HTTP::Put.new(path,{'Content-Type' =>'application/json'})
-				req.set_form_data(params)
-				response = Net::HTTP.new(host, port).start {|http| http.request(req) }
-				# puts response
-			rescue Exception => e
-				# puts e.message
-			end
-		}
-	end
+  def self.getBasicAuthHeader(app)
+    'Basic ' + Base64.encode64(app.name + ":" + app.auth_token).gsub("\n","")
+  end
 
 end
