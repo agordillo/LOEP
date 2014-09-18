@@ -41,6 +41,13 @@ group :production do
   gem 'execjs', '2.0.2'
 end
 
+# Gems used only for assets
+group :assets do
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'uglifier', '>= 1.0.3'
+end
+
 #xlsx generation
 gem 'axlsx', '2.0.1'
 gem 'axlsx_rails', '0.1.5'
