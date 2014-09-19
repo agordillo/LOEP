@@ -269,8 +269,8 @@ class EvaluationsController < ApplicationController
   def authenticate_session_token
     if (params["app_name"].nil? and params["app_id"].nil?) or params["session_token"].nil?
       @message = I18n.t("api.message.error.unauthorized")
-      render :embed_empty, :layout => 'embed'
-      return
+      @error_code = 401
+      return render :embed_empty, :layout => 'embed'
     end
 
     begin
@@ -281,16 +281,16 @@ class EvaluationsController < ApplicationController
       end
     rescue
       @message = I18n.t("api.message.error.unauthorized")
-      render :embed_empty, :layout => 'embed'
-      return
+      @error_code = 401
+      return render :embed_empty, :layout => 'embed'
     end
 
     @sessionToken = params["session_token"]
 
     if @app.nil? or !@app.isSessionTokenValid(@sessionToken) or @app.user.nil? or !@app.user.isAdmin?
       @message = I18n.t("api.message.error.unauthorized")
-      render :embed_empty, :layout => 'embed'
-      return
+      @error_code = 401
+      return render :embed_empty, :layout => 'embed'
     end
 
     @current_user = @app.user
@@ -305,8 +305,8 @@ class EvaluationsController < ApplicationController
 
     if @lo.nil?
       @message = I18n.t("api.message.error.lo_unexists")
-      render :embed_empty, :layout => 'embed'
-      return
+      @error_code = 404
+      return render :embed_empty, :layout => 'embed'
     end
   end
 

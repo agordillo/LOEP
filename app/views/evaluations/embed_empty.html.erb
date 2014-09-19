@@ -1,7 +1,20 @@
-<div id="wrapper">
-  <div id='container'>
-    <%unless @message.nil? %>
-		<p><%=@message%></p>
-	<%end%>
+<% notifyError ||= (params["ajax"]=="true" && !@error_code.nil?) %>
+
+<%if notifyError %>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      _sendLOEPMessage({"type": "LOEPMessage","error": true, "error_code": '<%=@error_code%>', "error_msg": '<%=@message%>'});
+    });
+    var _sendLOEPMessage = function(msg){
+      window.parent.postMessage(msg,'*');
+    }
+  </script>
+<%else%>
+  <div id="wrapper">
+    <div id='container'>
+      <%unless @message.nil? %>
+        <p><%=@message%></p>
+      <%end%>
+    </div>
   </div>
-</div>
+<%end%>
