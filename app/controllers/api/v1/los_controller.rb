@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 class Api::V1::LosController < Api::V1::BaseController
+  before_filter :getLO, :only => [:show, :update, :destroy, :showEvaluationsRepresentation]
   before_filter :filterLOLanguage, :only => [:create, :update]
 
   # API REST for LOs
@@ -18,17 +19,12 @@ class Api::V1::LosController < Api::V1::BaseController
 
   # GET /api/v1/los/:id
   def show
-    if params[:use_id_loep].nil?
-      lo = current_app.los.find_by_id_repository(params[:id])
-    else
-      lo = current_app.los.find_by_id(params[:id])
-    end
-    authorize! :show, lo
+    authorize! :show, @lo
 
     respond_to do |format|
       format.any {
-        unless lo.nil?
-          render json: lo.extended_attributes, :content_type => "application/json"
+        unless @lo.nil?
+          render json: @lo.extended_attributes, :content_type => "application/json"
         else
           render json: {"error" => "Learning Object not found"}, status: :not_found, :content_type => "application/json"
         end
@@ -71,15 +67,14 @@ class Api::V1::LosController < Api::V1::BaseController
 
   # PUT /api/v1/los/:id
   def update
-    lo = Lo.find(params[:id])
-    authorize! :update, lo
+    authorize! :update, @lo
 
     respond_to do |format|
         format.any { 
-          if lo.update_attributes(params[:lo])
-            render json: lo.extended_attributes, :content_type => "application/json"
+          if @lo.update_attributes(params[:lo])
+            render json: @lo.extended_attributes, :content_type => "application/json"
           else
-            render json: lo.errors, status: :bad_request, :content_type => "application/json"
+            render json: @lo.errors, status: :bad_request, :content_type => "application/json"
           end
         }
     end
@@ -87,9 +82,8 @@ class Api::V1::LosController < Api::V1::BaseController
 
   # DELETE /api/v1/los/:id
   def destroy
-    lo = Lo.find(params[:id])
-    authorize! :destroy, lo
-    lo.destroy
+    authorize! :destroy, @lo
+    @lo.destroy
 
     respond_to do |format|
       format.any { 
@@ -100,6 +94,14 @@ class Api::V1::LosController < Api::V1::BaseController
 
 
   private
+
+  def getLO
+    if params[:use_id_loep].nil?
+      @lo = current_app.los.find_by_id_repository(params[:id])
+    else
+      @lo = current_app.los.find_by_id(params[:id])
+    end
+  end
 
   def filterLOLanguage
     if params[:lo]

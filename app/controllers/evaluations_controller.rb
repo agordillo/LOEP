@@ -3,7 +3,7 @@ class EvaluationsController < ApplicationController
   before_filter :authenticate_user_or_session_token, :only => [:create]
   before_filter :authenticate_session_token, :only => [:embed]
   before_filter :getEvModel, :only => [:new, :create, :embed]
-  before_filter :getAppLo, :only => [:embed]
+  before_filter :getLoForUsersOrApps, :only => [:embed]
   
   # GET /evaluations
   # GET /evaluations.json
@@ -91,7 +91,7 @@ class EvaluationsController < ApplicationController
     @evmethod = @evaluation.evmethod
     unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evmethod.name
       @message = I18n.t("evaluations.message.error.external_evaluations_disabled")
-      render :embed_empty, :layout => 'embed'
+      render "application/embed_empty", :layout => 'embed'
       return
     end
     @evmethodItems = @evModel.getItems
@@ -122,7 +122,7 @@ class EvaluationsController < ApplicationController
     if params[:embed]
       unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evaluation.evmethod.name
         @message = I18n.t("evaluations.message.error.external_evaluations_disabled")
-        render :embed_empty, :layout => 'embed'
+        render "application/embed_empty", :layout => 'embed'
         return
       end
       action = "embed"
@@ -204,16 +204,6 @@ class EvaluationsController < ApplicationController
 
   private
 
-  def authenticate_user_or_session_token
-    if params[:session_token]
-      #Authenticate via session_token
-      authenticate_session_token
-    else
-      #Authenticate user
-      authenticate_user!
-    end
-  end
-
   def getEvModel
     @evModel = self.class.name.sub("Controller", "").singularize.constantize
   end
@@ -258,55 +248,6 @@ class EvaluationsController < ApplicationController
     if action=="embed"
       @title = @lo.name
       @embed = true
-    end
-  end
-
-
-  ####################
-  # Methods for Embed
-  ####################
-
-  def authenticate_session_token
-    if (params["app_name"].nil? and params["app_id"].nil?) or params["session_token"].nil?
-      @message = I18n.t("api.message.error.unauthorized")
-      @error_code = 401
-      return render :embed_empty, :layout => 'embed'
-    end
-
-    begin
-      unless params["app_id"].nil?
-        @app = App.find(params["app_id"])
-      else
-        @app = App.find_by_name(params["app_name"])
-      end
-    rescue
-      @message = I18n.t("api.message.error.unauthorized")
-      @error_code = 401
-      return render :embed_empty, :layout => 'embed'
-    end
-
-    @sessionToken = params["session_token"]
-
-    if @app.nil? or !@app.isSessionTokenValid(@sessionToken) or @app.user.nil? or !@app.user.isAdmin?
-      @message = I18n.t("api.message.error.unauthorized")
-      @error_code = 401
-      return render :embed_empty, :layout => 'embed'
-    end
-
-    @current_user = @app.user
-  end
-
-  def getAppLo
-    if params[:use_id_loep].nil?
-      @lo = @app.los.find_by_id_repository(params[:lo_id])
-    else
-      @lo = Lo.find_by_id(params[:lo_id])
-    end
-
-    if @lo.nil?
-      @message = I18n.t("api.message.error.lo_unexists")
-      @error_code = 404
-      return render :embed_empty, :layout => 'embed'
     end
   end
 

@@ -1,6 +1,6 @@
 <%= render 'application/rgraph' %>
 
-<% 
+<%
   @evmethods.each do |evmethod| 
     representationData = nil
     if action=="show" and @lo.hasBeenEvaluatedWithEvmethod(evmethod) and evmethod.getEvaluationModule.methods.include? :representationData
@@ -12,16 +12,18 @@
     end
 %>
   <% unless representationData.nil? %>
-    <p class="space_large"></p>
-    <h1 class="loep_title loep_title_min">
-      <%if action=="show"%>
-        <%=t("evaluations.summary.main", :evmethod => evmethod.name)%>
-      <%elsif action=="compare"%>
-        <%=t("evaluations.summary.comparison", :evmethod => evmethod.name)%>
-      <%elsif action=="stats"%>
-        <%=t("evaluations.summary.stats", :evmethod => evmethod.name)%>
-      <%end%>
-    </h1>
+    <% unless @onlyShowRepresentation %>
+      <p class="space_large"></p>
+      <h1 class="loep_title loep_title_min">
+        <%if action=="show"%>
+          <%=t("evaluations.summary.main", :evmethod => evmethod.name)%>
+        <%elsif action=="compare"%>
+          <%=t("evaluations.summary.comparison", :evmethod => evmethod.name)%>
+        <%elsif action=="stats"%>
+          <%=t("evaluations.summary.stats", :evmethod => evmethod.name)%>
+        <%end%>
+      </h1>
+    <% end %>
     <%= render "evmethods/representation", :representationData => representationData, :evmethod => evmethod %>
   <%end%>
 <% end %>

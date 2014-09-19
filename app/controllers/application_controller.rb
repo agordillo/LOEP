@@ -97,6 +97,74 @@ class ApplicationController < ActionController::Base
   end
 
 
+  ####################
+  # Methods for Embed
+  ####################
+
+  def getLoForUsersOrApps
+    if @app.nil?
+      @lo = Lo.find(params[:id])
+    else
+      #Access from an application
+      if params[:use_id_loep].nil?
+        @lo = @app.los.find_by_id_repository(params[:lo_id]||params[:id])
+      else
+        @lo = @app.los.find_by_id(params[:lo_id]||params[:id])
+      end
+
+      if @lo.nil?
+        @message = I18n.t("api.message.error.lo_unexists")
+        @error_code = 404
+        return render "application/embed_empty", :layout => 'embed'
+      end
+    end
+  end
+
+  ################
+  # Authentication
+  ################
+
+  def authenticate_user_or_session_token
+    if params[:session_token]
+      #Authenticate via session_token
+      authenticate_session_token
+    else
+      #Authenticate user
+      authenticate_user!
+    end
+  end
+
+  def authenticate_session_token
+    if (params["app_name"].nil? and params["app_id"].nil?) or params["session_token"].nil?
+      @message = I18n.t("api.message.error.unauthorized")
+      @error_code = 401
+      return render :embed_empty, :layout => 'embed'
+    end
+
+    begin
+      unless params["app_id"].nil?
+        @app = App.find(params["app_id"])
+      else
+        @app = App.find_by_name(params["app_name"])
+      end
+    rescue
+      @message = I18n.t("api.message.error.unauthorized")
+      @error_code = 401
+      return render :embed_empty, :layout => 'embed'
+    end
+
+    @sessionToken = params["session_token"]
+
+    if @app.nil? or !@app.isSessionTokenValid(@sessionToken) or @app.user.nil? or !@app.user.isAdmin?
+      @message = I18n.t("api.message.error.unauthorized")
+      @error_code = 401
+      return render :embed_empty, :layout => 'embed'
+    end
+
+    @current_user = @app.user
+  end
+
+
   private
 
   ################

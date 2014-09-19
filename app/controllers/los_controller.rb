@@ -1,6 +1,8 @@
 class LosController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :filterLanguage
+  before_filter :authenticate_user!, :except => [:showEvaluationsRepresentation]
+  before_filter :authenticate_user_or_session_token, :only => [:showEvaluationsRepresentation]
+  before_filter :filterLanguage, :only => [:create, :update]
+  before_filter :getLoForUsersOrApps, :only => [:showEvaluationsRepresentation]
 
   # GET /los
   # GET /los.json
@@ -451,6 +453,31 @@ class LosController < ApplicationController
             @resourceName = "LOEvaluations"
             render :xlsx => "index", :filename => "LOEvaluations.xlsx", :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet"
         }
+    end
+  end
+
+
+  #Representation
+  # GET /los/:id/representation?evmethods=wblts,wlbtt
+  def showEvaluationsRepresentation
+    authorize! :show, @lo
+
+    @evmethods = @lo.evmethods.uniq
+
+    unless params["evmethods"].nil?
+      paramsEvmethods = params["evmethods"].split(",")
+      @evmethods = (@evmethods & Evmethod.all.select{|e| paramsEvmethods.include? e.shortname}).sort_by{|ev| paramsEvmethods.index(ev.shortname)}
+    else
+      @evmethods = @evmethods.sort_by{|ev| ev.name}
+    end
+
+    #Do not show title, only representation
+    @onlyShowRepresentation = (params["showtitle"]!="true")
+
+    respond_to do |format|
+      format.html {
+        render "evaluationsRepresentation", :content_type => "text/html", :layout => "embed"
+      }
     end
   end
 
