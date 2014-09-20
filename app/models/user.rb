@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   validates :language_id, :presence => { :message => I18n.t("dictionary.errors.blank") }
   validates :language_id, :exclusion => { :in => [-1], :message => I18n.t("dictionary.errors.unspecified")}
   validates :occupation, :presence => { :message => I18n.t("dictionary.errors.blank") }
-  validates_inclusion_of :occupation, :in => ["Education", "Technology", "Other"], :allow_nil => false, :message => ": " + I18n.t("dictionary.invalid")
+  validates_inclusion_of :occupation, :in => I18n.t("occupations", :locale => :en).map{|k,v| k.to_s}, :allow_nil => false, :message => ": " + I18n.t("dictionary.invalid")
 
   # Virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'

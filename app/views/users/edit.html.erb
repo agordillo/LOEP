@@ -32,7 +32,7 @@
       </div>
 
       <p class="form_legend">* <%=t("registrations.occupation")%></p>
-      <%= f.select :occupation, options_for_select(Utils.getOptionsForOccupation,@user.occupation || "Education"), {} ,{ :class=>'loep_input' } %>
+      <%= f.select :occupation, options_for_select(Utils.getOptionsForOccupation,@user.occupation || "education"), {} ,{ :class=>'loep_input' } %>
 
       <p class="form_legend">* <%=t("registrations.language_preferred")%></p>
       <%= f.select :language_id, options_for_select(Utils.getOptionsForSelectLan(@user,{:current_user=>current_user}),@user.language_id || "Unspecified"), {} ,{ :class=>'loep_input' } %>
