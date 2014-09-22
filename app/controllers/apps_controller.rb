@@ -109,6 +109,19 @@ class AppsController < ApplicationController
     end
   end
 
+  # GET /apps/:id/create_session_token
+  def create_session_token
+    @app = App.find(params[:id])
+    authorize! :update, @app
+
+    @app.create_session_token
+    
+    respond_to do |format|
+      format.html { redirect_to app_path(@app) }
+      format.json { render json: @app }
+    end
+  end
+
 
   private
 

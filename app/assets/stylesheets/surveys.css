@@ -3,7 +3,6 @@
  */
 
 #surveys {
-
 }
 
 #surveys h1 {
@@ -198,4 +197,10 @@ p.or_block_separator {
 
 textarea.evaluation_survey_text_item_input{
   margin-bottom: 15px;
+}
+
+
+/* Adapt survey views for small screens (including Mobile devices) */
+@media (max-width: 600px) {
+
 }

@@ -25,7 +25,7 @@
       <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
     <% end %>
 
-    <%sessionTokens=@app.valid_session_tokens%>
+    <%sessionTokens = @app.valid_session_tokens.first(10)%>
     <%unless sessionTokens.blank? %>
       <p class="form_legend"><%=t("dictionary.auth_tokens_active")%></p>
       <%sessionTokens.each do |s|%>
@@ -33,7 +33,8 @@
         <p class="space_extra_small"></p>
       <%end%>
     <% end %>
-
+    <p class="space_small"></p>
+    <p><%= link_to "Create new session token", app_new_session_token_path(@app) %></p>
     <p class="space_small"></p>
 
     <%if !@app.callback.nil? %>

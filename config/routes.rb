@@ -52,6 +52,7 @@ LOEP::Application.routes.draw do
   
   #Applications
   devise_for :apps
+  match '/apps/:id/create_session_token' => 'apps#create_session_token', via: [:get, :post]
   resources :apps
   
   #Surveys
