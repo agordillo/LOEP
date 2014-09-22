@@ -2,11 +2,11 @@
   <h2><%=@lo.name%></h2>
   
   <% if iamAdmin? %>
-    <%= link_to t("actions.view_as_reviewer"), rlo_path(@lo) %> |
-    <%= link_to t("dictionary.edit"), edit_lo_path(@lo) %> |
-    <a href="<%=new_assignment_path_for(@lo.id,nil)%>"><%=t("actions.add_assignment")%></a> |
-    <a href="<%=download_path(@lo,"xlsx")%>"><%=t("actions.download")%></a> |
-    <a href="<%=download_evs_path(@lo,"xlsx")%>"><%=t("actions.download_evaluations")%></a>
+    <%= link_to t("actions.view_as_reviewer"), rlo_path(@lo), :class=>'ralink' %> |
+    <%= link_to t("dictionary.edit"), edit_lo_path(@lo), :class=>'ralink' %> |
+    <a class="ralink" href="<%=new_assignment_path_for(@lo.id,nil)%>"><%=t("actions.add_assignment")%></a> |
+    <a class="ralink" href="<%=download_path(@lo,"xlsx")%>"><%=t("actions.download")%></a> |
+    <a class="ralink" href="<%=download_evs_path(@lo,"xlsx")%>"><%=t("actions.download_evaluations")%></a>
   <% end %>
 
   <p class="space_medium"></p>

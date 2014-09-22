@@ -10,7 +10,7 @@
 	overflow: hidden;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: normal;
-	font-size: 15px;
+	font-size: 0.75rem;
 	color: white;
 }
 
@@ -36,7 +36,7 @@
 }
 
 #homemenu h3 {
-	font-size: 15px;
+	font-size: 0.75rem;
 	line-height: 24px;
 	padding: 3px 10px;
 	margin-bottom: 2px;
@@ -57,7 +57,7 @@
 }
 
 #homemenu h3 span {
-	font-size: 16px;
+	font-size: 0.8rem;
 	margin-right: 10px;
 }
 
@@ -66,7 +66,7 @@
 }
 
 #homemenu ul ul li a {
-	font-size: 14px;
+	font-size: 0.7rem;
 	line-height: 24px;
 	display: block;
 	padding: 6px 10px 6px 15px;

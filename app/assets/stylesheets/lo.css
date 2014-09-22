@@ -14,3 +14,7 @@
 .new_lo_form #tags_tagsinput {
 	width: 80% !important;
 }
+
+.loep_table_selected_los{
+	font-size: 0.7rem;
+}

@@ -34,8 +34,14 @@
       <p class="survey_question_group_title"><%=sectionTitle%></p>
     <% end %>
 
-    <p class="survey_question_title"><%=nItemToShow%>. <%=item[:name]%></p>
-    <p class="survey_question_subtitle"><%=item[:description]%></p>
+    <% unless nItemToShow.nil? %>
+      <p class="survey_question_title"><%=nItemToShow%>. <%=item[:name]%></p>
+      <%unless item[:description].blank?%>
+        <p class="survey_question_subtitle"><%=item[:description]%></p>
+      <%end%>
+    <% end %>
+
+    <p class="survey_block_top_space"></p>
     
     <div class="rating_wrapper">
       <div class="rating_wrapper_column1">

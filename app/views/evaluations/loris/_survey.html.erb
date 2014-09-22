@@ -1,8 +1,16 @@
 <% @evmethodItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <div class="survey_block" item="<%=nItem%>">
-    <p class="survey_question_title"><%=nItem%>. <%=item[:name]%></p>
-    <p class="survey_question_subtitle"><%=item[:description]%></p>
+
+    <% unless nItem.nil? %>
+      <p class="survey_question_title"><%=nItem%>. <%=item[:name]%></p>
+      <%unless item[:description].blank?%>
+        <p class="survey_question_subtitle"><%=item[:description]%></p>
+      <%end%>
+    <% end %>
+
+    <p class="survey_block_top_space"></p>
+
     <div class="rating_wrapper">
       <div class="stars_wrapper">
         <span  class="hover-star_legend_left"><%=t("forms.evmethod.low")%></span>

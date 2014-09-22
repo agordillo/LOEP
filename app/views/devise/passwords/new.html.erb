@@ -1,5 +1,5 @@
 <div class="loep_form_wrapper">
-	<h2><%=t("login.password_forgot")%></h2>
+	<h2 class="password_forgot_title"><%=t("login.password_forgot")%></h2>
 
 	<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
 
@@ -17,6 +17,6 @@
 	<% end %>
 
   </br>
-  <%= link_to t("dictionary.back"), :back %>
+  <%= link_to t("dictionary.back"), :back, :class=>'backLink' %>
 
 </div>

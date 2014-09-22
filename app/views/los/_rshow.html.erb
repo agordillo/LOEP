@@ -5,7 +5,7 @@
     <h2><%=@lo.name%></h2>
 
     <% if iamAdmin? %>
-      <%= link_to t("actions.view_as_admin"), lo_path(@lo) %>
+      <%= link_to t("actions.view_as_admin"), lo_path(@lo), :class=>'ralink' %>
     <% end %>
 
     <p class="space_medium"></p>

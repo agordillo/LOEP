@@ -39,8 +39,12 @@
 
     <% unless nItemToShow.nil? %>
       <p class="survey_question_title"><%=nItemToShow%>. <%=item[:name]%></p>
-      <p class="survey_question_subtitle"><%=item[:description]%></p>
+      <%unless item[:description].blank?%>
+        <p class="survey_question_subtitle"><%=item[:description]%></p>
+      <%end%>
     <% end %>
+
+    <p class="survey_block_top_space"></p>
 
     <%if item[:type] == "integer" %>
       <%integerItemsIndex+=1%>
