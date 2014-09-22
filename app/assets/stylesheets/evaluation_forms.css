@@ -179,6 +179,14 @@ textarea.evaluation_survey_text_item_input{
   margin-bottom: 15px;
 }
 
+/* Context */
+input.user_context_age_input{
+  max-width: 50px;
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
+
 /* Modify specific forms */
 
 div.lori_evmethod_form_wrapper .survey_block_top_space {

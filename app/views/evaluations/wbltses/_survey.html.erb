@@ -1,6 +1,8 @@
 <%integerItemsIndex=0%>
 <%textItemsIndex=0%>
 
+<%= render 'user_context', :f => f , :readonly => readonly %>
+
 <% @evmethodItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <div class="survey_block" item="<%=nItem%>">

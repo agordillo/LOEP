@@ -63,64 +63,64 @@ class ExtendEvaluationSlots < ActiveRecord::Migration
   end
 
   def down
-    remove_column :evaluations, :item41, :integer
-    remove_column :evaluations, :item42, :integer
-    remove_column :evaluations, :item43, :integer
-    remove_column :evaluations, :item44, :integer
-    remove_column :evaluations, :item45, :integer
-    remove_column :evaluations, :item46, :integer
-    remove_column :evaluations, :item47, :integer
-    remove_column :evaluations, :item48, :integer
-    remove_column :evaluations, :item49, :integer
-    remove_column :evaluations, :item50, :integer
-    remove_column :evaluations, :item51, :integer
-    remove_column :evaluations, :item52, :integer
-    remove_column :evaluations, :item53, :integer
-    remove_column :evaluations, :item54, :integer
-    remove_column :evaluations, :item55, :integer
-    remove_column :evaluations, :item56, :integer
-    remove_column :evaluations, :item57, :integer
-    remove_column :evaluations, :item58, :integer
-    remove_column :evaluations, :item59, :integer
-    remove_column :evaluations, :item60, :integer
-    remove_column :evaluations, :item61, :integer
-    remove_column :evaluations, :item62, :integer
-    remove_column :evaluations, :item63, :integer
-    remove_column :evaluations, :item64, :integer
-    remove_column :evaluations, :item65, :integer
-    remove_column :evaluations, :item66, :integer
-    remove_column :evaluations, :item67, :integer
-    remove_column :evaluations, :item68, :integer
-    remove_column :evaluations, :item69, :integer
-    remove_column :evaluations, :item70, :integer
-    remove_column :evaluations, :item71, :integer
-    remove_column :evaluations, :item72, :integer
-    remove_column :evaluations, :item73, :integer
-    remove_column :evaluations, :item74, :integer
-    remove_column :evaluations, :item75, :integer
-    remove_column :evaluations, :item76, :integer
-    remove_column :evaluations, :item77, :integer
-    remove_column :evaluations, :item78, :integer
-    remove_column :evaluations, :item79, :integer
-    remove_column :evaluations, :item80, :integer
-    remove_column :evaluations, :item81, :integer
-    remove_column :evaluations, :item82, :integer
-    remove_column :evaluations, :item83, :integer
-    remove_column :evaluations, :item84, :integer
-    remove_column :evaluations, :item85, :integer
-    remove_column :evaluations, :item86, :integer
-    remove_column :evaluations, :item87, :integer
-    remove_column :evaluations, :item88, :integer
-    remove_column :evaluations, :item89, :integer
-    remove_column :evaluations, :item90, :integer
-    remove_column :evaluations, :item91, :integer
-    remove_column :evaluations, :item92, :integer
-    remove_column :evaluations, :item93, :integer
-    remove_column :evaluations, :item94, :integer
-    remove_column :evaluations, :item95, :integer
-    remove_column :evaluations, :item96, :integer
-    remove_column :evaluations, :item97, :integer
-    remove_column :evaluations, :item98, :integer
-    remove_column :evaluations, :item99, :integer
+    remove_column :evaluations, :item41
+    remove_column :evaluations, :item42
+    remove_column :evaluations, :item43
+    remove_column :evaluations, :item44
+    remove_column :evaluations, :item45
+    remove_column :evaluations, :item46
+    remove_column :evaluations, :item47
+    remove_column :evaluations, :item48
+    remove_column :evaluations, :item49
+    remove_column :evaluations, :item50
+    remove_column :evaluations, :item51
+    remove_column :evaluations, :item52
+    remove_column :evaluations, :item53
+    remove_column :evaluations, :item54
+    remove_column :evaluations, :item55
+    remove_column :evaluations, :item56
+    remove_column :evaluations, :item57
+    remove_column :evaluations, :item58
+    remove_column :evaluations, :item59
+    remove_column :evaluations, :item60
+    remove_column :evaluations, :item61
+    remove_column :evaluations, :item62
+    remove_column :evaluations, :item63
+    remove_column :evaluations, :item64
+    remove_column :evaluations, :item65
+    remove_column :evaluations, :item66
+    remove_column :evaluations, :item67
+    remove_column :evaluations, :item68
+    remove_column :evaluations, :item69
+    remove_column :evaluations, :item70
+    remove_column :evaluations, :item71
+    remove_column :evaluations, :item72
+    remove_column :evaluations, :item73
+    remove_column :evaluations, :item74
+    remove_column :evaluations, :item75
+    remove_column :evaluations, :item76
+    remove_column :evaluations, :item77
+    remove_column :evaluations, :item78
+    remove_column :evaluations, :item79
+    remove_column :evaluations, :item80
+    remove_column :evaluations, :item81
+    remove_column :evaluations, :item82
+    remove_column :evaluations, :item83
+    remove_column :evaluations, :item84
+    remove_column :evaluations, :item85
+    remove_column :evaluations, :item86
+    remove_column :evaluations, :item87
+    remove_column :evaluations, :item88
+    remove_column :evaluations, :item89
+    remove_column :evaluations, :item90
+    remove_column :evaluations, :item91
+    remove_column :evaluations, :item92
+    remove_column :evaluations, :item93
+    remove_column :evaluations, :item94
+    remove_column :evaluations, :item95
+    remove_column :evaluations, :item96
+    remove_column :evaluations, :item97
+    remove_column :evaluations, :item98
+    remove_column :evaluations, :item99
   end
 end

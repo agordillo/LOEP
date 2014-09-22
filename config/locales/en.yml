@@ -231,6 +231,11 @@ en:
         - "GBL"
         - "Learning Objects"
         - "LO"
+  context:
+    user:
+      title: "User Data"
+      age: "Age"
+      gender: "Gender"
   datepicker:
     closeText: 'Done'
     currentText: 'Now'
@@ -275,6 +280,7 @@ en:
         generic_create: "An error occurred and the evaluation could not be created. Check all the fields and try again."
         generic_update: "Evaluation cannot be updated. Wrong params."
         overall_score: "The proposed overall score is not valid. Please, check it."
+        uc_age: "The specified age is not valid. Please, check it."
       no_evaluations: "You haven't evaluated any Learning Object yet.</p><p> When you evaluate one, the evaluation will appear in this panel."
       success:
         create: "The evaluation was successfully submitted."

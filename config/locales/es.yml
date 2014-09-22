@@ -58,7 +58,7 @@ es:
       one: "Objecto Flash"
       plural: "Objectos Flash"
     forbidden_action: "Acción prohibida"
-    gender: "Género"
+    gender: "Sexo"
     image:
       one: &image "Imagen"
       plural: "Imágenes"
@@ -228,6 +228,11 @@ es:
         - "Aprendizaje basado en Juegos"
         - "Objetos de Aprendizaje"
         - "OA"
+  context:
+    user:
+      title: "Información de Usuario"
+      age: "Edad"
+      gender: "Sexo"
   datepicker:
     closeText: 'Ok'
     currentText: 'Hoy'
@@ -271,7 +276,8 @@ es:
         external_evaluations_disabled: "Error: Este método de evaluación no admite evaluaciones externas."
         generic_create: "Ocurrió un error y la evaluación no pudo ser creada. Comprueba todos los campos y vuelve a intentarlo."
         generic_update: "La evaluación no pudo ser actualizada. Los parámetros eran incorrectos."
-        overall_score: "La puntuación global propuesta no es válida. Por favor, revisela."
+        overall_score: "La puntuación global propuesta no es válida. Por favor, revísela."
+        uc_age: "La edad especificada no es válida. Por favor, revísela."
       no_evaluations: "Todavía no has evaluado ningún Objeto de Aprendizaje.</p><p>Cuando evalúes uno, la evaluación aparecerá en este panel."
       success:
         create: "La evaluación fue enviada correctamente."

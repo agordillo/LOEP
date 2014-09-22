@@ -2,7 +2,8 @@ class Evaluation < ActiveRecord::Base
   attr_accessible :user_id, :assignment_id, :lo_id, :evmethod_id, :completed_at, :comments, :score, :anonymous, :app_id,
   :item1, :item2, :item3, :item4, :item5, :item6, :item7, :item8, :item9, :item10, :item11, :item12, :item13, :item14, :item15, :item16, :item17, :item18, :item19, :item20, :item21, :item22, :item23, :item24, :item25, :item26, :item27, :item28, :item29, :item30, :item31, :item32, :item33, :item34, :item35, :item36, :item37, :item38, :item39, :item40, :item41, :item42, :item43, :item44, :item45, :item46, :item47, :item48, :item49, :item50, :item51, :item52, :item53, :item54, :item55, :item56, :item57, :item58, :item59, :item60, :item61, :item62, :item63, :item64, :item65, :item66, :item67, :item68, :item69, :item70, :item71, :item72, :item73, :item74, :item75, :item76, :item77, :item78, :item79, :item80, :item81, :item82, :item83, :item84, :item85, :item86, :item87, :item88, :item89, :item90, :item91, :item92, :item93, :item94, :item95, :item96, :item97, :item98, :item99, 
   :titem1, :titem2, :titem3, :titem4, :titem5, :titem6, :titem7, :titem8, :titem9, :titem10, :titem11, :titem12, :titem13, :titem14, :titem15, :titem16, :titem17, :titem18, :titem19, :titem20, :titem21, :titem22, :titem23, :titem24, :titem25, :titem26, :titem27, :titem28, :titem29, :titem30, :titem31, :titem32, :titem33, :titem34, :titem35, :titem36, :titem37, :titem38, :titem39, :titem40,
-  :sitem1, :sitem2, :sitem3, :sitem4, :sitem5
+  :sitem1, :sitem2, :sitem3, :sitem4, :sitem5,
+  :uc_age, :uc_gender, :loc_context, :loc_grade, :loc_strategy
 
   belongs_to :user
   belongs_to :app
@@ -20,7 +21,6 @@ class Evaluation < ActiveRecord::Base
   :presence => true
 
   validate :is_score_wrong
-
   def is_score_wrong
     if !self.score.nil? and !Utils.is_numeric?(self.score)
       errors.add(:score, I18n.t("evaluations.message.error.overall_score"))
@@ -30,7 +30,6 @@ class Evaluation < ActiveRecord::Base
   end
 
   validate :duplicated_evaluation
-
   def duplicated_evaluation
     if self.id.nil? and !self.evmethod.allow_multiple_evaluations and !user.isAdmin?
       evaluations = Evaluation.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
@@ -47,6 +46,9 @@ class Evaluation < ActiveRecord::Base
       true
     end
   end
+
+  validates :uc_age, :numericality => { :greater_than => 0, :less_than_or_equal_to => 100 }, :allow_blank => true
+  validates :uc_gender, :numericality => { :greater_than => 0, :less_than_or_equal_to => 2 }, :allow_blank => true
 
   after_initialize :init
   before_validation :checkScoreBeforeSave
