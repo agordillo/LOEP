@@ -1,3 +1,7 @@
+<%if embed%>
+  <%= render 'contexts', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"]} %>
+<%end%>
+
 <% @evmethodItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <div class="survey_block" item="<%=nItem%>">
@@ -23,14 +27,14 @@
       </div>
       <div class="na-check">
         <span><%=t("forms.evmethod.na")%></span>
-        <%= f.radio_button "item" + nItem.to_s, "-1", :class=>'na-input', :title => "N/A", :readonly => readonly ? "true" : nil %>
+        <%= f.radio_button "item" + nItem.to_s, "-1", :class=>'na-input', :title => t("forms.evmethod.na"), :disabled => readonly ? "disabled" : nil %>
       </div>
       <div class="hover-start_text">
         <% if readonly %>
           <% iValue = @evaluation.send("item" + nItem.to_s)%>
           <% if iValue===-1 %>
             <div class='numberCircle numberCircleSmall'>
-              <span><%=t("evmethods.forms.na")%></span>
+              <span><%=t("forms.evmethod.na")%></span>
             </div>
           <% else %>
             <div class='numberCircle'>
@@ -134,8 +138,9 @@
         var selectedValue = $(starTextDOM).attr("selectedValue");
         if(selectedValue){
           var classes = 'numberCircle';
-          if(selectedValue == "N/A"){
-            classes = classes + " numberCircleSmall";
+          var na = '<%=t("forms.evmethod.na")%>';
+          if(selectedValue == na){
+            classes += " numberCircleSmall";
           }
           var text = "<div class='"+ classes +"'><span>"+selectedValue+"</span></div>";
         }

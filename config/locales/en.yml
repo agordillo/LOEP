@@ -232,6 +232,23 @@ en:
         - "Learning Objects"
         - "LO"
   context:
+    lo:
+      title: "Context Information"
+      context: "Scenario"
+      context_select:
+        classroom: "Classroom"
+        homework: "Homework"
+        selflearning: "Self-directed learning"
+        online: "Online course"
+        other: *other
+      grade: "Grade and/or subject where the resource has been used"
+      strategy: "For what purpose the resource has been used?"
+      strategy_select:
+        introduction: "Introduce a topic"
+        refresh: "Refresh a topic"
+        reinforce: "Reinforce or clarify a topic"
+        evaluate: "Evaluate a topic"
+        other: *other
     user:
       title: "User Data"
       age: "Age"
@@ -273,6 +290,7 @@ en:
       editing_lo_with_evmethod:  "Editing evaluation of the LO %{lo} with %{evmethod}"
       lo_url: "Learning Object URL"
       show: "Evaluation of the LO %{lo} with %{evmethod}"
+      subsection_title: "Evaluation"
     message:
       error:
         duplicated: "The evaluation hasn't been created because this user had already evaluated the Learning Object."

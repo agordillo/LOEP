@@ -31,7 +31,7 @@
 
     <p class="survey_title"><%=surveyTitle%></p>
 
-    <%= render 'survey', :f => f , :readonly => readonly %>
+    <%= render 'survey', :f => f , :readonly => readonly, :embed => @embed%>
 
     <% if iamAdmin? and !@evaluation.completed_at.nil? %>
       <p class="form_legend">Completion Date</p>

@@ -6,6 +6,15 @@ div.survey_block {
   margin-bottom: 20px;
 }
 
+div.survey_block_only_with_title {
+  margin-bottom: 0px !important;
+}
+
+div.survey_block_after_context{
+  margin-bottom: 14px !important;
+  margin-top: 30px !important;
+}
+
 .survey_title {
   font-size: 1.25rem;
   font-weight: bold;
@@ -13,32 +22,41 @@ div.survey_block {
   margin-top: 20px;
 }
 
-.survey_question_title {
+.survey_question_title, .survey_question_group_title, .survey_supersection_title {
   font-size: 0.9rem;
-  background-color: #2B4923;
-  color: white;
   border-radius: 0px 5px 5px 0px;
   padding: 2px 6px;
   border: 1px solid #373736;
-  margin-bottom: 5px;
   font-weight: bold;
+}
+
+div.survey_block_context .survey_question_title {
+  font-size: 0.8rem;
+}
+
+.survey_question_title {
+  color: white;
+  background-color: #2B4923;
+  margin-bottom: 5px;
+}
+
+.survey_question_group_title {
+  color: white;
+  background-color: black;
+  margin-bottom: 15px;
+}
+
+.survey_supersection_title {
+  color: rgb(30, 30, 30);
+  background-color: rgb(230, 230, 230);
+  border: 1px solid rgb(130, 130, 130);
+  margin-bottom: 8px;
 }
 
 .survey_question_subtitle {
   font-size: 0.75rem;
   color: #666;
   margin-bottom: 5px;
-}
-
-.survey_question_group_title {
-  font-size: 0.9rem;
-  background-color: black;
-  color: white;
-  border-radius: 0px 5px 5px 0px;
-  padding: 2px 6px;
-  border: 1px solid #373736;
-  margin-bottom: 15px;
-  font-weight: bold;
 }
 
 div.rating_wrapper {
@@ -187,13 +205,17 @@ input.user_context_age_input{
   margin-top: 0px;
 }
 
+div.survey_block_context select.loep_input:not(.select_without_bottom_margin), div.survey_block_context input.loep_input:not(.select_without_bottom_margin){
+  margin-bottom: 15px;
+}
+
 /* Modify specific forms */
 
 div.lori_evmethod_form_wrapper .survey_block_top_space {
   margin-bottom: 1px;
 }
 
-div.loem_evmethod_form_wrapper div.survey_block{
+div.loem_evmethod_form_wrapper div.survey_block:not(.survey_block_after_context){
   margin-bottom: 30px !important;
 }
 
@@ -217,7 +239,7 @@ div.loem_evmethod_form_wrapper .numberCircle {
   p.survey_question_group_title{
     margin-bottom: 5px !important;
   }
-  p.survey_question_title, p.survey_question_group_title{
+  p.survey_question_title, p.survey_question_group_title, p.survey_supersection_title{
     font-size: 0.6rem !important;
   }
   p.survey_title {

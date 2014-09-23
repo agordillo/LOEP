@@ -1,0 +1,24 @@
+<% items ||= ["all"] %>
+
+<div class="survey_block survey_block_context">
+  <p class="survey_supersection_title"><%=t("context.lo.title")%></p>
+  
+  <%if items.include?("loc_context") or items.include?("all") %>
+    <p class="survey_question_title"><%=t("context.lo.context")%></p>
+    <p class="survey_block_top_space"></p>
+    <%= f.select :loc_context, options_for_select(Utils.getOptionsForSelectLOContextContext,@evaluation.loc_context || "classroom"), {} ,{ :class=>'optionalInput loep_input', :disabled => readonly ? "disabled" : nil } %>
+  <%end%>
+
+   <%if items.include?("loc_grade") or items.include?("all") %>
+    <p class="survey_question_title"><%=t("context.lo.grade")%></p>
+    <p class="survey_block_top_space"></p>
+    <%= f.text_field :loc_grade, :class=>'optionalInput loep_input', :readonly => readonly ? "true" : nil %>
+  <%end%>
+
+  <%if items.include?("loc_strategy") or items.include?("all") %>
+    <p class="survey_question_title"><%=t("context.lo.strategy")%></p>
+    <p class="survey_block_top_space"></p>
+    <%= f.select :loc_strategy, options_for_select(Utils.getOptionsForSelectLOContextStrategy,@evaluation.loc_strategy || "introduction"), {} ,{ :class=>'optionalInput loep_input select_without_bottom_margin', :disabled => readonly ? "disabled" : nil } %>
+  <%end%>
+
+</div>

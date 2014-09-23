@@ -62,6 +62,14 @@ class Utils
     I18n.t("occupations").map{|k,v| [v,k.to_s]}
   end
 
+  def self.getOptionsForSelectLOContextContext
+    I18n.t("context.lo.context_select").map{|k,v| [v,k.to_s]}
+  end
+
+  def self.getOptionsForSelectLOContextStrategy
+    I18n.t("context.lo.strategy_select").map{|k,v| [v,k.to_s]}
+  end
+
 
   #Dates
 

@@ -50,6 +50,10 @@ class Evaluation < ActiveRecord::Base
   validates :uc_age, :numericality => { :greater_than => 0, :less_than_or_equal_to => 100 }, :allow_blank => true
   validates :uc_gender, :numericality => { :greater_than => 0, :less_than_or_equal_to => 2 }, :allow_blank => true
 
+  validates_inclusion_of :loc_context, :in => I18n.t("context.lo.context_select", :locale => :en).map{|k,v| k.to_s}, :allow_nil => true, :message => ": " + I18n.t("dictionary.invalid")
+  validates_inclusion_of :loc_strategy, :in => I18n.t("context.lo.strategy_select", :locale => :en).map{|k,v| k.to_s}, :allow_nil => true, :message => ": " + I18n.t("dictionary.invalid")
+
+
   after_initialize :init
   before_validation :checkScoreBeforeSave
   after_create :checkAssignment

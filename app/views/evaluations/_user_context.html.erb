@@ -1,15 +1,21 @@
-<div class="survey_block">
-  <p class="survey_question_group_title"><%=t("context.user.title")%></p>
-  
-  <p class="survey_question_title"><%=t("context.user.age")%></p>
-  <p class="survey_block_top_space"></p>
-  <%= f.number_field :uc_age, :min => 1, :max => 99, :step => 1, :class => "optionalInput user_context_age_input" %>
+<% items ||= ["all"] %>
 
-  <p class="survey_question_title"><%=t("context.user.gender")%></p>
-  <p class="survey_block_top_space"></p>
-  <div class="gender_buttons">
-    <%= f.radio_button :uc_gender, 1 , :class=> "optionalInput"%><span class="gender_label"><%=t("dictionary.male")%></span>
-    <%= f.radio_button :uc_gender, 2, :class=> "optionalInput"%><span class="gender_label"><%=t("dictionary.female")%></span>
-  </div>
+<div class="survey_block survey_block_context">
+  <p class="survey_supersection_title"><%=t("context.user.title")%></p>
+  
+  <%if items.include?("uc_age") or items.include?("all") %>
+    <p class="survey_question_title"><%=t("context.user.age")%></p>
+    <p class="survey_block_top_space"></p>
+    <%= f.number_field :uc_age, :min => 1, :max => 99, :step => 1, :class => "optionalInput user_context_age_input", :readonly => readonly ? "true" : nil %>
+  <%end%>
+
+  <%if items.include?("uc_gender") or items.include?("all") %>
+    <p class="survey_question_title"><%=t("context.user.gender")%></p>
+    <p class="survey_block_top_space"></p>
+    <div class="gender_buttons">
+      <%= f.radio_button :uc_gender, 1 , :class=> "optionalInput", :disabled => readonly ? "disabled" : nil%><span class="gender_label"><%=t("dictionary.male")%></span>
+      <%= f.radio_button :uc_gender, 2, :class=> "optionalInput", :disabled => readonly ? "disabled" : nil%><span class="gender_label"><%=t("dictionary.female")%></span>
+    </div>
+  <%end%>
 
 </div>

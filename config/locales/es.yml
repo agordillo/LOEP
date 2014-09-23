@@ -229,6 +229,23 @@ es:
         - "Objetos de Aprendizaje"
         - "OA"
   context:
+    lo:
+      title: "Información de Contexto"
+      context: "Escenario de uso"
+      context_select:
+        classroom: "Aula"
+        homework: "Deberes"
+        selflearning: "Aprendizaje autodidacta"
+        online: "Curso online"
+        other: *other
+      grade: "Curso (nivel educativo) y/o asignatura donde el recurso ha sido utilizado"
+      strategy: "¿Con qué finalidad ha sido utilizado el recurso?"
+      strategy_select:
+        introduction: "Introducir un tema"
+        refresh: "Refrescar un tema"
+        reinforce: "Reforzar o clarificar un tema"
+        evaluate: "Evaluar un tema"
+        other: *other
     user:
       title: "Información de Usuario"
       age: "Edad"
@@ -270,6 +287,7 @@ es:
       editing_lo_with_evmethod:  "Editando la evaluación del OA %{lo} con %{evmethod}"
       lo_url: "URL del Objeto de Aprendizaje"
       show: "Evaluación del OA %{lo} con %{evmethod}"
+      subsection_title: "Evaluación"
     message:
       error:
         duplicated: "La evaluación no fue creada porque este usuario ya había evaluado el Objeto de Aprendizaje."

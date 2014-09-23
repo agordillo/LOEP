@@ -1,3 +1,7 @@
+<%if embed%>
+  <%= render 'contexts', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"]} %>
+<%end%>
+
 <% @evmethodItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <%itemName = "item" + nItem.to_s%>

@@ -1,6 +1,8 @@
 <%integerItemsIndex=0%>
 <%textItemsIndex=0%>
 
+<%= render 'contexts', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"], :lo_context => ["all"]} %>
+
 <% @evmethodItems.each_with_index do |item,i| %>
   <%nItem = i+1%>
   <div class="survey_block" item="<%=nItem%>">
@@ -67,7 +69,7 @@
             <% iValue = @evaluation.send("item" + integerItemsIndex.to_s)%>
             <% if iValue===-1 %>
               <div class='numberCircle numberCircleSmall'>
-                <span><%="N/A"%></span>
+                <span><%=t("forms.evmethod.na")%></span>
               </div>
             <% else %>
               <div class='numberCircle'>
@@ -173,8 +175,9 @@
         var selectedValue = $(starTextDOM).attr("selectedValue");
         if(selectedValue){
           var classes = 'numberCircle';
-          if(selectedValue == "N/A"){
-            classes = classes + " numberCircleSmall";
+          var na = '<%=t("forms.evmethod.na")%>';
+          if(selectedValue == na){
+            classes += " numberCircleSmall";
           }
           var text = "<div class='"+ classes +"'><span>"+selectedValue+"</span></div>";
         }
