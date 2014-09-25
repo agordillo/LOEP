@@ -6,6 +6,7 @@ gem 'rake', '10.3.2'
 # DBMS
 # gem 'sqlite3'
 gem 'mysql2', '0.3.14'
+gem 'pg', '= 0.17.1'
 
 gem 'jquery-rails', '3.0.4'
 

@@ -16,12 +16,12 @@ ActiveRecord::Schema.define(:version => 20140922185555) do
   create_table "apps", :force => true do |t|
     t.string   "name"
     t.string   "auth_token"
-    t.datetime "created_at",                                               :null => false
-    t.datetime "updated_at",                                               :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.integer  "user_id"
-    t.text     "callback",             :limit => 16777215
+    t.text     "callback"
     t.string   "authentication_token"
-    t.string   "encrypted_password",                       :default => "", :null => false
+    t.string   "encrypted_password",   :default => "", :null => false
   end
 
   create_table "assignments", :force => true do |t|
@@ -31,9 +31,9 @@ ActiveRecord::Schema.define(:version => 20140922185555) do
     t.string   "status"
     t.datetime "deadline"
     t.datetime "completed_at"
-    t.text     "description",  :limit => 16777215
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
+    t.text     "description"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.integer  "evmethod_id"
     t.integer  "suitability"
   end
@@ -70,24 +70,24 @@ ActiveRecord::Schema.define(:version => 20140922185555) do
     t.integer  "item23"
     t.integer  "item24"
     t.integer  "item25"
-    t.text     "comments",      :limit => 16777215
-    t.text     "titem1",        :limit => 16777215
-    t.text     "titem2",        :limit => 16777215
-    t.text     "titem3",        :limit => 16777215
-    t.text     "titem4",        :limit => 16777215
-    t.text     "titem5",        :limit => 16777215
-    t.text     "titem6",        :limit => 16777215
-    t.text     "titem7",        :limit => 16777215
-    t.text     "titem8",        :limit => 16777215
-    t.text     "titem9",        :limit => 16777215
-    t.text     "titem10",       :limit => 16777215
+    t.text     "comments"
+    t.text     "titem1"
+    t.text     "titem2"
+    t.text     "titem3"
+    t.text     "titem4"
+    t.text     "titem5"
+    t.text     "titem6"
+    t.text     "titem7"
+    t.text     "titem8"
+    t.text     "titem9"
+    t.text     "titem10"
     t.string   "sitem1"
     t.string   "sitem2"
     t.string   "sitem3"
     t.string   "sitem4"
     t.string   "sitem5"
-    t.datetime "created_at",                                                                          :null => false
-    t.datetime "updated_at",                                                                          :null => false
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
     t.integer  "item26"
     t.integer  "item27"
     t.integer  "item28"
@@ -103,37 +103,37 @@ ActiveRecord::Schema.define(:version => 20140922185555) do
     t.integer  "item38"
     t.integer  "item39"
     t.integer  "item40"
-    t.text     "titem11",       :limit => 16777215
-    t.text     "titem12",       :limit => 16777215
-    t.text     "titem13",       :limit => 16777215
-    t.text     "titem14",       :limit => 16777215
-    t.text     "titem15",       :limit => 16777215
-    t.text     "titem16",       :limit => 16777215
-    t.text     "titem17",       :limit => 16777215
-    t.text     "titem18",       :limit => 16777215
-    t.text     "titem19",       :limit => 16777215
-    t.text     "titem20",       :limit => 16777215
-    t.text     "titem21",       :limit => 16777215
-    t.text     "titem22",       :limit => 16777215
-    t.text     "titem23",       :limit => 16777215
-    t.text     "titem24",       :limit => 16777215
-    t.text     "titem25",       :limit => 16777215
-    t.text     "titem26",       :limit => 16777215
-    t.text     "titem27",       :limit => 16777215
-    t.text     "titem28",       :limit => 16777215
-    t.text     "titem29",       :limit => 16777215
-    t.text     "titem30",       :limit => 16777215
-    t.text     "titem31",       :limit => 16777215
-    t.text     "titem32",       :limit => 16777215
-    t.text     "titem33",       :limit => 16777215
-    t.text     "titem34",       :limit => 16777215
-    t.text     "titem35",       :limit => 16777215
-    t.text     "titem36",       :limit => 16777215
-    t.text     "titem37",       :limit => 16777215
-    t.text     "titem38",       :limit => 16777215
-    t.text     "titem39",       :limit => 16777215
-    t.text     "titem40",       :limit => 16777215
-    t.decimal  "score",                             :precision => 12, :scale => 6
+    t.text     "titem11"
+    t.text     "titem12"
+    t.text     "titem13"
+    t.text     "titem14"
+    t.text     "titem15"
+    t.text     "titem16"
+    t.text     "titem17"
+    t.text     "titem18"
+    t.text     "titem19"
+    t.text     "titem20"
+    t.text     "titem21"
+    t.text     "titem22"
+    t.text     "titem23"
+    t.text     "titem24"
+    t.text     "titem25"
+    t.text     "titem26"
+    t.text     "titem27"
+    t.text     "titem28"
+    t.text     "titem29"
+    t.text     "titem30"
+    t.text     "titem31"
+    t.text     "titem32"
+    t.text     "titem33"
+    t.text     "titem34"
+    t.text     "titem35"
+    t.text     "titem36"
+    t.text     "titem37"
+    t.text     "titem38"
+    t.text     "titem39"
+    t.text     "titem40"
+    t.decimal  "score",         :precision => 12, :scale => 6
     t.integer  "item41"
     t.integer  "item42"
     t.integer  "item43"
@@ -193,7 +193,7 @@ ActiveRecord::Schema.define(:version => 20140922185555) do
     t.integer  "item97"
     t.integer  "item98"
     t.integer  "item99"
-    t.boolean  "anonymous",                                                        :default => false
+    t.boolean  "anonymous",                                    :default => false
     t.integer  "app_id"
     t.integer  "uc_age"
     t.integer  "uc_gender"
@@ -244,9 +244,9 @@ ActiveRecord::Schema.define(:version => 20140922185555) do
   end
 
   create_table "los", :force => true do |t|
-    t.text     "url",               :limit => 16777215
+    t.text     "url"
     t.string   "name"
-    t.text     "description",       :limit => 16777215
+    t.text     "description"
     t.string   "lotype"
     t.string   "repository"
     t.string   "technology"
@@ -263,9 +263,9 @@ ActiveRecord::Schema.define(:version => 20140922185555) do
     t.boolean  "hasFlashcards"
     t.boolean  "hasVirtualTours"
     t.boolean  "hasEnrichedVideos"
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
-    t.string   "scope",                                 :default => "Private"
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+    t.string   "scope",             :default => "Private"
     t.integer  "owner_id"
     t.integer  "app_id"
     t.string   "id_repository"
@@ -306,12 +306,6 @@ ActiveRecord::Schema.define(:version => 20140922185555) do
     t.integer  "app_id"
     t.string   "auth_token"
     t.datetime "expire_at"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "survey_ranking_a", :force => true do |t|
-    t.text     "results"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -357,7 +351,7 @@ ActiveRecord::Schema.define(:version => 20140922185555) do
     t.integer  "gender"
     t.integer  "language_id"
     t.integer  "loric_id"
-    t.string   "occupation",             :default => "Education"
+    t.string   "occupation",             :default => "education"
     t.string   "authentication_token"
   end
 

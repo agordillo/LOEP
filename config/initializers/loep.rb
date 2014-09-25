@@ -13,18 +13,20 @@ Recaptcha.configure do |config|
     config.private_key = LOEP::Application.config.APP_CONFIG['recaptcha']['private_key']
 end
 
-#Configure the evaluation models you want to use in your LOEP instance
-#See app/models/evaluations for more possible methods to add
-LOEP::Application.config.evmethod_names = LOEP::Application.config.APP_CONFIG['evmethods'].reject{ |n| Evmethod.find_by_name(n).nil? }
-LOEP::Application.config.evmethods = LOEP::Application.config.evmethod_names.map{|n| Evmethod.find_by_name(n)}
+if ActiveRecord::Base.connection.table_exists? "evmethods"
+	#Configure the evaluation models you want to use in your LOEP instance
+	#See app/models/evaluations for more possible methods to add
+	LOEP::Application.config.evmethod_names = LOEP::Application.config.APP_CONFIG['evmethods'].reject{ |n| Evmethod.find_by_name(n).nil? }
+	LOEP::Application.config.evmethods = LOEP::Application.config.evmethod_names.map{|n| Evmethod.find_by_name(n)}
 
-#Configure the metrics you want to use in your LOEP instance
-#See app/models/metrics for more possible metrics to add
-LOEP::Application.config.metric_names = LOEP::Application.config.APP_CONFIG['metrics'].reject{ |n|
-	m = Metric.find_by_name(n);
-	m.nil? or !(m.evmethods - LOEP::Application.config.evmethods).empty?
-}
-LOEP::Application.config.metrics = LOEP::Application.config.metric_names.map{|n| Metric.find_by_name(n)}
+	#Configure the metrics you want to use in your LOEP instance
+	#See app/models/metrics for more possible metrics to add
+	LOEP::Application.config.metric_names = LOEP::Application.config.APP_CONFIG['metrics'].reject{ |n|
+		m = Metric.find_by_name(n);
+		m.nil? or !(m.evmethods - LOEP::Application.config.evmethods).empty?
+	}
+	LOEP::Application.config.metrics = LOEP::Application.config.metric_names.map{|n| Metric.find_by_name(n)}
 
-#UI
-LOEP::Application.config.show_surveys = (LOEP::Application.config.APP_CONFIG['surveys']=="true")
+	#UI
+	LOEP::Application.config.show_surveys = (LOEP::Application.config.APP_CONFIG['surveys']=="true")
+end
