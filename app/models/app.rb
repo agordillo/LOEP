@@ -54,7 +54,8 @@ class App < ActiveRecord::Base
   end
 
   def isSessionTokenValid(sessionToken)
-    valid_session_tokens.map{ |s| s.auth_token }.include? sessionToken
+    sessionToken = self.session_token.find_by_auth_token(sessionToken)
+    !sessionToken.nil? and !sessionToken.expired?
   end
 
   def create_session_token

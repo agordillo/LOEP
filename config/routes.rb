@@ -7,6 +7,8 @@ LOEP::Application.routes.draw do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
   resources :users
+  
+  resources :icodes, :only => [:new, :create]
 
   #Root page
   root :to =>'home#frontpage'

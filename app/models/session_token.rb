@@ -1,16 +1,13 @@
 class SessionToken < ActiveRecord::Base
-  attr_accessible :app_id, :auth_token, :expire_at
+  attr_accessible :app_id, :auth_token, :expire_at, :permanent
 
   belongs_to :app
 
   validates :app_id, :presence => true
 
-  validates :auth_token,
-  :presence => true,
-  :uniqueness => true
+  validates :auth_token, :presence => true, :uniqueness => true
 
-  validates :expire_at,
-  :presence => true
+  validates :expire_at, :presence => true
 
   validate :check_auth_token
 
@@ -38,9 +35,11 @@ class SessionToken < ActiveRecord::Base
     self.expire_at < Time.now
   end
 
-  def invalidate
-    self.expire_at = Time.now
-    self.save!
+  def invalidate(force=false)
+    unless self.permanent and force==false
+      self.expire_at = Time.now
+      self.save!
+    end
   end
 
   def self.deleteExpiredTokens

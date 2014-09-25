@@ -124,6 +124,13 @@ class ApplicationController < ActionController::Base
   # Authentication
   ################
 
+  def authenticate_admin!
+    authenticate_user!
+    unless current_user.isAdmin?
+      raise CanCan::AccessDenied.new(I18n.t("api.message.error.unauthorized"))
+    end
+  end
+
   def authenticate_user_or_session_token
     if params[:session_token]
       #Authenticate via session_token
