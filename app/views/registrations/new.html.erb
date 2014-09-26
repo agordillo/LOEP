@@ -40,9 +40,17 @@
     <p class="form_legend">* <%=t("login.password_confirmation")%></p>
     <%= f.password_field :password_confirmation, :class=>'loep_input', :autocomplete => "off" %>
 
-    <div class="captcha_wrapper">
-      <%= recaptcha_tags %>
-    </div>
+    <%if LOEP::Application.config.enable_recaptcha%>
+      <div class="captcha_wrapper">
+        <%= recaptcha_tags %>
+      </div>
+    <% else %>
+      <br/><br/>
+    <% end %>
+
+    <%unless @icode.blank? %>
+      <input type="hidden" name="icode" value="<%=@icode%>"/>
+    <% end %>
 
     <%= f.submit t("login.sign_up"), :class => 'loep_button sign_up_button' %>
   <% end %>

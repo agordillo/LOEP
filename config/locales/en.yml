@@ -754,6 +754,9 @@ en:
     message:
       error:
         captcha: "There was an error with the recaptcha code below. Please re-enter the code."
+        invitation_invalid: "The invitation code is not valid. Maybe it has expired."
+        invitation_required: "You need an invitation code to register in the LOEP platform."
+        role_required: "You need a role to register in the LOEP platform."
     password: "Password"
     password_change: "Change your password"
     password_confirmation: "Password confirmation"

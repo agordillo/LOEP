@@ -3,17 +3,30 @@
 namespace :generate do
 
   # How to use: 
+  # bundle exec rake generate:token
+  # bundle exec rake generate:token RAILS_ENV=production
+  task :token, [:length] => :environment do |t, args|
+    if args[:length]
+      length = args[:length].to_i
+    else
+      length = 50
+    end
+    token = SecureRandom.urlsafe_base64(length)
+    puts token
+  end
+
+  # How to use: 
   # bundle exec rake generate:evmethod["MethodName","ModuleName","Multiple"]
   # bundle exec rake generate:evmethod["MethodName","ModuleName","Multiple"] RAILS_ENV=production
   # For instance: bundle exec rake generate:evmethod["Lori v1.5","Lori","false"]
   task :evmethod, [:name,:module_name,:multiple] => :environment do |t, args|
-  	desc "Generate new evaluation method"
-  	puts "Generating new evaluation method"
+    desc "Generate new evaluation method"
+    puts "Generating new evaluation method"
     puts ""
 
-  	if !args[:name]
-  		fail "You need to specify a name for the evmethod: bundle exec rake generate:evmethod[\"MethodName\",\"ModuleName\",\"Multiple\"]"
-  	end
+    if !args[:name]
+      fail "You need to specify a name for the evmethod: bundle exec rake generate:evmethod[\"MethodName\",\"ModuleName\",\"Multiple\"]"
+    end
 
     unless args[:multiple]
       multiple = false
@@ -95,7 +108,6 @@ namespace :generate do
     end
 
   end
-
 
 end
 

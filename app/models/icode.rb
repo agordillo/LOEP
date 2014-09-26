@@ -29,22 +29,27 @@ class Icode < ActiveRecord::Base
   # Methods
   ###########
 
+  def getRole
+    unless self.expired?
+      self.role
+    else
+      nil
+    end
+  end
+
   def expired?
     self.expire_at < Time.now
   end
 
-  def invalidate
-    self.expire_at = Time.now
-    self.save!
+  def invalidate(force=false)
+    unless self.permanent and force==false
+      self.expire_at = Time.now
+      self.save!
+    end
   end
 
   def self.getValidIcodes
     Icode.all.reject{|ic| ic.expired?}
-  end
-
-  def self.isCodeValid(code)
-    icode = Icode.find_by_code(code)
-    !icode.nil? and !icode.expired?
   end
 
   def self.deleteExpiredIcodes

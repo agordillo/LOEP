@@ -12,24 +12,30 @@ development:
   # This token is also used as secret key for Devise to generate the random tokens.
   # Execute 'bundle exec rake secret' to generate a new secret_token and copy it here
   secret_token: ""
-  #Get your own keys from https://www.google.com/recaptcha
-  recaptcha:
-    public_key: ""
-    private_key: ""
+  # Uncomment to enable recaptcha. Get your own keys from https://www.google.com/recaptcha
+  # recaptcha:
+  #   public_key: ""
+  #   private_key: ""
   surveys: "false"
   evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T"]
   metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean"]
-  allow_external_evaluations: ["WBLT-S"]
+  allow_external_evaluations: ["WBLT-S","WBLT-T"]
+  #Register Policy valid values ["FREE","INVITATION_ONLY","HYBRID"]
+  register_policy: "FREE"
+  #Default role can be any LOEP role ["User","Reviewer",...]
+  default_role: "User"
 
 production:
   domain: "loep.global.dit.upm.es"
   no_reply_mail: "no-reply@loep.global.dit.upm.es"
   main_mail: "no-reply@loep.global.dit.upm.es"
   secret_token: ""
-  recaptcha:
-    public_key: ""
-    private_key: ""
+  # recaptcha:
+  #   public_key: ""
+  #   private_key: ""
   surveys: "false"
   evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T"]
   metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean"]
-  allow_external_evaluations: ["WBLT-S"]
+  allow_external_evaluations: ["WBLT-S","WBLT-T"]
+  register_policy: "FREE"
+  default_role: "User"

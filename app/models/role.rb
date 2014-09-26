@@ -20,4 +20,8 @@ class Role < ActiveRecord::Base
   	Role.find_by_name("User")
   end
 
+  def self.default
+    Role.find_by_name(LOEP::Application.config.default_role) || user
+  end
+
 end

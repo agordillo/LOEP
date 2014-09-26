@@ -7,9 +7,11 @@
 		<div id="frontpage_A">
 			<%= render 'home/login' %>
 		</div>
-		<div id="frontpage_B">
-			<h1><%=t("frontpage.new_to_loep")%></h1>
-			<%= link_to t("login.sign_up"), new_user_registration_path, :method => :get, :class => 'loep_button sign_up_button'  %>
-		</div>
+		<% unless LOEP::Application.config.register_policy == "INVITATION_ONLY" %>
+			<div id="frontpage_B">
+				<h1><%=t("frontpage.new_to_loep")%></h1>
+				<%= link_to t("login.sign_up"), new_user_registration_path, :method => :get, :class => 'loep_button sign_up_button' %>
+			</div>
+		<% end %>
 	</div>
 </div>
