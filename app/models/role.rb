@@ -8,6 +8,10 @@ class Role < ActiveRecord::Base
     :case_sensitive => false
   }
 
+  def self.superadmin
+    Role.find_by_name("SuperAdmin")
+  end
+
   def self.admin
   	Role.find_by_name("Admin")
   end
@@ -22,6 +26,22 @@ class Role < ActiveRecord::Base
 
   def self.default
     Role.find_by_name(LOEP::Application.config.default_role) || user
+  end
+
+  def readable
+    I18n.t("roles."+self.name.downcase, :default => self.name) unless self.name.nil?
+  end
+
+  def comparisonValue
+    if self.name == "SuperAdmin"
+      return 9
+    elsif self.name == "Admin"
+      return 8
+    elsif self.name == "Reviewer"
+      return 2
+    else
+      return 1
+    end
   end
 
 end

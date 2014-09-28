@@ -2,6 +2,8 @@
 
 LOEP::Application.config.version = "1.0.0"
 
+LOEP::Application.config.full_domain = "http://" + LOEP::Application.config.APP_CONFIG["domain"]
+
 #Secret key for verifying the integrity of signed cookies.
 LOEP::Application.config.secret_token = LOEP::Application.config.APP_CONFIG['secret_token']
 

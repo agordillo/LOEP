@@ -1,0 +1,23 @@
+<div class="loep_form_wrapper new_lo_form">
+  
+  <p class="form_before_button">&nbsp;</p>
+
+  <%= form_for(@icode) do |f| %>
+
+    <%= f.hidden_field :owner_id, :value=>current_user.id %>
+
+    <% roleOptions = Utils.getOptionsForSelectRoles(current_user) %>
+    <% unless roleOptions.nil? %>
+       <p class="form_legend"><%=t("role_model.name.one")%></p>
+      <%= f.select :role_id, options_for_select(roleOptions,@icode.role_id || Role.default.id), {} ,{ :class=>'optionalInput loep_input select_without_bottom_margin'} %>
+    <% end %>
+
+    <p class="form_legend"><%=t("dictionary.type")%></p>
+    <%= f.select :permanent, options_for_select([[t("dictionary.permanent.permanent"),true],[t("dictionary.permanent.oneuse"),false]],false), {} ,{ :class=>'optionalInput loep_input select_without_bottom_margin'} %>
+    
+    <p class="form_before_button">&nbsp;</p>
+    <p class="form_before_button">&nbsp;</p>
+    <%= f.submit t("icodes.actions.create"), :class => 'loep_button' %>
+
+  <% end %>
+</div>

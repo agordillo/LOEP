@@ -17,6 +17,13 @@ class Ability
             can [:update, :destroy], App do |app|
                 app.user.nil? || user.compareRole > app.user.compareRole || user.id == app.user.id
             end
+            can :create, Icode do |icode|
+                icode.role.nil? || icode.role.comparisonValue < user.compareRole
+            end
+            can [:update, :destroy], Icode do |icode|
+                icode.owner.nil? or icode.owner.compareRole < user.compareRole or icode.owner==user
+            end
+
             can :evaluate, :all
             can :complete, :all
             can :reject, :all
@@ -37,6 +44,13 @@ class Ability
             can [:update, :destroy], App do |app|
                 app.user.nil? || user.compareRole > app.user.compareRole || user.id == app.user.id
             end
+            can :create, Icode do |icode|
+                icode.role.nil? || icode.role.comparisonValue < user.compareRole
+            end
+            can [:update, :destroy], Icode do |icode|
+                icode.owner.nil? or icode.owner.compareRole < user.compareRole or icode.owner==user
+            end
+
             can :evaluate, :all
             can :complete, :all
             can :reject, :all
@@ -91,6 +105,7 @@ class Ability
         can :destroy, ActiveRecord::Relation do |arr|
             arr.all? { |el| can?(:rshow, el) }
         end
+
 
         # The first argument to `can` is the action you are giving the user 
         # permission to do.

@@ -8,7 +8,7 @@ LOEP::Application.routes.draw do
   end
   resources :users
   
-  resources :icodes, :only => [:new, :create]
+  resources :icodes, :except => [:index, :update]
 
   #Root page
   root :to =>'home#frontpage'

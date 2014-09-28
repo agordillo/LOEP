@@ -70,14 +70,6 @@ class User < ActiveRecord::Base
 
   #Extra Attrs
 
-  def role
-    if self.role?("SuperAdmin")
-      "SuperAdmin"
-    else
-      self.roles.first.name
-    end
-  end
-
   def age
     unless self.birthday.nil?
       age = Date.today.year - self.birthday.year
@@ -95,12 +87,15 @@ class User < ActiveRecord::Base
   end
 
   def readable_role
-    I18n.t("roles."+self.role.downcase, :default => self.role) unless self.role.nil?
+    self.role.readable unless self.role.nil?
   end
 
   def readable_occupation
     I18n.t("occupations."+self.occupation.downcase) unless self.occupation.nil?
   end
+
+
+  #Methods
 
   #Get Learning Objects evaluated by this user
   def evLos
@@ -122,57 +117,9 @@ class User < ActiveRecord::Base
     Lo.where(:owner_id=>self.id)
   end
 
-  #Extra Getters
   def getLanguages
     unless self.languages.empty?
       self.languages.map { |l| l.id }
-    end
-  end
-
-
-  #Methods
-  def checkLanguages
-    if !self.languages.include? Language.find(self.language_id)
-      self.languages.push(Language.find(self.language_id))
-    end
-  end
-
-
-  #Role Management
-
-  def role?(role)
-    return !!self.roles.find_by_name(role.to_s.camelize)
-  end
-
-  def isAdmin?
-    return self.role?("Admin") || self.role?("SuperAdmin")
-  end
-
-  def assignRole(newRoleName)
-    if self.role?("SuperAdmin")
-      #SuperAdmin is always superAdmin
-      return
-    end
-
-    newRole = Role.find_by_name(newRoleName)
-    if !newRole.nil?
-      self.roles.delete_all
-      self.roles.push(newRole)
-      if newRole.name == "SuperAdmin"
-        self.roles.push(Role.find_by_name("Admin"));
-      end
-    end
-  end
-
-  def compareRole
-    if self.role == "SuperAdmin"
-      return 4
-    elsif self.role == "Admin"
-      return 3
-     elsif self.role == "Reviewer"
-      return 2
-     else
-      return 1
     end
   end
 
@@ -184,72 +131,90 @@ class User < ActiveRecord::Base
     end
   end
 
-  def check_permissions_to_change_role(current_user, newRole)
-    unless current_user.role?("SuperAdmin") || current_user.role?("Admin")
+
+  #Role Management
+
+  def role
+    self.roles.sort_by{|r| r.comparisonValue }.reverse.first
+  end
+
+  def role_name
+    role.name unless role.nil?
+  end
+
+  def role?(role)
+    return !!self.roles.find_by_name(role.to_s.camelize)
+  end
+
+  def isAdmin?
+    return self.role?("Admin") || self.role?("SuperAdmin")
+  end
+
+  def assignRole(newRole,delete=true)
+    if self.role?("SuperAdmin") or newRole.nil?
+      #SuperAdmin is always superAdmin
+      return
+    end
+
+    if delete
+      self.roles.delete_all
+    end
+    self.roles.push(newRole)
+
+    if newRole.name == "SuperAdmin"
+      self.roles.push(Role.admin);
+    end
+  end
+
+  def addRole(newRole)
+    assignRole(newRole,false)
+  end
+
+  def compareRole
+    return self.role.comparisonValue
+  end
+
+  def canChangeRole?(user, newRole)
+    unless self.isAdmin?
       return false
     end
 
-    if self.role?("SuperAdmin")
+    unless self.compareRole > user.compareRole or self.id == user.id
       return false
     end
 
-    #SuperAdmin can change any role to any user (unless other SuperAdmins)
-    if current_user.role?("SuperAdmin")
-      return true
-    end
-
-    #current_user is Admin and self is not SuperAdmin
-
-    if newRole=="SuperAdmin"
+    unless !newRole.nil? and self.compareRole >= newRole.comparisonValue
       return false
     end
 
-    #Admins can change the role of other users that aren't admins
-    #Admins cannot create SuperAdmins
-    unless self.role?("Admin")
-      return true
-    end 
-
-    #current_user is Admin and self is Admin too, newRole is not SuperAdmin
-
-    #Admin can change its own role
-    if current_user.id == self.id
-      return true
-    end
-
-    return false
+    return true
   end
 
 
   #Class extra attrs and methods
   def self.superAdmins
-    sadmins = []
-    User.find_each do |user|
-      if user.role?("SuperAdmin")
-        sadmins << user
-      end
-    end
-    sadmins
+    Role.admin.users
   end
 
   def self.admins
-    admins = []
-    User.find_each do |user|
-      if user.isAdmin?
-        admins << user
-      end
-    end
-    admins
+    (Role.superadmin.users + Role.admin.users).uniq
   end
 
   def self.reviewers
-    reviewers = []
-    User.find_each do |user|
-      if user.role?("Reviewer")
-        reviewers << user
-      end
+    Role.reviewer.users
+  end
+
+  def self.users
+    Role.user.users
+  end
+
+
+  private
+
+  def checkLanguages
+    if !self.languages.include? Language.find(self.language_id)
+      self.languages.push(Language.find(self.language_id))
     end
-    reviewers
   end
 
 end

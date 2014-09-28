@@ -40,7 +40,11 @@
 				</li>
 				<% if iamAdmin? %>
 					<li class="<%='menu_option_selected' if params[:controller] == 'users'%>">
-						<a href="/users"><h3><span class="glyphicon glyphicon-user"></span><%=t("menu.users")%></h3></a>
+						<h3><span class="glyphicon glyphicon-user"></span><%=t("menu.users")%></h3>
+						<ul>
+							<li><a href="<%=users_path%>"><%=t("menu.actions.list")%></a></li>
+							<li><a href="<%=new_icode_path%>"><%=t("users.actions.invite")%></a></li>
+						</ul>
 					</li>
 				<% end %>
 				<% if iamAdmin? %>

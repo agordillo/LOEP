@@ -10,12 +10,17 @@
       <%= f.text_field :name, :class=>'loep_input' %>
 
       <% if iamSuperAdmin? || (iamAdmin? and !isAdmin?(@user)) %>
+        <% rSuperAdmin = Role.superadmin %>
+        <% rAdmin = Role.admin %>
+        <% rReviewer = Role.reviewer %>
+        <% rUser = Role.user %>
+
         <p class="form_legend"><%=t("dictionary.role")%></p>
         <select id="user_role" name="role">
-          <option value="SuperAdmin" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "SuperAdmin")%> <%="selected=true" if @user.role=="SuperAdmin"%>><%=t("roles.superadmin")%></option>
-          <option value="Admin" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "Admin")%> <%="selected=true" if @user.role=="Admin"%>><%=t("roles.admin")%></option>
-          <option value="Reviewer" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "Reviewer")%> <%="selected=true" if @user.role=="Reviewer"%>><%=t("roles.reviewer")%></option>
-          <option value="User" <%="disabled=true" if !@user.check_permissions_to_change_role(current_user, "User")%> <%="selected=true" if @user.role=="User"%>><%=t("roles.user")%></option>
+          <option value="SuperAdmin" <%="disabled=true" unless current_user.canChangeRole?(@user,rSuperAdmin)%> <%="selected=true" if @user.role==rSuperAdmin%>><%=t("roles.superadmin")%></option>
+          <option value="Admin" <%="disabled=true" unless current_user.canChangeRole?(@user,rAdmin)%> <%="selected=true" if @user.role==rAdmin%>><%=t("roles.admin")%></option>
+          <option value="Reviewer" <%="disabled=true" unless current_user.canChangeRole?(@user,rReviewer)%> <%="selected=true" if @user.role==rReviewer%>><%=t("roles.reviewer")%></option>
+          <option value="User" <%="disabled=true" unless current_user.canChangeRole?(@user,rUser)%> <%="selected=true" if @user.role==rUser%>><%=t("roles.user")%></option>
         </select>
       <% end %>
 

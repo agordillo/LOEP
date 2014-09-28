@@ -76,6 +76,9 @@ es:
     or: "O"
     other: &other "Otro"
     owner: "Dueño"
+    permanent:
+      permanent: "Permanente"
+      oneuse: "Un sólo uso"
     process_completed: "Proceso completado"
     quality: "Calidad"
     quiz:
@@ -647,6 +650,49 @@ es:
     submit:
       create: "Crear %{model}"
       update: "Actualizar %{model}"
+  icodes:
+    actions:
+      create: "Generar Invitación"
+    iurl: "URL de la Invitación"
+    message:
+      success:
+        create: "El código de invitación ha sido creado satisfactoriamente."
+    new: "Invita a alguien a la plataforma LOEP"
+    name:
+      one: "Código de Invitación"
+      plural: "Códigos de Invitación"
+  language:
+    de: "Alemán"
+    en: "Inglés"
+    es: "Español"
+    fr: "Francés"
+    hu: "Húngaro"
+    it: "Italiano"
+    lanin: "Independiente del idioma"
+    lanot: "Otro"
+    nl: "Holandés"
+  login:
+    confirmation_instructions: "¿No has recibido las instrucciones de confirmación?"
+    message:
+      error:
+        captcha: "Hubo un error con el código captcha. Por favor, vuelve a introducir el código."
+    password: "Contraseña"
+    password_change: "Cambia tu contraseña"
+    password_confirmation: "Confirmación de contraseña"
+    password_current_in_settings: "Contraseña actual (la contraseña es necesaria para confirmar tus cambios)"
+    password_in_settings: "Contraseña (dejar en blanco si no deseas cambiarla)"
+    password_new: "Nueva contraseña"
+    password_new_confirmation: "Confirmar nueva contraseña"
+    password_forgot: "¿Olvidaste tu contraseña?"
+    password_reset_instructions: "Envíame instrucciones para reestablecer mi contraseña"
+    remember_me: "Recuérdame"
+    sign_in: "Iniciar sesión"
+    sign_in_with: "Iniciar sesión con %{provider}"
+    sign_out: "Cerrar sesión"
+    sign_up: "Regístrate"
+    unlock_instructions: "¿No has recibido las instrucciones para desbloquear la cuenta?"
+    unlock_instructions_resend: "Reenviar instrucciones para desbloquear la cuenta"
+    username_or_email: "Nombre de usuario o Correo electrónico"
   los:
     actions:
       add_new: "Añadir Nuevo"
@@ -736,38 +782,6 @@ es:
     name:
       one: "Métrica"
       plural: "Métricas"
-  language:
-    de: "Alemán"
-    en: "Inglés"
-    es: "Español"
-    fr: "Francés"
-    hu: "Húngaro"
-    it: "Italiano"
-    lanin: "Independiente del idioma"
-    lanot: "Otro"
-    nl: "Holandés"
-  login:
-    confirmation_instructions: "¿No has recibido las instrucciones de confirmación?"
-    message:
-      error:
-        captcha: "Hubo un error con el código captcha. Por favor, vuelve a introducir el código."
-    password: "Contraseña"
-    password_change: "Cambia tu contraseña"
-    password_confirmation: "Confirmación de contraseña"
-    password_current_in_settings: "Contraseña actual (la contraseña es necesaria para confirmar tus cambios)"
-    password_in_settings: "Contraseña (dejar en blanco si no deseas cambiarla)"
-    password_new: "Nueva contraseña"
-    password_new_confirmation: "Confirmar nueva contraseña"
-    password_forgot: "¿Olvidaste tu contraseña?"
-    password_reset_instructions: "Envíame instrucciones para reestablecer mi contraseña"
-    remember_me: "Recuérdame"
-    sign_in: "Iniciar sesión"
-    sign_in_with: "Iniciar sesión con %{provider}"
-    sign_out: "Cerrar sesión"
-    sign_up: "Regístrate"
-    unlock_instructions: "¿No has recibido las instrucciones para desbloquear la cuenta?"
-    unlock_instructions_resend: "Reenviar instrucciones para desbloquear la cuenta"
-    username_or_email: "Nombre de usuario o Correo electrónico"
   occupations:
     education: "Educación (profesor, pedagogo, ...)"
     technology: "Tecnología (desarrollador de contenidos educativos, soporte TIC, ...)"
@@ -785,6 +799,10 @@ es:
     admin: "Administrador"
     reviewer: "Revisor"
     user: "Usuario"
+  role_model:
+    name:
+      one: "Rol"
+      plural: "Roles"
   scopes:
     public: "Público"
     private: "Privado"
@@ -820,6 +838,8 @@ es:
   tags:
     add_a_tag: "añadir etiqueta"
   users:
+    actions:
+      invite: "Invitar"
     edit_profile: "Editar perfil"
     message:
       no_users: "No hay usuarios en la plataforma."

@@ -7,8 +7,6 @@ class IcodesController < ApplicationController
     @icode = Icode.new
     authorize! :create, @icode
 
-    Utils.update_return_to(session,request)
-
     respond_to do |format|
       format.html
       format.json { render json: @icode }
@@ -22,8 +20,8 @@ class IcodesController < ApplicationController
     authorize! :create, @icode
 
     respond_to do |format|
-      if @icode.save 
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("icodes.message.success.create") }
+      if @icode.save
+        format.html { redirect_to icode_path(@icode), notice: I18n.t("icodes.message.success.create") }
         format.json { render json: @icode, status: :created, location: @icode }
       else
         format.html { 
@@ -32,6 +30,34 @@ class IcodesController < ApplicationController
         }
         format.json { render json: @icode.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  # GET /icode/:id
+  # POST /icode/:id.json
+  def show
+    @icode = Icode.find(params[:id])
+    authorize! :show, @icode
+
+    respond_to do |format|
+      format.html
+      format.json{
+        render :json => @icode
+      }
+    end
+  end
+
+  # DELETE /icodes/:id
+  # DELETE /icodes/:id.json
+  def destroy
+    @icode = Icode.find(params[:id])
+    authorize! :destroy, @icode
+
+    @icode.destroy
+
+    respond_to do |format|
+      format.html { redirect_to home_path }
+      format.json { head :no_content }
     end
   end
 

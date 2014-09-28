@@ -70,6 +70,13 @@ class Utils
     I18n.t("context.lo.strategy_select").map{|k,v| [v,k.to_s]}
   end
 
+  def self.getOptionsForSelectRoles(current_user)
+    if current_user.isAdmin?
+      Role.all.reject{|r| r.comparisonValue >= current_user.compareRole}.map{|r| [r.readable,r.id] }
+    end
+  end
+
+
 
   #Dates
 

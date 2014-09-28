@@ -61,16 +61,16 @@ class UsersController < ApplicationController
 		#Try to pass this param will trigger a "Can't mass-assign protected attributes: roles" error
 
 		#This is the only way to change the role of a user
-		#The method @user.check_permissions_to_change_role(current_user, params["role"]) 
+		#The method current_user.canChangeRole?(@user,role)
 	    #ensure that the current_user has the required permissions to make this change
 
 		if params["role"]
-			if !@user.check_permissions_to_change_role(current_user, params["role"])
+			role = Role.find_by_name(params["role"])
+			unless current_user.canChangeRole?(@user,role)
 				flash.now[:alert] = I18n.t("dictionary.forbidden_action")
-				render :action => "edit"
-				return
+				return render :action => "edit"
 			else
-				@user.assignRole(params["role"])
+				@user.assignRole(role)
 			end
 		end
 
@@ -80,10 +80,10 @@ class UsersController < ApplicationController
   		if @user.errors.blank?
   			@user.save
   			flash[:notice] = I18n.t("users.message.success.update")
-  			redirect_to Utils.return_after_create_or_update(session)
+  			return redirect_to Utils.return_after_create_or_update(session)
   		else
   			flash.now[:alert] = @user.errors.full_messages.to_sentence
-  			render :action => "edit"
+  			return render :action => "edit"
   		end
 	end
 
