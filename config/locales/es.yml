@@ -656,7 +656,7 @@ es:
   icodes:
     actions:
       create: "Generar Invitación"
-    imessage: "Hola, has recibido una invitación para unirte a la plataforma LOEP (Learning Object Evaluation Platform - %{loepURL}). Esta plataforma tiene como objetivo proporcionar a profesores y docentes un conjunto de herramientas para facilitar la evaluación de recursos educativos. \nPara unirte solo tienes que registrarte en la plataforma mediante este enlace: %{iURL}. Automáticamente se te asignará el siguiente rol: %{rolName}. \n\nMuchas gracias por tu atención."
+    imessage: "Hola, has recibido una invitación para unirte a la plataforma LOEP (%{loepURL}). Esta plataforma tiene como objetivo proporcionar a profesores y docentes un conjunto de herramientas para facilitar la evaluación de recursos educativos. \nPara unirte solo tienes que registrarte en la plataforma mediante este enlace: %{iURL}. Automáticamente se te asignará el siguiente rol: %{rolName}. \n\nMuchas gracias por tu atención."
     imessage_title: "Mensaje de Invitación"
     iurl: "URL de la Invitación"
     mail:

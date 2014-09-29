@@ -158,4 +158,24 @@ class Utils
     token
   end
 
+  def self.parseLinks(s)
+    #regexp
+    url = /( |[(.]|^)(http[s]?:\/\/[^\s&^)&^.]+)( |[).]|$)/
+
+    #replace urls with links
+    iLinks = 0
+    while s =~ url
+      iLinks += 1
+      if iLinks > 50
+        return s
+      end
+      sStart = $1
+      urlValue = $2
+      sEnding = $3
+      s.sub! /( |[(.]|^)#{urlValue.gsub("?","\\?").gsub("/","\\\/")}( |[).]|$)/, "#{sStart}<a href='#{urlValue}' target='_blank'>#{urlValue}</a>#{sEnding}"
+    end
+
+     return s
+  end
+
 end

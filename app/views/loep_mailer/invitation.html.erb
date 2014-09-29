@@ -1,1 +1,3 @@
-<p><%= @body %></p>
+<% Utils.parseLinks(@body).split("\r\n").each do |line| %>
+  <p><%=raw line%></p>
+<%end%>

@@ -15,7 +15,7 @@ LOEP::Application.configure do
 
   #Action mailer configuration
   #Perform deliveries
-  config.action_mailer.perform_deliveries = true #TODO: Change to false
+  config.action_mailer.perform_deliveries = false
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 
