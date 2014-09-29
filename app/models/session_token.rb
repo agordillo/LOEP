@@ -4,9 +4,7 @@ class SessionToken < ActiveRecord::Base
   belongs_to :app
 
   validates :app_id, :presence => true
-
   validates :auth_token, :presence => true, :uniqueness => true
-
   validates :expire_at, :presence => true
 
   validate :check_auth_token
@@ -31,6 +29,10 @@ class SessionToken < ActiveRecord::Base
   # Methods
   ###########
 
+  def owner
+    app
+  end
+
   def expired?
     self.expire_at < Time.now
   end
@@ -42,8 +44,8 @@ class SessionToken < ActiveRecord::Base
     end
   end
 
-  def self.deleteExpiredTokens
-    expiredSessionTokens = SessionToken.all.select{|s| s.expired?}
+  def self.deleteExpiredTokens   
+    expiredSessionTokens = SessionToken.where("expire_at < ?", Time.now)
     expiredSessionTokens.each do |s|
       s.destroy
     end
@@ -60,7 +62,11 @@ class SessionToken < ActiveRecord::Base
 
   def checkExpirationDate
     if self.expire_at.nil?
-      self.expire_at = Time.now + 12.hours
+      unless self.permanent===true
+        self.expire_at = Time.now + 12.hours
+      else
+        self.expire_at = Time.now + 1000.years
+      end
     end
   end
 

@@ -50,7 +50,7 @@ class App < ActiveRecord::Base
   ###########
 
   def valid_session_tokens
-    self.session_token.reject{|s| s.expired? }.sort_by{|s| s.expire_at }.reverse
+    self.session_token.where("expire_at > ?", Time.now).sort_by{|s| s.expire_at }.reverse
   end
 
   def isSessionTokenValid(sessionToken)
@@ -58,9 +58,10 @@ class App < ActiveRecord::Base
     !sessionToken.nil? and !sessionToken.expired?
   end
 
-  def create_session_token
+  def create_session_token(permanent=false)
     s = SessionToken.new
     s.app_id = self.id
+    s.permanent = permanent
     s.save!
     s
   end
