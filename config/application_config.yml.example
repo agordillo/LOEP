@@ -3,8 +3,14 @@
 
 development:
   domain: "localhost:8080"
-  no_reply_mail: "no-reply@loep.global.dit.upm.es"
-  main_mail: "no-reply@loep.global.dit.upm.es"
+  mail:
+    no_reply_mail: "no-reply@loep.global.dit.upm.es"
+    main_mail: "no-reply@loep.global.dit.upm.es"
+    # Type can be "SENDMAIL" or "SMTP" (default)
+    type: "SMTP"
+    #  gmail_credentials:
+    #    username: ""
+    #    password: ""
   # Your secret key for verifying the integrity of signed cookies.
   # If you change this key, all old signed cookies will become invalid!
   # Make sure the secret is at least 30 characters and all random,
@@ -27,8 +33,9 @@ development:
 
 production:
   domain: "loep.global.dit.upm.es"
-  no_reply_mail: "no-reply@loep.global.dit.upm.es"
-  main_mail: "no-reply@loep.global.dit.upm.es"
+  mail:
+    no_reply_mail: "no-reply@loep.global.dit.upm.es"
+    main_mail: "no-reply@loep.global.dit.upm.es"
   secret_token: ""
   # recaptcha:
   #   public_key: ""

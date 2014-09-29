@@ -63,13 +63,24 @@ class IcodesController < ApplicationController
 
   # POST /icodes/.id/invitation
   def send_invitation_mail
+    success = false
+
+    unless params[:email].blank? or params[:imessage].blank?
+      iMail = LoepMailer.invitation(params[:email],params[:imessage])
+      unless iMail.nil?
+        iMail.deliver
+        success = true
+      end  
+    end
 
     respond_to do |format|
-      format.html { 
-        # TODO
-        # flash[:notice] = I18n.t("icodes.message.success.invitation")
-        # flash[:alert] = I18n.t("icodes.message.error.invitation")
-        redirect_to home_path 
+      format.html {
+        if success
+          flash[:notice] = I18n.t("icodes.message.success.invitation")
+        else
+          flash[:alert] = I18n.t("icodes.message.error.invitation")
+        end
+        redirect_to home_path
       }
       format.json { head :no_content }
     end

@@ -13,20 +13,9 @@ LOEP::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
-  #Config action mailer
-  #http://edgeguides.rubyonrails.org/action_mailer_basics.html
-  ActionMailer::Base.default :from => config.APP_CONFIG["no_reply_mail"]
-  config.action_mailer.default_url_options = { :host => config.APP_CONFIG["domain"] }
-  
-  config.action_mailer.delivery_method = :sendmail
-  ActionMailer::Base.sendmail_settings = {
-    :location => "/usr/sbin/sendmail",
-    :arguments => "-i -t"
-  }
-
+  #Action mailer configuration
   #Perform deliveries
-  config.action_mailer.perform_deliveries = true
-
+  config.action_mailer.perform_deliveries = true #TODO: Change to false
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = true
 

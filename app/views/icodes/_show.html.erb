@@ -3,8 +3,6 @@
 
   <%= form_tag(controller: "icodes", action: "send_invitation_mail", method: "post") do |f| %>
 
-    <%= hidden_field_tag :icode_id, @icode.id %>
-
     <% if can?(:destroy,@icode) %>
       <a class="ralink" href="<%=icode_path(@icode)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><%=t("dictionary.remove")%></a>
       <br/><br/>
@@ -12,7 +10,7 @@
 
     <%unless @icode.code.nil? %>
       <p class="form_legend"><%=t("icodes.registrationURL")%></p>
-      <%= text_field_tag :code, @icode.invitation_url, :class=>'loep_input loep_input_center', :readonly => true  %>
+      <%= text_field_tag :registrationURL, @icode.invitation_url, :class=>'loep_input loep_input_center', :readonly => true  %>
 
       <p class="form_legend"><%=t("dictionary.type")%></p>
        <%= text_field_tag :permanent, @icode.readable_type, :class=>'loep_input loep_input_center', :readonly => true  %>

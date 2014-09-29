@@ -659,6 +659,8 @@ es:
     imessage: "Hola, has recibido una invitación para unirte a la plataforma LOEP (Learning Object Evaluation Platform - %{loepURL}). Esta plataforma tiene como objetivo proporcionar a profesores y docentes un conjunto de herramientas para facilitar la evaluación de recursos educativos. \nPara unirte solo tienes que registrarte en la plataforma mediante este enlace: %{iURL}. Automáticamente se te asignará el siguiente rol: %{rolName}. \n\nMuchas gracias por tu atención."
     imessage_title: "Mensaje de Invitación"
     iurl: "URL de la Invitación"
+    mail:
+      invitation_subject: "Invitación para unirse a LOEP"
     message:
       success:
         create: "El código de invitación ha sido creado satisfactoriamente."

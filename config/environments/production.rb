@@ -48,29 +48,14 @@ LOEP::Application.configure do
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # config.assets.precompile += %w( search.js )
 
-  #Config action mailer
-  #(supposing you have a SMTP server on localhost:25)
-  #Configure SMTP server
-  ActionMailer::Base.default :from => config.APP_CONFIG["no_reply_mail"]
-  config.action_mailer.default_url_options = {:host => config.APP_CONFIG["domain"]}
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address => "127.0.0.1",
-    :port    => "25",
-    :domain  => config.APP_CONFIG["domain"],
-    :enable_starttls_auto => true,
-    :openssl_verify_mode  => 'none'
-  }
-  
+  #Action mailer configuration
+  #Perform deliveries
+  config.action_mailer.perform_deliveries = true 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 
   # Enable threaded mode
   # config.threadsafe!
-
-  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation can not be found)
-  config.i18n.fallbacks = true
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
