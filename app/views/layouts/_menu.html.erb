@@ -1,4 +1,8 @@
 <% if user_signed_in? %>
+
+	<% admin = iamAdmin? %>
+	<% reviewer = iamReviewer? %>
+
 	<div id="homemenu_wrapper">
 		<p> <%=t("menu.main")%> </p>
 		<div id="homemenu">
@@ -6,19 +10,21 @@
 				<li class="<%='menu_option_selected' if params[:controller] == 'home'%>">
 					<a href="/home"><h3><span class="glyphicon glyphicon-home"></span><%=t("menu.home")%></h3></a>
 				</li>
-				<li class="<%='menu_option_selected' if params[:controller] == 'assignments'%>">
-					<% if iamAdmin? %>
-						<h3><span class="glyphicon glyphicon-time"></span><%=t("menu.assignments")%></h3>
-						<ul>
-							<li><a href="/assignments"><%=t("menu.actions.list")%></a></li>
-							<li><a href="/assignments/new"><%=t("assignments.actions.add_new")%></a></li>
-							<li><a href="/automatic_assignments/new"><%=t("menu.actions.amatching")%></a></li>
-						</ul>
-					<% else %>
-						<a href="<%=loep_asignments_path%>"><h3><span class="glyphicon glyphicon-time"></span><%=t("menu.assignments")%></h3></a>
-					<% end %>
-				</li>
-				<% if iamAdmin? %>
+				<% if admin or reviewer %>
+					<li class="<%='menu_option_selected' if params[:controller] == 'assignments'%>">
+						<% if admin %>
+							<h3><span class="glyphicon glyphicon-time"></span><%=t("menu.assignments")%></h3>
+							<ul>
+								<li><a href="/assignments"><%=t("menu.actions.list")%></a></li>
+								<li><a href="/assignments/new"><%=t("assignments.actions.add_new")%></a></li>
+								<li><a href="/automatic_assignments/new"><%=t("menu.actions.amatching")%></a></li>
+							</ul>
+						<% else %>
+							<a href="<%=loep_asignments_path%>"><h3><span class="glyphicon glyphicon-time"></span><%=t("menu.assignments")%></h3></a>
+						<% end %>
+					</li>
+				<%end%>
+				<% if admin %>
 					<li class="<%='menu_option_selected' if params[:controller] == 'los'%>">
 						<h3><span class="glyphicon glyphiconfull glyphicon-show_big_thumbnails"></span><%=t("menu.learning_objects")%></h3>
 						<ul>
@@ -38,7 +44,7 @@
 				<li class="<%='menu_option_selected' if params[:controller] == 'evaluations'%>">
 					<a href="<%=evaluations_path%>"><h3><span class="glyphicon glyphicon-star-empty"></span><%=t("menu.evaluations")%></h3></a>
 				</li>
-				<% if iamAdmin? %>
+				<% if admin %>
 					<li class="<%='menu_option_selected' if params[:controller] == 'users'%>">
 						<h3><span class="glyphicon glyphicon-user"></span><%=t("menu.users")%></h3>
 						<ul>
@@ -47,7 +53,7 @@
 						</ul>
 					</li>
 				<% end %>
-				<% if iamAdmin? %>
+				<% if admin %>
 					<li class="<%='menu_option_selected' if params[:controller] == 'apps'%>">
 						<h3><span class="glyphicon glyphiconfull imac"></span><%=t("menu.applications")%></h3>
 						<ul>
@@ -78,17 +84,17 @@
 			</ul>
 		</div>
 	</div>
-<% end %>
 
-<script type="text/javascript">
-	$(document).ready(function(){
-		$("#homemenu h3").click(function(){
-			//slide up all the link lists
-			$("#homemenu ul ul").slideUp();
-			//slide down the link list below the h3 clicked - only if its closed
-			if(!$(this).next().is(":visible")){
-				$(this).next().slideDown();
-			}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#homemenu h3").click(function(){
+				//slide up all the link lists
+				$("#homemenu ul ul").slideUp();
+				//slide down the link list below the h3 clicked - only if its closed
+				if(!$(this).next().is(":visible")){
+					$(this).next().slideDown();
+				}
+			});
 		});
-	});
-</script>
+	</script>
+<% end %>

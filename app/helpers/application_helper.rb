@@ -45,6 +45,14 @@ module ApplicationHelper
 		checkRoleForUser(user,"SuperAdmin")
 	end
 
+	def iamReviewer?
+		isReviewer?(current_user)
+	end
+
+	def isReviewer?(user)
+		checkRoleForUser(user,"Reviewer")
+	end
+
 	def checkRoleForUser(user,role)
 		!user.nil? and user.role?(role)
 	end

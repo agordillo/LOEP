@@ -71,9 +71,14 @@ class Utils
   end
 
   def self.getOptionsForSelectRoles(current_user)
+    roles = []
     if current_user.isAdmin?
-      Role.all.reject{|r| r.comparisonValue >= current_user.compareRole}.map{|r| [r.readable,r.id] }
+      roles = Role.all.reject{|r| r.comparisonValue >= current_user.compareRole}.map{|r| r}
+      if LOEP::Application.config.register_policy=="FREE"
+        roles = (roles & [Role.default])
+      end
     end
+    roles.map{|r| [r.readable,r.id] }
   end
 
 
