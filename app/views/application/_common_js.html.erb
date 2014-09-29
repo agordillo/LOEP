@@ -14,7 +14,7 @@
 
   var roleComparisonHash = {};
   <% Role.all.each do |r| %>
-    roleComparisonHash['<%=r.readable%>'] = '<%=r.comparisonValue%>';
+    roleComparisonHash['<%=r.readable%>'] = '<%=r.value%>';
   <% end %>
 
   jQuery.fn.dataTableExt.oSort['roles-asc'] = function(a,b){

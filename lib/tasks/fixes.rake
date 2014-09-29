@@ -37,6 +37,23 @@ namespace :fixes do
 		end
 	end
 
+	task :rolesValue => :environment do
+		roles = [
+			{name:"SuperAdmin", value:9},
+			{name:"Admin", value:8},
+			{name:"Reviewer", value:2},
+			{name:"User", value:1}
+		]
+		roles.each do |role|
+			r = Role.find_by_name(role[:name])
+			unless r.nil?
+				puts "Updating role: " + role[:name]
+				r.value = role[:value]
+				r.save!
+			end
+		end
+	end
+
 end
 
  

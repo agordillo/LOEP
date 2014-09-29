@@ -193,16 +193,16 @@ namespace :db do
 
 		task :roles => :environment do
 			roles = [
-				{name:"SuperAdmin"},
-				{name:"Admin"},
-				{name:"Reviewer"},
-				{name:"User"}
+				{name:"SuperAdmin", value:9},
+				{name:"Admin", value:8},
+				{name:"Reviewer", value:2},
+				{name:"User", value:1}
 			]
 			roles.each do |role|
 				r = Role.find_by_name(role[:name])
 				if r.nil?
 					puts "Creating new role: " + role[:name]
-					Role.create!  :name  => role[:name]
+					Role.create!  :name  => role[:name], :value => role[:value]
 				end
 			end
 		end

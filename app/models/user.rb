@@ -125,8 +125,8 @@ class User < ActiveRecord::Base
   end
 
   def compareUsers(user)
-    if self.compareRole != user.compareRole
-      return self.compareRole <=> user.compareRole
+    if self.value != user.value
+      return self.value <=> user.value
     else
        return self.created_at <=> user.created_at
     end
@@ -135,16 +135,20 @@ class User < ActiveRecord::Base
 
   #Role Management
 
+  def sort_roles
+    self.roles.sort_by{|r| r.value}.reverse
+  end
+
   def role
-    self.roles.sort_by{|r| r.comparisonValue }.reverse.first
+    self.sort_roles.first
   end
 
   def role_name
     role.name unless role.nil?
   end
 
-  def role?(role)
-    return !!self.roles.find_by_name(role.to_s.camelize)
+  def role?(roleName)
+    return !!self.roles.find_by_name(roleName.to_s.camelize)
   end
 
   def isAdmin?
@@ -171,8 +175,8 @@ class User < ActiveRecord::Base
     assignRole(newRole,false)
   end
 
-  def compareRole
-    return self.role.comparisonValue
+  def value
+    return self.role.value
   end
 
   def canChangeRole?(user, newRole)
@@ -180,11 +184,11 @@ class User < ActiveRecord::Base
       return false
     end
 
-    unless self.compareRole > user.compareRole or self.id == user.id
+    unless self.value > user.value or self.id == user.id
       return false
     end
 
-    unless !newRole.nil? and self.compareRole >= newRole.comparisonValue
+    unless !newRole.nil? and self.value >= newRole.value
       return false
     end
 

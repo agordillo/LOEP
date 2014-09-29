@@ -8,20 +8,20 @@ class Ability
         if user.role? :SuperAdmin 
             #SuperAdmin
             can [:update, :destroy], User do |u|
-               user.compareRole > u.compareRole || user.id == u.id
+               user.value > u.value || user.id == u.id
             end
             can [:create, :update, :destroy], Lo
             can [:create, :update, :destroy], Assignment
             can [:create, :update, :destroy], Evaluation
             can :create, App
             can [:update, :destroy], App do |app|
-                app.user.nil? || user.compareRole > app.user.compareRole || user.id == app.user.id
+                app.user.nil? || user.value > app.user.value || user.id == app.user.id
             end
             can :create, Icode do |icode|
-                icode.role.nil? || icode.role.comparisonValue < user.compareRole
+                icode.role.nil? || icode.role.value < user.value
             end
             can [:update, :destroy], Icode do |icode|
-                icode.owner.nil? or icode.owner.compareRole < user.compareRole or icode.owner==user
+                icode.owner.nil? or icode.owner.value < user.value or icode.owner==user
             end
 
             can :evaluate, :all
@@ -35,20 +35,20 @@ class Ability
         elsif user.role? :Admin
             #Admin
             can [:update, :destroy], User do |u|
-               user.compareRole > u.compareRole || user.id == u.id
+               user.value > u.value || user.id == u.id
             end
             can [:create, :update, :destroy], Lo
             can [:create, :update, :destroy], Assignment
             can :create, Evaluation
             can :create, App
             can [:update, :destroy], App do |app|
-                app.user.nil? || user.compareRole > app.user.compareRole || user.id == app.user.id
+                app.user.nil? || user.value > app.user.value || user.id == app.user.id
             end
             can :create, Icode do |icode|
-                icode.role.nil? || icode.role.comparisonValue < user.compareRole
+                icode.role.nil? || icode.role.value < user.value
             end
             can [:update, :destroy], Icode do |icode|
-                icode.owner.nil? or icode.owner.compareRole < user.compareRole or icode.owner==user
+                icode.owner.nil? or icode.owner.value < user.value or icode.owner==user
             end
 
             can :evaluate, :all

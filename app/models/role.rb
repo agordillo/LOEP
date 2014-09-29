@@ -32,16 +32,4 @@ class Role < ActiveRecord::Base
     I18n.t("roles."+self.name.downcase, :default => self.name) unless self.name.nil?
   end
 
-  def comparisonValue
-    if self.name == "SuperAdmin"
-      return 9
-    elsif self.name == "Admin"
-      return 8
-    elsif self.name == "Reviewer"
-      return 2
-    else
-      return 1
-    end
-  end
-
 end
