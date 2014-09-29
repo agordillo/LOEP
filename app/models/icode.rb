@@ -56,11 +56,11 @@ class Icode < ActiveRecord::Base
   end
 
   def self.getValidIcodes
-    Icode.all.reject{|ic| ic.expired?}
+    Icode.where("expire_at > ?", Time.now)
   end
 
   def self.deleteExpiredIcodes
-    expiredIcodes = Icode.all.select{|ic| ic.expired?}
+    expiredIcodes = Icode.where("expire_at < ?", Time.now)
     expiredIcodes.each do |ic|
       ic.destroy
     end
@@ -68,6 +68,14 @@ class Icode < ActiveRecord::Base
 
   def invitation_url
     LOEP::Application.config.full_domain + Rails.application.routes.url_helpers.new_user_registration_path + "?icode=" + self.code.to_s
+  end
+
+  def readable_type
+    if self.permanent
+      I18n.t("dictionary.permanent.permanent")
+    else
+      I18n.t("dictionary.permanent.oneuse")
+    end
   end
 
 
@@ -81,7 +89,11 @@ class Icode < ActiveRecord::Base
 
   def checkExpirationDate
     if self.expire_at.nil?
-      self.expire_at = Time.now + 15.days
+      unless self.permanent===true
+        self.expire_at = Time.now + 15.days
+      else
+        self.expire_at = Time.now + 1000.years
+      end
     end
   end
 

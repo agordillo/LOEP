@@ -56,7 +56,21 @@ class IcodesController < ApplicationController
     @icode.destroy
 
     respond_to do |format|
-      format.html { redirect_to home_path }
+      format.html { redirect_to new_icode_path }
+      format.json { head :no_content }
+    end
+  end
+
+  # POST /icodes/.id/invitation
+  def send_invitation_mail
+
+    respond_to do |format|
+      format.html { 
+        # TODO
+        # flash[:notice] = I18n.t("icodes.message.success.invitation")
+        # flash[:alert] = I18n.t("icodes.message.error.invitation")
+        redirect_to home_path 
+      }
       format.json { head :no_content }
     end
   end

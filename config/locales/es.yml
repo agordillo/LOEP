@@ -20,6 +20,7 @@ es:
     birthday: "Fecha de nacimiento"
     callback: "Callback"
     cancel: "Cancelar"
+    code: "Código"
     compare: "Comparar"
     completed_at: "Completado el"
     completion_date: "Fecha de Terminación"
@@ -50,6 +51,7 @@ es:
       reserved_word: "es una palabra reservada"
       too_short: "es demasiado corto"
       unspecified: "tiene que ser especificado"
+    expiration: "Vencimiento"
     female: "Mujer"
     flashcard:
       one: &flashcard "Flashcard"
@@ -87,6 +89,7 @@ es:
     remove: "Borrar"
     repository: "Repositorio"
     role: "Rol"
+    send: "Enviar"
     scope: "Ámbito"
     statistics: "Estadísticas"
     status: "Estado"
@@ -653,14 +656,21 @@ es:
   icodes:
     actions:
       create: "Generar Invitación"
+    imessage: "Hola, has recibido una invitación para unirte a la plataforma LOEP (Learning Object Evaluation Platform - %{loepURL}). Esta plataforma tiene como objetivo proporcionar a profesores y docentes un conjunto de herramientas para facilitar la evaluación de recursos educativos. \nPara unirte solo tienes que registrarte en la plataforma mediante este enlace: %{iURL}. Automáticamente se te asignará el siguiente rol: %{rolName}. \n\nMuchas gracias por tu atención."
+    imessage_title: "Mensaje de Invitación"
     iurl: "URL de la Invitación"
     message:
       success:
         create: "El código de invitación ha sido creado satisfactoriamente."
+        invitation: "La invitación fue enviada con éxito."
+      error:
+        invitation: "Ocurrió un error y la invitación no pudo ser enviada."
     new: "Invita a alguien a la plataforma LOEP"
     name:
       one: "Código de Invitación"
       plural: "Códigos de Invitación"
+      mine_active: "Mis códigos de invitación activos"
+    registrationURL: "URL de Registro"
   language:
     de: "Alemán"
     en: "Inglés"
@@ -676,6 +686,9 @@ es:
     message:
       error:
         captcha: "Hubo un error con el código captcha. Por favor, vuelve a introducir el código."
+        invitation_invalid: "El código de invitación no es válido. Quizás ha expirado."
+        invitation_required: "Necesitas un código de invitación para registrarte en la plataforma LOEP."
+        role_required: "Necesitas un rol para registrarte en la plataforma LOEP."
     password: "Contraseña"
     password_change: "Cambia tu contraseña"
     password_confirmation: "Confirmación de contraseña"

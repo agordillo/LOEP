@@ -183,6 +183,10 @@ input.loep_input {
 	width: 50%;
 }
 
+input.loep_input_center {
+	text-align: center;
+}
+
 textarea.loep_input {
 	width: 50%;
 	max-height: 200px;

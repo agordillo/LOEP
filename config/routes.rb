@@ -8,6 +8,7 @@ LOEP::Application.routes.draw do
   end
   resources :users
   
+  match '/icodes/:id/invitation' => 'icodes#send_invitation_mail', via: [:post]
   resources :icodes, :except => [:index, :update]
 
   #Root page

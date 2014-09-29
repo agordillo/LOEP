@@ -4,6 +4,15 @@
 
 <%= render 'form' %>
 
+<% @icodes = current_user.icodes.getValidIcodes %>
+<% unless @icodes.length == 0 %>
+	</br></br>
+	<div class="loep_form_wrapper">
+		<h2><%=t("icodes.name.mine_active")%></h2>
+	</div>
+	<%= render '/icodes/index', :showTools => true %>
+<%end%>
+
 </br>
 <div class="loep_form_wrapper">
 	<%= generic_back_link %>

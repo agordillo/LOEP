@@ -1,0 +1,82 @@
+<% showTools ||= false %>
+
+<% aL = @icodes.length %>
+<% if aL === 0 %>
+  <%= render '/layouts/emptytable', :resources => t("icodes.name.plural").downcase %>
+<% else %>
+  <table id="icode_table" cellspacing='0' class="loep_table">
+    <thead>
+      <tr>
+        <th><%=t("dictionary.role")%></th>
+        <th><%=t("dictionary.type")%></th>
+        <th><%=t("dictionary.expiration")%></th>
+        <th><%=t("dictionary.code")%></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @icodes.each do |icode| %>
+      <tr>
+        <td class="tdcenter">
+          <%= icode.role.readable %>
+        </td>
+        <td class="tdcenter">
+          <%= icode.readable_type %>
+        </td>
+        <td class="tdcenter">
+          <%= Utils.getReadableDate(icode.expire_at) %>
+        </td>
+        <td class="tdcenter">
+          <a href="<%=icode_path(icode)%>"><%= icode.code %></a>
+        </td>
+        <td class="tdcenter tddestroy">
+          <%if can?(:destroy,icode) %>
+            <a href="<%=icode_path(icode)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("dictionary.remove")%></a>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+
+<% if showTools %>
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+
+    //////////////////
+    // Table Sorter
+    //////////////////
+
+    var iDisplayLength = LOEP.Storage.get("IcodesTable_iDisplayLength") || -1;
+
+    //DOC: http://datatables.net
+    var icodesTable = $("#icode_table").dataTable({
+      "bJQueryUI": true,
+      "sPaginationType": "full_numbers",
+      "aaSorting": [[ 0, "asc" ]],
+      "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [ 3,4 ] },
+          { "bSearchable": false, "aTargets": [ 4 ] },
+          { "sType": "loep-date-dd/mm/yyyy", "aTargets": [2] },
+          { "sType": "roles", "aTargets": [ 0 ] }
+      ],
+      "sDom": '<"H"lfr><"F"ip>t',
+      "iDisplayLength": iDisplayLength,
+      "oLanguage": { <%= render "application/oLanguage"%> }
+    });
+
+    //DataTable events: http://datatables.net/docs/DataTables/1.9.4/#page
+    $('#icode_table_length').on('change', function(e){
+      var iDisplayLength = parseInt($(this).find("select").val());
+      LOEP.Storage.add("IcodesTable_iDisplayLength",iDisplayLength);
+    });
+
+  });
+
+</script>
+
+<% end %>

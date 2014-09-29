@@ -20,6 +20,7 @@ en:
     birthday: "Date of birth"
     callback: "Callback"
     cancel: "Cancel"
+    code: "Code"
     compare: "Compare"
     completed_at: "Completed at"
     completion_date: "Completion Date"
@@ -50,6 +51,7 @@ en:
       reserved_word: "is a reserved word"
       too_short: "is too short"
       unspecified: "has to be specified"
+    expiration: "Expiration"
     female: "Female"
     flashcard:
       one: &flashcard "Flashcard"
@@ -87,6 +89,7 @@ en:
     remove: "Remove"
     repository: "Repository"
     role: "Role"
+    send: "Send"
     scope: "Scope"
     statistics: "Statistics"
     status: "Status"
@@ -656,14 +659,21 @@ en:
   icodes:
     actions:
       create: "Generate Invitation"
+    imessage: "Hello, you have received an invitation to join to the LOEP platform (Learning Object Evaluation Platform -  %{loepURL}). This platform aims to provide teachers and educators with a set of tools to facilitate the evaluation of educational resources. \nTo join you only have to register in the platform following this link: %{iURL}. Automatically, the role below will be assigned to you: %{rolName}. \n\nThank you  very much for your attention."
+    imessage_title: "Invitation Message"
     iurl: "Invitation URL"
     message:
       success:
         create: "The invitation code has been succesfully created"
+        invitation: "The invitation has been succesfully sent"
+      error:
+        invitation: "An error occurred and the invitation could not be sent"
     new: "Invite somebody to the LOEP platform"
     name:
       one: "Invitation Code"
       plural: "Invitation Codes"
+      mine_active: "My active invitation codes"
+    registrationURL: "Registration URL"
   language:
     de: "German"
     en: "English"

@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   has_many :evaluations
   has_many :los, through: :evaluations
   has_many :apps
+  has_many :icodes, :foreign_key => "owner_id"
   
   before_save :checkLanguages
 

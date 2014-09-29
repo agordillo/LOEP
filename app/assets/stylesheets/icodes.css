@@ -1,0 +1,12 @@
+textarea.imessage{
+	width: 100%;
+	min-height: 200px;
+	max-height: 500px;
+	padding: 8px;
+	resize: vertical;
+}
+
+div.show_wrapper input.icode_email {
+	margin-bottom: 10px;
+	width: 100% !important;
+}
