@@ -237,6 +237,15 @@ en:
         - "GBL"
         - "Learning Objects"
         - "LO"
+  contact:
+    info: "You can write a message in the text box below. It will be sent to the administrators of the platform."
+    mail_subject: "LOEP: User message"
+    message:
+      success:
+        send: "The message was succesfully sent."
+      error:
+        send: "An error occurred and the message could not be sent."
+    message_from: "Message from"
   context:
     lo:
       title: "Context Information"
@@ -783,16 +792,17 @@ en:
       rlist: "Ranked List"
       add_new: "Add New"
       search: "Search"
-    main: "Main Menu"
-    home: "Home"
-    assignments: "Assignments"
-    learning_objects: "Learning Objects"
-    evaluations: "Evaluations"
-    users: "Users"
     applications: "Applications"
+    assignments: "Assignments"
+    contact: "Contact"
+    evaluations: "Evaluations"
     documentation: "Documentation"
-    surveys: "Surveys"
+    home: "Home"
+    learning_objects: "Learning Objects"
+    main: "Main Menu"
     settings: "Settings"
+    surveys: "Surveys"
+    users: "Users"
   metrics:
     message:
       error:

@@ -234,6 +234,15 @@ es:
         - "Aprendizaje basado en Juegos"
         - "Objetos de Aprendizaje"
         - "OA"
+  contact:
+    info: "Puedes escribir un mensaje en la caja de texto inferior. Será enviado a los administradores de la plataforma."
+    mail_subject: "LOEP: Mensaje de usuario"
+    message:
+      success:
+        send: "El mensaje fue correctamente enviado."
+      error:
+        send: "Ocurrió un error y no se pudo enviar el mensaje."
+    message_from: "Mensaje de"
   context:
     lo:
       title: "Información de Contexto"
@@ -780,16 +789,18 @@ es:
       rlist: "Ranking"
       add_new: "Añadir Nuevo"
       search: "Buscar"
-    main: "Menú Principal"
-    home: "Inicio"
-    assignments: "Asignaciones"
-    learning_objects: "Objetos de Aprendizaje"
-    evaluations: "Evaluaciones"
-    users: "Usuarios"
+    contact: "Contact"
     applications: "Aplicaciones"
+    assignments: "Asignaciones"
+    contact: "Contacto"
     documentation: "Documentación"
+    evaluations: "Evaluaciones"
+    home: "Inicio"
+    learning_objects: "Objetos de Aprendizaje"
+    main: "Menú Principal"
     surveys: "Encuestas"
     settings: "Ajustes"
+    users: "Usuarios"
   metrics:
     message:
       error:

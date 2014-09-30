@@ -1,0 +1,7 @@
+textarea.contact_message{
+	width: 100%;
+	min-height: 200px;
+	max-height: 500px;
+	padding: 8px;
+	resize: vertical;
+}

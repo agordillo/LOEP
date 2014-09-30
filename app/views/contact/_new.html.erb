@@ -1,0 +1,15 @@
+<div class="show_wrapper loep_form_wrapper">
+	<h2><%=t("menu.contact")%></h2>
+	<p><%=t("contact.info")%></p>
+
+	<%= form_tag(controller: "contact", action: "send_mail", method: "post") do |f| %>
+		<%= text_area_tag :message, nil, :class=>'contact_message' %>
+		<br/><br/>
+		<input class="loep_button" name="send" type="submit" value="<%=t("dictionary.send")%>">
+	<% end %>
+</div>
+
+<div class="show_wrapper loep_form_wrapper">
+	</br>
+	<%= generic_back_link %>
+</div>

@@ -1,0 +1,7 @@
+<%unless @user.nil?%>
+	<p><%=t("contact.message_from")%>: <a href="<%=full_path(user_path(@user))%>" target="_blank"><%=@user.name%></a></p>
+<%end%>
+<p>-------------------------------------------------------------</p>
+<% @body.split("\r\n").each do |line| %>
+	<%=line%><br/>
+<%end%>

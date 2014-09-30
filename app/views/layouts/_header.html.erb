@@ -1,23 +1,26 @@
 <% if user_signed_in? %>
 	<!-- Top bar -->
 	<nav id="topbar" class="navbar navbar-default" role="navigation">
-	    <ul class="navbar-top">
-        <li class="userbox">
-          <a href="<%=user_path(current_user)%>">
-            <img src="/assets/default_avatar.png">
-            <%=current_user.name%> (<%=current_user.readable_role%>)
-          </a>
-        </li>
-	      <li>
-	      	<a title='<%=t("menu.home")%>' href="<%=home_path%>"><span class="glyphicon glyphicon-home"></span></a>
-	      </li>
-	      <li>
-	      	<a title='<%=t("menu.settings")%>' href="<%=edit_user_registration_path(current_user)%>"><span class="glyphicon glyphicon-wrench"></span></a>
-	      </li>
-	      <li>
-	      	<a title='<%=t("login.sign_out")%>' href="/users/sign_out" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-log-out"></span></a>
-	      </li>
-	    </ul>
+		<ul class="navbar-top">
+			<li class="userbox">
+				<a href="<%=user_path(current_user)%>">
+					<img src="/assets/default_avatar.png">
+					<%=current_user.name%> (<%=current_user.readable_role%>)
+				</a>
+			</li>
+			<li>
+				<a title='<%=t("menu.home")%>' href="<%=home_path%>"><span class="glyphicon glyphicon-home"></span></a>
+			</li>
+			<li>
+				<a title='<%=t("menu.contact")%>' href="<%=contact_path%>"><span class="glyphicon glyphicon-envelope"></span></a>
+			</li>
+			<li>
+				<a title='<%=t("menu.settings")%>' href="<%=edit_user_registration_path(current_user)%>"><span class="glyphicon glyphicon-wrench"></span></a>
+			</li>
+			<li>
+				<a title='<%=t("login.sign_out")%>' href="/users/sign_out" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-log-out"></span></a>
+			</li>
+		</ul>
 	</nav>
 <% end %>
 <div id="logo_wrapper">

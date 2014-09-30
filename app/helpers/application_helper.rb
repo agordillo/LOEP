@@ -1,10 +1,10 @@
 module ApplicationHelper
 	def devise_mapping
-	  Devise.mappings[:user]
+		Devise.mappings[:user]
 	end
 
 	def resource_name
-	  devise_mapping.name
+		devise_mapping.name
 	end
 
 	def resource_class
@@ -19,13 +19,21 @@ module ApplicationHelper
 		end
 	end
 
+	def contact_path
+		return "/contact"
+	end
+
 	def generic_back_link
-	    if iamAdmin?
-	      link_to t("dictionary.back"), :back, :class => 'backLink'
-	    else
-	      link_to t("menu.home"), home_path, :class => 'backLink'
-	    end
-  	end
+		if iamAdmin?
+			link_to t("dictionary.back"), :back, :class => 'backLink'
+		else
+			link_to t("menu.home"), home_path, :class => 'backLink'
+		end
+	end
+
+	def full_path(relativePath)
+		LOEP::Application.config.full_domain + relativePath unless relativePath.nil?
+	end
 
 	#Role helpers
 

@@ -65,6 +65,10 @@ LOEP::Application.routes.draw do
     resources :survey_ranking_as
   end
 
+  #Contact
+  match '/contact' => 'contact#new', via: [:get]
+  match '/contact_send' => 'contact#send_mail', via: [:post]
+
   #Web Services
   match '/tags' => 'application#serve_tags'
   match '/surveys' => 'surveys#index'

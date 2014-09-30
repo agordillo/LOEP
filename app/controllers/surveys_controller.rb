@@ -5,7 +5,7 @@ class SurveysController < ApplicationController
   end
 
   def completed
-  	render "completed"
+    render "completed"
   end
 
 end
