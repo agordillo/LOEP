@@ -2,7 +2,7 @@
 
 <% rL = @users.length %>
 <% if rL === 0 %>
-  <%= render '/layouts/emptytable', :fullmessage => t("users.message.no_users") %>
+  <%= render '/application/emptytable', :fullmessage => t("users.message.no_users") %>
 <% else %>
   <% if showTools %>
   <div class="loep_table_tools">

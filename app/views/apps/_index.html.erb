@@ -2,7 +2,7 @@
 
 <% aL = @apps.length %>
 <% if aL === 0 %>
-  <%= render '/layouts/emptytable', :resources => t("applications.name.plural").downcase %>
+  <%= render '/application/emptytable', :resources => t("applications.name.plural").downcase %>
 <% else %>
   <table id="app_table" cellspacing='0' class="loep_table">
     <thead>

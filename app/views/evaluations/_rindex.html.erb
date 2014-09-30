@@ -1,6 +1,6 @@
 <% eL = @evaluations.length %>
 <% if eL === 0 %>
-  <%= render '/layouts/emptytable', :fullHTMLmessage => ("<p>"+t("evaluations.message.no_evaluations")+"</p>") %>
+  <%= render '/application/emptytable', :fullHTMLmessage => ("<p>"+t("evaluations.message.no_evaluations")+"</p>") %>
 <% else %>
   <table cellspacing='0' class="loep_table">
     <tr>

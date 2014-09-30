@@ -63,23 +63,23 @@
 		<% end %>
 
 		// Usage Example
-	    // var radar = new RGraph.Radar('<%=evmethod.id%>',[0,2,4,6,8,10,8,6,4],[0,2,4,6,8,10,8,6,4]);
+		// var radar = new RGraph.Radar('<%=evmethod.id%>',[0,2,4,6,8,10,8,6,4],[0,2,4,6,8,10,8,6,4]);
 
-	    var radar = construct(RGraph.Radar,RGraphRadarArgs);
-	    radar.Set.apply(this,RGraphRadarTooltipArgs);
-	    radar.Set.apply(this,RGraphRadarFillTooltipArgs);
-	    var keysLength = RGraphRadarKeyArgs[1].length;
-	    if(keysLength > 0){
-	    	radar.Set.apply(this,RGraphRadarKeyArgs);
-	    	radar.Set('key.interactive', true)
-	    	for(var i=0; i<keysLength; i++){
-	    		RGraphRadarKeyColorsArgs[1].push(getColor(i));
-	    	}
-	    	radar.Set.apply(this,RGraphRadarKeyColorsArgs);
-	    }
-	    radar.Set.apply(this,RGraphRadarColorsArgs);
-	    radar.Set('labels', graphLabels)
-	    	.Set('ymax', '10')
+		var radar = construct(RGraph.Radar,RGraphRadarArgs);
+		radar.Set.apply(this,RGraphRadarTooltipArgs);
+		radar.Set.apply(this,RGraphRadarFillTooltipArgs);
+		var keysLength = RGraphRadarKeyArgs[1].length;
+		if(keysLength > 0){
+			radar.Set.apply(this,RGraphRadarKeyArgs);
+			radar.Set('key.interactive', true)
+			for(var i=0; i<keysLength; i++){
+				RGraphRadarKeyColorsArgs[1].push(getColor(i));
+			}
+			radar.Set.apply(this,RGraphRadarKeyColorsArgs);
+		}
+		radar.Set.apply(this,RGraphRadarColorsArgs);
+		radar.Set('labels', graphLabels)
+			.Set('ymax', '10')
 			.Set('labels.axes', '')
 			.Set('background.circles.poly', true)
 			.Set('background.circles.spacing', 30)

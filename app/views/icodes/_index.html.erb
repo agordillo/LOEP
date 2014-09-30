@@ -2,7 +2,7 @@
 
 <% aL = @icodes.length %>
 <% if aL === 0 %>
-  <%= render '/layouts/emptytable', :resources => t("icodes.name.plural").downcase %>
+  <%= render '/application/emptytable', :resources => t("icodes.name.plural").downcase %>
 <% else %>
   <table id="icode_table" cellspacing='0' class="loep_table">
     <thead>

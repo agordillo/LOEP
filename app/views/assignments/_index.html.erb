@@ -2,7 +2,7 @@
 
 <% rL = @assignments.length %>
 <% if rL === 0 %>
-  <%= render '/layouts/emptytable', :resources => t("assignments.name.plural").downcase %>
+  <%= render '/application/emptytable', :resources => t("assignments.name.plural").downcase %>
 <% else %>
   <% if showTools %>
   <div class="loep_table_tools">

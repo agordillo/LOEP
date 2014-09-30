@@ -56,9 +56,11 @@ class Evaluation < ActiveRecord::Base
 
   after_initialize :init
   before_validation :checkScoreBeforeSave
+
   after_create :checkAssignment
   after_save :updateScores
   after_save :checkCallbacks
+  after_destroy :updateScores
 
 
   ################################
@@ -329,14 +331,12 @@ class Evaluation < ActiveRecord::Base
     #3. For each Metric, create/update the scores of the LO.
     metrics = Metric.allc.select { |m| m.evmethods.include? self.evmethod }
     metrics.each do |m|
-      scores = self.lo.scores.where(:metric_id=>m.id)
-      if scores.length > 0
+      s = self.lo.scores.where(:metric_id=>m.id).first
+      unless s.nil?
         #Update Score
-        s = scores.first
         loScore = s.metric.getScoreForLo(s.lo)
         if loScore.nil?
-          #Remove Score
-          #TODO
+          s.destroy
         else
           #Update score
           s.value = loScore

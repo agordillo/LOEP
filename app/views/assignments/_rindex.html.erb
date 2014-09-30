@@ -5,7 +5,7 @@
 <% aL = @assignments.length %>
 
 <% if aL === 0 %>
-  <%= render '/layouts/emptytable', :fullHTMLmessage => t("assignments.no_assignments_for_reviewer") %>
+  <%= render '/application/emptytable', :fullHTMLmessage => t("assignments.no_assignments_for_reviewer") %>
 <% else %>
 
   <table cellspacing='0' class="loep_table">

@@ -2,7 +2,7 @@
 
 <% sL = @scores.length %>
 <% if sL === 0 %>
-  <%= render '/layouts/emptytable', :resources => t("scores.name.plural").downcase %>
+  <%= render '/application/emptytable', :resources => t("scores.name.plural").downcase %>
 <% else %>
   <table id="scores_table" cellspacing='0' class="loep_table">
     <thead>
