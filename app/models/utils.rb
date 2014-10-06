@@ -165,7 +165,7 @@ class Utils
 
   def self.parseLinks(s)
     #regexp
-    url = /( |[(.]|^)(http[s]?:\/\/[^\s&^)&^.]+)( |[).]|$)/
+    url = /( |[(.]|^)(http[s]?:\/\/[^\s&^)]+)( |[).]|$)/
 
     #replace urls with links
     iLinks = 0
