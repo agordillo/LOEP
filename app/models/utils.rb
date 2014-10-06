@@ -165,7 +165,7 @@ class Utils
 
   def self.parseLinks(s)
     #regexp
-    url = /( |[(.]|^)(http[s]?:\/\/[^\s&^)]+[^.])( |[).]|$)/
+    url = /([ (.]|^)(http[s]?:\/\/[a-zA-Z0-9.\/_\-?=:]*[a-zA-Z0-9\/_\-?=:]+)([ ).]|$)/
 
     #replace urls with links
     iLinks = 0
@@ -177,7 +177,7 @@ class Utils
       sStart = $1
       urlValue = $2
       sEnding = $3
-      s.sub! /( |[(.]|^)#{urlValue.gsub("?","\\?").gsub("/","\\\/")}( |[).]|$)/, "#{sStart}<a href='#{urlValue}' target='_blank'>#{urlValue}</a>#{sEnding}"
+      s.sub! /([ (.]|^)#{urlValue.gsub("?","\\?").gsub("/","\\\/")}([ ).]|$)/, "#{sStart}<a href='#{urlValue}' target='_blank'>#{urlValue}</a>#{sEnding}"
     end
 
      return s
