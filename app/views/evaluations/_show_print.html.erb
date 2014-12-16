@@ -1,0 +1,6 @@
+<div class="loep_form_wrapper <%=@evaluation.evmethod.shortname%>_evmethod_form_wrapper">
+  <%= form_for(@evaluation, remote: false, :html => {:'data-type' => "html"}) do |f| %>
+     <p class="survey_title"><%=t("forms.evmethod.title", evmethod: @evmethod.name)%></p>
+     <%= render 'survey_print', :f => f , :readonly => true, :embed => true %>
+  <% end %>
+</div>

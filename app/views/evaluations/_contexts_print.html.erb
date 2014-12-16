@@ -1,0 +1,14 @@
+<% contexts ||= Hash.new %>
+
+<% unless contexts[:user_context].blank? %> 
+  <%= render 'user_context', :f => f , :readonly => readonly, :items => contexts[:user_context] %>
+<%end%>
+<% unless contexts[:lo_context].blank? %> 
+  <%= render 'lo_context_print', :f => f , :readonly => readonly, :items => contexts[:lo_context] %>
+<%end%>
+
+<%unless contexts.blank? %>
+  <div class="survey_block survey_block_after_context">
+    <p class="survey_supersection_title"><%=t("evaluations.form.subsection_title")%></p>
+  </div>
+<%end%>

@@ -49,6 +49,7 @@ LOEP::Application.routes.draw do
   namespace :evaluations do
     resources :loems, :loris, :wbltses, :wbltts do
       get 'embed', :on => :collection
+      get 'print', :on => :collection
     end
   end
   resources :evaluations

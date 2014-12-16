@@ -1,0 +1,206 @@
+<%integerItemsIndex=0%>
+<%textItemsIndex=0%>
+
+<%= render 'contexts_print', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"], :lo_context => ["all"]} %>
+
+<% @evmethodItems.each_with_index do |item,i| %>
+  <%nItem = i+1%>
+  <div class="survey_block" item="<%=nItem%>">
+    <%
+      case nItem
+      when 1
+        sectionTitle = "1. " + t("dictionary.quality")
+      when 5
+        sectionTitle = "2. " + t("dictionary.learning")
+      when 10
+        sectionTitle = "3. " + t("dictionary.engagement")
+      when 14
+        sectionTitle = "4. " + item[:name]
+      when 15
+        sectionTitle = "5. " + item[:name]
+      else
+        sectionTitle = nil
+      end
+    %>
+    <%
+      case nItem
+      when 1,2,3,4
+        nItemToShow = (nItem+96).chr
+      when 5,6,7,8,9
+        nItemToShow = (nItem-4+96).chr
+      when 10,11,12,13
+        nItemToShow = (nItem-9+96).chr
+      else
+        nItemToShow = nil
+      end
+    %>
+
+    <% if nItem == 11%>
+      <br/><br/><br/><br/>
+    <% end %>
+
+    <% unless sectionTitle.nil? %>
+      <p class="survey_question_group_title"><%=sectionTitle%></p>
+    <% end %>
+    <% unless nItemToShow.nil? %>
+      <p class="survey_question_title"><%=nItemToShow%>. <%=item[:name]%></p>
+      <%unless item[:description].blank?%>
+        <p class="survey_question_subtitle"><%=item[:description]%></p>
+      <%end%>
+    <% end %>
+
+    <p class="survey_block_top_space"></p>
+
+    <%if item[:type] == "integer" %>
+      <div class="rating_wrapper">
+        <div class="stars_wrapper stars_wrapper_print">         
+          <table>
+            <tr>
+              <td><%=t("forms.evmethod.sdagree")%></td>
+              <td>&nbsp;&nbsp;</td>
+              <td class="optionValue">1</td>
+              <td class="optionValue">2</td>
+              <td class="optionValue">3</td>
+              <td class="optionValue">4</td>
+              <td class="optionValue">5</td>
+              <td class="optionValue">6</td>
+              <td class="optionValue">7</td>
+              <td>&nbsp;&nbsp;</td>
+              <td><%=t("forms.evmethod.sagree")%></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="td_star_wrapper"><span class="glyphicon glyphicon-star-empty"></span></td>
+              <td class="td_star_wrapper"><span class="glyphicon glyphicon-star-empty"></span></td>
+              <td class="td_star_wrapper"><span class="glyphicon glyphicon-star-empty"></span></td>
+              <td class="td_star_wrapper"><span class="glyphicon glyphicon-star-empty"></span></td>
+              <td class="td_star_wrapper"><span class="glyphicon glyphicon-star-empty"></span></td>
+              <td class="td_star_wrapper"><span class="glyphicon glyphicon-star-empty"></span></td>
+              <td class="td_star_wrapper"><span class="glyphicon glyphicon-star-empty"></span></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+  <%elsif item[:type] == "text" %>
+    <%textItemsIndex+=1%>
+    <%= f.text_area "titem" + textItemsIndex.to_s, :class=>'loep_input evaluation_survey_text_item_input optionalInput', :readonly => readonly ? "true" : nil %>
+  <%end%>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    <% if !readonly %>
+
+      $('.hover-star').rating({
+          focus: function(value, link){
+              var ratingWrapper = $("div.rating_wrapper").has(this);
+
+              var tip = $(ratingWrapper).find("div.hover-start_text");
+              var title = $(link).attr("ititle");
+              if(typeof title == "undefined"){
+                title = $(link).attr("title");
+                $(link).removeAttr("title");
+                $(link).attr("ititle",title);
+              }
+              var text = "<div class='numberCircle'>"+title+"</div>";
+              tip.html(text);
+          },
+          blur: function(value, link){
+              var ratingWrapper = $("div.rating_wrapper").has(this);
+              var tip = $(ratingWrapper).find("div.hover-start_text");
+              updateCircle(tip);
+          },
+          callback: function(value, link){
+            if(typeof value == "undefined"){
+              return;
+            }
+
+            var ratingWrapper = $("div.rating_wrapper").has(this);
+
+            var tip = $(ratingWrapper).find("div.hover-start_text");
+            $(tip).attr("selectedValue",value);
+
+            var remove = $(ratingWrapper).find("div.remove_item-value");
+            $(remove).fadeIn().css("display","inline-block");
+
+            var naInput = $(ratingWrapper).find("input.na-input");
+            if($(naInput).length > 0){
+              $(naInput)[0].checked = false
+              $(naInput).trigger("change");
+            }
+
+          }
+      });
+  
+      $(document).on('click', 'div.remove_item-value', function(event){
+          var ratingWrapper = $("div.rating_wrapper").has(this);
+
+          var tip = $(ratingWrapper).find("div.hover-start_text");
+          $(tip).removeAttr("selectedValue");
+
+          var ratingCancelButton = $(ratingWrapper).find("div.rating-cancel > a");
+          $(ratingCancelButton).trigger("click");
+
+          var naInput = $(ratingWrapper).find("input.na-input");
+          if($(naInput).length > 0){
+            $(naInput)[0].checked = false
+            $(naInput).trigger("change");
+          }
+
+          $(tip).fadeOut(function(){
+            $(tip).html("");
+            $(tip).css("display","inline-block");
+          });
+
+          $(this).fadeOut();
+      });
+
+      $(document).on('change', 'input.na-input', function(event){
+        if(this.checked){
+          var ratingWrapper = $("div.rating_wrapper").has(this);
+
+          var ratingCancelButton = $(ratingWrapper).find("div.rating-cancel > a");
+          $(ratingCancelButton).trigger("click")
+
+          var tip = $(ratingWrapper).find("div.hover-start_text");
+          $(tip).attr("selectedValue",$(this).attr("title"));
+          updateCircle(tip);
+
+          var remove = $(ratingWrapper).find("div.remove_item-value");
+          $(remove).fadeIn().css("display","inline-block");
+        }
+      });
+
+      var updateCircle = function(starTextDOM){
+        var selectedValue = $(starTextDOM).attr("selectedValue");
+        if(selectedValue){
+          var classes = 'numberCircle';
+           var na = '<%=t("forms.evmethod.na")%>';
+          if(selectedValue == na){
+            classes += " numberCircleSmall";
+          }
+          var text = "<div class='"+ classes +"'><span>"+selectedValue+"</span></div>";
+        }
+        $(starTextDOM).html(text || '');
+      };
+
+      //Load UI when editing evaluations
+      $(".rating_wrapper").each(function(index,ratingWrapper){
+        $(ratingWrapper).find("input:checked").trigger("change");
+        var tip = $(ratingWrapper).find("div.hover-start_text");
+        updateCircle(tip);
+      });
+
+    <% else %>
+      $('.hover-star').rating();
+      $('.hover-star').rating(
+        'readOnly'
+      );
+    <% end %>
+
+  });
+</script>

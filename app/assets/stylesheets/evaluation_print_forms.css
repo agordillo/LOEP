@@ -1,0 +1,12 @@
+.stars_wrapper_print .glyphicon-star-empty {
+	font-size: 22px;
+}
+
+.stars_wrapper_print td.optionValue{
+	font-size: 17px;
+}
+
+.stars_wrapper_print td.optionValue, .stars_wrapper_print td.td_star_wrapper {
+	text-align: center;
+}
+

@@ -2,7 +2,7 @@ class EvaluationsController < ApplicationController
   before_filter :authenticate_user!, :except => [:create, :embed]
   before_filter :authenticate_user_or_session_token, :only => [:create]
   before_filter :authenticate_session_token, :only => [:embed]
-  before_filter :getEvModel, :only => [:new, :create, :embed]
+  before_filter :getEvModel, :only => [:new, :create, :embed, :print]
   before_filter :getLoForUsersOrApps, :only => [:embed]
   
   # GET /evaluations
@@ -100,6 +100,15 @@ class EvaluationsController < ApplicationController
     @embed = true
 
     render :embed, :layout => 'embed'
+  end
+
+  # View to print the web form
+  def print
+    @evaluation = @evModel.new
+    @evmethod = @evaluation.evmethod
+    @evmethodItems = @evModel.getItems
+    
+    render :print, :layout => 'embed'
   end
 
   # GET /evaluations/:id/edit
