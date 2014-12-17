@@ -91,12 +91,11 @@ class EvaluationsController < ApplicationController
     @evmethod = @evaluation.evmethod
     unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evmethod.name
       @message = I18n.t("evaluations.message.error.external_evaluations_disabled")
-      render "application/embed_empty", :layout => 'embed'
-      return
+      return render "application/embed_empty", :layout => 'embed'
     end
     @evmethodItems = @evModel.getItems
 
-    @title = @lo.name
+    @title = @evmethod.name + ": " + @lo.name
     @embed = true
 
     render :embed, :layout => 'embed'

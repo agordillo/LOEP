@@ -2,11 +2,10 @@
 <html>
 <head>
   <title>
-    <%unless @evmethod.nil?%>
-      <%=@evmethod.name%>: 
-    <%end%>
-    <%unless @evmethod.nil?%>
+    <%if !@title.blank?%>
       <%=@title%>
+    <%elsif !@evmethod.blank?%>
+      <%=@evmethod.name%>
     <%end%>
   </title>
   <meta name="viewport" content="width=device-width" />

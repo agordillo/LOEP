@@ -1,0 +1,18 @@
+<% items ||= ["all"] %>
+
+<div class="survey_block survey_block_context">
+  <p class="survey_supersection_title"><%=t("context.print.title")%></p>
+  
+  <%if items.include?("resource_id") or items.include?("all") %>
+    <p class="survey_question_title"><%=t("context.print.resource_id")%></p>
+    <p class="survey_block_top_space"></p>
+    <%= text_field_tag :print_resource_id, "", {:class=>'optionalInput loep_input', :readonly => readonly ? "true" : nil } %>
+  <%end%>
+
+  <%if items.include?("date") or items.include?("all") %>
+    <p class="survey_question_title"><%=t("context.print.date")%></p>
+    <p class="survey_block_top_space"></p>
+    <%= text_field_tag :print_date, "", {:class=>'optionalInput loep_input', :readonly => readonly ? "true" : nil } %>
+  <%end%>
+
+</div>

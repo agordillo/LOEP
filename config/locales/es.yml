@@ -244,6 +244,10 @@ es:
         send: "Ocurrió un error y no se pudo enviar el mensaje."
     message_from: "Mensaje de"
   context:
+    print:
+      title: "Información de la Evaluación"
+      resource_id: "Identificador del Recurso (Nombre y/o URL)"
+      date: "Fecha"
     lo:
       title: "Información de Contexto"
       context: "Escenario de uso"

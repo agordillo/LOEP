@@ -247,6 +247,10 @@ en:
         send: "An error occurred and the message could not be sent."
     message_from: "Message from"
   context:
+    print:
+      title: "Evaluation Information"
+      resource_id: "Resource Identifier (Name and/or URL)"
+      date: "Date"
     lo:
       title: "Context Information"
       context: "Scenario"
