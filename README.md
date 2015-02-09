@@ -16,7 +16,7 @@ rails s and enjoy!
 
 # Discussion and contribution
   
-Feel free to send us your comments and suggestions at [github](http://github.com/ging/loep/issues).  
+Feel free to send us your comments and suggestions at [github](http://github.com/agordillo/LOEP/issues).  
 
 
 # Installation and documentation
@@ -26,7 +26,7 @@ Do you want to use LOEP in your project? <br/>
 Do you want to deploy your own LOEP istance? <br/>
 Are you looking to contribute to this open source project?  <br/>
 
-Visit our [wiki](http://github.com/ging/loep/wiki) to see all the available documentation.  
+Visit our [wiki](http://github.com/agordillo/LOEP/wiki) to see all the available documentation.  
 
 
 
@@ -34,9 +34,9 @@ Visit our [wiki](http://github.com/ging/loep/wiki) to see all the available docu
 
 Copyright 2015 Aldo Gordillo Méndez
 
-ViSH Editor is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+LOEP is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-ViSH Editor is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
+LOEP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU Affero General Public License along with ViSH Editor. If not, see [http://www.gnu.org/licenses](http://www.gnu.org/licenses).
+You should have received a copy of the GNU Affero General Public License along with LOEP. If not, see [http://www.gnu.org/licenses](http://www.gnu.org/licenses).
 
