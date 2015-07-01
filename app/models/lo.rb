@@ -1,8 +1,8 @@
 class Lo < ActiveRecord::Base
-  attr_accessible :description, :name, :repository, :id_repository, :technology, :language_id, :lotype, :url, :scope, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list
+  attr_accessible :description, :name, :repository, :id_repository, :technology, :language_id, :lotype, :url, :scope, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list, :lom_profile_url
 
   acts_as_xlsx
-  
+
   validates :url,
   :presence => true,
   :uniqueness => {
@@ -52,6 +52,9 @@ class Lo < ActiveRecord::Base
   has_many :metrics, through: :scores
   has_many :evmethods, through: :evaluations
   belongs_to :app
+  has_one :lom
+
+  after_save :save_lom_profile
 
   #---------------------------------------------------------------------------------
 
@@ -150,6 +153,28 @@ class Lo < ActiveRecord::Base
 
   def readable_technology_or_format
     I18n.t("los.technology_or_format." + self.technology) unless self.technology.nil?
+  end
+
+  def metadata
+    self.lom.metadata unless self.lom.nil?
+  end
+
+  def update_lom_profile
+    if self.lom.nil?
+      lom = Lom.new
+      lom.lo_id = self.id
+    else
+      lom = self.lom
+    end
+    
+    unless self.lom_profile_url.blank?
+      #Generate LOM profile from url
+      lom.populate_from_url(self.lom_profile_url)
+    else
+      lom.populate_from_lo
+    end
+
+    lom.save
   end
 
 
@@ -287,6 +312,13 @@ class Lo < ActiveRecord::Base
 
   def self.Public
     Lo.where("los.scope!='private'")
+  end
+
+
+  private
+
+  def save_lom_profile
+    self.update_lom_profile
   end
 
 end

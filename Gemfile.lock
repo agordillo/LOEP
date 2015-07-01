@@ -193,6 +193,7 @@ DEPENDENCIES
   net-sftp (= 2.1.2)
   net-ssh (= 2.6.5)
   net-ssh-gateway (= 1.2.0)
+  nokogiri (= 1.6.3.1)
   pg (= 0.17.1)
   pry-rails (= 0.3.2)
   rails (= 3.2.12)

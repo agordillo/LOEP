@@ -5,6 +5,11 @@
   <p class="show_legend"><%=t("dictionary.url")%></p>
   <a target="_blank" href="<%=@lo.url%>"><p class="show_value"><%=@lo.url%></p></a>
 
+  <% unless @lo.lom_profile_url.blank? %>
+    <p class="show_legend">LOM <%=t("dictionary.url")%></p>
+    <a target="_blank" href="<%=@lo.lom_profile_url%>"><p class="show_value"><%=@lo.lom_profile_url%></p></a>
+  <% end %>
+
   <p class="show_legend"><%=t("dictionary.repository")%></p>
   <p class="show_value"><%=@lo.repository%></p>
 
