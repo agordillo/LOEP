@@ -159,6 +159,10 @@ class Lo < ActiveRecord::Base
     self.lom.metadata unless self.lom.nil?
   end
 
+  def metadata_fields
+    self.lom.metadata_fields unless self.lom.nil?
+  end
+
   def update_lom_profile
     if self.lom.nil?
       lom = Lom.new
