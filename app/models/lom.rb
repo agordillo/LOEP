@@ -13,7 +13,7 @@ class Lom < ActiveRecord::Base
       lom = doc.at_xpath('//lom')
       self.profile = Hash.from_xml(lom.to_xml).to_json
     rescue
-      self.profile = Hash.new
+      self.populate_from_lo
     end
   end
 
@@ -52,9 +52,10 @@ class Lom < ActiveRecord::Base
 
   def metadata
     metadata = JSON.parse(self.profile)["lom"] rescue {}
-    unless metadata.nil?
-      metadata
+    if metadata.nil?
+      metadata = {}
     end
+    return metadata
   end
 
   def metadata_fields
