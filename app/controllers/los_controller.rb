@@ -122,6 +122,26 @@ class LosController < ApplicationController
     end
   end
 
+  def show_metadata
+    lo = Lo.find(params[:id])
+    authorize! :show, lo
+
+    respond_to do |format|
+      format.any {
+        unless lo.nil? or lo.metadata_fields.blank?
+          xmlMetadata = lo.metadata("xml")
+        else
+          require 'builder'
+          xmlMetadata = ::Builder::XmlMarkup.new(:indent => 2)
+          xmlMetadata.instruct! :xml, :version => "1.0", :encoding => "UTF-8"
+          xmlMetadata.error("Learning Object Metadata record not found")
+          xmlMetadata = xmlMetadata.target!
+        end
+        render :xml => xmlMetadata, :content_type => "text/xml"
+      }
+    end
+  end
+
   # GET /los/new
   # GET /los/new.json
   def new

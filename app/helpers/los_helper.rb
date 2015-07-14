@@ -11,6 +11,11 @@ module LosHelper
 		return "/los/downloadevs." + format + "?lo_ids="+getLoIds(los)
 	end
 
+	def show_metadata_path(lo)
+		return LOEP::Application.config.full_domain + "/los/" + lo.id.to_s + "/metadata.xml"
+	end
+
+
 	private
 
 	def getLoIds(los)

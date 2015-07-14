@@ -50,7 +50,9 @@ class Lom < ActiveRecord::Base
     self.profile = json.to_json
   end
 
-  def metadata
+  def metadata(format="json")
+    return metadata_xml if format=="xml"
+
     metadata = JSON.parse(self.profile)["lom"] rescue {}
     if metadata.nil?
       metadata = {}
@@ -61,7 +63,7 @@ class Lom < ActiveRecord::Base
   def metadata_fields
     metadata_fields = {}
 
-    metadata = self.metadata
+    metadata = self.metadata("json")
 
     #Category 1
     unless metadata["general"].nil?
@@ -237,6 +239,63 @@ class Lom < ActiveRecord::Base
 
   def self.categories
     ["general","lifecycle","metametadata","technical","educational","rights","relation","annotation","classification"]
+  end
+
+
+  private
+
+  def metadata_xml
+    metadata = self.metadata("json")
+    metadata_fields = self.metadata_fields
+
+    require 'builder'
+    myxml = ::Builder::XmlMarkup.new(:indent => 2)
+    myxml.instruct! :xml, :version => "1.0", :encoding => "UTF-8"
+    
+    lomHeaderOptions =  { 'xmlns' => "http://ltsc.ieee.org/xsd/LOM",
+                          'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance",
+                          'xsi:schemaLocation' => "http://ltsc.ieee.org/xsd/LOM lom.xsd"
+                        }
+
+    #Language (LO language and metadata language)
+    loLanguage = metadata_fields["1.3"]
+    if loLanguage.nil?
+      loLanOpts = {}
+    else
+      loLanOpts = { :language=> loLanguage }
+    end
+    metadataLanguage = metadata_fields["3.4"] || "en"
+
+    myxml.tag!("lom",lomHeaderOptions) do
+      
+      myxml.general do
+        unless metadata_fields["1.1.1"].blank? and metadata_fields["1.1.2"].blank?
+          myxml.identifier do
+            myxml.catalog(metadata_fields["1.1.1"]) unless metadata_fields["1.1.1"].blank?
+            myxml.entry(metadata_fields["1.1.2"]) unless metadata_fields["1.1.2"].blank?
+          end
+        end
+
+        unless metadata_fields["1.2"].blank?
+          myxml.title do
+            myxml.string(metadata_fields["1.2"], loLanOpts)
+          end
+        end
+
+        unless metadata_fields["1.3"].blank?
+          myxml.language(metadata_fields["1.3"])
+        end
+
+        unless metadata_fields["1.4"].blank?
+          myxml.description do
+            myxml.string(metadata_fields["1.4"], loLanOpts)
+          end
+        end
+      end
+
+    end
+
+    return myxml.target!
   end
 
 end

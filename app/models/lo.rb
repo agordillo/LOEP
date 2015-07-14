@@ -155,8 +155,8 @@ class Lo < ActiveRecord::Base
     I18n.t("los.technology_or_format." + self.technology) unless self.technology.nil?
   end
 
-  def metadata
-    self.lom.nil? ? Hash.new : self.lom.metadata
+  def metadata(format="json")
+    self.lom.nil? ? Hash.new : self.lom.metadata(format)
   end
 
   def metadata_fields

@@ -10,6 +10,11 @@
     <a target="_blank" href="<%=@lo.metadata_url%>"><p class="show_value"><%=@lo.metadata_url%></p></a>
   <% end %>
 
+  <% unless @lo.metadata.blank? %>
+    <p class="show_legend"><%=t("los.form.metadata_loep")%></p>
+    <a target="_blank" href="<%=show_metadata_path(@lo)%>"><p class="show_value"><%=show_metadata_path(@lo)%></p></a>
+  <% end %>
+  
   <p class="show_legend"><%=t("dictionary.repository")%></p>
   <p class="show_value"><%=@lo.repository%></p>
 

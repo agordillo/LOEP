@@ -26,6 +26,7 @@ LOEP::Application.routes.draw do
   match '/los/download' => 'los#download', via: [:get]
   match '/los/downloadevs' => 'los#downloadevs', via: [:get]
   match '/los/:id/representation' => 'los#showEvaluationsRepresentation', via: [:get]
+  match '/los/:id/metadata' => 'los#show_metadata', via: [:get]
   match '/rlos/:id' => 'los#rshow'
   resources :los
 
