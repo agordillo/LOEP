@@ -72,7 +72,7 @@ class Lom < ActiveRecord::Base
       metadata_fields["1.2"] = Lom.getLangString(metadata["general"]["title"]) unless Lom.getLangString(metadata["general"]["title"]).blank?
       metadata_fields["1.3"] = metadata["general"]["language"] unless metadata["general"]["language"].blank?
       metadata_fields["1.4"] = Lom.getLangString(metadata["general"]["description"]) unless Lom.getLangString(metadata["general"]["description"]).blank?
-      metadata_fields["1.5"] = metadata["general"]["keyword"].map{|k| Lom.getLangString(k) }.compact.join(",") unless (!metadata["general"]["keyword"].is_a? Array or metadata["general"]["keyword"].map{|k| Lom.getLangString(k) }.compact.empty?)
+      metadata_fields["1.5"] = metadata["general"]["keyword"].map{|k| Lom.getLangString(k) }.compact.join(", ") unless (!metadata["general"]["keyword"].is_a? Array or metadata["general"]["keyword"].map{|k| Lom.getLangString(k) }.compact.empty?)
       metadata_fields["1.6"] = Lom.getLangString(metadata["general"]["coverage"]) unless Lom.getLangString(metadata["general"]["coverage"]).blank?
       metadata_fields["1.7"] = Lom.getVocabularyItem(metadata["general"]["structure"]) unless Lom.getVocabularyItem(metadata["general"]["structure"]).blank?
       metadata_fields["1.8"] = Lom.getVocabularyItem(metadata["general"]["aggregationlevel"]) unless Lom.getVocabularyItem(metadata["general"]["aggregationlevel"]).blank?
@@ -86,9 +86,9 @@ class Lom < ActiveRecord::Base
         metadata["lifecycle"]["contribute"] = [metadata["lifecycle"]["contribute"]]
       end
       if metadata["lifecycle"]["contribute"].is_a? Array
-        metadata_fields["2.3.1"] = metadata["lifecycle"]["contribute"].map{|c| Lom.getVocabularyItem(c["role"])}.compact.join(",") unless metadata["lifecycle"]["contribute"].map{|c| c["role"]}.compact.blank?
-        metadata_fields["2.3.2"] = metadata["lifecycle"]["contribute"].map{|c| Lom.getVCARD(c["entity"])}.compact.join(",") unless metadata["lifecycle"]["contribute"].map{|c| Lom.getVCARD(c["entity"])}.compact.blank?
-        metadata_fields["2.3.3"] = metadata["lifecycle"]["contribute"].map{|c| Lom.getDatetime(c["date"])}.compact.join(",") unless metadata["lifecycle"]["contribute"].map{|c| Lom.getDatetime(c["date"])}.compact.blank?
+        metadata_fields["2.3.1"] = metadata["lifecycle"]["contribute"].map{|c| Lom.getVocabularyItem(c["role"])}.compact.join(", ") unless metadata["lifecycle"]["contribute"].map{|c| c["role"]}.compact.blank?
+        metadata_fields["2.3.2"] = metadata["lifecycle"]["contribute"].map{|c| Lom.getVCARD(c["entity"])}.compact.join(", ") unless metadata["lifecycle"]["contribute"].map{|c| Lom.getVCARD(c["entity"])}.compact.blank?
+        metadata_fields["2.3.3"] = metadata["lifecycle"]["contribute"].map{|c| Lom.getDatetime(c["date"])}.compact.join(", ") unless metadata["lifecycle"]["contribute"].map{|c| Lom.getDatetime(c["date"])}.compact.blank?
       end
     end
 
@@ -102,9 +102,9 @@ class Lom < ActiveRecord::Base
         metadata["metametadata"]["contribute"] = [metadata["metametadata"]["contribute"]]
       end
       if metadata["metametadata"]["contribute"].is_a? Array
-        metadata_fields["3.2.1"] = metadata["metametadata"]["contribute"].map{|c| Lom.getVocabularyItem(c["role"])}.compact.join(",") unless metadata["metametadata"]["contribute"].map{|c| c["role"]}.compact.blank?
-        metadata_fields["3.2.2"] = metadata["metametadata"]["contribute"].map{|c| Lom.getVCARD(c["entity"])}.compact.join(",") unless metadata["metametadata"]["contribute"].map{|c| Lom.getVCARD(c["entity"])}.compact.blank?
-        metadata_fields["3.2.3"] = metadata["metametadata"]["contribute"].map{|c| Lom.getDatetime(c["date"])}.compact.join(",") unless metadata["metametadata"]["contribute"].map{|c| Lom.getDatetime(c["date"])}.compact.blank?
+        metadata_fields["3.2.1"] = metadata["metametadata"]["contribute"].map{|c| Lom.getVocabularyItem(c["role"])}.compact.join(", ") unless metadata["metametadata"]["contribute"].map{|c| c["role"]}.compact.blank?
+        metadata_fields["3.2.2"] = metadata["metametadata"]["contribute"].map{|c| Lom.getVCARD(c["entity"])}.compact.join(", ") unless metadata["metametadata"]["contribute"].map{|c| Lom.getVCARD(c["entity"])}.compact.blank?
+        metadata_fields["3.2.3"] = metadata["metametadata"]["contribute"].map{|c| Lom.getDatetime(c["date"])}.compact.join(", ") unless metadata["metametadata"]["contribute"].map{|c| Lom.getDatetime(c["date"])}.compact.blank?
       end
       metadata_fields["3.3"] = metadata["metametadata"]["metadataschema"] unless metadata["metametadata"]["metadataschema"].blank?
       metadata_fields["3.4"] = metadata["metametadata"]["language"] unless metadata["metametadata"]["language"].blank?
@@ -122,10 +122,10 @@ class Lom < ActiveRecord::Base
         if metadata["technical"]["requirement"].is_a? Array
           metadata["technical"]["requirement"] = metadata["technical"]["requirement"].reject{|mf| mf["orcomposite"].blank?}.map{|mf| mf["orcomposite"]}
           if metadata["technical"]["requirement"].length > 0
-            metadata_fields["4.4.1.1"] = metadata["technical"]["requirement"].map{|c| Lom.getVocabularyItem(c["type"])}.compact.join(",") unless metadata["technical"]["requirement"].map{|c| c["type"]}.compact.blank?
-            metadata_fields["4.4.1.2"] = metadata["technical"]["requirement"].map{|c| Lom.getVocabularyItem(c["name"])}.compact.join(",") unless metadata["technical"]["requirement"].map{|c| c["name"]}.compact.blank?
-            metadata_fields["4.4.1.3"] = metadata["technical"]["requirement"].map{|c| c["minimumversion"]}.compact.join(",") unless metadata["technical"]["requirement"].map{|c| c["minimumversion"]}.compact.blank?
-            metadata_fields["4.4.1.4"] = metadata["technical"]["requirement"].map{|c| c["maximumversion"]}.compact.join(",") unless metadata["technical"]["requirement"].map{|c| c["maximumversion"]}.compact.blank?
+            metadata_fields["4.4.1.1"] = metadata["technical"]["requirement"].map{|c| Lom.getVocabularyItem(c["type"])}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| c["type"]}.compact.blank?
+            metadata_fields["4.4.1.2"] = metadata["technical"]["requirement"].map{|c| Lom.getVocabularyItem(c["name"])}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| c["name"]}.compact.blank?
+            metadata_fields["4.4.1.3"] = metadata["technical"]["requirement"].map{|c| c["minimumversion"]}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| c["minimumversion"]}.compact.blank?
+            metadata_fields["4.4.1.4"] = metadata["technical"]["requirement"].map{|c| c["maximumversion"]}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| c["maximumversion"]}.compact.blank?
           end
         end
       end
@@ -161,15 +161,15 @@ class Lom < ActiveRecord::Base
       if metadata["relation"].is_a? Hash
         metadata["relation"] = [metadata["relation"]]
       end
-      metadata_fields["7.1"] = metadata["relation"].map{|c| Lom.getVocabularyItem(c["kind"])}.compact.join(",") unless metadata["relation"].map{|c| c["kind"]}.compact.blank?
+      metadata_fields["7.1"] = metadata["relation"].map{|c| Lom.getVocabularyItem(c["kind"])}.compact.join(", ") unless metadata["relation"].map{|c| c["kind"]}.compact.blank?
       metadataResources = metadata["relation"].reject{|mr| mr["resource"].nil?}.map{|mr| mr["resource"]}
       unless metadataResources.empty?
         metadataIdentifiers = metadataResources.reject{|mr| mr["identifier"].nil?}.map{|mr| mr["identifier"]}
         unless metadataIdentifiers.empty?
-          metadata_fields["7.2.1.1"] = metadataIdentifiers.map{|c| c["catalog"]}.compact.join(",") unless metadataIdentifiers.map{|c| c["catalog"]}.compact.blank?
-          metadata_fields["7.2.1.2"] = metadataIdentifiers.map{|c| c["entry"]}.compact.join(",") unless metadataIdentifiers.map{|c| c["entry"]}.compact.blank?
+          metadata_fields["7.2.1.1"] = metadataIdentifiers.map{|c| c["catalog"]}.compact.join(", ") unless metadataIdentifiers.map{|c| c["catalog"]}.compact.blank?
+          metadata_fields["7.2.1.2"] = metadataIdentifiers.map{|c| c["entry"]}.compact.join(", ") unless metadataIdentifiers.map{|c| c["entry"]}.compact.blank?
         end
-        metadata_fields["7.2.2"] = metadataResources.map{|c| Lom.getLangString(c["description"])}.compact.join(",") unless metadataResources.map{|c| Lom.getLangString(c["description"])}.compact.blank?
+        metadata_fields["7.2.2"] = metadataResources.map{|c| Lom.getLangString(c["description"])}.compact.join(", ") unless metadataResources.map{|c| Lom.getLangString(c["description"])}.compact.blank?
       end
     end
 
@@ -178,9 +178,9 @@ class Lom < ActiveRecord::Base
       if metadata["annotation"].is_a? Hash
         metadata["annotation"] = [metadata["annotation"]]
       end
-      metadata_fields["8.1"] = metadata["annotation"].map{|c| Lom.getVCARD(c["entity"])}.compact.join(",") unless metadata["annotation"].map{|c| Lom.getVCARD(c["entity"])}.compact.blank?
-      metadata_fields["8.2"] = metadata["annotation"].map{|c| Lom.getDateTime(c["date"])}.compact.join(",") unless metadata["annotation"].map{|c| Lom.getDateTime(c["date"])}.compact.blank?
-      metadata_fields["8.3"] = metadata["annotation"].map{|c| Lom.getLangString(c["description"])}.compact.join(",") unless metadata["annotation"].map{|c| Lom.getLangString(c["description"])}.compact.blank?
+      metadata_fields["8.1"] = metadata["annotation"].map{|c| Lom.getVCARD(c["entity"])}.compact.join(", ") unless metadata["annotation"].map{|c| Lom.getVCARD(c["entity"])}.compact.blank?
+      metadata_fields["8.2"] = metadata["annotation"].map{|c| Lom.getDateTime(c["date"])}.compact.join(", ") unless metadata["annotation"].map{|c| Lom.getDateTime(c["date"])}.compact.blank?
+      metadata_fields["8.3"] = metadata["annotation"].map{|c| Lom.getLangString(c["description"])}.compact.join(", ") unless metadata["annotation"].map{|c| Lom.getLangString(c["description"])}.compact.blank?
     end
 
     #Category 9
@@ -190,15 +190,15 @@ class Lom < ActiveRecord::Base
         if metadata["classification"]["taxonpath"].is_a? Hash
           metadata["classification"]["taxonpath"] = [metadata["classification"]["taxonpath"]]
         end
-        metadata_fields["9.2.1"] = metadata["classification"]["taxonpath"].map{|c| Lom.getLangString(c["source"])}.compact.join(",") unless metadata["classification"]["taxonpath"].map{|c| Lom.getLangString(c["source"])}.compact.blank?
+        metadata_fields["9.2.1"] = metadata["classification"]["taxonpath"].map{|c| Lom.getLangString(c["source"])}.compact.join(", ") unless metadata["classification"]["taxonpath"].map{|c| Lom.getLangString(c["source"])}.compact.blank?
         metadataTaxons = metadata["classification"]["taxonpath"].reject{|ct| ct["taxon"].nil?}.map{|ct| ct["taxon"]}
         unless metadataTaxons.empty?
-          metadata_fields["9.2.2.1"] = metadataTaxons.map{|c| c["id"]}.compact.join(",") unless metadataTaxons.map{|c| c["id"]}.compact.blank?
-          metadata_fields["9.2.2.2"] = metadataTaxons.map{|c| Lom.getLangString(c["entry"])}.compact.join(",") unless metadataTaxons.map{|c| Lom.getLangString(c["entry"])}.compact.blank?
+          metadata_fields["9.2.2.1"] = metadataTaxons.map{|c| c["id"]}.compact.join(", ") unless metadataTaxons.map{|c| c["id"]}.compact.blank?
+          metadata_fields["9.2.2.2"] = metadataTaxons.map{|c| Lom.getLangString(c["entry"])}.compact.join(", ") unless metadataTaxons.map{|c| Lom.getLangString(c["entry"])}.compact.blank?
         end
       end
       metadata_fields["9.3"] = Lom.getLangString(metadata["classification"]["description"]) unless Lom.getLangString(metadata["classification"]["description"]).blank?
-      metadata_fields["9.4"] = metadata["classification"]["keyword"].map{|k| Lom.getLangString(k)}.compact.join(",") unless (!metadata["classification"]["keyword"].is_a? Array or metadata["classification"]["keyword"].map{|k| Lom.getLangString(k)}.compact.empty?)
+      metadata_fields["9.4"] = metadata["classification"]["keyword"].map{|k| Lom.getLangString(k)}.compact.join(", ") unless (!metadata["classification"]["keyword"].is_a? Array or metadata["classification"]["keyword"].map{|k| Lom.getLangString(k)}.compact.empty?)
     end
 
     metadata_fields
@@ -209,12 +209,12 @@ class Lom < ActiveRecord::Base
 
   def self.getLangString(langString)
     return langString["string"] if (!langString.nil? and langString["string"].is_a? String)
-    return langString["string"].join(",") if (!langString.nil? and langString["string"].is_a? Array)
+    return langString["string"].join(", ") if (!langString.nil? and langString["string"].is_a? Array)
   end
 
   def self.getVocabularyItem(vocabulary)
     return vocabulary["value"] if (!vocabulary.nil? and vocabulary.is_a? Hash and vocabulary["value"].is_a? String)
-    return vocabulary.select{|v| v["value"].is_a? String}.map{|v| v["value"]}.join(",") if (!vocabulary.nil? and vocabulary.is_a? Array and !vocabulary.empty? and !vocabulary.select{|v| v["value"].is_a? String}.map{|v| v["value"]}.compact.blank? )
+    return vocabulary.select{|v| v["value"].is_a? String}.map{|v| v["value"]}.join(", ") if (!vocabulary.nil? and vocabulary.is_a? Array and !vocabulary.empty? and !vocabulary.select{|v| v["value"].is_a? String}.map{|v| v["value"]}.compact.blank? )
   end
 
   def self.getVCARD(vcard)

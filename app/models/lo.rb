@@ -1,5 +1,5 @@
 class Lo < ActiveRecord::Base
-  attr_accessible :description, :name, :repository, :id_repository, :technology, :language_id, :lotype, :url, :scope, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list, :lom_profile_url
+  attr_accessible :description, :name, :repository, :id_repository, :technology, :language_id, :lotype, :url, :scope, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list, :metadata_url
 
   acts_as_xlsx
 
@@ -54,7 +54,7 @@ class Lo < ActiveRecord::Base
   belongs_to :app
   has_one :lom
 
-  after_save :save_lom_profile
+  after_save :save_metadata_profiles
 
   #---------------------------------------------------------------------------------
 
@@ -171,9 +171,9 @@ class Lo < ActiveRecord::Base
       lom = self.lom
     end
     
-    unless self.lom_profile_url.blank?
+    unless self.metadata_url.blank?
       #Generate LOM profile from url
-      lom.populate_from_url(self.lom_profile_url)
+      lom.populate_from_url(self.metadata_url)
     else
       lom.populate_from_lo
     end
@@ -321,7 +321,7 @@ class Lo < ActiveRecord::Base
 
   private
 
-  def save_lom_profile
+  def save_metadata_profiles
     self.update_lom_profile
   end
 

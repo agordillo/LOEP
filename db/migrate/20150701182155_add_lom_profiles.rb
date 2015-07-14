@@ -6,11 +6,11 @@ class AddLomProfiles < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_column :los, :lom_profile_url, :text
+    add_column :los, :metadata_url, :text
   end
 
   def down
-    remove_column :los, :lom_profile_url
-  	drop_table :loms
+    remove_column :los, :metadata_url
+    drop_table :loms
   end
 end

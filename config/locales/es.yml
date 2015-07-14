@@ -741,6 +741,7 @@ es:
     form:
       access_lo: "Haga click en la URL  que aparece a continuación para acceder al Objeto de Aprendizaje"
       info_lo: "Información del Objeto de Aprendizaje"
+      metadata_url: "URL de metadatos"
       select_los: "Seleccione los elementos que incluye este Objeto de Aprendizaje"
       selected_los: "Elementos incluidos en este Objeto de Aprendizaje"
       technology_or_format: "Tecnología o Formato"

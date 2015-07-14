@@ -38,11 +38,6 @@ ActiveRecord::Schema.define(:version => 20150701182155) do
     t.integer  "suitability"
   end
 
-  create_table "assignments_evmethods", :id => false, :force => true do |t|
-    t.integer "assignment_id"
-    t.integer "evmethod_id"
-  end
-
   create_table "evaluations", :force => true do |t|
     t.integer  "user_id"
     t.integer  "assignment_id"
@@ -215,11 +210,6 @@ ActiveRecord::Schema.define(:version => 20150701182155) do
     t.boolean  "allow_multiple_evaluations", :default => false
   end
 
-  create_table "evmethods_assignments", :id => false, :force => true do |t|
-    t.integer "evmethod_id"
-    t.integer "assignment_id"
-  end
-
   create_table "evmethods_metrics", :id => false, :force => true do |t|
     t.integer "evmethod_id"
     t.integer "metric_id"
@@ -296,7 +286,7 @@ ActiveRecord::Schema.define(:version => 20150701182155) do
     t.integer  "owner_id"
     t.integer  "app_id"
     t.string   "id_repository"
-    t.text     "lom_profile_url"
+    t.text     "metadata_url"
   end
 
   create_table "metrics", :force => true do |t|

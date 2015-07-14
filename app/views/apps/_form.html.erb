@@ -7,7 +7,7 @@
     <p class="form_legend">* <%=t("dictionary.name")%></p>
     <%= f.text_field :name, :class=>'loep_input' %>
 
-    <%if !@app.auth_token.nil? %>
+    <% unless @app.auth_token.nil? %>
       <p class="form_legend">* <%=t("dictionary.auth_token")%> <span id="refreshAuthToken" class="glyphicon glyphiconfull refresh refreshAuthToken"></span></p>
       <%= f.text_field :auth_token, :class=>'loep_input', :readonly => true %>
     <% end %>

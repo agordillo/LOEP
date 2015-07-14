@@ -744,6 +744,7 @@ en:
     form:
       access_lo: "Click on the URL shown below to access the Learning Object"
       info_lo: "Learning Object Information"
+      metadata_url: "Metadata URL"
       select_los: "Select the elements included in this Learning Object"
       selected_los: "Elements included in this Learning Object"
       technology_or_format: "Technology or Format"

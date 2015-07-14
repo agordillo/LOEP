@@ -5,22 +5,22 @@
   <p class="show_legend"><%=t("dictionary.url")%></p>
   <a target="_blank" href="<%=@lo.url%>"><p class="show_value"><%=@lo.url%></p></a>
 
-  <% unless @lo.lom_profile_url.blank? %>
-    <p class="show_legend">LOM <%=t("dictionary.url")%></p>
-    <a target="_blank" href="<%=@lo.lom_profile_url%>"><p class="show_value"><%=@lo.lom_profile_url%></p></a>
+  <% unless @lo.metadata_url.blank? %>
+    <p class="show_legend"><%=t("los.form.metadata_url")%></p>
+    <a target="_blank" href="<%=@lo.metadata_url%>"><p class="show_value"><%=@lo.metadata_url%></p></a>
   <% end %>
 
   <p class="show_legend"><%=t("dictionary.repository")%></p>
   <p class="show_value"><%=@lo.repository%></p>
 
-  <%if iamAdmin? and !@lo.owner.nil? %>
+  <% if iamAdmin? and !@lo.owner.nil? %>
     <p class="show_legend"><%=t("dictionary.owner")%></p>
-    <%if !@lo.app.nil? %>
+    <% unless @lo.app.nil? %>
       <a href="<%=app_path(@lo.app)%>"><p class="show_value"><%=@lo.app.name%></p></a>
     <% else %>
       <a href="<%=user_path(@lo.owner)%>"><p class="show_value"><%=@lo.owner.name%></p></a>
     <% end %>
-  <%end%>
+  <% end %>
 
   <p class="show_legend"><%=t("dictionary.scope")%></p>
   <p class="show_value"><%=@lo.readable_scope%></p>

@@ -26,18 +26,26 @@ namespace :fixes do
 
 	task :fixViSHLOs => :environment do |t, args|
 		puts "Fixing ViSH Learning Objects"
-		puts "Fix repository id field and metadata url"
+		puts "Fix repository id field"
 
 		Lo.where(:repository=>"ViSH").each do |lo|
 			unless lo.url.nil?
 				id = lo.url.split("/").pop
 				idRepository = "Excursion:" + id
 				lo.update_column :id_repository, idRepository
+			end
+		end
+	end
 
-				if lo.lom_profile_url.blank?
-					lo.update_column :lom_profile_url, lo.url + "/metadata.xml"
-					lo.update_lom_profile
+	task :updateViSHLOsMetadataProfiles => :environment do |t, args|
+		puts "Updating metadata profiles of ViSH Learning Objects"
+
+		Lo.where(:repository=>"ViSH").each do |lo|
+			unless lo.url.nil?
+				if lo.metadata_url.blank?
+					lo.update_column :metadata_url, lo.url + "/metadata.xml"
 				end
+				lo.update_lom_profile
 			end
 		end
 	end
