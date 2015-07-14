@@ -13,44 +13,45 @@ class Lom < ActiveRecord::Base
       lom = doc.at_xpath('//lom')
       self.profile = Hash.from_xml(lom.to_xml).to_json
     rescue
+      self.profile = Hash.new
     end
   end
 
   def populate_from_lo
-    return if self.lo.nil?
-
     json = Hash.new
     json["lom"] = {}
 
-    json["lom"]["general"] = {}
-    json["lom"]["general"]["entry"] = self.lo.url unless self.lo.url.nil?
-    json["lom"]["general"]["title"] = {"string" => self.lo.name } unless self.lo.name.blank?
-    json["lom"]["general"]["language"] = self.lo.language.code unless self.lo.language.nil?
-    json["lom"]["general"]["description"] = {"string" => self.lo.description } unless self.lo.description.blank?
+    unless self.lo.nil?
+      json["lom"]["general"] = {}
+      json["lom"]["general"]["entry"] = self.lo.url unless self.lo.url.nil?
+      json["lom"]["general"]["title"] = {"string" => self.lo.name } unless self.lo.name.blank?
+      json["lom"]["general"]["language"] = self.lo.language.code unless self.lo.language.nil?
+      json["lom"]["general"]["description"] = {"string" => self.lo.description } unless self.lo.description.blank?
 
-    if self.lo.tag_list.length > 1
-      json["lom"]["general"]["keyword"] = []
-      self.lo.tag_list.each do |tag_name|
-        json["lom"]["general"]["keyword"].push({"string" => tag_name})
+      if self.lo.tag_list.length > 1
+        json["lom"]["general"]["keyword"] = []
+        self.lo.tag_list.each do |tag_name|
+          json["lom"]["general"]["keyword"].push({"string" => tag_name})
+        end
       end
+
+      json["lom"]["metametadata"] = {}
+      json["lom"]["metametadata"]["language"] = "en"
+      json["lom"]["metametadata"]["metadataschema"] = "LOMv1.0"
+      
+      json["lom"]["technical"] = {}
+      json["lom"]["technical"]["location"] = self.lo.url unless self.lo.url.nil?
+
+      json["lom"]["educational"] = {}
+      json["lom"]["educational"]["description"] = {"string" => self.lo.description } unless self.lo.description.blank?
+      json["lom"]["educational"]["language"] = self.lo.language.code unless self.lo.language.nil?
     end
-
-    json["lom"]["metametadata"] = {}
-    json["lom"]["metametadata"]["language"] = "en"
-    json["lom"]["metametadata"]["metadataschema"] = "LOMv1.0"
-    
-    json["lom"]["technical"] = {}
-    json["lom"]["technical"]["location"] = self.lo.url unless self.lo.url.nil?
-
-    json["lom"]["educational"] = {}
-    json["lom"]["educational"]["description"] = {"string" => self.lo.description } unless self.lo.description.blank?
-    json["lom"]["educational"]["language"] = self.lo.language.code unless self.lo.language.nil?
 
     self.profile = json.to_json
   end
 
   def metadata
-    metadata = JSON.parse(self.profile)["lom"] rescue nil
+    metadata = JSON.parse(self.profile)["lom"] rescue {}
     unless metadata.nil?
       metadata
     end
@@ -201,6 +202,9 @@ class Lom < ActiveRecord::Base
 
     metadata_fields
   end
+
+
+  # Class Methods
 
   def self.getLangString(langString)
     return langString["string"] if (!langString.nil? and langString["string"].is_a? String)

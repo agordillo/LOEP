@@ -156,11 +156,11 @@ class Lo < ActiveRecord::Base
   end
 
   def metadata
-    self.lom.metadata unless self.lom.nil?
+    self.lom.nil? ? Hash.new : self.lom.metadata
   end
 
   def metadata_fields
-    self.lom.metadata_fields unless self.lom.nil?
+    self.lom.nil? ? Hash.new : self.lom.metadata_fields
   end
 
   def update_lom_profile
@@ -178,7 +178,7 @@ class Lo < ActiveRecord::Base
       lom.populate_from_lo
     end
 
-    lom.save
+    lom.save!
   end
 
 
