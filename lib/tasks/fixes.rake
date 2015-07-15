@@ -37,15 +37,15 @@ namespace :fixes do
 		end
 	end
 
-	task :updateViSHLOsMetadataProfiles => :environment do |t, args|
-		puts "Updating metadata profiles of ViSH Learning Objects"
+	task :updateViSHLOsMetadata => :environment do |t, args|
+		puts "Updating metadata of ViSH Learning Objects"
 
 		Lo.where(:repository=>"ViSH").each do |lo|
 			unless lo.url.nil?
 				if lo.metadata_url.blank?
 					lo.update_column :metadata_url, lo.url + "/metadata.xml"
 				end
-				lo.update_lom_profile
+				lo.update_metadata
 			end
 		end
 	end

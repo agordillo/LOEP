@@ -237,13 +237,6 @@ ActiveRecord::Schema.define(:version => 20150701182155) do
     t.integer "user_id"
   end
 
-  create_table "loms", :force => true do |t|
-    t.integer  "lo_id"
-    t.text     "profile"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "lorics", :force => true do |t|
     t.integer  "user_id"
     t.integer  "item1"
@@ -287,6 +280,15 @@ ActiveRecord::Schema.define(:version => 20150701182155) do
     t.integer  "app_id"
     t.string   "id_repository"
     t.text     "metadata_url"
+  end
+
+  create_table "metadata", :force => true do |t|
+    t.integer  "lo_id"
+    t.string   "schema"
+    t.text     "content"
+    t.text     "lom_content"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "metrics", :force => true do |t|

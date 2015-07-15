@@ -52,9 +52,9 @@ class Lo < ActiveRecord::Base
   has_many :metrics, through: :scores
   has_many :evmethods, through: :evaluations
   belongs_to :app
-  has_one :lom
+  has_one :metadata
 
-  after_save :save_metadata_profiles
+  after_save :save_metadata
 
   #---------------------------------------------------------------------------------
 
@@ -155,30 +155,31 @@ class Lo < ActiveRecord::Base
     I18n.t("los.technology_or_format." + self.technology) unless self.technology.nil?
   end
 
-  def metadata(format="json")
-    self.lom.nil? ? Hash.new : self.lom.metadata(format)
+  def update_metadata
+    if self.metadata.nil?
+      metadata = Metadata.new
+      metadata.lo_id = self.id
+    else
+      metadata = self.metadata
+    end
+    metadata.update
+    metadata.save!
   end
 
-  def metadata_fields
-    self.lom.nil? ? Hash.new : self.lom.metadata_fields
-  end
-
-  def update_lom_profile
-    if self.lom.nil?
-      lom = Lom.new
-      lom.lo_id = self.id
+  def getMetadata(options={})
+    options = {:format => "json", :schema => Metadata::Lom.schema }.merge(options)
+    if self.metadata.nil?
+      case options[:format]
+      when "json"
+        return {}
+      when "xml"
+        return Metadata.getEmptyXml
+      else
+        return nil
+      end
     else
-      lom = self.lom
+      return self.metadata.getMetadata(options)
     end
-    
-    unless self.metadata_url.blank?
-      #Generate LOM profile from url
-      lom.populate_from_url(self.metadata_url)
-    else
-      lom.populate_from_lo
-    end
-
-    lom.save!
   end
 
 
@@ -321,8 +322,8 @@ class Lo < ActiveRecord::Base
 
   private
 
-  def save_metadata_profiles
-    self.update_lom_profile
+  def save_metadata
+    self.update_metadata
   end
 
 end

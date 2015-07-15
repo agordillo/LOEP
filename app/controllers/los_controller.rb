@@ -128,14 +128,10 @@ class LosController < ApplicationController
 
     respond_to do |format|
       format.any {
-        unless lo.nil? or lo.metadata_fields.blank?
-          xmlMetadata = lo.metadata("xml")
+        unless lo.nil? or lo.getMetadata({:format => "json", :schema => Metadata::Lom.schema}).blank?
+          xmlMetadata = lo.getMetadata({:format => "xml", :schema => Metadata::Lom.schema})
         else
-          require 'builder'
-          xmlMetadata = ::Builder::XmlMarkup.new(:indent => 2)
-          xmlMetadata.instruct! :xml, :version => "1.0", :encoding => "UTF-8"
-          xmlMetadata.error("Learning Object Metadata record not found")
-          xmlMetadata = xmlMetadata.target!
+          xmlMetadata = Metadata.getEmptyXml
         end
         render :xml => xmlMetadata, :content_type => "text/xml"
       }
