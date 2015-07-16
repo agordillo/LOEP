@@ -175,6 +175,8 @@ class Metadata::Lom < Metadata
       metadata = metadata_json(metadataRecord)
       metadata_fields = metadata_fields(metadataRecord)
 
+      return Metadata.getEmptyXml if metadata_fields.blank?
+
       require 'builder'
       myxml = ::Builder::XmlMarkup.new(:indent => 2)
       myxml.instruct! :xml, :version => "1.0", :encoding => "UTF-8"
@@ -195,29 +197,338 @@ class Metadata::Lom < Metadata
 
       myxml.tag!("lom",lomHeaderOptions) do
         
-        myxml.general do
-          unless metadata_fields["1.1.1"].blank? and metadata_fields["1.1.2"].blank?
-            myxml.identifier do
-              myxml.catalog(metadata_fields["1.1.1"]) unless metadata_fields["1.1.1"].blank?
-              myxml.entry(metadata_fields["1.1.2"]) unless metadata_fields["1.1.2"].blank?
+        unless metadata["general"].blank?
+          myxml.general do
+            unless metadata_fields["1.1.1"].blank? and metadata_fields["1.1.2"].blank?
+              myxml.identifier do
+                myxml.catalog(metadata_fields["1.1.1"]) unless metadata_fields["1.1.1"].blank?
+                myxml.entry(metadata_fields["1.1.2"]) unless metadata_fields["1.1.2"].blank?
+              end
+            end
+
+            unless metadata_fields["1.2"].blank?
+              myxml.title do
+                myxml.string(metadata_fields["1.2"], loLanOpts)
+              end
+            end
+
+            unless metadata_fields["1.3"].blank?
+              myxml.language(metadata_fields["1.3"])
+            end
+
+            unless metadata_fields["1.4"].blank?
+              myxml.description do
+                myxml.string(metadata_fields["1.4"], loLanOpts)
+              end
+            end
+
+            unless metadata_fields["1.5"].blank?
+              metadata_fields["1.5"].split(", ").each do |tag|
+                myxml.keyword do
+                  myxml.string(tag.to_s, loLanOpts)
+                end
+              end
+            end
+
+            unless metadata_fields["1.6"].blank?
+              myxml.coverage do
+                myxml.string(metadata_fields["1.6"], loLanOpts)
+              end
+            end
+
+            unless metadata_fields["1.7"].blank?
+              myxml.structure do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["1.7"])
+              end
+            end
+
+            unless metadata_fields["1.8"].blank?
+              myxml.aggregationLevel do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["1.8"])
+              end
             end
           end
+        end
 
-          unless metadata_fields["1.2"].blank?
-            myxml.title do
-              myxml.string(metadata_fields["1.2"], loLanOpts)
+        unless metadata["lifecycle"].blank?
+          myxml.lifeCycle do
+            unless metadata_fields["2.1"].blank?
+              myxml.version do
+                myxml.string(metadata_fields["2.1"], :language=>metadataLanguage)
+              end
+            end
+            unless metadata_fields["2.2"].blank?
+              myxml.status do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["2.2"])
+              end
+            end
+            unless metadata["lifecycle"]["contribute"].blank?
+              metadata["lifecycle"]["contribute"] = [metadata["lifecycle"]["contribute"]] unless metadata["lifecycle"]["contribute"].is_a? Array
+              metadata["lifecycle"]["contribute"].each do |contributor|
+                myxml.contribute do
+                  if contributor["role"] and contributor["role"]["value"].is_a? String
+                    myxml.role do
+                      myxml.source(Metadata::Lom.schema)
+                      myxml.value(contributor["role"]["value"])
+                    end
+                  end
+                  if contributor["entity"].is_a? String
+                    myxml.entity(contributor["entity"])
+                  end
+                  if contributor["date"] and contributor["date"]["datetime"].is_a? String
+                    myxml.date do
+                      myxml.dateTime(contributor["date"]["datetime"])
+                      unless contributor["date"]["description"].blank? or !contributor["date"]["description"]["string"].is_a? String
+                        myxml.description do
+                          myxml.string(contributor["date"]["description"]["string"], :language=> metadataLanguage)
+                        end
+                      end
+                    end
+                  end
+                end
+              end
             end
           end
+        end
 
-          unless metadata_fields["1.3"].blank?
-            myxml.language(metadata_fields["1.3"])
+        unless metadata["metametadata"].blank?
+          myxml.metaMetadata do
+            unless metadata_fields["3.1.1"].blank? and metadata_fields["3.1.2"].blank?
+              myxml.identifier do
+                unless metadata_fields["3.1.1"].blank?
+                  myxml.catalog(metadata_fields["3.1.1"])
+                end
+                unless metadata_fields["3.1.2"].blank?
+                  myxml.entry(metadata_fields["3.1.2"])
+                end
+              end
+            end
+            unless metadata["metametadata"]["contribute"].blank?
+              metadata["metametadata"]["contribute"] = [metadata["metametadata"]["contribute"]] unless metadata["metametadata"]["contribute"].is_a? Array
+              metadata["metametadata"]["contribute"].each do |contributor|
+                myxml.contribute do
+                  if contributor["role"] and contributor["role"]["value"].is_a? String
+                    myxml.role do
+                      myxml.source(Metadata::Lom.schema)
+                      myxml.value(contributor["role"]["value"])
+                    end
+                  end
+                  if contributor["entity"].is_a? String
+                    myxml.entity(contributor["entity"])
+                  end
+                  if contributor["date"] and contributor["date"]["datetime"].is_a? String
+                    myxml.date do
+                      myxml.dateTime(contributor["date"]["datetime"])
+                      unless contributor["date"]["description"].blank? or !contributor["date"]["description"]["string"].is_a? String
+                        myxml.description do
+                          myxml.string(contributor["date"]["description"]["string"], :language=> metadataLanguage)
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
+            myxml.metadataSchema(Metadata::Lom.schema)
+            myxml.language(metadataLanguage)
           end
+        end
 
-          unless metadata_fields["1.4"].blank?
-            myxml.description do
-              myxml.string(metadata_fields["1.4"], loLanOpts)
+        unless metadata["technical"].blank?
+          myxml.technical do
+            unless metadata_fields["4.1"].blank?
+              myxml.format(metadata_fields["4.1"])
+            end
+            unless metadata_fields["4.2"].blank?
+              myxml.size(metadata_fields["4.2"])
+            end
+            unless metadata_fields["4.3"].blank?
+              myxml.location(metadata_fields["4.3"])
+            end
+            unless metadata["technical"]["requirement"].blank?
+              myxml.requirement do
+                metadata["technical"]["requirement"] = [metadata["technical"]["requirement"]] unless metadata["technical"]["requirement"].is_a? Array
+                metadata["technical"]["requirement"].map{|orC| orC["orcomposite"]}.compact.each do |orComposite|
+                  unless orComposite.blank?
+                    myxml.orComposite do
+                      unless orComposite["type"].blank? or !orComposite["type"]["value"].is_a? String
+                        myxml.type do
+                          myxml.source(Metadata::Lom.schema)
+                          myxml.value(orComposite["type"]["value"])
+                        end
+                      end
+                      unless orComposite["name"].blank? or !orComposite["name"]["value"].is_a? String
+                        myxml.name do
+                          myxml.source(Metadata::Lom.schema)
+                          myxml.value(orComposite["name"]["value"])
+                        end
+                      end
+                      unless !orComposite["minimumversion"].is_a? String
+                        myxml.minimumVersion(orComposite["minimumversion"])
+                      end
+                      unless !orComposite["maximumversion"].is_a? String
+                        myxml.maximumVersion(orComposite["maximumversion"])
+                      end
+                    end
+                  end
+                end
+              end
+            end
+            unless metadata_fields["4.5"].blank?
+              myxml.installationRemarks do
+                myxml.string(metadata_fields["4.5"], :language=> metadataLanguage)
+              end
+            end
+            unless metadata_fields["4.6"].blank?
+              myxml.otherPlatformRequirements do
+                myxml.string(metadata_fields["4.6"], :language=> metadataLanguage)
+              end
+            end
+            unless metadata_fields["4.7"].blank?
+              myxml.duration do
+                myxml.duration(metadata_fields["4.7"])
+                unless metadata["technical"]["duration"]["description"].blank?
+                  myxml.description(metadata["technical"]["duration"]["description"])
+                end
+              end
             end
           end
+        end
+
+        unless metadata["educational"].blank?
+          myxml.educational do
+            unless metadata_fields["5.1"].blank?
+              myxml.interactivityType do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["5.1"])
+              end
+            end
+            unless metadata_fields["5.2"].blank?
+              metadata["educational"]["learningresourcetype"] = [metadata["educational"]["learningresourcetype"]] unless metadata["educational"]["learningresourcetype"].is_a? Array
+              metadata["educational"]["learningresourcetype"].compact.each do |lrt|
+                if lrt["value"].is_a? String
+                  myxml.learningResourceType do
+                    myxml.source(Metadata::Lom.schema)
+                    myxml.value(lrt["value"])
+                  end
+                end
+              end
+            end
+            unless metadata_fields["5.3"].blank?
+              myxml.interactivityLevel do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["5.3"])
+              end
+            end
+            unless metadata_fields["5.4"].blank?
+              myxml.semanticDensity do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["5.4"])
+              end
+            end
+            unless metadata_fields["5.5"].blank?
+              myxml.intendedEndUserRole do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["5.5"])
+              end
+            end
+            unless metadata_fields["5.6"].blank?
+              myxml.context do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["5.6"])
+              end
+            end
+            unless metadata_fields["5.7"].blank?
+              myxml.typicalAgeRange do
+                myxml.string(metadata_fields["5.7"], :language=> metadataLanguage)
+              end
+            end
+            unless metadata_fields["5.8"].blank?
+              myxml.difficulty do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["5.8"])
+              end
+            end
+            unless metadata_fields["5.9"].blank?
+              myxml.typicalLearningTime do
+                myxml.duration(metadata_fields["5.9"])
+                unless metadata["educational"]["typicallearningtime"]["description"].blank?
+                  myxml.description(metadata["educational"]["typicallearningtime"]["description"])
+                end
+              end
+            end
+            unless metadata_fields["5.10"].blank?
+              myxml.description do
+                  myxml.string(metadata_fields["5.10"], loLanOpts)
+              end
+            end
+            unless metadata_fields["5.11"].blank?
+              myxml.language(metadata_fields["5.11"])                
+            end
+          end
+        end
+
+        unless metadata["rights"].blank?
+          myxml.rights do
+            unless metadata_fields["6.1"].blank?
+              myxml.cost do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["6.1"])
+              end
+            end
+
+            unless metadata_fields["6.2"].blank?
+              myxml.copyrightAndOtherRestrictions do
+                myxml.source(Metadata::Lom.schema)
+                myxml.value(metadata_fields["6.2"])
+              end
+            end
+
+            unless metadata_fields["6.3"].blank?
+              myxml.description do
+                myxml.string(metadata_fields["6.3"], :language=> metadataLanguage)
+              end
+            end
+          end
+        end
+
+        unless metadata["relation"].blank?
+          metadata["relation"] = [metadata["relation"]] unless metadata["relation"].is_a? Array
+          metadata["relation"].each do |relation|
+            myxml.relation do
+              unless relation["kind"].blank? or !relation["kind"]["value"].is_a? String
+                myxml.kind do
+                  myxml.source(Metadata::Lom.schema)
+                  myxml.value(relation["kind"]["value"])
+                end
+              end
+              unless relation["resource"].blank?
+                myxml.resource do
+                  unless relation["resource"]["identifier"].blank?
+                    myxml.identifier do
+                      myxml.catalog(relation["resource"]["identifier"]["catalog"]) unless relation["resource"]["identifier"]["catalog"].blank?
+                      myxml.entry(relation["resource"]["identifier"]["entry"]) unless relation["resource"]["identifier"]["entry"].blank?
+                    end
+                  end
+                  unless relation["resource"]["description"].blank? or !relation["resource"]["description"]["value"].is_a? String
+                    myxml.description do
+                      myxml.source(Metadata::Lom.schema)
+                      myxml.value(relation["resource"]["description"]["value"])
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+
+        unless metadata["annotation"].blank?
+        end
+
+        unless metadata["classification"].blank?
         end
 
       end
