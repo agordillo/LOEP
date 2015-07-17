@@ -526,9 +526,78 @@ class Metadata::Lom < Metadata
         end
 
         unless metadata["annotation"].blank?
+          metadata["annotation"] = [metadata["annotation"]] unless metadata["annotation"].is_a? Array
+          metadata["annotation"].each do |annotation|
+            myxml.annotation do
+              myxml.entity(annotation["entity"]) unless !annotation["entity"].is_a? String
+              if annotation["date"] and annotation["date"]["datetime"].is_a? String
+                myxml.date do
+                  myxml.dateTime(annotation["date"]["datetime"])
+                  unless annotation["date"]["description"].blank? or !annotation["date"]["description"]["string"].is_a? String
+                    myxml.description do
+                      myxml.string(annotation["date"]["description"]["string"], :language=> metadataLanguage)
+                    end
+                  end
+                end
+              end
+              unless annotation["description"].blank? or !annotation["description"]["string"].is_a? String
+                myxml.description do
+                  #TODO, language of the annotation
+                  myxml.string(annotation["description"]["string"], :language=> metadataLanguage)
+                end
+              end
+            end
+          end
         end
 
         unless metadata["classification"].blank?
+          metadata["classification"] = [metadata["classification"]] unless metadata["classification"].is_a? Array
+          metadata["classification"].each do |classification|
+            myxml.classification do
+              unless classification["purpose"].blank? or !classification["purpose"]["value"].is_a? String
+                myxml.purpose do
+                  myxml.source(Metadata::Lom.schema)
+                  myxml.value(classification["purpose"]["value"])
+                end
+              end
+              unless classification["taxonpath"].blank?
+                classification["taxonpath"] = [classification["taxonpath"]] unless classification["taxonpath"].is_a? Array
+                classification["taxonpath"].each do |taxonPath|
+                  myxml.taxonPath do
+                    unless taxonPath["source"].blank? or !taxonPath["source"]["string"].is_a? String
+                      myxml.source do
+                        myxml.string(taxonPath["source"]["string"], :language=> metadataLanguage)
+                      end
+                    end
+                    unless taxonPath["taxon"].blank?
+                      taxonPath["taxon"] = [taxonPath["taxon"]] unless taxonPath["taxon"].is_a? Array
+                      taxonPath["taxon"].each do |taxon|
+                        myxml.taxon do
+                          myxml.id(taxon["id"]) unless !taxon["id"].is_a? String
+                          myxml.entry(taxon["entry"]) unless !taxon["entry"].is_a? String
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+              unless classification["description"].blank? or !classification["description"]["string"].is_a? String
+                myxml.description do
+                  myxml.string(classification["description"]["string"], :language=> metadataLanguage)
+                end
+              end
+              unless classification["keywords"].blank?
+                classification["keywords"] = [classification["keywords"]] unless classification["keywords"].is_a? Array
+                classification["keywords"].each do |keyword|
+                  unless keyword.blank? or !keyword["string"].is_a? String
+                    myxml.keyword do
+                      myxml.string(keyword["string"], :language=> metadataLanguage)
+                    end
+                  end
+                end
+              end
+            end
+          end
         end
 
       end
