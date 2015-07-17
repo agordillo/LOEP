@@ -33,11 +33,11 @@ class Metadata::Lom < Metadata
       #Category 1
       unless metadata["general"].nil?
         unless metadata["general"]["identifier"].nil?
-          fields["1.1.1"] = metadata["general"]["identifier"]["catalog"] unless metadata["general"]["identifier"]["catalog"].blank?
-          fields["1.1.2"] = metadata["general"]["identifier"]["entry"] unless metadata["general"]["identifier"]["entry"].blank?
+          fields["1.1.1"] = metadata["general"]["identifier"]["catalog"]["value"] unless metadata["general"]["identifier"]["catalog"].blank? or metadata["general"]["identifier"]["catalog"]["value"].blank?
+          fields["1.1.2"] = metadata["general"]["identifier"]["entry"]["value"] unless metadata["general"]["identifier"]["entry"].blank? or metadata["general"]["identifier"]["entry"]["value"].blank?
         end
         fields["1.2"] = Metadata::Lom.getLangString(metadata["general"]["title"]) unless Metadata::Lom.getLangString(metadata["general"]["title"]).blank?
-        fields["1.3"] = metadata["general"]["language"] unless metadata["general"]["language"].blank?
+        fields["1.3"] = metadata["general"]["language"]["value"] unless metadata["general"]["language"].blank? or metadata["general"]["language"]["value"].blank?
         fields["1.4"] = Metadata::Lom.getLangString(metadata["general"]["description"]) unless Metadata::Lom.getLangString(metadata["general"]["description"]).blank?
         fields["1.5"] = metadata["general"]["keyword"].map{|k| Metadata::Lom.getLangString(k) }.compact.join(", ") unless (!metadata["general"]["keyword"].is_a? Array or metadata["general"]["keyword"].map{|k| Metadata::Lom.getLangString(k) }.compact.empty?)
         fields["1.6"] = Metadata::Lom.getLangString(metadata["general"]["coverage"]) unless Metadata::Lom.getLangString(metadata["general"]["coverage"]).blank?
@@ -47,13 +47,13 @@ class Metadata::Lom < Metadata
 
       #Category 2
       unless metadata["lifecycle"].nil?
-        fields["2.1"] = Metadata::Lom.getLangString(metadata["lifecycle"]["version"]) unless metadata["lifecycle"]["version"].blank?
-        fields["2.2"] = Metadata::Lom.getVocabularyItem(metadata["lifecycle"]["status"]) unless metadata["lifecycle"]["status"].blank?
+        fields["2.1"] = Metadata::Lom.getLangString(metadata["lifecycle"]["version"]) unless Metadata::Lom.getLangString(metadata["lifecycle"]["version"]).blank?
+        fields["2.2"] = Metadata::Lom.getVocabularyItem(metadata["lifecycle"]["status"]) unless Metadata::Lom.getVocabularyItem(metadata["lifecycle"]["status"]).blank?
         if metadata["lifecycle"]["contribute"].is_a? Hash
           metadata["lifecycle"]["contribute"] = [metadata["lifecycle"]["contribute"]]
         end
         if metadata["lifecycle"]["contribute"].is_a? Array
-          fields["2.3.1"] = metadata["lifecycle"]["contribute"].map{|c| Metadata::Lom.getVocabularyItem(c["role"])}.compact.join(", ") unless metadata["lifecycle"]["contribute"].map{|c| c["role"]}.compact.blank?
+          fields["2.3.1"] = metadata["lifecycle"]["contribute"].map{|c| Metadata::Lom.getVocabularyItem(c["role"])}.compact.join(", ") unless metadata["lifecycle"]["contribute"].map{|c| Metadata::Lom.getVocabularyItem(c["role"])}.compact.blank?
           fields["2.3.2"] = metadata["lifecycle"]["contribute"].map{|c| Metadata::Lom.getVCARD(c["entity"])}.compact.join(", ") unless metadata["lifecycle"]["contribute"].map{|c| Metadata::Lom.getVCARD(c["entity"])}.compact.blank?
           fields["2.3.3"] = metadata["lifecycle"]["contribute"].map{|c| Metadata::Lom.getDatetime(c["date"])}.compact.join(", ") unless metadata["lifecycle"]["contribute"].map{|c| Metadata::Lom.getDatetime(c["date"])}.compact.blank?
         end
@@ -609,18 +609,18 @@ class Metadata::Lom < Metadata
     # LOM datatype Methods
 
     def getLangString(langString)
-      return langString["string"] if (!langString.nil? and langString["string"].is_a? String)
-      return langString["string"].join(", ") if (!langString.nil? and langString["string"].is_a? Array)
+      return langString["string"]["value"] if (!langString.nil? and langString["string"].is_a? Hash and !langString["string"].blank? and langString["string"]["value"].is_a? String)
+      return langString["string"].map{|ls| ls["value"]}.compact.join(", ") if (!langString.nil? and langString["string"].is_a? Array and !langString["string"].map{|ls| ls["value"]}.compact.blank?)
     end
 
     def getVocabularyItem(vocabulary)
-      return vocabulary["value"] if (!vocabulary.nil? and vocabulary.is_a? Hash and vocabulary["value"].is_a? String)
-      return vocabulary.select{|v| v["value"].is_a? String}.map{|v| v["value"]}.join(", ") if (!vocabulary.nil? and vocabulary.is_a? Array and !vocabulary.empty? and !vocabulary.select{|v| v["value"].is_a? String}.map{|v| v["value"]}.compact.blank? )
+      return vocabulary["value"]["value"] if (!vocabulary.nil? and vocabulary.is_a? Hash and vocabulary["value"].is_a? Hash and vocabulary["value"]["value"].is_a? String)
+      return vocabulary.select{|v| v["value"].is_a? Hash and v["value"]["value"].is_a? String}.map{|v| v["value"]["value"]}.join(", ") if (!vocabulary.nil? and vocabulary.is_a? Array and !vocabulary.empty? and !vocabulary.select{|v| v["value"].is_a? Hash and v["value"]["value"].is_a? String}.map{|v| v["value"]["value"]}.compact.blank? )
     end
 
     def getVCARD(vcard)
-      if vcard.is_a? String
-        vcard = vcard.gsub("&#xD;","\n")
+      if vcard.is_a? Hash and vcard["value"].is_a? String
+        vcard = vcard["value"].gsub("&#xD;","\n")
         decoded_vcard = Vpim::Vcard.decode(vcard) rescue nil
         unless decoded_vcard.nil?
           decoded_vcard[0].name.fullname rescue nil
@@ -629,11 +629,11 @@ class Metadata::Lom < Metadata
     end
 
     def getDatetime(datetime)
-      datetime["datetime"] if (!datetime.nil? and datetime["datetime"].is_a? String)
+      datetime["datetime"]["value"] if (!datetime.nil? and datetime["datetime"].is_a? Hash and datetime["datetime"]["value"].is_a? String)
     end
 
     def getDuration(duration)
-      duration["duration"] if (!duration.nil? and duration["duration"].is_a? String)
+      duration["duration"]["value"] if (!duration.nil? and duration["duration"].is_a? Hash and duration["duration"]["value"].is_a? String)
     end
 
     def categories

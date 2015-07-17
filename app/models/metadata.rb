@@ -15,6 +15,11 @@ class Metadata < ActiveRecord::Base
       else
         self.populate_from_lo
       end
+
+      #self.save! prevent duplicate calls and bucles
+      self.update_column :content, self.content
+      self.update_column :lom_content, self.lom_content
+      self.update_column :updated_at, Time.now
     end
   end
 
@@ -36,7 +41,7 @@ class Metadata < ActiveRecord::Base
         metadata_content = doc
       end
 
-      self.content = Hash.from_xml(metadata_content.to_xml).to_json
+      self.content = Hash.from_xml_with_attributes(metadata_content.to_xml).to_json
 
       if self.schema === Metadata::Lom.schema
         self.lom_content = self.content
@@ -90,7 +95,6 @@ class Metadata < ActiveRecord::Base
     self.content = metadata.to_json
     self.lom_content = self.content
   end
-
 
   def getMetadata(options={})
     options = {:format => "json", :schema => Metadata::Lom.schema }.merge(options)

@@ -163,7 +163,6 @@ class Lo < ActiveRecord::Base
       metadata = self.metadata
     end
     metadata.update
-    metadata.save!
   end
 
   def getMetadata(options={})
