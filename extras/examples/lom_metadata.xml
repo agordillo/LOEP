@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lom xmlns="http://ltsc.ieee.org/xsd/LOM" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ltsc.ieee.org/xsd/LOM lom.xsd">
+  <general>
+    <identifier>
+      <catalog>ViSH</catalog>
+      <entry>Excursion:1143</entry>
+    </identifier>
+    <identifier>
+      <catalog>URI</catalog>
+      <entry>http://vishub.org/excursions/1143</entry>
+    </identifier>
+    <title>
+      <string language="es">Internet: Concepto y Arquitectura</string>
+    </title>
+    <language>es</language>
+    <description>
+      <string language="es">Explicación del concepto de Internet. Evolución histórica.
+        Descripción de la estructura y de los diferentes componentes que forman Internet.
+        Contenidos para la asignatura "Tecnologías de la Información y la Comunicación" de 2º de Bachillerato.
+      </string>
+    </description>
+    <keyword>
+      <string language="es">Internet</string>
+    </keyword>
+    <keyword>
+      <string language="es">TIC</string>
+    </keyword>
+    <keyword>
+      <string language="es">Informatica</string>
+    </keyword>
+    <keyword>
+      <string language="es">Tecnología</string>
+    </keyword>
+    <keyword>
+      <string language="en">ComputerScience</string>
+    </keyword>
+    <coverage>
+      <string language="es">Siglo XXI</string>
+    </coverage>
+    <coverage>
+      <string language="es">Europa</string>
+    </coverage>
+    <structure>
+      <source>LOMv1.0</source>
+      <value>hierarchical</value>
+    </structure>
+    <aggregationLevel>
+      <source>LOMv1.0</source>
+      <value>2</value>
+    </aggregationLevel>
+  </general>
+  <lifeCycle>
+    <version>
+      <string language="en">v2014.10.10</string>
+    </version>
+    <status>
+      <source>LOMv1.0</source>
+      <value>final</value>
+    </status>
+    <contribute>
+      <role>
+        <source>LOMv1.0</source>
+        <value>author</value>
+      </role>
+      <entity>BEGIN:VCARD&amp;#xD;VERSION:3.0&amp;#xD;N:Aldo&amp;#xD;FN:Aldo&amp;#xD;END:VCARD</entity>
+      <date>
+        <dateTime>2014-10-10</dateTime>
+        <description>
+          <string language="en">This date represents the date the author finished the indicated version of the Learning Object.</string>
+        </description>
+      </date>
+    </contribute>
+    <contribute>
+      <role>
+        <source>LOMv1.0</source>
+        <value>technical implementer</value>
+      </role>
+      <entity>BEGIN:VCARD&amp;#xD;VERSION:3.0&amp;#xD;N:Authoring Tool ViSH Editor v.0.8.9 (http://github.com/ging/vish_editor)&amp;#xD;FN:Authoring Tool ViSH Editor v.0.8.9 (http://github.com/ging/vish_editor)&amp;#xD;END:VCARD</entity>
+    </contribute>
+  </lifeCycle>
+  <metaMetadata>
+    <identifier>
+      <catalog>URI</catalog>
+      <entry>http://vishub.org/excursions/1143/metadata.xml</entry>
+    </identifier>
+    <contribute>
+      <role>
+        <source>LOMv1.0</source>
+        <value>creator</value>
+      </role>
+      <entity>BEGIN:VCARD&amp;#xD;VERSION:3.0&amp;#xD;N:Aldo&amp;#xD;FN:Aldo&amp;#xD;END:VCARD</entity>
+      <date>
+        <dateTime>2014-10-10</dateTime>
+        <description>
+          <string language="en">This date represents the date the author finished authoring the metadata of the indicated version of the Learning Object.</string>
+        </description>
+      </date>
+    </contribute>
+    <metadataSchema>LOMv1.0</metadataSchema>
+    <language>en</language>
+  </metaMetadata>
+  <technical>
+    <format>text/html</format>
+    <format>video/mpeg</format>
+    <size>4200</size>
+    <location>http://vishub.org/excursions/1143</location>
+    <requirement>
+      <orComposite>
+        <type>
+          <source>LOMv1.0</source>
+          <value>browser</value>
+        </type>
+        <name>
+          <source>LOMv1.0</source>
+          <value>ms-internet explorer</value>
+        </name>
+        <minimumVersion>9.0</minimumVersion>
+        <maximumVersion>11.0</maximumVersion>
+      </orComposite>
+      <orComposite>
+        <type>
+          <source>LOMv1.0</source>
+          <value>browser</value>
+        </type>
+        <name>
+          <source>LOMv1.0</source>
+          <value>any</value>
+        </name>
+      </orComposite>
+    </requirement>
+    <installationRemarks>
+      <string language="en">Unzip the zip file and launch index.html in your web browser.</string>
+    </installationRemarks>
+    <otherPlatformRequirements>
+      <string language="en">HTML5-compliant web browser and ViSH Viewer v.0.8.9 (http://github.com/ging/vish_editor)</string>
+    </otherPlatformRequirements>
+    <duration>
+      <duration>PT30M</duration>
+    </duration>
+  </technical>
+  <educational>
+    <interactivityType>
+      <source>LOMv1.0</source>
+      <value>mixed</value>
+    </interactivityType>
+    <learningResourceType>
+      <source>LOMv1.0</source>
+      <value>lecture</value>
+    </learningResourceType>
+    <learningResourceType>
+      <source>LOMv1.0</source>
+      <value>slide</value>
+    </learningResourceType>
+    <interactivityLevel>
+      <source>LOMv1.0</source>
+      <value>very high</value>
+    </interactivityLevel>
+    <semanticDensity>
+      <source>LOMv1.0</source>
+      <value>medium</value>
+    </semanticDensity>
+    <intendedEndUserRole>
+      <source>LOMv1.0</source>
+      <value>learner</value>
+    </intendedEndUserRole>
+    <intendedEndUserRole>
+      <source>LOMv1.0</source>
+      <value>author</value>
+    </intendedEndUserRole>
+    <context>
+      <source>LOMv1.0</source>
+      <value>school</value>
+    </context>
+    <typicalAgeRange>
+      <string language="en">15 - 18</string>
+    </typicalAgeRange>
+    <difficulty>
+      <source>LOMv1.0</source>
+      <value>medium</value>
+    </difficulty>
+    <typicalLearningTime>
+      <duration>PT40M</duration>
+    </typicalLearningTime>
+    <description>
+      <string language="es">Explicación del concepto de Internet. Evolución histórica.
+        Descripción de la estructura y de los diferentes componentes que forman Internet.
+        Contenidos para la asignatura "Tecnologías de la Información y la Comunicación" de 2º de Bachillerato.
+      </string>
+    </description>
+    <language>es</language>
+  </educational>
+  <rights>
+    <cost>
+      <source>LOMv1.0</source>
+      <value>no</value>
+    </cost>
+    <copyrightAndOtherRestrictions>
+      <source>LOMv1.0</source>
+      <value>yes</value>
+    </copyrightAndOtherRestrictions>
+    <description>
+      <string language="en">License: 'Creative Commons Attribution-NonCommercial'. For additional information or questions regarding copyright, distribution and reproduction, visit http://vishub.org/terms_of_use .</string>
+    </description>
+  </rights>
+  <relation>
+    <kind>
+      <source>LOMv1.0</source>
+      <value>isbasisfor</value>
+    </kind>
+    <resource>
+      <identifier>
+        <catalog>URI</catalog>
+        <entry>http://vishub.org/excursions/1147</entry>
+      </identifier>
+      <description>
+        <string language="es">Explicación de la estructura general de Internet y su topología. 
+          Redes de acceso y redes locales. Incluye ejercicios de autoevaluación interactivos. 
+          Contenidos para la asignatura "Tecnologías de la Información y la Comunicación" de 2º de Bachillerato.
+        </string>
+      </description>
+    </resource>
+  </relation>
+  <relation>
+    <kind>
+      <source>LOMv1.0</source>
+      <value>isbasisfor</value>
+    </kind>
+    <resource>
+      <identifier>
+        <catalog>URI</catalog>
+        <entry>http://vishub.org/excursions/1151</entry>
+      </identifier>
+      <description>
+        <string language="es">Direccionamiento en Internet. IPv4 e IPv6. Contenidos para la asignatura "Tecnologías de la Información y la Comunicación" de 2º de Bachillerato.
+        </string>
+      </description>
+    </resource>
+  </relation>
+  <annotation>
+    <entity>BEGIN:VCARD&amp;#xD;VERSION:3.0&amp;#xD;N:Aldo&amp;#xD;FN:Aldo&amp;#xD;END:VCARD</entity>
+    <date>
+      <dateTime>2014-10-15</dateTime>
+    </date>
+    <description>
+      <string language="es">He utilizado este recurso con mis estudiantes. Les encantó.</string>
+    </description>
+  </annotation>
+  <annotation>
+    <entity>BEGIN:VCARD&amp;#xD;VERSION:3.0&amp;#xD;N:Aldo&amp;#xD;FN:Aldo&amp;#xD;END:VCARD</entity>
+    <date>
+      <dateTime>2014-10-16</dateTime>
+    </date>
+    <description>
+      <string language="en">I have used this resource with my students. They loved it.</string>
+    </description>
+  </annotation>
+  <classification>
+    <purpose>
+      <source>LOMv1.0</source>
+      <value>discipline</value>
+    </purpose>
+    <taxonPath>
+      <source>
+        <string>ViSH</string>
+      </source>
+      <taxon>
+        <id>1</id>
+        <entry>
+          <string>Learning Objects</string>
+        </entry>
+      </taxon>
+      <taxon>
+        <id>32</id>
+        <entry>
+          <string>Computer Science</string>
+        </entry>
+      </taxon>
+    </taxonPath>
+    <description>
+      <string language="en">A Learning Object available in the Computer Science section of the ViSH catalogue.</string>
+    </description>
+    <keyword>
+      <string language="en">ComputerScience</string>
+    </keyword>
+    <keyword>
+      <string language="en">Technology</string>
+    </keyword>
+    <keyword>
+      <string language="en">Informatics</string>
+    </keyword>
+  </classification>
+</lom>

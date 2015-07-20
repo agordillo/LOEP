@@ -36,10 +36,8 @@ class Metadata::Lom < Metadata
 
     def metadata_fields_from_json(metadataJSON={})
       fields = {}
-
       metadata = JSON.parse(metadataJSON.to_json) rescue {} #Deep copy
       metadata = {} unless metadata.is_a? Hash
-
       #Category 1
       unless metadata["general"].nil?
         unless metadata["general"]["identifier"].nil?
@@ -102,7 +100,7 @@ class Metadata::Lom < Metadata
         unless metadata["technical"]["requirement"].nil?
           metadata["technical"]["requirement"] = [metadata["technical"]["requirement"]] if metadata["technical"]["requirement"].is_a? Hash
           unless metadata["technical"]["requirement"].blank?
-            metadata["technical"]["requirement"] = metadata["technical"]["requirement"].reject{|mf| mf["orcomposite"].blank?}.map{|mf| mf["orcomposite"]}
+            metadata["technical"]["requirement"] = metadata["technical"]["requirement"].map{|mf| mf["orcomposite"]}.flatten.compact
             unless metadata["technical"]["requirement"].blank?
               fields["4.4.1.1"] = metadata["technical"]["requirement"].map{|c| Metadata::Lom.getVocabularyItem(c["type"])}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| Metadata::Lom.getVocabularyItem(c["type"])}.compact.blank?
               fields["4.4.1.2"] = metadata["technical"]["requirement"].map{|c| Metadata::Lom.getVocabularyItem(c["name"])}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| Metadata::Lom.getVocabularyItem(c["name"])}.compact.blank?
@@ -157,24 +155,25 @@ class Metadata::Lom < Metadata
       unless metadata["annotation"].nil?
         metadata["annotation"] = [metadata["annotation"]] if metadata["annotation"].is_a? Hash
         fields["8.1"] = metadata["annotation"].map{|c| Metadata::Lom.getVCARD(c["entity"])}.compact.join(", ") unless metadata["annotation"].map{|c| Metadata::Lom.getVCARD(c["entity"])}.compact.blank?
-        fields["8.2"] = metadata["annotation"].map{|c| Metadata::Lom.getDateTime(c["date"])}.compact.join(", ") unless metadata["annotation"].map{|c| Metadata::Lom.getDateTime(c["date"])}.compact.blank?
+        fields["8.2"] = metadata["annotation"].map{|c| Metadata::Lom.getDatetime(c["date"])}.compact.join(", ") unless metadata["annotation"].map{|c| Metadata::Lom.getDatetime(c["date"])}.compact.blank?
         fields["8.3"] = metadata["annotation"].map{|c| Metadata::Lom.getLangString(c["description"])}.compact.join(", ") unless metadata["annotation"].map{|c| Metadata::Lom.getLangString(c["description"])}.compact.blank?
       end
 
       #Category 9
       unless metadata["classification"].nil?
-        fields["9.1"] = Metadata::Lom.getVocabularyItem(metadata["classification"]["purpose"]) unless Metadata::Lom.getVocabularyItem(metadata["classification"]["purpose"]).blank?
-        unless metadata["classification"]["taxonpath"].nil?
-          metadata["classification"]["taxonpath"] = [metadata["classification"]["taxonpath"]] if metadata["classification"]["taxonpath"].is_a? Hash
-          fields["9.2.1"] = metadata["classification"]["taxonpath"].map{|c| Metadata::Lom.getLangString(c["source"])}.compact.join(", ") unless metadata["classification"]["taxonpath"].map{|c| Metadata::Lom.getLangString(c["source"])}.compact.blank?
-          metadataTaxons = metadata["classification"]["taxonpath"].reject{|ct| ct["taxon"].nil?}.map{|ct| ct["taxon"]}.flatten.compact
+        metadata["classification"] = [metadata["classification"]] if metadata["classification"].is_a? Hash
+        fields["9.1"] = metadata["classification"].map{|c| Metadata::Lom.getVocabularyItem(c["purpose"])}.compact.join(", ") unless metadata["classification"].map{|c| Metadata::Lom.getVocabularyItem(c["purpose"])}.compact.blank?
+        taxonPaths = metadata["classification"].map{|c| c["taxonpath"]}.flatten.compact
+        unless taxonPaths.blank?
+          fields["9.2.1"] = taxonPaths.map{|c| Metadata::Lom.getLangString(c["source"])}.compact.join(", ") unless taxonPaths.map{|c| Metadata::Lom.getLangString(c["source"])}.compact.blank?
+          metadataTaxons = taxonPaths.reject{|ct| ct["taxon"].nil?}.map{|ct| ct["taxon"]}.flatten.compact
           unless metadataTaxons.empty?
             fields["9.2.2.1"] = metadataTaxons.map{|c| Metadata::Lom.getCharacterString(c["id"])}.compact.join(", ") unless metadataTaxons.map{|c| Metadata::Lom.getCharacterString(c["id"])}.compact.blank?
             fields["9.2.2.2"] = metadataTaxons.map{|c| Metadata::Lom.getLangString(c["entry"])}.compact.join(", ") unless metadataTaxons.map{|c| Metadata::Lom.getLangString(c["entry"])}.compact.blank?
           end
         end
-        fields["9.3"] = Metadata::Lom.getLangString(metadata["classification"]["description"]) unless Metadata::Lom.getLangString(metadata["classification"]["description"]).blank?
-        fields["9.4"] = metadata_field_for_array(metadata["classification"]["keyword"],"getLangString") unless metadata_field_for_array(metadata["classification"]["keyword"],"getLangString").blank?
+        fields["9.3"] = metadata["classification"].map{|c| Metadata::Lom.getLangString(c["description"])}.compact.join(", ") unless metadata["classification"].map{|c| Metadata::Lom.getLangString(c["description"])}.compact.blank?
+        fields["9.4"] = metadata["classification"].map{|c| metadata_field_for_array(c["keyword"],"getLangString")}.flatten.compact.join(", ") unless metadata["classification"].map{|c| metadata_field_for_array(c["keyword"],"getLangString")}.flatten.compact.blank?
       end
 
       fields
@@ -257,7 +256,7 @@ class Metadata::Lom < Metadata
               metadata["general"]["coverage"] = [metadata["general"]["coverage"]] unless metadata["general"]["coverage"].is_a? Array
               metadata["general"]["coverage"].each do |coverage|
                 unless Metadata::Lom.getLangString(coverage).blank?
-                  myxml.keyword do
+                  myxml.coverage do
                     myxml.string(Metadata::Lom.getLangString(coverage), loLanOpts)
                   end
                 end
@@ -385,7 +384,7 @@ class Metadata::Lom < Metadata
             unless metadata["technical"]["requirement"].blank?
               myxml.requirement do
                 metadata["technical"]["requirement"] = [metadata["technical"]["requirement"]] unless metadata["technical"]["requirement"].is_a? Array
-                metadata["technical"]["requirement"].map{|orC| orC["orcomposite"]}.compact.each do |orComposite|
+                metadata["technical"]["requirement"].map{|orC| orC["orcomposite"]}.flatten.compact.each do |orComposite|
                   unless orComposite.blank?
                     myxml.orComposite do
                       unless Metadata::Lom.getVocabularyItem(orComposite["type"]).blank?
@@ -562,10 +561,10 @@ class Metadata::Lom < Metadata
           metadata["relation"] = [metadata["relation"]] unless metadata["relation"].is_a? Array
           metadata["relation"].each do |relation|
             myxml.relation do
-              unless Metadata::Lom.getCharacterString(relation["kind"]).blank?
+              unless Metadata::Lom.getVocabularyItem(relation["kind"]).blank?
                 myxml.kind do
                   myxml.source(Metadata::Lom.schema)
-                  myxml.value(Metadata::Lom.getCharacterString(relation["kind"]))
+                  myxml.value(Metadata::Lom.getVocabularyItem(relation["kind"]))
                 end
               end
               unless relation["resource"].blank?
@@ -576,10 +575,16 @@ class Metadata::Lom < Metadata
                       myxml.entry(Metadata::Lom.getCharacterString(relation["resource"]["identifier"]["entry"])) unless Metadata::Lom.getCharacterString(relation["resource"]["identifier"]["entry"]).blank?
                     end
                   end
-                  unless Metadata::Lom.getCharacterString(relation["resource"]["description"]).blank?
-                    myxml.description do
-                      myxml.source(Metadata::Lom.schema)
-                      myxml.value(Metadata::Lom.getCharacterString(relation["resource"]["description"]))
+                  relation["resource"]["description"] = [relation["resource"]["description"]] if relation["resource"]["description"].is_a? Hash
+                  unless relation["resource"]["description"].blank?
+                    relation["resource"]["description"].each do |description|
+                      unless Metadata::Lom.getLangString(description).blank?
+                        myxml.description do
+                          relatedResourceDescLanguage = description["string"]["@attributes"]["language"] if description["string"]["@attributes"].is_a? Hash and description["string"]["@attributes"]["language"].is_a? String
+                          relatedResourceDescLanguage = metadataLanguage if relatedResourceDescLanguage.nil?
+                          myxml.string(Metadata::Lom.getLangString(description), :language => relatedResourceDescLanguage)
+                        end
+                      end
                     end
                   end
                 end
@@ -630,7 +635,7 @@ class Metadata::Lom < Metadata
                   myxml.taxonPath do
                     unless Metadata::Lom.getLangString(taxonPath["source"]).blank?
                       myxml.source do
-                        myxml.string(Metadata::Lom.getLangString(taxonPath["source"]), :language=> metadataLanguage)
+                        myxml.string(Metadata::Lom.getLangString(taxonPath["source"]))
                       end
                     end
                     unless taxonPath["taxon"].blank?
@@ -638,7 +643,9 @@ class Metadata::Lom < Metadata
                       taxonPath["taxon"].each do |taxon|
                         myxml.taxon do
                           myxml.id(Metadata::Lom.getCharacterString(taxon["id"])) unless Metadata::Lom.getCharacterString(taxon["id"]).blank?
-                          myxml.entry(Metadata::Lom.getLangString(taxon["entry"])) unless Metadata::Lom.getLangString(taxon["entry"]).blank?
+                          myxml.entry do
+                            myxml.string(Metadata::Lom.getLangString(taxon["entry"])) unless Metadata::Lom.getLangString(taxon["entry"]).blank?
+                          end
                         end
                       end
                     end
@@ -696,7 +703,8 @@ class Metadata::Lom < Metadata
     end
 
     def getDatetime(datetime)
-      datetime["datetime"]["value"] if (!datetime.nil? and datetime["datetime"].is_a? Hash and datetime["datetime"]["value"].is_a? String)
+      return datetime["datetime"]["value"] if (!datetime.nil? and datetime["datetime"].is_a? Hash and datetime["datetime"]["value"].is_a? String)
+      return datetime.select{|d| d["datetime"].is_a? Hash and d["datetime"]["value"].is_a? String}.map{|d| d["datetime"]["value"]}.join(", ") if (!datetime.nil? and datetime.is_a? Array and !datetime.empty? and !datetime.select{|d| d["datetime"].is_a? Hash and d["datetime"]["value"].is_a? String}.map{|d| d["datetime"]["value"]}.compact.blank? )
     end
 
     def getDuration(duration)
