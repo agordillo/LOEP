@@ -16,10 +16,13 @@ class Metadata < ActiveRecord::Base
         self.populate_from_lo
       end
 
-      #self.save! prevent duplicate calls and bucles
-      self.update_column :content, self.content
-      self.update_column :lom_content, self.lom_content
-      self.update_column :updated_at, Time.now
+      if self.new_record?
+        self.save
+      else
+        self.update_column :content, self.content
+        self.update_column :lom_content, self.lom_content
+        self.update_column :updated_at, Time.now
+      end
     end
   end
 
@@ -68,28 +71,28 @@ class Metadata < ActiveRecord::Base
 
     unless self.lo.nil?
       metadata["lom"]["general"] = {}
-      metadata["lom"]["general"]["entry"] = self.lo.url unless self.lo.url.nil?
-      metadata["lom"]["general"]["title"] = {"string" => self.lo.name } unless self.lo.name.blank?
-      metadata["lom"]["general"]["language"] = self.lo.language.code unless self.lo.language.nil?
-      metadata["lom"]["general"]["description"] = {"string" => self.lo.description } unless self.lo.description.blank?
+      metadata["lom"]["general"]["entry"] = {"value" => self.lo.url} unless self.lo.url.nil?
+      metadata["lom"]["general"]["title"] = {"string" => {"value" => self.lo.name}} unless self.lo.name.blank?
+      metadata["lom"]["general"]["language"] = {"value" => self.lo.language.code} unless self.lo.language.nil?
+      metadata["lom"]["general"]["description"] = {"string" => {"value" => self.lo.description}} unless self.lo.description.blank?
 
       if self.lo.tag_list.length > 1
         metadata["lom"]["general"]["keyword"] = []
         self.lo.tag_list.each do |tag_name|
-          metadata["lom"]["general"]["keyword"].push({"string" => tag_name})
+          metadata["lom"]["general"]["keyword"].push({"string" => {"value" => tag_name}})
         end
       end
 
       metadata["lom"]["metametadata"] = {}
-      metadata["lom"]["metametadata"]["language"] = "en"
-      metadata["lom"]["metametadata"]["metadataschema"] = "LOMv1.0"
+      metadata["lom"]["metametadata"]["language"] = {"value" => "en"}
+      metadata["lom"]["metametadata"]["metadataschema"] = {"value" => "LOMv1.0"}
       
       metadata["lom"]["technical"] = {}
-      metadata["lom"]["technical"]["location"] = self.lo.url unless self.lo.url.nil?
+      metadata["lom"]["technical"]["location"] = {"value" => self.lo.url} unless self.lo.url.nil?
 
       metadata["lom"]["educational"] = {}
-      metadata["lom"]["educational"]["description"] = {"string" => self.lo.description } unless self.lo.description.blank?
-      metadata["lom"]["educational"]["language"] = self.lo.language.code unless self.lo.language.nil?
+      metadata["lom"]["educational"]["description"] = {"string" => {"value" => self.lo.description}} unless self.lo.description.blank?
+      metadata["lom"]["educational"]["language"] = {"value" => self.lo.language.code} unless self.lo.language.nil?
     end
 
     self.content = metadata.to_json
