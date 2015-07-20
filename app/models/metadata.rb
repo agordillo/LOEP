@@ -41,7 +41,7 @@ class Metadata < ActiveRecord::Base
         metadata_content = doc
       end
 
-      self.content = Hash.from_xml_with_attributes(metadata_content.to_xml).to_json
+      self.content = Hash.from_xml_with_attributes(metadata_content).to_json
 
       if self.schema === Metadata::Lom.schema
         self.lom_content = self.content
