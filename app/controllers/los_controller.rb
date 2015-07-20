@@ -176,7 +176,7 @@ class LosController < ApplicationController
 
     respond_to do |format|
       if @lo.save 
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("los.message.success.create") }
+        format.html { redirect_to lo_path(@lo), notice: I18n.t("los.message.success.create") }
         format.json { render json: @lo.extended_attributes, status: :created, location: @lo }
       else
         format.html { 
