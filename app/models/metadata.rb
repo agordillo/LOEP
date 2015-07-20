@@ -44,10 +44,13 @@ class Metadata < ActiveRecord::Base
         metadata_content = doc
       end
 
-      self.content = Hash.from_xml_with_attributes(metadata_content).to_json
+      metadata_content = Hash.from_xml_with_attributes(metadata_content)
+      self.content = metadata_content.to_json
 
+      #Translation to LOM
       if self.schema === Metadata::Lom.schema
-        self.lom_content = self.content
+        #No need to translate. Rebuild LOM.
+        self.lom_content = Metadata::Lom.build_metadata_json(metadata_content).to_json
       elsif self.schema != "Unknown"
         # TODO: translations.
         # Generate self.lom_content from self.content in other metadata schemas
@@ -57,6 +60,7 @@ class Metadata < ActiveRecord::Base
         # else
         # end
       end
+
     rescue
       populate_from_lo
     end

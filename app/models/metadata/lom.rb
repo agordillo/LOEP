@@ -20,15 +20,25 @@ class Metadata::Lom < Metadata
     end
 
     def metadata_json(metadataRecord)
-      metadata = JSON.parse(metadataRecord.lom_content)["lom"] rescue {}
-      metadata = {} if metadata.blank?
-      return metadata
+      metadataJSON = JSON.parse(metadataRecord.lom_content)["lom"] rescue {}
+      metadataJSON = {} if metadataJSON.blank?
+      return metadataJSON
+    end
+
+    #Build compliant JSON from original JSON
+    def build_metadata_json(metadataJSON)
+      Hash.from_xml_with_attributes(metadata_xml_from_json(metadataJSON["lom"])) rescue {}
     end
 
     def metadata_fields(metadataRecord)
+      metadata_fields_from_json(metadata_json(metadataRecord))
+    end
+
+    def metadata_fields_from_json(metadataJSON={})
       fields = {}
 
-      metadata = metadata_json(metadataRecord)
+      metadata = JSON.parse(metadataJSON.to_json) rescue {} #Deep copy
+      metadata = {} unless metadata.is_a? Hash
 
       #Category 1
       unless metadata["general"].nil?
@@ -86,7 +96,7 @@ class Metadata::Lom < Metadata
 
       #Category 4
       unless metadata["technical"].nil?
-        fields["4.1"] = metadata_field_for_array(metadata["technical"]["format"]) unless metadata_field_for_array(metadata["technical"]["format"]).blank?
+        fields["4.1"] = metadata_field_for_array(metadata["technical"]["format"],"getCharacterString") unless metadata_field_for_array(metadata["technical"]["format"],"getCharacterString").blank?
         fields["4.2"] = Metadata::Lom.getCharacterString(metadata["technical"]["size"]) unless Metadata::Lom.getCharacterString(metadata["technical"]["size"]).blank?
         fields["4.3"] = metadata_field_for_array(metadata["technical"]["location"],"getCharacterString") unless metadata_field_for_array(metadata["technical"]["location"],"getCharacterString").blank?
         unless metadata["technical"]["requirement"].nil?
@@ -170,19 +180,14 @@ class Metadata::Lom < Metadata
       fields
     end
 
-    def metadata_field_for_array(field,dataTypeMethod="getCharacterString")
-      unless field.nil?
-        field = [field] if field.is_a? Hash
-        unless field.blank?
-          field.map{|e| send(dataTypeMethod,e)}.compact.join(", ") unless field.map{|e| send(dataTypeMethod,e)}.compact.blank?
-        end
-      end
+    def metadata_xml(metadataRecord)
+      metadata_xml_from_json(metadata_json(metadataRecord))
     end
 
-    def metadata_xml(metadataRecord)
-      metadata = metadata_json(metadataRecord)
-      metadata_fields = metadata_fields(metadataRecord)
-
+    def metadata_xml_from_json(metadataJSON={})
+      metadata = metadataJSON
+      metadata = {} unless metadata.is_a? Hash
+      metadata_fields = metadata_fields_from_json(metadata)
       return Metadata.getEmptyXml if metadata_fields.blank?
 
       require 'builder'
@@ -419,10 +424,10 @@ class Metadata::Lom < Metadata
             unless metadata_fields["5.2"].blank?
               metadata["educational"]["learningresourcetype"] = [metadata["educational"]["learningresourcetype"]] unless metadata["educational"]["learningresourcetype"].is_a? Array
               metadata["educational"]["learningresourcetype"].compact.each do |lrt|
-                if lrt["value"].is_a? String
+                unless Metadata::Lom.getVocabularyItem(lrt).blank?
                   myxml.learningResourceType do
                     myxml.source(Metadata::Lom.schema)
-                    myxml.value(lrt["value"])
+                    myxml.value(Metadata::Lom.getVocabularyItem(lrt).blank?)
                   end
                 end
               end
@@ -654,6 +659,16 @@ class Metadata::Lom < Metadata
 
     def categories
       ["general","lifecycle","metametadata","technical","educational","rights","relation","annotation","classification"]
+    end
+
+    #Helpers
+    def metadata_field_for_array(field,dataTypeMethod="getCharacterString")
+      unless field.nil?
+        field = [field] if field.is_a? Hash
+        unless field.blank?
+          field.map{|e| send(dataTypeMethod,e)}.compact.join(", ") unless field.map{|e| send(dataTypeMethod,e)}.compact.blank?
+        end
+      end
     end
 
   end

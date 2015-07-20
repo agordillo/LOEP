@@ -34,7 +34,7 @@ Hash.class_eval do
         attributes = {}
         unless node.attributes.blank?
           node.attributes.keys.each do |key|
-            attributes[node.attributes[key].name] = node.attributes[key].value
+            attributes[node.attributes[key].name.downcase] = node.attributes[key].value
           end
         end
 
@@ -45,14 +45,14 @@ Hash.class_eval do
             unless child.next_sibling || child.previous_sibling
               result_hash["value"] = result
             end
-          elsif result_hash[child.name]
-            if result_hash[child.name].is_a?(Object::Array)
-               result_hash[child.name] << result
+          elsif result_hash[child.name.downcase]
+            if result_hash[child.name.downcase].is_a?(Object::Array)
+               result_hash[child.name.downcase] << result
             else
-               result_hash[child.name] = [result_hash[child.name]] << result
+               result_hash[child.name.downcase] = [result_hash[child.name.downcase]] << result
             end
           else
-            result_hash[child.name] = result
+            result_hash[child.name.downcase] = result
           end
         end
         unless attributes.blank?
