@@ -200,82 +200,98 @@ class Metadata::Lom < Metadata
                           }
 
       #Language (LO language and metadata language)
-      loLanguage = metadata_fields["1.3"]
-      if loLanguage.nil?
-        loLanOpts = {}
-      else
-        loLanOpts = { :language=> loLanguage }
-      end
+      loLanguage = metadata_fields["1.3"].split(", ").first unless metadata_fields["1.3"].nil?
+      loLanOpts = loLanguage.blank? ? {} : { :language=> loLanguage }
       metadataLanguage = metadata_fields["3.4"] || "en"
 
       myxml.tag!("lom",lomHeaderOptions) do
         
         unless metadata["general"].blank?
           myxml.general do
-            unless metadata_fields["1.1.1"].blank? and metadata_fields["1.1.2"].blank?
-              myxml.identifier do
-                myxml.catalog(metadata_fields["1.1.1"]) unless metadata_fields["1.1.1"].blank?
-                myxml.entry(metadata_fields["1.1.2"]) unless metadata_fields["1.1.2"].blank?
-              end
-            end
-
-            unless metadata_fields["1.2"].blank?
-              myxml.title do
-                myxml.string(metadata_fields["1.2"], loLanOpts)
-              end
-            end
-
-            unless metadata_fields["1.3"].blank?
-              myxml.language(metadata_fields["1.3"])
-            end
-
-            unless metadata_fields["1.4"].blank?
-              myxml.description do
-                myxml.string(metadata_fields["1.4"], loLanOpts)
-              end
-            end
-
-            unless metadata_fields["1.5"].blank?
-              metadata_fields["1.5"].split(", ").each do |tag|
-                myxml.keyword do
-                  myxml.string(tag.to_s, loLanOpts)
+            unless metadata["general"]["identifier"].blank?
+              metadata["general"]["identifier"] = [metadata["general"]["identifier"]] unless metadata["general"]["identifier"].is_a? Array
+              metadata["general"]["identifier"].each do |identifier|
+                myxml.identifier do
+                  myxml.catalog(Metadata::Lom.getCharacterString(identifier["catalog"])) unless Metadata::Lom.getCharacterString(identifier["catalog"]).blank?
+                  myxml.entry(Metadata::Lom.getCharacterString(identifier["entry"])) unless Metadata::Lom.getCharacterString(identifier["entry"]).blank?
                 end
               end
             end
 
-            unless metadata_fields["1.6"].blank?
-              myxml.coverage do
-                myxml.string(metadata_fields["1.6"], loLanOpts)
+            unless Metadata::Lom.getLangString(metadata["general"]["title"]).blank?
+              myxml.title do
+                myxml.string(Metadata::Lom.getLangString(metadata["general"]["title"]), loLanOpts)
               end
             end
 
-            unless metadata_fields["1.7"].blank?
+            unless metadata["general"]["language"].blank?
+              metadata["general"]["language"] = [metadata["general"]["language"]] unless metadata["general"]["language"].is_a? Array
+              metadata["general"]["language"].each do |language|
+                myxml.language(Metadata::Lom.getCharacterString(language)) unless Metadata::Lom.getCharacterString(language).blank?
+              end
+            end
+
+            unless metadata["general"]["description"].blank?
+              metadata["general"]["description"] = [metadata["general"]["description"]] unless metadata["general"]["description"].is_a? Array
+              metadata["general"]["description"].each do |description|
+                unless Metadata::Lom.getLangString(description).blank?
+                  myxml.description do
+                    myxml.string(Metadata::Lom.getLangString(description), loLanOpts)
+                  end
+                end
+              end
+            end
+
+            unless metadata["general"]["keyword"].blank?
+              metadata["general"]["keyword"] = [metadata["general"]["keyword"]] unless metadata["general"]["keyword"].is_a? Array
+              metadata["general"]["keyword"].each do |keyword|
+                unless Metadata::Lom.getLangString(keyword).blank?
+                  myxml.keyword do
+                    myxml.string(Metadata::Lom.getLangString(keyword), loLanOpts)
+                  end
+                end
+              end
+            end
+
+            unless metadata["general"]["coverage"].blank?
+              metadata["general"]["coverage"] = [metadata["general"]["coverage"]] unless metadata["general"]["coverage"].is_a? Array
+              metadata["general"]["coverage"].each do |coverage|
+                unless Metadata::Lom.getLangString(coverage).blank?
+                  myxml.keyword do
+                    myxml.string(Metadata::Lom.getLangString(coverage), loLanOpts)
+                  end
+                end
+              end
+            end
+
+            unless Metadata::Lom.getVocabularyItem(metadata["general"]["structure"]).blank?
               myxml.structure do
                 myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["1.7"])
+                myxml.value(Metadata::Lom.getVocabularyItem(metadata["general"]["structure"]))
               end
             end
 
-            unless metadata_fields["1.8"].blank?
+            unless Metadata::Lom.getVocabularyItem(metadata["general"]["aggregationlevel"]).blank?
               myxml.aggregationLevel do
                 myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["1.8"])
+                myxml.value(Metadata::Lom.getVocabularyItem(metadata["general"]["aggregationlevel"]))
               end
             end
+
           end
         end
 
         unless metadata["lifecycle"].blank?
           myxml.lifeCycle do
-            unless metadata_fields["2.1"].blank?
+            unless Metadata::Lom.getLangString(metadata["lifecycle"]["version"]).blank?
               myxml.version do
-                myxml.string(metadata_fields["2.1"], :language=>metadataLanguage)
+                myxml.string(Metadata::Lom.getLangString(metadata["lifecycle"]["version"]), :language=>metadataLanguage)
               end
             end
-            unless metadata_fields["2.2"].blank?
+            unless Metadata::Lom.getVocabularyItem(metadata["lifecycle"]["status"]).blank?
               myxml.status do
                 myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["2.2"])
+                myxml.value(Metadata::Lom.getVocabularyItem(metadata["lifecycle"]["status"]))
               end
             end
             unless metadata["lifecycle"]["contribute"].blank?
@@ -283,11 +299,11 @@ class Metadata::Lom < Metadata
               metadata["lifecycle"]["contribute"].each do |contributor|
                 myxml.contribute do
                   unless Metadata::Lom.getVocabularyItem(contributor["role"]).blank?
-                      myxml.role do
-                        myxml.source(Metadata::Lom.schema)
-                        myxml.value(Metadata::Lom.getVocabularyItem(contributor["role"]))
-                      end
+                    myxml.role do
+                      myxml.source(Metadata::Lom.schema)
+                      myxml.value(Metadata::Lom.getVocabularyItem(contributor["role"]))
                     end
+                  end
                   unless Metadata::Lom.getCharacterString(contributor["entity"]).blank?
                     myxml.entity(Metadata::Lom.getCharacterString(contributor["entity"]))
                   end
@@ -309,13 +325,12 @@ class Metadata::Lom < Metadata
 
         unless metadata["metametadata"].blank?
           myxml.metaMetadata do
-            unless metadata_fields["3.1.1"].blank? and metadata_fields["3.1.2"].blank?
-              myxml.identifier do
-                unless metadata_fields["3.1.1"].blank?
-                  myxml.catalog(metadata_fields["3.1.1"])
-                end
-                unless metadata_fields["3.1.2"].blank?
-                  myxml.entry(metadata_fields["3.1.2"])
+            unless metadata["metametadata"]["identifier"].blank?
+              metadata["metametadata"]["identifier"] = [metadata["metametadata"]["identifier"]] unless metadata["metametadata"]["identifier"].is_a? Array
+              metadata["metametadata"]["identifier"].each do |identifier|
+                myxml.identifier do
+                  myxml.catalog(Metadata::Lom.getCharacterString(identifier["catalog"])) unless Metadata::Lom.getCharacterString(identifier["catalog"]).blank?
+                  myxml.entry(Metadata::Lom.getCharacterString(identifier["entry"])) unless Metadata::Lom.getCharacterString(identifier["entry"]).blank?
                 end
               end
             end
@@ -352,14 +367,20 @@ class Metadata::Lom < Metadata
 
         unless metadata["technical"].blank?
           myxml.technical do
-            unless metadata_fields["4.1"].blank?
-              myxml.format(metadata_fields["4.1"])
+            unless metadata["technical"]["format"].blank?
+              metadata["technical"]["format"] = [metadata["technical"]["format"]] unless metadata["technical"]["format"].is_a? Array
+              metadata["technical"]["format"].each do |format|
+                myxml.format(Metadata::Lom.getCharacterString(format)) unless Metadata::Lom.getCharacterString(format).blank?
+              end
             end
-            unless metadata_fields["4.2"].blank?
-              myxml.size(metadata_fields["4.2"])
+            unless Metadata::Lom.getCharacterString(metadata["technical"]["size"]).blank?
+              myxml.size(Metadata::Lom.getCharacterString(metadata["technical"]["size"]))
             end
-            unless metadata_fields["4.3"].blank?
-              myxml.location(metadata_fields["4.3"])
+            unless metadata["technical"]["location"].blank?
+              metadata["technical"]["location"] = [metadata["technical"]["location"]] unless metadata["technical"]["location"].is_a? Array
+              metadata["technical"]["location"].each do |location|
+                myxml.location(Metadata::Lom.getCharacterString(location)) unless Metadata::Lom.getCharacterString(location).blank?
+              end
             end
             unless metadata["technical"]["requirement"].blank?
               myxml.requirement do
@@ -390,19 +411,19 @@ class Metadata::Lom < Metadata
                 end
               end
             end
-            unless metadata_fields["4.5"].blank?
+            unless Metadata::Lom.getLangString(metadata["technical"]["installationremarks"]).blank?
               myxml.installationRemarks do
-                myxml.string(metadata_fields["4.5"], :language=> metadataLanguage)
+                myxml.string(Metadata::Lom.getLangString(metadata["technical"]["installationremarks"]), :language=> metadataLanguage)
               end
             end
-            unless metadata_fields["4.6"].blank?
+            unless Metadata::Lom.getLangString(metadata["technical"]["otherplatformrequirements"]).blank?
               myxml.otherPlatformRequirements do
-                myxml.string(metadata_fields["4.6"], :language=> metadataLanguage)
+                myxml.string(Metadata::Lom.getLangString(metadata["technical"]["otherplatformrequirements"]), :language=> metadataLanguage)
               end
             end
-            unless metadata_fields["4.7"].blank?
+            unless Metadata::Lom.getDuration(metadata["technical"]["duration"]).blank?
               myxml.duration do
-                myxml.duration(metadata_fields["4.7"])
+                myxml.duration(Metadata::Lom.getDuration(metadata["technical"]["duration"]))
                 unless Metadata::Lom.getLangString(metadata["technical"]["duration"]["description"]).blank?
                   myxml.description do
                     myxml.string(Metadata::Lom.getLangString(metadata["technical"]["duration"]["description"]), :language=> metadataLanguage)
@@ -415,61 +436,76 @@ class Metadata::Lom < Metadata
 
         unless metadata["educational"].blank?
           myxml.educational do
-            unless metadata_fields["5.1"].blank?
+            unless Metadata::Lom.getVocabularyItem(metadata["educational"]["interactivitytype"]).blank?
               myxml.interactivityType do
                 myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["5.1"])
+                myxml.value(Metadata::Lom.getVocabularyItem(metadata["educational"]["interactivitytype"]))
               end
             end
-            unless metadata_fields["5.2"].blank?
+            unless metadata["educational"]["learningresourcetype"].blank?
               metadata["educational"]["learningresourcetype"] = [metadata["educational"]["learningresourcetype"]] unless metadata["educational"]["learningresourcetype"].is_a? Array
               metadata["educational"]["learningresourcetype"].compact.each do |lrt|
                 unless Metadata::Lom.getVocabularyItem(lrt).blank?
                   myxml.learningResourceType do
                     myxml.source(Metadata::Lom.schema)
-                    myxml.value(Metadata::Lom.getVocabularyItem(lrt).blank?)
+                    myxml.value(Metadata::Lom.getVocabularyItem(lrt))
                   end
                 end
               end
             end
-            unless metadata_fields["5.3"].blank?
+            unless Metadata::Lom.getVocabularyItem(metadata["educational"]["interactivitylevel"]).blank?
               myxml.interactivityLevel do
                 myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["5.3"])
+                myxml.value(Metadata::Lom.getVocabularyItem(metadata["educational"]["interactivitylevel"]))
               end
             end
-            unless metadata_fields["5.4"].blank?
+            unless Metadata::Lom.getVocabularyItem(metadata["educational"]["semanticdensity"]).blank?
               myxml.semanticDensity do
                 myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["5.4"])
+                myxml.value(Metadata::Lom.getVocabularyItem(metadata["educational"]["semanticdensity"]))
               end
             end
-            unless metadata_fields["5.5"].blank?
-              myxml.intendedEndUserRole do
-                myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["5.5"])
+            unless metadata["educational"]["intendedenduserrole"].blank?
+              metadata["educational"]["intendedenduserrole"] = [metadata["educational"]["intendedenduserrole"]] unless metadata["educational"]["intendedenduserrole"].is_a? Array
+              metadata["educational"]["intendedenduserrole"].compact.each do |ieur|
+                unless Metadata::Lom.getVocabularyItem(ieur).blank?
+                  myxml.intendedEndUserRole do
+                    myxml.source(Metadata::Lom.schema)
+                    myxml.value(Metadata::Lom.getVocabularyItem(ieur))
+                  end
+                end
               end
             end
-            unless metadata_fields["5.6"].blank?
-              myxml.context do
-                myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["5.6"])
+            unless metadata["educational"]["context"].blank?
+              metadata["educational"]["context"] = [metadata["educational"]["context"]] unless metadata["educational"]["context"].is_a? Array
+              metadata["educational"]["context"].compact.each do |context|
+                unless Metadata::Lom.getVocabularyItem(context).blank?
+                  myxml.context do
+                    myxml.source(Metadata::Lom.schema)
+                    myxml.value(Metadata::Lom.getVocabularyItem(context))
+                  end
+                end
               end
             end
-            unless metadata_fields["5.7"].blank?
-              myxml.typicalAgeRange do
-                myxml.string(metadata_fields["5.7"], :language=> metadataLanguage)
+            unless metadata["educational"]["typicalagerange"].blank?
+              metadata["educational"]["typicalagerange"] = [metadata["educational"]["typicalagerange"]] unless metadata["educational"]["typicalagerange"].is_a? Array
+              metadata["educational"]["typicalagerange"].compact.each do |tagr|
+                unless Metadata::Lom.getLangString(tagr).blank?
+                  myxml.typicalAgeRange do
+                    myxml.string(Metadata::Lom.getLangString(tagr), :language=> metadataLanguage)
+                  end
+                end
               end
             end
-            unless metadata_fields["5.8"].blank?
+            unless Metadata::Lom.getVocabularyItem(metadata["educational"]["difficulty"]).blank?
               myxml.difficulty do
                 myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["5.8"])
+                myxml.value(Metadata::Lom.getVocabularyItem(metadata["educational"]["difficulty"]))
               end
             end
-            unless metadata_fields["5.9"].blank?
+            unless Metadata::Lom.getDuration(metadata["educational"]["typicallearningtime"]).blank?
               myxml.typicalLearningTime do
-                myxml.duration(metadata_fields["5.9"])
+                myxml.duration(Metadata::Lom.getDuration(metadata["educational"]["typicallearningtime"]))
                 unless Metadata::Lom.getLangString(metadata["educational"]["typicallearningtime"]["description"]).blank?
                   myxml.description do
                     myxml.string(Metadata::Lom.getLangString(metadata["educational"]["typicallearningtime"]["description"]), :language=> metadataLanguage)
@@ -477,36 +513,46 @@ class Metadata::Lom < Metadata
                 end
               end
             end
-            unless metadata_fields["5.10"].blank?
-              myxml.description do
-                  myxml.string(metadata_fields["5.10"], loLanOpts)
+            unless metadata["educational"]["description"].blank?
+              metadata["educational"]["description"] = [metadata["educational"]["description"]] unless metadata["educational"]["description"].is_a? Array
+              metadata["educational"]["description"].compact.each do |description|
+                unless Metadata::Lom.getLangString(description).blank?
+                  myxml.description do
+                    myxml.string(Metadata::Lom.getLangString(description), loLanOpts)
+                  end
+                end
               end
             end
-            unless metadata_fields["5.11"].blank?
-              myxml.language(metadata_fields["5.11"])                
+            unless metadata["educational"]["language"].blank?
+              metadata["educational"]["language"] = [metadata["educational"]["language"]] unless metadata["educational"]["language"].is_a? Array
+              metadata["educational"]["language"].compact.each do |language|
+                unless Metadata::Lom.getCharacterString(language).blank?
+                  myxml.language(Metadata::Lom.getCharacterString(language))
+                end
+              end
             end
           end
         end
 
         unless metadata["rights"].blank?
           myxml.rights do
-            unless metadata_fields["6.1"].blank?
+            unless Metadata::Lom.getVocabularyItem(metadata["rights"]["cost"]).blank?
               myxml.cost do
                 myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["6.1"])
+                myxml.value(Metadata::Lom.getVocabularyItem(metadata["rights"]["cost"]))
               end
             end
 
-            unless metadata_fields["6.2"].blank?
+            unless Metadata::Lom.getVocabularyItem(metadata["rights"]["copyrightandotherrestrictions"]).blank?
               myxml.copyrightAndOtherRestrictions do
                 myxml.source(Metadata::Lom.schema)
-                myxml.value(metadata_fields["6.2"])
+                myxml.value(Metadata::Lom.getVocabularyItem(metadata["rights"]["copyrightandotherrestrictions"]))
               end
             end
 
-            unless metadata_fields["6.3"].blank?
+            unless Metadata::Lom.getLangString(metadata["rights"]["description"]).blank?
               myxml.description do
-                myxml.string(metadata_fields["6.3"], :language=> metadataLanguage)
+                myxml.string(Metadata::Lom.getLangString(metadata["rights"]["description"]), :language=> metadataLanguage)
               end
             end
           end
