@@ -239,10 +239,11 @@ namespace :db do
 			
 			#Create the evaluation methods in the database if they are not created
 			LOEP_VANILLA_EvMethods = [
-				{name:"LORI v1.5", module_name:"Evaluations::Lori", multiple:false},
-				{name:"LOEM", module_name:"Evaluations::Loem", multiple:false},
-				{name:"WBLT-S", module_name:"Evaluations::Wblts", multiple:true},
-				{name:"WBLT-T", module_name:"Evaluations::Wbltt", multiple:false}
+				{name:"LORI v1.5", module_name:"Evaluations::Lori", multiple:false, automatic: false},
+				{name:"LOEM", module_name:"Evaluations::Loem", multiple:false, automatic: false},
+				{name:"WBLT-S", module_name:"Evaluations::Wblts", multiple:true, automatic: false},
+				{name:"WBLT-T", module_name:"Evaluations::Wbltt", multiple:false, automatic: false},
+				{name:"Metadata Quality", module_name:"Evaluations::Metadata", multiple:false, automatic: true}
 			]
 
 			LOEP_VANILLA_EvMethods.each do |evmethod|
@@ -254,6 +255,7 @@ namespace :db do
 					ev.name = evmethod[:name]
 					ev.module = evmethod[:module_name]
 					ev.allow_multiple_evaluations = evmethod[:multiple]
+					ev.automatic = evmethod[:automatic]
 					ev.save!
 				end
 			end
@@ -276,7 +278,8 @@ namespace :db do
 				{name:"LOEM Arithmetic Mean", module_name:"Metrics::LOEMAM", evmethods:["LOEM"]},
 				{name:"WBLT-S Arithmetic Mean", module_name:"Metrics::WBLTSAM", evmethods:["WBLT-S"]},
 				{name:"WBLT-T Arithmetic Mean", module_name:"Metrics::WBLTTAM", evmethods:["WBLT-T"]},
-				{name:"LORIEM", module_name:"Metrics::LORIEM", evmethods:["LORI v1.5","LOEM"]}
+				{name:"LORIEM", module_name:"Metrics::LORIEM", evmethods:["LORI v1.5","LOEM"]},
+				{name:"LOM Metadata Quality Metric", module_name:"Metrics::LomMetadata", evmethods:["Metadata Quality"]}
 			]
 
 			LOEP_VANILLA_Metrics.each do |metric|

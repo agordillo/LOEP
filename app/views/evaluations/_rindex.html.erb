@@ -16,10 +16,12 @@
           <a href="<%=ev.evmethod.documentation_path%>"><span><%=ev.evmethod.name%></span></a>
         </td>
         <td class="tdcenter tdrshow">
-          <a href="<%=ev.evaluation_path%>"><span class="glyphicon glyphicon-eye-open"></span></a>
+          <% unless ev.automatic? %>
+            <a href="<%=ev.evaluation_path%>"><span class="glyphicon glyphicon-eye-open"></span></a>
+          <% end %>
         </td>
         <td class="tdcenter tdedit">
-          <% if can?(:update, ev) %>
+          <% if can?(:update, ev) and !ev.automatic? %>
             <a href="<%=ev.edit_evaluation_path%>"><span class="glyphicon glyphicon-edit"></span> <%=t("dictionary.edit")%></a>
           <% end %>
         </td>

@@ -11,8 +11,14 @@ class Evaluation < ActiveRecord::Base
   belongs_to :evmethod
   belongs_to :assignment #optional
 
-  validates :user_id,
-  :presence => true
+  validate :has_user
+  def has_user
+    if user_id.blank? and !self.automatic?
+      errors.add(:user, "Evaluation without user")
+    else
+      true
+    end
+  end
 
   validates :lo_id,
   :presence => true
@@ -31,8 +37,12 @@ class Evaluation < ActiveRecord::Base
 
   validate :duplicated_evaluation
   def duplicated_evaluation
-    if self.id.nil? and !self.evmethod.allow_multiple_evaluations and !user.isAdmin?
-      evaluations = Evaluation.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
+    if self.new_record? and !self.evmethod.allow_multiple_evaluations and (self.automatic? or !user.isAdmin?)
+      unless self.automatic?
+        evaluations = Evaluation.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
+      else
+        evaluations = Evaluation.where(:lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
+      end
       if evaluations.length > 0
         errors.add(:duplicated_evaluation, ": " + I18n.t("evaluations.message.error.duplicated"))
       else
@@ -40,9 +50,9 @@ class Evaluation < ActiveRecord::Base
       end
     else
       #No check duplicated evaluations when:
-        #!self.id.nil? => Updating an existing resource
+        #!self.new_record?? => Updating an existing evaluation
         #self.evmethod.allow_multiple_evaluations => EvMethod that allows multiple evaluations
-        #user.isAdmin? => The user is an Admin...
+        #!self.automatic? and user.isAdmin? => The user is an Admin, and evmethod is manual
       true
     end
   end
@@ -194,10 +204,14 @@ class Evaluation < ActiveRecord::Base
 
   #Get the real reviewer of the Evaluation
   def readable_reviewer
-    unless self.app.nil? or !self.anonymous
+    if self.anonymous and !self.app.nil?
       (I18n.t("dictionary.anonymous") + ' (<a href="'+Rails.application.routes.url_helpers.app_path(self.app)+'">'+self.app.name+'</a>)').html_safe
-    else
+    elsif !self.user.nil?
       ('<a href="'+Rails.application.routes.url_helpers.user_path(self.user)+'">'+self.user.name+'</a>').html_safe
+    elsif self.automatic?
+      "Automatic"
+    else
+      ""
     end
   end
   
@@ -251,6 +265,10 @@ class Evaluation < ActiveRecord::Base
     items.reject{|item| item[:type].nil? or !types.include? item[:type]}
   end
 
+  def automatic?
+    self.evmethod.automatic
+  end
+
 
   ################################
   # Method for evaluations to inherit
@@ -296,6 +314,17 @@ class Evaluation < ActiveRecord::Base
     Evmethod.find_by_module(self.name).representationDataForComparingLos(los)
   end
 
+  #Create automatic evaluations (only for automatic evaluation methods)
+  def self.createAutomaticEvaluation(lo)
+    evaluation = self.where(:lo_id => lo.id).first
+    if evaluation.nil?
+      evaluation = self.new
+      evaluation.lo_id = lo.id
+      evaluation.completed_at = Time.now
+    end
+    evaluation
+  end
+
 
   private
 
@@ -307,6 +336,8 @@ class Evaluation < ActiveRecord::Base
   end
 
   def checkAssignment
+    return if self.automatic?
+
     # Look for the related assignment of this evaluation
     # It should be a pending assignment of the user with the same Lo and the same evaluation method
     assignment = self.user.assignments.where(:status => "Pending", :lo_id=>self.lo.id, :evmethod_id=>self.evmethod.id).first

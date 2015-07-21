@@ -55,6 +55,7 @@ class Lo < ActiveRecord::Base
   has_one :metadata
 
   after_save :save_metadata
+  after_save :calculate_automatic_scores
 
   #---------------------------------------------------------------------------------
 
@@ -323,6 +324,10 @@ class Lo < ActiveRecord::Base
 
   def save_metadata
     self.update_metadata
+  end
+
+  def calculate_automatic_scores
+    #TODO
   end
 
 end

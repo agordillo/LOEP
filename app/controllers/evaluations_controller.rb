@@ -61,6 +61,8 @@ class EvaluationsController < ApplicationController
     @evmethod = @evaluation.evmethod
     @evmethodItems = @evModel.getItems
 
+    return new_automatic if @evaluation.evmethod.automatic
+    
     if params[:assignment_id]
       @assignment = Assignment.find(params[:assignment_id])
     else
@@ -82,6 +84,16 @@ class EvaluationsController < ApplicationController
       format.html
       format.json { render json: @evaluation }
     end
+  end
+
+  def new_automatic
+    @evaluation = @evModel.createAutomaticEvaluation(@lo)
+    unless @evaluation.nil? or @evaluation.new_record?
+      flash[:notice] = "The learning object has been automatically evaluated using the evalution method: " + @evmethod.name
+    else
+      flash[:alert] = "The learning object couldn't be automatically evaluated using the evaluation method: " + @evmethod.name
+    end
+    redirect_to(:back)
   end
 
   # Embed evaluation forms in external apps (similar to new)

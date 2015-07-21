@@ -24,10 +24,14 @@
         </td>
         <td><%=ev.readable_reviewer%></td>
         <td class="tdcenter tdrshow">
-          <a href="<%=ev.evaluation_path%>"><span class="glyphicon glyphicon-eye-open"></span></a>
+          <% unless ev.automatic? %>
+            <a href="<%=ev.evaluation_path%>"><span class="glyphicon glyphicon-eye-open"></span></a>
+          <% end %>
         </td>
         <td class="tdcenter tdedit">
-            <a href="<%=ev.edit_evaluation_path%>"><span class="glyphicon glyphicon-edit"></span> <%=t("dictionary.edit")%></a>
+            <% unless ev.automatic? %>
+              <a href="<%=ev.edit_evaluation_path%>"><span class="glyphicon glyphicon-edit"></span> <%=t("dictionary.edit")%></a>
+            <% end %>
         </td>
         <td class="tdcenter tddestroy">
           <a href="<%=ev.evaluation_path%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><span class="glyphicon glyphicon-trash"></span> <%=t("dictionary.remove")%></a>
