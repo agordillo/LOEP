@@ -96,13 +96,16 @@ class LosController < ApplicationController
     end
     authorize! :rshow, @assignments
     
-    @evmethods = Evmethod.allc.select{|ev| can?(:evaluate, @lo, ev) and !ev.automatic? }
+    @evmethods = Evmethod.allc.select{|ev| can?(:evaluate, @lo, ev) }
+    unless user.role?("Admin")
+      @evmethods = @evmethods.reject{|ev| ev.automatic? }
+    end
 
     unless user.role?("Admin")
       @evaluations = user.evaluations.where(:lo_id=>@lo.id)
       authorize! :rshow, @evaluations
     else
-      @evaluations = @lo.evaluations.reject{|ev| ev.automatic?}
+      @evaluations = @lo.evaluations
       authorize! :show, @evaluations
     end
     @evaluations = @evaluations.sort_by{ |ev| ev.updated_at}.reverse
