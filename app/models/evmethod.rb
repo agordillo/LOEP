@@ -22,6 +22,10 @@ class Evmethod < ActiveRecord::Base
     Evmethod.where("name in (?)",LOEP::Application.config.evmethod_names)
   end
 
+  def self.allc_automatic
+    allc.where(:automatic => true)
+  end
+
 
   ################################
   # Method for represent evaluations of a specific evmethod through graphs

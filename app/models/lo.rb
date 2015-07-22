@@ -327,7 +327,9 @@ class Lo < ActiveRecord::Base
   end
 
   def calculate_automatic_scores
-    #TODO
+    Evmethod.allc_automatic.each do |evmethod|
+      evmethod.getEvaluationModule.createAutomaticEvaluation(self)
+    end
   end
 
 end
