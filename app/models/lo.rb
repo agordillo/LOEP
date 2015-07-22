@@ -195,6 +195,8 @@ class Lo < ActiveRecord::Base
     attrs["created_at"] = Utils.getReadableDate(attrs["created_at"])
     attrs["updated_at"] = Utils.getReadableDate(attrs["updated_at"])
 
+    evData = self.getEvaluationData
+
     Evmethod.allc.each do |evmethod|
       evMethodAssignments = self.assignments.where(:evmethod_id=>evmethod.id)
 
@@ -209,21 +211,15 @@ class Lo < ActiveRecord::Base
       evMethodFullValidEvaluations = Evaluation.getValidEvaluationsForItems(evMethodEvaluations,itemsArray)
       attrs["Completed Evaluations with " + evmethod.name] = evMethodFullValidEvaluations.length
 
-      if evmethod.getEvaluationModule.methods.include? :representationData
-        representationData = evmethod.getEvaluationModule.representationData(self)
-      end
-
-      itemsArray.each_with_index do |nItem,index|
-        attrKey = evmethod.name + " item" + nItem.to_s
-
-        if !representationData.nil?
-          if !representationData["iScores"][index].nil?
-            attrs[attrKey] = representationData["iScores"][index]
+      unless evData.blank? or evData[evmethod.name].blank? or evData[evmethod.name][:items].blank?
+        evDataItems = evData[evmethod.name][:items]
+        itemsArray.each_with_index do |nItem,index|
+          attrKey = evmethod.name + " item" + nItem.to_s
+          unless evDataItems[index].blank?
+            attrs[attrKey] = evDataItems[index].to_f.round(2)
           else
             attrs[attrKey] = ""
           end
-        else
-          attrs[attrKey] = ""
         end
       end
     end
@@ -233,7 +229,7 @@ class Lo < ActiveRecord::Base
 
       score = self.scores.where(:metric_id => metric.id).first
       if !score.nil?
-        attrs[attrKey] = score.value.to_f
+        attrs[attrKey] = score.value.to_f.to_f.round(2)
       else
         attrs[attrKey] = ""
       end
@@ -254,9 +250,7 @@ class Lo < ActiveRecord::Base
     if evmethods.nil?
       loEvmethods = self.evmethods.uniq
     else
-      unless evmethods.is_a? Array
-        evmethods = [evmethods]
-      end
+      evmethods = [evmethods] unless evmethods.is_a? Array
       loEvmethods = evmethods
     end
 
