@@ -29,8 +29,8 @@ class Evaluations::Metadata < Evaluation
   def self.createAutomaticEvaluation(lo)
     evaluation = super
     #Code here...
-    evaluation.item1 = Metrics::MetadataCompleteness.getScoreForLo(lo)
-    evaluation.item2 = Metrics::MetadataCompleteness.getScoreForLo(lo)
+    evaluation.item1 = Metrics::LomMetadataCompleteness.getScoreForLo(lo)
+    evaluation.item2 = Metrics::LomMetadataCompleteness.getScoreForLo(lo)
     evaluation.save!
     evaluation
   end

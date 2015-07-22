@@ -105,7 +105,7 @@ class Metadata::Lom < Metadata
               fields["4.4.1.1"] = metadata["technical"]["requirement"].map{|c| Metadata::Lom.getVocabularyItem(c["type"])}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| Metadata::Lom.getVocabularyItem(c["type"])}.compact.blank?
               fields["4.4.1.2"] = metadata["technical"]["requirement"].map{|c| Metadata::Lom.getVocabularyItem(c["name"])}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| Metadata::Lom.getVocabularyItem(c["name"])}.compact.blank?
               fields["4.4.1.3"] = metadata["technical"]["requirement"].map{|c| Metadata::Lom.getCharacterString(c["minimumversion"])}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| Metadata::Lom.getCharacterString(c["minimumversion"])}.compact.empty?
-              fields["4.4.1.3"] = metadata["technical"]["requirement"].map{|c| Metadata::Lom.getCharacterString(c["maximumversion"])}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| Metadata::Lom.getCharacterString(c["maximumversion"])}.compact.empty?
+              fields["4.4.1.4"] = metadata["technical"]["requirement"].map{|c| Metadata::Lom.getCharacterString(c["maximumversion"])}.compact.join(", ") unless metadata["technical"]["requirement"].map{|c| Metadata::Lom.getCharacterString(c["maximumversion"])}.compact.empty?
             end
           end
         end
