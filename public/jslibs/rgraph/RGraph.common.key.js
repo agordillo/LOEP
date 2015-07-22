@@ -1,15 +1,30 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
 
-    if (typeof(RGraph) == 'undefined') RGraph = {};
-    if (!RGraph.HTML) RGraph.HTML = {}
+    RGraph      = window.RGraph || {isRGraph: true};
+    RGraph.HTML = RGraph.HTML || {};
+
+// Module pattern
+(function (win, doc, undefined)
+{
+    var RG = RGraph,
+        ua = navigator.userAgent,
+        ma = Math;
+
+
+
 
     /**
     * Draws the graph key (used by various graphs)
@@ -18,14 +33,14 @@
     * @param array  key An array of the texts to be listed in the key
     * @param colors An array of the colors to be used
     */
-    RGraph.DrawKey = function (obj, key, colors)
+    RG.drawKey =
+    RG.DrawKey = function (obj, key, colors)
     {
         if (!key) {
             return;
         }
 
-        var RG   = RGraph,
-            ca   = obj.canvas,
+        var ca   = obj.canvas,
             co   = obj.context,
             prop = obj.properties,
 
@@ -94,8 +109,11 @@
         */
         function DrawKey_graph (obj, key, colors)
         {
-            var text_size    = typeof(prop['chart.key.text.size']) == 'number' ? prop['chart.key.text.size'] : prop['chart.text.size'];
-            var text_font    = prop['chart.text.font'];
+            var text_size   = typeof(prop['chart.key.text.size']) == 'number' ? prop['chart.key.text.size'] : prop['chart.text.size'];
+            var text_italic = prop['chart.key.text.italic'] ?  true : false
+            var text_bold   = prop['chart.key.text.bold'] ?  true : false
+            var text_font   = prop['chart.key.text.font'] || prop['chart.key.font'] || prop['chart.text.font'];
+
             var gutterLeft   = obj.gutterLeft;
             var gutterRight  = obj.gutterRight;
             var gutterTop    = obj.gutterTop;
@@ -134,20 +152,21 @@
             * Now we know the width, we can move the key left more accurately
             */
             if (   prop['chart.yaxispos'] == 'left'
-                || (obj.type == 'pie' && !prop['chart.yaxispos'])
-                || (obj.type == 'hbar' && !prop['chart.yaxispos'])
-                || (obj.type == 'hbar' && prop['chart.yaxispos'] == 'center')
-                || (obj.type == 'rscatter' && !prop['chart.yaxispos'])
-                || (obj.type == 'radar' && !prop['chart.yaxispos'])
-                || (obj.type == 'rose' && !prop['chart.yaxispos'])
-                || (obj.type == 'funnel' && !prop['chart.yaxispos'])
-                || (obj.type == 'vprogress' && !prop['chart.yaxispos'])
-                || (obj.type == 'hprogress' && !prop['chart.yaxispos'])
+                || (obj.type === 'pie' && !prop['chart.yaxispos'])
+                || (obj.type === 'hbar' && !prop['chart.yaxispos'])
+                || (obj.type === 'hbar' && prop['chart.yaxispos'] === 'center')
+                || (obj.type === 'hbar' && prop['chart.yaxispos'] === 'right')
+                || (obj.type === 'rscatter' && !prop['chart.yaxispos'])
+                || (obj.type === 'radar' && !prop['chart.yaxispos'])
+                || (obj.type === 'rose' && !prop['chart.yaxispos'])
+                || (obj.type === 'funnel' && !prop['chart.yaxispos'])
+                || (obj.type === 'vprogress' && !prop['chart.yaxispos'])
+                || (obj.type === 'hprogress' && !prop['chart.yaxispos'])
                ) {
-    
+
                 hpos -= width;
             }
-    
+
             /**
             * Horizontal alignment
             */
@@ -280,6 +299,8 @@
                 
                     ret = RG.Text2(obj, {'font': text_font,
                                          'size': text_size,
+                                         'bold': text_bold,
+                                         'italic': text_italic,
                                          'x': hpos + blob_size + 5 + 5,
                                          'y': vpos + (5 * j) + (text_size * j) + 3,
                                          'text': key[i]});
@@ -321,7 +342,9 @@
         function DrawKey_gutter (obj, key, colors)
         {
             var text_size    = typeof(prop['chart.key.text.size']) == 'number' ? prop['chart.key.text.size'] : prop['chart.text.size'],
-                text_font    = prop['chart.text.font'],
+                text_bold    = prop['chart.key.text.bold'],
+                text_italic  = prop['chart.key.text.italic'],
+                text_font    = prop['chart.key.text.font'] || prop['chart.key.font'] || prop['chart.text.font'],
                 text_color   = prop['chart.key.text.color'],
                 gutterLeft   = obj.gutterLeft,
                 gutterRight  = obj.gutterRight,
@@ -336,7 +359,7 @@
                 fillstyle    = prop['chart.key.background'],
                 strokestyle  = '#999',
                 length       = 0;
-            
+
             if (!obj.coords) obj.coords = {};
             obj.coords.key = [];
     
@@ -506,7 +529,15 @@
     
                 co.beginPath();
                     co.fillStyle = typeof text_color == 'object' ? text_color[i] : text_color;;
-                    var ret = RG.Text2(obj, {'font':text_font,'size':text_size,'x':pos,'y':vpos + text_size + 3, 'text': key[i]});
+                    var ret = RG.Text2(obj, {
+                        'font':text_font,
+                        'bold':text_bold,
+                        'size':text_size,
+                        'italic': text_italic,
+                        'x':pos,
+                        'y':vpos + text_size + 3,
+                        'text': key[i]
+                    });
                 co.fill();
                 pos += co.measureText(key[i]).width;
                 
@@ -553,48 +584,49 @@
             }
     
 
-            obj.coords.key.forEach(function (value, index, arr)
-            {
-
-                var rect = new RGraph.Drawing.Rect(obj.id,value[0], value[1], prop['chart.key.position'] == 'gutter' ? value[2] : maxlen, value[3])
-                    .Set('fillstyle', 'rgba(0,0,0,0)')
-                    .Draw();
-                
-                rect.onclick = function (e, shape)
+            //obj.coords.key.forEach(function (value, index, arr)
+            //{
+            for (var i=0,len=obj.coords.key.length; i<len; i+=1) {
+            
+                // Because the loop would have finished when the i variable is needed - put
+                // the onclick function inside a new context so that the value of the i
+                // variable is what we expect when the key has been clicked
+                (function (idx)
                 {
-                    var co  = rect.context;
+                    var arr   = obj.coords.key;
+                    var value = obj.coords.key[idx];
+                    var index = idx;
+    
 
-                    co.fillStyle = prop['chart.key.interactive.highlight.label'];
-                    co.fillRect(shape.x, shape.y, shape.width, shape.height);
+                    var rect = new RGraph.Drawing.Rect(obj.id,value[0], value[1], prop['chart.key.position'] == 'gutter' ? value[2] : maxlen, value[3])
+                        .Set('fillstyle', 'rgba(0,0,0,0)')
+                        .Draw();
+                    
+                    rect.onclick = function (e, shape)
+                    {
+                        var co  = rect.context;
+    
+                        co.fillStyle = prop['chart.key.interactive.highlight.label'];
+                        co.fillRect(shape.x, shape.y, shape.width, shape.height);
+    
+                        if (typeof obj.interactiveKeyHighlight == 'function') {
+                            
+                            obj.Set('chart.key.interactive.index', idx);
 
-                    if (typeof obj.interactiveKeyHighlight == 'function') {
-                        
-                        obj.Set('chart.key.interactive.index', index);
-                        
-                        RG.FireCustomEvent(obj, 'onbeforeinteractivekey');
-                        obj.interactiveKeyHighlight(index);
-                        RG.FireCustomEvent(obj, 'onafterinteractivekey');
+                            RG.FireCustomEvent(obj, 'onbeforeinteractivekey');
+                            obj.interactiveKeyHighlight(index);
+                            RG.FireCustomEvent(obj, 'onafterinteractivekey');
+                        }
                     }
-                }
-                
-                rect.onmousemove = function (e, shape)
-                {
-                    e.target.style.cursor = 'pointer';
-                }
-            });
+                    
+                    rect.onmousemove = function (e, shape)
+                    {
+                        e.target.style.cursor = 'pointer';
+                    }
+                })(i);
+            }
         }
-    }
-
-
-
-
-
-
-
-
-
-
-
+    };
 
 
 
@@ -604,18 +636,18 @@
     * 
     * @param array key The key elements
     */
-    RGraph.getKeyLength = function (key)
+    RG.getKeyLength = function (key)
     {
-        var len = 0;
+        var length = 0;
 
-        for (var i=0; i<key.length; ++i) {
+        for (var i=0,len=key.length; i<len; i+=1) {
             if (key[i] != null) {
-                ++len;
+                ++length;
             }
         }
 
-        return len;
-    }
+        return length;
+    };
 
 
 
@@ -628,10 +660,11 @@
     * @param object prop An object map of the various properties that you can use to
     *                    configure the key. See the documentation page for a list.
     */
+    RGraph.HTML.key =
     RGraph.HTML.Key = function (id, prop)
     {
-        var div = document.getElementById(id);
-        
+        var div = doc.getElementById(id);
+
         
         /**
         * Create the table that becomes the key
@@ -689,8 +722,14 @@
             })() + '>' + prop.labels[i] + '</span>' + (prop.links && prop.links[i] ? '</a>' : '') + '</td></tr>';
         }
         
-        div.innerHTML += str + '</table>';
+        div.innerHTML += (str + '</table>');
 
         // Return the TABLE object that is the HTML key
-        return document.getElementById('rgraph_key');
-    }
+        return doc.getElementById('rgraph_key');
+    };
+
+
+
+
+// End module pattern
+})(window, document);

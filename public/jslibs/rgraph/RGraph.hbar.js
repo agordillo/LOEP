@@ -1,14 +1,19 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
-    
-    if (typeof(RGraph) == 'undefined') RGraph = {};
+
+    RGraph = window.RGraph || {isRGraph: true};
 
     /**
     * The horizontal bar chart constructor. The horizontal bar is a minor variant
@@ -18,12 +23,31 @@
     * @param object canvas The canvas object
     * @param array  data   The chart data
     */
-    RGraph.HBar = function (id, data)
+    RGraph.HBar = function (conf)
     {
-        // Get the canvas and context objects
+        /**
+        * Allow for object config style
+        */
+        if (   typeof conf === 'object'
+            && typeof conf.data === 'object'
+            && typeof conf.id === 'string') {
+
+            var id                        = conf.id
+            var canvas                    = document.getElementById(id);
+            var data                      = conf.data;
+            var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
+        
+        } else {
+        
+            var id     = conf;
+            var canvas = document.getElementById(id);
+            var data   = arguments[1];
+        }
+
+
         this.id                = id;
-        this.canvas            = document.getElementById(typeof id === 'object' ? id.id : id);
-        this.context           = this.canvas.getContext ? this.canvas.getContext("2d") : null;
+        this.canvas            = canvas;
+        this.context           = this.canvas.getContext ? this.canvas.getContext("2d", {alpha: (typeof id === 'object' && id.alpha === false) ? false : true}) : null;
         this.canvas.__object__ = this;
         this.data              = data;
         this.type              = 'hbar';
@@ -34,20 +58,24 @@
         this.coords            = [];
         this.coords2           = [];
         this.coordsText        = [];
+        this.original_colors   = [];
+        this.firstDraw         = true; // After the first draw this will be false
 
 
         /**
         * Compatibility with older browsers
         */
-        RGraph.OldBrowserCompat(this.context);
+        //RGraph.OldBrowserCompat(this.context);
 
         
         this.max = 0;
         this.stackedOrGrouped  = false;
 
         // Default properties
-        this.properties = {
+        this.properties =
+        {
             'chart.gutter.left':            75,
+            'chart.gutter.left.autosize':   false,
             'chart.gutter.right':           25,
             'chart.gutter.top':             25,
             'chart.gutter.bottom':          25,
@@ -66,6 +94,7 @@
             'chart.background.grid.autofit.numvlines': 20,
             'chart.background.grid.dashed': false,
             'chart.background.grid.dotted': false,
+            'chart.background.color':       null,
             'chart.linewidth':              1,
             'chart.title':                  '',
             'chart.title.background':       null,
@@ -184,8 +213,8 @@
             return;
         }
 
-        for (i=0; i<this.data.length; ++i) {
-            if (typeof(this.data[i]) == 'object') {
+        for (i=0,len=this.data.length; i<len; ++i) {
+            if (typeof this.data[i] == 'object') {
                 this.stackedOrGrouped = true;
             }
         }
@@ -194,8 +223,8 @@
         /**
         * Create the dollar objects so that functions can be added to them
         */
-        var linear_data = RGraph.array_linearize(data);
-        for (var i=0; i<linear_data.length; ++i) {
+        var linear_data = RGraph.arrayLinearize(data);
+        for (var i=0,len=linear_data.length; i<len; ++i) {
             this['$' + i] = {};
         }
 
@@ -220,21 +249,25 @@
 
 
 
-        ///////////////////////////////// SHORT PROPERTIES /////////////////////////////////
-
-
-
-
-        var RG   = RGraph;
-        var ca   = this.canvas;
-        var co   = ca.getContext('2d');
-        var prop = this.properties;
-        //var $jq  = jQuery;
-
-
-
-
-        //////////////////////////////////// METHODS ///////////////////////////////////////
+        // Short variable names
+        var RG    = RGraph;
+        var ca    = this.canvas;
+        var co    = ca.getContext('2d');
+        var prop  = this.properties;
+        var jq    = jQuery;
+        var pa    = RG.Path;
+        var win   = window;
+        var doc   = document;
+        var ma    = Math;
+        
+        
+        
+        /**
+        * "Decorate" the object with the generic effects if the effects library has been included
+        */
+        if (RG.Effects && typeof RG.Effects.decorate === 'function') {
+            RG.Effects.decorate(this);
+        }
 
 
 
@@ -245,8 +278,23 @@
         * @param name  string The name of the property to set
         * @param value mixed  The value of the property
         */
-        this.Set = function (name, value)
+        this.set =
+        this.Set = function (name)
         {
+            var value = typeof arguments[1] === 'undefined' ? null : arguments[1];
+
+            /**
+            * the number of arguments is only one and it's an
+            * object - parse it for configuration data and return.
+            */
+            if (arguments.length === 1 && typeof name === 'object') {
+                RG.parseObjectStyleConfig(this, name);
+                return this;
+            }
+
+
+
+
             name = name.toLowerCase();
     
             /**
@@ -263,7 +311,7 @@
             prop[name] = value;
     
             return this;
-        }
+        };
 
 
 
@@ -273,6 +321,7 @@
         * 
         * @param name  string The name of the property to get
         */
+        this.get =
         this.Get = function (name)
         {
             /**
@@ -287,7 +336,7 @@
             }
     
             return prop[name];
-        }
+        };
 
 
 
@@ -295,6 +344,7 @@
         /**
         * The function you call to draw the bar chart
         */
+        this.draw =
         this.Draw = function ()
         {
             /**
@@ -312,6 +362,39 @@
                 // Don't want to do this again
                 this.colorsParsed = true;
             }
+            
+            
+            
+            
+            
+            
+            /**
+            * Accomodate autosizing the left gutter
+            */
+            if (prop['chart.gutter.left.autosize']) {
+                var len    = 0;
+                var labels = prop['chart.labels'];
+                var font   = prop['chart.text.font'];
+                var size   = prop['chart.text.size'];
+
+                for (var i=0; i<labels.length; i+=1) {
+                    var length = RG.measureText(labels[i], false, font, size)[0] || 0
+                    len = ma.max(len, length);
+                }
+                
+                prop['chart.gutter.left'] = len + 10;
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
     
     
             /**
@@ -326,9 +409,10 @@
             /**
             * Stop the coords array from growing uncontrollably
             */
-            this.coords  = [];
-            this.coords2 = [];
-            this.max     = 0;
+            this.coords     = [];
+            this.coords2    = [];
+            this.coordsText = [];
+            this.max        = 0;
     
             /**
             * Check for chart.xmin in stacked charts
@@ -353,7 +437,7 @@
     
     
             // Progressively Draw the chart
-            RG.background.Draw(this);
+            RG.Background.draw(this);
     
             this.Drawbars();
             this.DrawAxes();
@@ -395,14 +479,25 @@
             */
             RG.InstallEventListeners(this);
     
-    
+
+            /**
+            * Fire the onfirstdraw event
+            */
+            if (this.firstDraw) {
+                RG.fireCustomEvent(this, 'onfirstdraw');
+                this.firstDraw = false;
+                this.firstDrawFunc();
+            }
+
+
+
             /**
             * Fire the RGraph ondraw event
             */
             RG.FireCustomEvent(this, 'ondraw');
 
             return this;
-        }
+        };
 
 
 
@@ -410,9 +505,10 @@
         /**
         * This draws the axes
         */
+        this.drawAxes =
         this.DrawAxes = function ()
         {
-            var halfway = Math.round((this.graphwidth / 2) + this.gutterLeft);
+            var halfway = ma.round((this.graphwidth / 2) + this.gutterLeft);
     
             co.beginPath();
                 
@@ -424,6 +520,11 @@
                     if (prop['chart.yaxispos'] == 'center') {
                         co.moveTo(halfway, this.gutterTop);
                         co.lineTo(halfway, ca.height - this.gutterBottom);
+                    
+                    } else if (prop['chart.yaxispos'] == 'right') {
+                        co.moveTo(ca.width - this.gutterRight, this.gutterTop);
+                        co.lineTo(ca.width - this.gutterRight, ca.height - this.gutterBottom);
+                    
                     } else {
                         co.moveTo(this.gutterLeft, this.gutterTop);
                         co.lineTo(this.gutterLeft, ca.height - this.gutterBottom);
@@ -447,22 +548,32 @@
             
                     for (y=this.gutterTop; y<(ca.height - this.gutterBottom - 1); y+=yTickGap) {
                         if (prop['chart.yaxispos'] == 'center') {
-                            co.moveTo(halfway + 3, Math.round(y));
-                            co.lineTo(halfway  - 3, Math.round(y));
+                            co.moveTo(halfway + 3, ma.round(y));
+                            co.lineTo(halfway  - 3, ma.round(y));
+
+                        } else if (prop['chart.yaxispos'] == 'right') {
+                            co.moveTo(ca.width - this.gutterRight, ma.round(y));
+                            co.lineTo(ca.width - this.gutterRight + 3, ma.round(y));
+
                         } else {
-                            co.moveTo(this.gutterLeft, Math.round(y));
-                            co.lineTo( this.gutterLeft  - 3, Math.round(y));
+                            co.moveTo(this.gutterLeft, ma.round(y));
+                            co.lineTo( this.gutterLeft  - 3, ma.round(y));
                         }
                     }
                     
                     // If the X axis isn't being shown draw the end tick
                     if (prop['chart.noxaxis'] == true) {
                         if (prop['chart.yaxispos'] == 'center') {
-                            co.moveTo(halfway + 3, Math.round(y));
-                            co.lineTo(halfway  - 3, Math.round(y));
+                            co.moveTo(halfway + 3, ma.round(y));
+                            co.lineTo(halfway  - 3, ma.round(y));
+                        
+                        } else if (prop['chart.yaxispos'] == 'right') {
+                            co.moveTo(ca.width - this.gutterRight, ma.round(y));
+                            co.lineTo(ca.width - this.gutterRight + 3, ma.round(y));
+
                         } else {
-                            co.moveTo(this.gutterLeft, Math.round(y));
-                            co.lineTo( this.gutterLeft  - 3, Math.round(y));
+                            co.moveTo(this.gutterLeft, ma.round(y));
+                            co.lineTo( this.gutterLeft  - 3, ma.round(y));
                         }
                     }
                 }
@@ -473,25 +584,49 @@
                     && prop['chart.noxaxis'] == false
                     && prop['chart.numxticks'] > 0
                     && prop['chart.noaxes'] == false) {
-    
+
                     xTickGap = (ca.width - this.gutterLeft - this.gutterRight ) / prop['chart.numxticks'];
-                    
                     yStart   = ca.height - this.gutterBottom;
                     yEnd     = (ca.height - this.gutterBottom) + 3;
-            
-                    for (x=(ca.width - this.gutterRight), i=0; prop['chart.yaxispos'] == 'center' ? x>=this.gutterLeft : x>this.gutterLeft; x-=xTickGap) {
-            
-                        if (prop['chart.yaxispos'] != 'center' || i != 5) {
-                            co.moveTo(Math.round(x), yStart);
-                            co.lineTo(Math.round(x), yEnd);
+
+
+
+
+
+                    var i = prop['chart.numxticks']
+                    
+                    while(i--) {
+
+                        var x   = ca.width - this.gutterRight - (i * xTickGap);
+                        
+                        if (prop['chart.yaxispos'] === 'right') {
+                            x -= xTickGap;
                         }
-                        i++;
+
+                        co.moveTo(ma.round(x), yStart);
+                        co.lineTo(ma.round(x), yEnd);
                     }
-    
+
+
+
+                    if (prop['chart.yaxispos'] === 'center') {
+                        var i = 5; while (i--) {
+                            var x   = this.gutterLeft + (xTickGap * i);
+
+                            co.moveTo(ma.round(x), yStart);
+                            co.lineTo(ma.round(x), yEnd);
+                            
+                        }
+                    }
+
+
+
+
+
                     // If the Y axis isn't being shown draw the end tick
                     if (prop['chart.noyaxis'] == true) {
-                        co.moveTo(this.gutterLeft, Math.round(yStart));
-                        co.lineTo( this.gutterLeft, Math.round(yEnd));
+                        co.moveTo(this.gutterLeft, ma.round(yStart));
+                        co.lineTo( this.gutterLeft, ma.round(yEnd));
                     }
                 }
             co.stroke();
@@ -500,7 +635,7 @@
             * Reset the linewidth
             */
             co.lineWidth = 1;
-        }
+        };
 
 
 
@@ -508,6 +643,7 @@
         /**
         * This draws the labels for the graph
         */
+        this.drawLabels =
         this.DrawLabels = function ()
         {
             var units_pre  = prop['chart.units.pre'];
@@ -534,7 +670,7 @@
                 /**
                 * Specific X labels
                 */
-                if (RGraph.is_array(prop['chart.xlabels.specific'])) {
+                if (RG.isArray(prop['chart.xlabels.specific'])) {
                     
                     if (prop['chart.yaxispos'] == 'center') {
 
@@ -561,6 +697,24 @@
                                                 'x':this.gutterLeft + (interval * (labels.length - i - 1)),
                                                 'y':ca.height - this.gutterBottom,
                                                 'text':labels[i],
+                                                'valign':'top',
+                                                'halign':'center',
+                                                'tag': 'scale'});
+                        }
+
+                    } else if (prop['chart.yaxispos'] == 'right') {
+
+                        var labels         = prop['chart.xlabels.specific'];
+                        var interval       = this.graphwidth / (labels.length - 1);
+
+                        co.fillStyle = prop['chart.text.color'];
+                        
+                        for (var i=0; i<labels.length; i+=1) {
+                                RG.Text2(this, {'font':font,
+                                                'size':text_size,
+                                                'x':this.gutterLeft + (interval * i),
+                                                'y':ca.height - this.gutterBottom,
+                                                'text':labels[labels.length - i - 1],
                                                 'valign':'top',
                                                 'halign':'center',
                                                 'tag': 'scale'});
@@ -603,7 +757,7 @@
                                                 'size':text_size,
                                                 'x':this.gutterLeft + (this.graphwidth / 2) - ((this.graphwidth / 2) * ((i+1)/this.scale2.labels.length)),
                                                 'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap,
-                                                'text':this.scale2.labels[i],
+                                                'text':'-' + this.scale2.labels[i],
                                                 'valign':'center',
                                                 'halign':'center',
                                         'tag': 'scale'});
@@ -619,19 +773,33 @@
                                                 'halign':'center',
                                         'tag': 'scale'});
                         }
-            
-                    } else {
+                
+                    }else if (prop['chart.yaxispos'] == 'right') {
+
                     
-                        for (var i=0; i<this.scale2.labels.length; ++i) {
+                        for (var i=0,len=this.scale2.labels.length; i<len; ++i) {
                             RG.Text2(this, {'font':font,
-                                                'size':text_size,
-                                                'x':this.gutterLeft + (this.graphwidth * ((i+1)/this.scale2.labels.length)),
-                                                'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap,
-                                                'text':this.scale2.labels[i],
-                                                'valign':'center',
-                                                'halign':'center',
-                                                'tag': 'scale'
-                                               });
+                                            'size':text_size,
+                                            'x':this.gutterLeft + (i * (this.graphwidth / len)),
+                                            'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap,
+                                            'text':'-' + this.scale2.labels[len - 1 - i],
+                                            'valign':'center',
+                                            'halign':'center',
+                                            'tag': 'scale'
+                                           });
+                        }
+
+                    } else {
+                        for (var i=0,len=this.scale2.labels.length; i<len; ++i) {
+                            RG.Text2(this, {'font':font,
+                                            'size':text_size,
+                                            'x':this.gutterLeft + (this.graphwidth * ((i+1)/len)),
+                                            'y':this.gutterTop + this.halfTextHeight + this.graphheight + gap,
+                                            'text':this.scale2.labels[i],
+                                            'valign':'center',
+                                            'halign':'center',
+                                            'tag': 'scale'
+                                           });
                         }
                     }
         
@@ -641,6 +809,13 @@
                     if (prop['chart.xmin'] > 0 || prop['chart.noyaxis'] == true) {
         
                         var x = prop['chart.yaxispos'] == 'center' ?  this.gutterLeft + (this.graphwidth / 2): this.gutterLeft;
+                        
+                        /**
+                        * Y axis on the right
+                        */
+                        if (prop['chart.yaxispos'] === 'right') {
+                            var x = ca.width - this.gutterRight;
+                        }
         
                         RG.Text2(this, {'font':font,
                                             'size':text_size,
@@ -669,28 +844,39 @@
                 // Draw the X axis labels
                 co.fillStyle = prop['chart.text.color'];
                 
-                // How wide is each bar
+                // How high is each bar
                 var barHeight = (ca.height - this.gutterTop - this.gutterBottom ) / prop['chart.labels'].length;
                 
-                // Reset the xTickGap
+                // Reset the yTickGap
                 yTickGap = (ca.height - this.gutterTop - this.gutterBottom) / prop['chart.labels'].length
-    
+
+                /**
+                * If the Y axis is on the right set the alignment and the X position, otherwise on the left
+                */
+                if (prop['chart.yaxispos'] === 'right') {
+                    var x = ca.width - this.gutterRight + xOffset;
+                    var halign = 'left'
+                } else {
+                    var x = this.gutterLeft - xOffset;
+                    var halign = 'right'
+                }
+
                 // Draw the X tickmarks
                 var i=0;
                 for (y=this.gutterTop + (yTickGap / 2); y<=ca.height - this.gutterBottom; y+=yTickGap) {
                 
-                    RG.Text2(this, {'font':font,
-                                       'size':prop['chart.text.size'],
-                                       'x':this.gutterLeft - xOffset,
-                                       'y':y,
-                                       'text':String(prop['chart.labels'][i++]),
-                                       'halign':'right',
-                                       'valign':'center',
+                    RG.Text2(this, {'font': font,
+                                       'size': prop['chart.text.size'],
+                                       'x': x,
+                                       'y': y,
+                                       'text': String(prop['chart.labels'][i++]),
+                                       'halign': halign,
+                                       'valign': 'center',
                                        'tag': 'labels'
                                       });
                 }
             }
-        }
+        };
 
 
 
@@ -698,6 +884,7 @@
         /**
         * This function draws the bars
         */
+        this.drawbars =
         this.Drawbars = function ()
         {
             co.lineWidth   = prop['chart.linewidth'];
@@ -710,6 +897,7 @@
             * Work out the max value
             */
             if (prop['chart.xmax']) {
+
                 this.scale2 = RG.getScale2(this, {'max':prop['chart.xmax'],
                                                       'min':prop['chart.xmin'],
                                                       'scale.decimals':Number(prop['chart.scale.decimals']),
@@ -724,9 +912,9 @@
                 this.max = this.scale2.max;
     
             } else {
-            
+
                 var grouping = prop['chart.grouping'];
-    
+
                 for (i=0; i<this.data.length; ++i) {
                     if (typeof(this.data[i]) == 'object') {
                         var value = grouping == 'grouped' ? Number(RG.array_max(this.data[i], true)) : Number(RG.array_sum(this.data[i])) ;
@@ -734,7 +922,7 @@
                         var value = Number(Math.abs(this.data[i]));
                     }
     
-                    this.max = Math.max(Math.abs(this.max), Math.abs(value));
+                    this.max = ma.max(Math.abs(this.max), Math.abs(value));
                 }
     
                 this.scale2 = RG.getScale2(this, {'max':this.max,
@@ -748,7 +936,7 @@
                                                       'ylabels.count':prop['chart.xlabels.count']
                                                      });
     
-    
+
                 this.max = this.scale2.max;
                 this.min = this.scale2.min;
             }
@@ -761,29 +949,37 @@
             * This is here to facilitate sequential colors
             */
             var colorIdx = 0;
-    
+
+
+
+
             /**
             * The bars are drawn HERE
             */
             var graphwidth = (ca.width - this.gutterLeft - this.gutterRight);
             var halfwidth  = graphwidth / 2;
-    
-            for (i=0; i<this.data.length; ++i) {
+
+            for (i=0,len=this.data.length; i<len; ++i) {
     
                 // Work out the width and height
-                var width  = (this.data[i] / this.max) *  graphwidth;
+                var width  = ma.abs((this.data[i] / this.max) *  graphwidth);
                 var height = this.graphheight / this.data.length;
-    
+
                 var orig_height = height;
-    
+
                 var x       = this.gutterLeft;
                 var y       = this.gutterTop + (i * height);
                 var vmargin = prop['chart.vmargin'];
-    
+                
+                // Account for the Y axis being on the right hand side
+                if (prop['chart.yaxispos'] === 'right') {
+                    x = ca.width - this.gutterRight - ma.abs(width);
+                }
+
                 // Account for negative lengths - Some browsers (eg Chrome) don't like a negative value
                 if (width < 0) {
                     x -= width;
-                    width = Math.abs(width);
+                    width = ma.abs(width);
                 }
     
                 /**
@@ -816,8 +1012,13 @@
                                 barWidth = barWidth * (this.graphwidth / 2);
                                 barX = ((this.graphwidth / 2) + this.gutterLeft) - barWidth;
                             }
+
+                        } else if (prop['chart.yaxispos'] == 'right') {
+
+                            barWidth = Math.abs(barWidth);
+                            barX = ca.width - this.gutterRight - barWidth;
                         }
-    
+
                         // Set the fill color
                         co.strokeStyle = prop['chart.strokestyle'];
                         co.fillStyle = prop['chart.colors'][0];
@@ -826,10 +1027,10 @@
                         if (prop['chart.colors.sequential']) {
                             co.fillStyle = prop['chart.colors'][colorIdx++];
                         }
-    
+
                         co.strokeRect(barX, this.gutterTop + (i * height) + prop['chart.vmargin'], barWidth, barHeight);
                         co.fillRect(barX, this.gutterTop + (i * height) + prop['chart.vmargin'], barWidth, barHeight);
-    
+
                         this.coords.push([barX,
                                           y + vmargin,
                                           barWidth,
@@ -845,8 +1046,10 @@
     
                         if (prop['chart.yaxispos'] == 'center') {
                             alert('[HBAR] You can\'t have a stacked chart with the Y axis in the center, change it to grouped');
+                        } else if (prop['chart.yaxispos'] == 'right') {
+                            var x = ca.width - this.gutterRight
                         }
-    
+
                         var barHeight = height - (2 * vmargin);
 
                         if (typeof this.coords2[i] == 'undefined') {
@@ -854,11 +1057,11 @@
                         }
     
                         for (j=0; j<this.data[i].length; ++j) {
-                        
+
     
                             // Set the fill/stroke colors
                             co.strokeStyle = prop['chart.strokestyle'];
-                            co.fillStyle = prop['chart.colors'][j];
+                            co.fillStyle   = prop['chart.colors'][j];
                             
     
                             // Sequential colors
@@ -868,8 +1071,14 @@
                             
     
                             var width = (((this.data[i][j]) / (this.max))) * this.graphwidth;
-                            var totalWidth = (RG.array_sum(this.data[i]) / this.max) * this.graphwidth;
-    
+                            var totalWidth = (RG.arraySum(this.data[i]) / this.max) * this.graphwidth;
+                            
+                            if (prop['chart.yaxispos'] === 'right') {
+                                x -= width;
+                            }
+                            
+
+
                             co.strokeRect(x, this.gutterTop + prop['chart.vmargin'] + (this.graphheight / this.data.length) * i, width, height - (2 * vmargin) );
                             co.fillRect(x, this.gutterTop + prop['chart.vmargin'] + (this.graphheight / this.data.length) * i, width, height - (2 * vmargin) );
     
@@ -895,7 +1104,9 @@
                                                   j == (this.data[i].length - 1)
                                                  ]);
     
-                            x += width;
+                            if (prop['chart.yaxispos'] !== 'right') {
+                                x += width;
+                            }
                         }
     
                     /**
@@ -917,7 +1128,7 @@
                             * Turn on the shadow if need be
                             */
                             if (prop['chart.shadow']) {
-                                RG.SetShadow(this, prop['chart.shadow.color'], prop['chart.shadow.offsetx'], prop['chart.shadow.offsety'], prop['chart.shadow.blur']);
+                                RG.setShadow(this, prop['chart.shadow.color'], prop['chart.shadow.offsetx'], prop['chart.shadow.offsety'], prop['chart.shadow.blur']);
                             }
     
                             // Set the fill/stroke colors
@@ -936,12 +1147,16 @@
                             var startX = this.gutterLeft;
     
     
-    
-    
+
                             // Account for the Y axis being in the middle
                             if (prop['chart.yaxispos'] == 'center') {
                                 width  /= 2;
                                 startX += halfwidth;
+                            
+                            // Account for the Y axis being on the right
+                            } else if (prop['chart.yaxispos'] == 'right') {
+                                width = ma.abs(width);
+                                startX = ca.width - this.gutterRight - ma.abs(width);;
                             }
                             
                             if (width < 0) {
@@ -986,7 +1201,7 @@
             RG.NoShadow(this);
             
             this.RedrawBars();
-        }
+        };
 
 
 
@@ -994,6 +1209,7 @@
         /**
         * This function goes over the bars after they been drawn, so that upwards shadows are underneath the bars
         */
+        this.redrawBars =
         this.RedrawBars = function ()
         {
             if (prop['chart.noredraw']) {
@@ -1006,7 +1222,7 @@
             var size   = prop['chart.text.size'];
             var color  = prop['chart.text.color'];
     
-            RG.NoShadow(this);
+            RG.noShadow(this);
             co.strokeStyle = prop['chart.strokestyle'];
     
             for (var i=0; i<coords.length; ++i) {
@@ -1016,43 +1232,54 @@
                         co.strokeStyle = prop['chart.strokestyle'];
                         co.fillStyle = coords[i][4];
                         co.lineWidth = prop['chart.linewidth'];
-                        co.strokeRect(coords[i][0], coords[i][1], coords[i][2], coords[i][3]);
-                        co.fillRect(coords[i][0], coords[i][1], coords[i][2], coords[i][3]);
-                    co.fill();
+                        co.rect(coords[i][0], coords[i][1], coords[i][2], coords[i][3]);
                     co.stroke();
+                    co.fill();
                 }
     
                 /**
                 * Draw labels "above" the bar
                 */
+                var halign = 'left';
                 if (prop['chart.labels.above'] && coords[i][6]) {
     
                     co.fillStyle   = prop['chart.text.color'];
                     co.strokeStyle = 'black';
-                    RG.NoShadow(this);
+                    RG.noShadow(this);
     
                     var border = (coords[i][0] + coords[i][2] + 7 + co.measureText(prop['chart.units.pre'] + this.coords[i][5] + prop['chart.units.post']).width) > ca.width ? true : false;
-                    
+
                     /**
                     * Default to the value - then check for specific labels
                     */
-                    var text = RG.number_format(this, (this.coords[i][5]).toFixed(prop['chart.labels.above.decimals']), prop['chart.units.pre'], prop['chart.units.post']);
+                    var text = RG.numberFormat(this, (this.coords[i][5]).toFixed(prop['chart.labels.above.decimals']), prop['chart.units.pre'], prop['chart.units.post']);
                     if (typeof prop['chart.labels.above.specific'] == 'object' && prop['chart.labels.above.specific'] && prop['chart.labels.above.specific'][i]) {
                         text = prop['chart.labels.above.specific'][i];
+                    }
+                    
+                    var x = coords[i][0] + coords[i][2] + 5;
+                    var y = coords[i][1] + (coords[i][3] / 2);
+                    
+                    if (prop['chart.yaxispos'] === 'right') {
+                        x = coords[i][0] - 5;
+                        halign = 'right';
+                    } else if (prop['chart.yaxispos'] === 'center' && this.data_arr[i] < 0) {
+                        x = coords[i][0] - 5;
+                        halign = 'right';
                     }
 
                     RG.Text2(this, {'font':font,
                                         'size':size,
-                                        'x':coords[i][0] + coords[i][2] + 5,
-                                        'y':coords[i][1] + (coords[i][3] / 2),
+                                        'x':x,
+                                        'y':y,
                                         'text': text,
                                         'valign':'center',
-                                        'halign':'left',
+                                        'halign': halign,
                                         'tag': 'labels.above'
                                        });
                 }
             }
-        }
+        };
 
 
 
@@ -1096,7 +1323,7 @@
                            };
                 }
             }
-        }
+        };
 
 
 
@@ -1145,7 +1372,7 @@
             }
     
             return value;
-        }
+        };
 
 
 
@@ -1155,11 +1382,12 @@
         * 
         * @param object shape The shape to highlight
         */
+        this.highlight =
         this.Highlight = function (shape)
         {
             // Add the new highlight
             RG.Highlight.Rect(this, shape);
-        }
+        };
 
 
 
@@ -1184,7 +1412,7 @@
     
                 return this;
             }
-        }
+        };
 
 
 
@@ -1232,7 +1460,7 @@
                 img.style.left = ((width * 0.1) - 8.5) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + (coordW / 2) + coordX + (width / 2)) > document.body.offsetWidth) {
+            } else if ((canvasXY[0] + (coordW / 2) + coordX + (width / 2)) > doc.body.offsetWidth) {
                 tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
                 img.style.left = ((width * 0.9) - 8.5) + 'px';
     
@@ -1241,7 +1469,7 @@
                 tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
                 img.style.left = ((width * 0.5) - 8.5) + 'px';
             }
-        }
+        };
 
 
 
@@ -1279,7 +1507,7 @@
             }
     
             return coord;
-        }
+        };
 
 
 
@@ -1289,6 +1517,23 @@
         */
         this.parseColors = function ()
         {
+            // Save the original colors so that they can be restored when the canvas is reset
+            if (this.original_colors.length === 0) {
+                //this.original_colors['chart.'] = RG.array_clone(prop['chart.']);
+                this.original_colors['chart.colors']                = RG.array_clone(prop['chart.colors']);
+                this.original_colors['chart.background.grid.color'] = RG.array_clone(prop['chart.background.grid.color']);
+                this.original_colors['chart.background.color']      = RG.array_clone(prop['chart.background.color']);
+                this.original_colors['chart.background.barcolor1']  = RG.array_clone(prop['chart.background.barcolor1']);
+                this.original_colors['chart.background.barcolor2']  = RG.array_clone(prop['chart.background.barcolor2']);
+                this.original_colors['chart.text.color']            = RG.array_clone(prop['chart.text.color']);
+                this.original_colors['chart.labels.colors']         = RG.array_clone(prop['chart.labels.colors']);
+                this.original_colors['chart.strokestyle']           = RG.array_clone(prop['chart.strokestyle']);
+                this.original_colors['chart.axis.color']            = RG.array_clone(prop['chart.axis.color']);
+                this.original_colors['chart.highlight.fill']        = RG.array_clone(prop['chart.highlight.fill']);
+                this.original_colors['chart.highlight.stroke']      = RG.array_clone(prop['chart.highlight.stroke']);
+                
+            }
+
             var colors = prop['chart.colors'];
     
             for (var i=0; i<colors.length; ++i) {
@@ -1296,6 +1541,7 @@
             }
             
             prop['chart.background.grid.color'] = this.parseSingleColorForGradient(prop['chart.background.grid.color']);
+            prop['chart.background.color']      = this.parseSingleColorForGradient(prop['chart.background.color']);
             prop['chart.background.barcolor1']  = this.parseSingleColorForGradient(prop['chart.background.barcolor1']);
             prop['chart.background.barcolor2']  = this.parseSingleColorForGradient(prop['chart.background.barcolor2']);
             prop['chart.text.color']            = this.parseSingleColorForGradient(prop['chart.text.color']);
@@ -1304,7 +1550,18 @@
             prop['chart.axis.color']            = this.parseSingleColorForGradient(prop['chart.axis.color']);
             prop['chart.highlight.fill']        = this.parseSingleColorForGradient(prop['chart.highlight.fill']);
             prop['chart.highlight.stroke']      = this.parseSingleColorForGradient(prop['chart.highlight.stroke']);
-        }
+        };
+
+
+
+
+        /**
+        * Use this function to reset the object to the post-constructor state. Eg reset colors if
+        * need be etc
+        */
+        this.reset = function ()
+        {
+        };
 
 
 
@@ -1320,6 +1577,10 @@
             if (color.match(/^gradient\((.*)\)$/i)) {
                 
                 var parts = RegExp.$1.split(':');
+                
+                if (prop['chart.yaxispos'] === 'right') {
+                    parts = RG.arrayReverse(parts);
+                }
     
                 // Create the gradient
                 var grad = co.createLinearGradient(prop['chart.gutter.left'],0,ca.width - prop['chart.gutter.right'],0);
@@ -1334,7 +1595,7 @@
             }
                 
             return grad ? grad : color;
-        }
+        };
 
 
 
@@ -1362,7 +1623,119 @@
                 // Reset the lineWidth
                 co.lineWidth = pre_linewidth;
             });
-        }
+        };
+
+
+
+
+        /**
+        * Using a function to add events makes it easier to facilitate method chaining
+        * 
+        * @param string   type The type of even to add
+        * @param function func 
+        */
+        this.on = function (type, func)
+        {
+            if (type.substr(0,2) !== 'on') {
+                type = 'on' + type;
+            }
+            
+            this[type] = func;
+    
+            return this;
+        };
+
+
+
+
+        /**
+        * This function runs once only
+        * (put at the end of the file (before any effects))
+        */
+        this.firstDrawFunc = function ()
+        {
+        };
+
+
+
+
+        /**
+        * Grow
+        * 
+        * The HBar chart Grow effect gradually increases the values of the bars
+        * 
+        * @param object   OPTIONAL Options for the effect. You can pass frames here
+        * @param function OPTIONAL A callback function
+        */
+        this.grow = function ()
+        {
+            var obj      = this;
+            var opt      = arguments[0] || {};
+            var frames   = opt.frames || 30;
+            var frame    = 0;
+            var callback = arguments[1] || function () {};
+
+
+            // Save the data
+            obj.original_data = RG.array_clone(obj.data);
+
+
+            // Stop the scale from changing by setting chart.ymax (if it's not already set)
+            if (obj.Get('chart.xmax') == 0) {
+
+                var xmax = 0;
+    
+                for (var i=0; i<obj.data.length; ++i) {
+                    if (RG.is_array(obj.data[i]) && obj.Get('chart.grouping') == 'stacked') {
+                        xmax = Math.max(xmax, RG.array_sum(obj.data[i]));
+                    } else if (RG.is_array(obj.data[i]) && obj.Get('chart.grouping') == 'grouped') {
+                        xmax = ma.max(xmax, RG.array_max(obj.data[i]));
+                    } else {
+                        xmax = ma.max(xmax, RG.array_max(obj.data[i]));
+                    }
+                }
+    
+                var scale2 = RG.getScale2(obj, {'max':xmax});
+                obj.Set('chart.xmax', scale2.max);
+            }
+    
+            function iterator ()
+            {
+                // Alter the Bar chart data depending on the frame
+                for (var j=0,len=obj.original_data.length; j<len; ++j) {
+                    
+                    // This stops the animation from being completely linear
+                    var easingFactor = RG.Effects.getEasingMultiplier(frames, frame);
+    
+                    if (typeof obj.data[j] === 'object') {
+                        for (var k=0,len2=obj.data[j].length; k<len2; ++k) {
+                            obj.data[j][k] = obj.original_data[j][k] * easingFactor;
+                        }
+                    } else {
+                        obj.data[j] = obj.original_data[j] * easingFactor;
+                    }
+                }
+    
+    
+
+                RG.redrawCanvas(obj.canvas);
+    
+                if (frame < frames) {
+                    frame += 1;
+                    RG.Effects.updateCanvas(iterator);
+                } else {
+                    callback(obj);
+                }
+            }
+            
+            iterator();
+            
+            return this;
+        };
+
+
+
+        RG.att(ca);
 
 
 
@@ -1371,4 +1744,15 @@
         * Charts are now always registered
         */
         RG.Register(this);
-    }
+
+
+
+
+        /**
+        * This is the 'end' of the constructor so if the first argument
+        * contains configuration data - handle that.
+        */
+        if (parseConfObjectForOptions) {
+            RG.parseObjectStyleConfig(this, conf.options);
+        }
+    };

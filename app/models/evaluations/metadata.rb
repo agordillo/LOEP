@@ -13,12 +13,6 @@ class Evaluations::Metadata < Evaluation
     [
       { :name => "Completeness",
         :description => "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource.", 
-        :type=> "integer" },
-      { :name => "Completeness2",
-        :description => "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource.", 
-        :type=> "integer" },
-      { :name => "Completeness3",
-        :description => "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource.", 
         :type=> "integer" }
     ]
   end
@@ -37,7 +31,6 @@ class Evaluations::Metadata < Evaluation
     #Code here...
     evaluation.item1 = Metrics::MetadataCompleteness.getScoreForLo(lo)
     evaluation.item2 = Metrics::MetadataCompleteness.getScoreForLo(lo)
-    evaluation.item3 = Metrics::MetadataCompleteness.getScoreForLo(lo)
     evaluation.save!
     evaluation
   end

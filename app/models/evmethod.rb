@@ -79,7 +79,7 @@ class Evmethod < ActiveRecord::Base
     
     los.each do |lo|
       rpdLo = evModule.representationData(lo)
-      if !graphEngine and !rpdLo["engine"].nil?
+      if !graphEngine and !rpdLo.nil? and !rpdLo["engine"].nil?
         graphEngine = rpdLo["engine"]
       end
       unless rpdLo.nil?

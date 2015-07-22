@@ -1,0 +1,7 @@
+<% iScores = (representationData["iScores"] || representationData[representationData.keys.first]["iScores"]) rescue [] %>
+
+<% if iScores.length < 3 %>
+	<%= render "evmethods/representations/rgraph_bar_representation", :representationData => representationData, :evmethod => evmethod %>
+<% else %>
+	<%= render "evmethods/representations/rgraph_radar_representation", :representationData => representationData, :evmethod => evmethod %>
+<% end %>

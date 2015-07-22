@@ -1,30 +1,66 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
 
-    if (typeof(RGraph) == 'undefined') RGraph = {};
+    RGraph = window.RGraph || {isRGraph: true};
+
+
+
 
     /**
     * The progress bar constructor
     * 
-    * @param int id    The ID of the canvas tag
-    * @param int value The indicated value of the meter.
-    * @param int max   The end value (the upper most) of the meter
+    * @param mixed conf This can either be an object that contains all of the configuration data
+    *                   (the updated way of configuring the object) or it can be a string consisting of the
+    *                   canvas ID
+    * @param number     The minimum value (if using the older configuration style)
+    * @param number     The maximum value (if using the older configuration style)
+    * @param number     The represented value (if using the older configuration style)
     */
-    RGraph.VProgress = function (id, value, max)
+    RGraph.VProgress = function (conf)
     {
-        this.id                = id;
-        this.max               = max;
-        this.value             = value;
-        this.canvas            = document.getElementById(typeof id === 'object' ? id.id : id);
+        /**
+        * Allow for object config style
+        */
+        if (   typeof conf === 'object'
+            && typeof conf.min === 'number'
+            && typeof conf.max === 'number'
+            && typeof conf.id === 'string') {
+
+            var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
+        
+        } else {
+
+            var conf = {
+                           id: arguments[0],
+                          min: arguments[1],
+                          max: arguments[2],
+                        value: arguments[3]
+                       }
+        }
+
+
+
+
+        this.id                = conf.id;
+        this.canvas            = document.getElementById(this.id);
         this.context           = this.canvas.getContext('2d');
         this.canvas.__object__ = this;
+
+        this.min               = conf.min;
+        this.max               = conf.max;
+        this.value             = RGraph.stringsToNumbers(conf.value);
         this.type              = 'vprogress';
         this.coords            = [];
         this.isRGraph          = true;
@@ -33,14 +69,17 @@
         this.canvas.uid        = this.canvas.uid ? this.canvas.uid : RGraph.CreateUID();
         this.colorsParsed      = false;
         this.coordsText        = [];
+        this.original_colors   = [];
+        this.firstDraw         = true; // After the first draw this will be false
 
 
         /**
         * Compatibility with older browsers
         */
-        RGraph.OldBrowserCompat(this.context);
+        //RGraph.OldBrowserCompat(this.context);
 
-        this.properties = {
+        this.properties =
+        {
             'chart.colors':             ['Gradient(white:#0c0)','Gradient(white:red)','Gradient(white:green)','yellow','pink','cyan','black','white','gray'],
             'chart.strokestyle.inner':  '#999',
             'chart.strokestyle.outer':  '#999',
@@ -65,13 +104,11 @@
             'chart.title.font':         null,
             'chart.title.size':         null,
             'chart.title.color':        'black',
-            
             'chart.title.side':         null,
             'chart.title.side.font':    'Arial',
             'chart.title.side.size':    12,
             'chart.title.side.color':   'black',
             'chart.title.side.bold':    true,
-            
             'chart.text.size':          10,
             'chart.text.color':         'black',
             'chart.text.font':          'Arial',
@@ -82,7 +119,7 @@
             'chart.tooltips.effect':    'fade',
             'chart.tooltips.css.class': 'RGraph_tooltip',
             'chart.tooltips.highlight': true,
-            'chart.tooltips.event':         'onclick',
+            'chart.tooltips.event':     'onclick',
             'chart.highlight.stroke':   'rgba(0,0,0,0)',
             'chart.highlight.fill':     'rgba(255,255,255,0.7)',
             'chart.annotatable':        false,
@@ -106,7 +143,6 @@
             'chart.labels.count':       10,
             'chart.labels.position':    'right',
             'chart.adjustable':         false,
-            'chart.min':                0,
             'chart.scale.decimals':     0,
             'chart.scale.thousand':     ',',
             'chart.scale.point':        '.',
@@ -135,26 +171,6 @@
             'chart.events.mousemove':   null,
             'chart.border.inner':       true
         }
-        
-        /**
-        * Allow for new style method of passing arguments to the constructor
-        */
-        if (arguments.length == 4) {
-
-            this.min   = arguments[1];
-            this.max   = arguments[2];
-            this.value = arguments[3];
-            
-            this.properties['chart.min'] = arguments[1];
-        
-        } else if (arguments.length == 3) {
-
-            this.min   = 0;
-            this.max   = arguments[2];
-            this.value = arguments[1];
-            
-            this.properties['chart.min'] = 0;
-        }
 
         // Check for support
         if (!this.canvas) {
@@ -166,7 +182,7 @@
         /**
         * Create the dollar objects so that functions can be added to them
         */
-        var linear_data = RGraph.array_linearize(value);
+        var linear_data = RGraph.arrayLinearize(this.value);
         for (var i=0; i<linear_data.length; ++i) {
             this['$' + i] = {};
         }
@@ -185,21 +201,25 @@
 
 
 
-        ///////////////////////////////// SHORT PROPERTIES /////////////////////////////////
-
-
-
-
-        var RG   = RGraph;
-        var ca   = this.canvas;
-        var co   = ca.getContext('2d');
-        var prop = this.properties;
-        //var $jq  = jQuery;
-
-
-
-
-        //////////////////////////////////// METHODS ///////////////////////////////////////
+        // Short variable names
+        var RG    = RGraph;
+        var ca    = this.canvas;
+        var co    = ca.getContext('2d');
+        var prop  = this.properties;
+        var jq    = jQuery;
+        var pa    = RG.Path;
+        var win   = window;
+        var doc   = document;
+        var ma    = Math;
+        
+        
+        
+        /**
+        * "Decorate" the object with the generic effects if the effects library has been included
+        */
+        if (RG.Effects && typeof RG.Effects.decorate === 'function') {
+            RG.Effects.decorate(this);
+        }
 
 
 
@@ -207,11 +227,25 @@
         /**
         * A generic setter
         * 
-        * @param string name  The name of the property to set
-        * @param string value The value of the poperty
+        * @param string name  The name of the property to set or it can also be an object containing
+        *                     object style configuration
         */
-        this.Set = function (name, value)
+        this.set =
+        this.Set = function (name)
         {
+            var value = typeof arguments[1] === 'undefined' ? null : arguments[1];
+
+            /**
+            * the number of arguments is only one and it's an
+            * object - parse it for configuration data and return.
+            */
+            if (arguments.length === 1 && typeof name === 'object') {
+                RG.parseObjectStyleConfig(this, name);
+                return this;
+            }
+
+
+
             /**
             * This should be done first - prepend the propertyy name with "chart." if necessary
             */
@@ -232,7 +266,7 @@
             prop[name.toLowerCase()] = value;
     
             return this;
-        }
+        };
 
 
 
@@ -242,6 +276,7 @@
         * 
         * @param string name  The name of the property to get
         */
+        this.get =
         this.Get = function (name)
         {
             /**
@@ -252,7 +287,7 @@
             }
     
             return prop[name.toLowerCase()];
-        }
+        };
 
 
 
@@ -260,6 +295,7 @@
         /**
         * Draws the progress bar
         */
+        this.draw =
         this.Draw = function ()
         {
             /**
@@ -300,6 +336,17 @@
             this.width  = ca.width - this.gutterLeft - this.gutterRight;
             this.height = ca.height - this.gutterTop - this.gutterBottom;
             this.coords = [];
+
+
+
+            /**
+            * Stop this growing uncontrollably
+            */
+            this.coordsText = [];
+
+
+
+
     
             this.Drawbar();
             this.DrawTickMarks();
@@ -350,14 +397,27 @@
             * Instead of using RGraph.common.adjusting.js, handle them here
             */
             this.AllowAdjusting();
-            
+
+
+            /**
+            * Fire the onfirstdraw event
+            */
+            if (this.firstDraw) {
+                RG.fireCustomEvent(this, 'onfirstdraw');
+                this.firstDraw = false;
+                this.firstDrawFunc();
+            }
+
+
+
+
             /**
             * Fire the RGraph ondraw event
             */
             RG.FireCustomEvent(this, 'ondraw');
             
             return this;
-        }
+        };
 
 
 
@@ -365,23 +425,24 @@
         /**
         * Draw the bar itself
         */
+        this.drawbar =
         this.Drawbar = function ()
         {
             /**
             * First get the scale
             */
                 this.scale2 = RGraph.getScale2(this, {
-                                                    'max':this.max,
-                                                    'min':this.min,
-                                                    'strict':true,
-                                                    'scale.thousand':prop['chart.scale.thousand'],
-                                                    'scale.point':prop['chart.scale.point'],
-                                                    'scale.decimals':prop['chart.scale.decimals'],
-                                                    'ylabels.count':prop['chart.labels.count'],
-                                                    'scale.round':prop['chart.scale.round'],
-                                                    'units.pre': prop['chart.units.pre'],
-                                                    'units.post': prop['chart.units.post']
-                                                   });
+                    'max':this.max,
+                    'min':this.min,
+                    'strict':true,
+                    'scale.thousand':prop['chart.scale.thousand'],
+                    'scale.point':prop['chart.scale.point'],
+                    'scale.decimals':prop['chart.scale.decimals'],
+                    'ylabels.count':prop['chart.labels.count'],
+                    'scale.round':prop['chart.scale.round'],
+                    'units.pre': prop['chart.units.pre'],
+                    'units.post': prop['chart.units.post']
+                });
     
     
             // Set a shadow if requested
@@ -390,7 +451,7 @@
             }
     
             // Draw the shadow for MSIE
-            if (ISOLD && prop['chart.shadow']) {
+            if (RGraph.ISOLD && prop['chart.shadow']) {
                 co.fillStyle = prop['chart.shadow.color'];
                 co.fillRect(this.gutterLeft + prop['chart.shadow.offsetx'], this.gutterTop + prop['chart.shadow.offsety'], this.width, this.height);
             }
@@ -407,15 +468,15 @@
             co.strokeStyle = prop['chart.strokestyle.outer'];
             co.fillStyle   = prop['chart.colors'][0];
             var margin     = prop['chart.margin'];
-            var barHeight  = (ca.height - this.gutterTop - this.gutterBottom) * (RG.array_sum(this.value) / this.max);
+            var barHeight  = (ca.height - this.gutterTop - this.gutterBottom) * ((RG.arraySum(this.value) - this.min) / (this.max - this.min));
     
             // Draw the actual bar itself
-            if (typeof(this.value) == 'number') {
+            if (typeof this.value == 'number') {
     
                 co.lineWidth   = 1;
                 co.strokeStyle = prop['chart.strokestyle.inner'];
     
-            } else if (typeof(this.value) == 'object') {
+            } else if (typeof this.value == 'object') {
     
                 co.beginPath();
                 co.strokeStyle = prop['chart.strokestyle.inner'];
@@ -424,7 +485,7 @@
     
                 for (var i=0; i<this.value.length; ++i) {
     
-                    var segmentHeight = ( (this.value[i] - prop['chart.min']) / (this.max - prop['chart.min']) ) * (ca.height - this.gutterBottom - this.gutterTop);
+                    var segmentHeight = ( (this.value[i] - this.min) / (this.max - this.min) ) * (ca.height - this.gutterBottom - this.gutterTop);
     
                     co.fillStyle = prop['chart.colors'][i];
                     
@@ -472,12 +533,17 @@
             co.beginPath();
             co.strokeStyle = prop['chart.strokestyle.inner'];
     
-            if (typeof(this.value) == 'number') {
+            if (typeof this.value == 'number') {
                 
                 if (prop['chart.border.inner']) {
                     co.strokeRect(this.gutterLeft + margin, this.gutterTop + this.height - barHeight, this.width - margin - margin, barHeight);
                 }
-                co.fillRect(this.gutterLeft + margin, this.gutterTop + this.height - barHeight, this.width - margin - margin, barHeight);
+                co.fillRect(
+                    this.gutterLeft + margin,
+                    this.gutterTop + this.height - barHeight,
+                    this.width - margin - margin,
+                    barHeight
+                );
     
                 // Store the coords
                 this.coords.push([this.gutterLeft + margin, this.gutterTop + this.height - barHeight, this.width - margin - margin, barHeight]);
@@ -534,7 +600,7 @@
                                 'tag': 'label.inner'
                                });
             }
-        }
+        };
 
 
 
@@ -542,6 +608,7 @@
         /**
         * The function that draws the tick marks.
         */
+        this.drawTickMarks =
         this.DrawTickMarks = function ()
         {
             co.strokeStyle = prop['chart.tickmarks.color'];
@@ -559,7 +626,7 @@
                     }
                 co.stroke();
             }
-        }
+        };
 
 
 
@@ -567,6 +634,7 @@
         /**
         * The function that draws the labels
         */
+        this.drawLabels =
         this.DrawLabels = function ()
         {
             if (!RG.is_null(prop['chart.labels.specific'])) {
@@ -602,11 +670,11 @@
                 /**
                 * Show zero?
                 */            
-                if (prop['chart.tickmarks.zerostart'] && prop['chart.min'] == 0) {
+                if (prop['chart.tickmarks.zerostart'] && this.min == 0) {
                     RG.Text2(this, {'font':text_font,
                                     'size':text_size,
                                     'x':position == 'left' ? (this.gutterLeft - 5) : (ca.width - this.gutterRight + 5),
-                                    'y':ca.height - this.gutterBottom,'text':RG.number_format(this, prop['chart.min'].toFixed(decimals), units_pre, units_post),
+                                    'y':ca.height - this.gutterBottom,'text':RG.number_format(this, this.min.toFixed(decimals), units_pre, units_post),
                                     'valign':yAlignment,
                                     'halign':xAlignment,
                                     'tag': 'scale'
@@ -614,21 +682,21 @@
                 }
     
                 /**
-                * chart.ymin is set
+                * min is set
                 */
-                if (prop['chart.min'] != 0) {
+                if (this.min != 0) {
                     RG.Text2(this, {'font':text_font,
                                     'size':text_size,
                                     'x':position == 'left' ? (this.gutterLeft - 5) : (ca.width - this.gutterRight + 5),
                                     'y':ca.height - this.gutterBottom,
-                                    'text':RG.number_format(this, prop['chart.min'].toFixed(decimals), units_pre, units_post),
+                                    'text':RG.number_format(this, this.min.toFixed(decimals), units_pre, units_post),
                                     'valign':yAlignment,
                                     'halign':xAlignment,
                                     'tag': 'scale'
                                    });
                 }
             }
-        }
+        };
 
 
 
@@ -636,6 +704,7 @@
         /**
         * Draws titles
         */
+        this.drawTitles =
         this.DrawTitles = function ()
         {
             var text_size  = prop['chart.text.size'];
@@ -676,7 +745,7 @@
                                 'tag': 'title.side'
                                });
             }
-        }
+        };
 
 
 
@@ -691,7 +760,7 @@
         {
             var mouseCoords = RG.getMouseXY(e)
     
-            for (var i=0; i<this.coords.length; i++) {
+            for (var i=0,len=this.coords.length; i<len; i++) {
     
                 var mouseCoords = RG.getMouseXY(e);
                 var mouseX = mouseCoords[0];
@@ -715,7 +784,7 @@
                                        'tooltip': tooltip };
                 }
             }
-        }
+        };
 
 
 
@@ -733,15 +802,15 @@
             var mouseY      = mouseCoords[1];
     
             var value = (this.height - (mouseY - this.gutterTop)) / this.height;
-                value *= this.max - prop['chart.min'];
-                value += prop['chart.min'];
+                value *= this.max - this.min;
+                value += this.min;
 
             // Bounds checking
             if (value > this.max) value = this.max;
             if (value < this.min) value = this.min;
 
             return value;
-        }
+        };
 
 
 
@@ -751,11 +820,12 @@
         * 
         * @param object shape The shape to highlight
         */
+        this.highlight =
         this.Highlight = function (shape)
         {
             // Add the new highlight
             RG.Highlight.Rect(this, shape);
-        }
+        };
 
 
 
@@ -780,15 +850,17 @@
 
                 return this;
             }
-        }
+        };
 
 
 
 
         /**
         * This function allows the VProgress to be  adjustable.
+        * UPDATE: Not any more
         */
-        this.AllowAdjusting = function () {return;}
+        this.allowAdjusting =
+        this.AllowAdjusting = function () {return;};
 
 
 
@@ -798,6 +870,7 @@
         * 
         * @param object e The event object
         */
+        this.adjusting_mousemove =
         this.Adjusting_mousemove = function (e)
         {
             /**
@@ -808,16 +881,16 @@
                 var mouseXY = RG.getMouseXY(e);
                 var value   = this.getValue(e);
                 
-                if (typeof(value) == 'number') {
+                if (typeof value === 'number') {
     
                     // Fire the onadjust event
                     RG.FireCustomEvent(this, 'onadjust');
         
                     this.value = Number(value.toFixed(prop['chart.scale.decimals']));
-                    RG.Redraw();
+                    RG.RedrawCanvas(this.canvas);
                 }
             }
-        }
+        };
 
 
 
@@ -825,6 +898,7 @@
         /**
         * Draws chart.labels.specific
         */
+        this.drawSpecificLabels =
         this.DrawSpecificLabels = function ()
         {
             var labels = prop['chart.labels.specific'];
@@ -854,7 +928,7 @@
                     }
                 co.fill();
             }
-        }
+        };
 
 
 
@@ -902,7 +976,7 @@
                 img.style.left = ((width * 0.1) - 8.5) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (coordW / 2) + (width / 2)) > document.body.offsetWidth) {
+            } else if ((canvasXY[0] + coordX + (coordW / 2) + (width / 2)) > doc.body.offsetWidth) {
                 tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
                 img.style.left = ((width * 0.9) - 8.5) + 'px';
     
@@ -911,7 +985,7 @@
                 tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
                 img.style.left = ((width * 0.5) - 8.5) + 'px';
             }
-        }
+        };
 
 
 
@@ -924,16 +998,16 @@
         */
         this.getYCoord = function (value)
         {
-            if (value > this.max || value < prop['chart.min']) {
+            if (value > this.max || value < this.min) {
                 return null;
             }
-    
+
             var barHeight = ca.height - prop['chart.gutter.top'] - prop['chart.gutter.bottom'];
-            var coord = ((value - prop['chart.min']) / (this.max - prop['chart.min'])) * barHeight;
+            var coord = ((value - this.min) / (this.max - this.min)) * barHeight;
             coord = ca.height - coord - prop['chart.gutter.bottom'];
             
             return coord;
-        }
+        };
 
 
 
@@ -958,7 +1032,7 @@
             }
     
             return false;
-        }
+        };
 
 
 
@@ -968,12 +1042,41 @@
         */
         this.parseColors = function ()
         {
+            // Save the original colors so that they can be restored when the canvas is reset
+            if (this.original_colors.length === 0) {
+                this.original_colors['chart.colors']            = RG.array_clone(prop['chart.colors']);
+                this.original_colors['chart.tickmarks.color']   = RG.array_clone(prop['chart.tickmarks.color']);
+                this.original_colors['chart.strokestyle.inner'] = RG.array_clone(prop['chart.strokestyle.inner']);
+                this.original_colors['chart.strokestyle.outer'] = RG.array_clone(prop['chart.strokestyle.outer']);
+                this.original_colors['chart.highlight.fill']    = RG.array_clone(prop['chart.highlight.fill']);
+                this.original_colors['chart.highlight.stroke']  = RG.array_clone(prop['chart.highlight.stroke']);
+                this.original_colors['chart.highlight.color']   = RG.array_clone(prop['chart.highlight.color']);
+            }
+
             var colors = prop['chart.colors'];
     
-            for (var i=0; i<colors.length; ++i) {
+            for (var i=0,len=colors.length; i<len; ++i) {
                 colors[i] = this.parseSingleColorForGradient(colors[i]);
             }
-        }
+    
+            prop['chart.tickmarks.color']   = this.parseSingleColorForGradient(prop['chart.tickmarks.color']);
+            prop['chart.strokestyle.inner'] = this.parseSingleColorForGradient(prop['chart.strokestyle.inner']);
+            prop['chart.strokestyle.outer'] = this.parseSingleColorForGradient(prop['chart.strokestyle.outer']);
+            prop['chart.highlight.fill']    = this.parseSingleColorForGradient(prop['chart.highlight.fill']);
+            prop['chart.highlight.stroke']  = this.parseSingleColorForGradient(prop['chart.highlight.stroke']);
+            prop['chart.background.color']  = this.parseSingleColorForGradient(prop['chart.background.color']);
+        };
+
+
+
+
+        /**
+        * Use this function to reset the object to the post-constructor state. Eg reset colors if
+        * need be etc
+        */
+        this.reset = function ()
+        {
+        };
 
 
 
@@ -983,7 +1086,7 @@
         */
         this.parseSingleColorForGradient = function (color)
         {
-            if (!color || typeof(color) != 'string') {
+            if (!color || typeof color != 'string') {
                 return color;
             }
     
@@ -997,7 +1100,7 @@
     
                 grad.addColorStop(0, RG.trim(parts[0]));
     
-                for (var j=1; j<parts.length; ++j) {
+                for (var j=1,len=parts.length; j<len; ++j) {
                     grad.addColorStop(j * diff, RG.trim(parts[j]));
                 }
                 
@@ -1005,7 +1108,7 @@
             }
     
             return grad ? grad : color;
-        }
+        };
 
 
 
@@ -1013,6 +1116,7 @@
         /**
         * Draws the bevel effect
         */
+        this.drawBevel =
         this.DrawBevel = function ()
         {
             // In case of multiple segments - this adds up all the lengths
@@ -1038,7 +1142,7 @@
                 co.stroke();
     
             co.restore();
-        }
+        };
 
 
 
@@ -1065,8 +1169,125 @@
             
             // Reset the linewidth
             co.lineWidth    = 1;
-        }
+        };
 
+
+
+
+        /**
+        * Using a function to add events makes it easier to facilitate method chaining
+        * 
+        * @param string   type The type of even to add
+        * @param function func 
+        */
+        this.on = function (type, func)
+        {
+            if (type.substr(0,2) !== 'on') {
+                type = 'on' + type;
+            }
+            
+            this[type] = func;
+    
+            return this;
+        };
+
+
+
+
+        /**
+        * This function runs once only
+        * (put at the end of the file (before any effects))
+        */
+        this.firstDrawFunc = function ()
+        {
+        };
+
+
+
+
+        /**
+        * HProgress Grow effect (which is also the VPogress Grow effect)
+        * 
+        * @param object obj The chart object
+        */
+        this.grow   = function ()
+        {
+            var obj           = this;
+            var canvas        = obj.canvas;
+            var context       = obj.context;
+            var initial_value = obj.currentValue;
+            var opt           = arguments[0] || {};
+            var numFrames     = opt.frames || 30;
+            var frame         = 0
+            var callback      = arguments[1] || function () {};
+    
+            if (typeof obj.value === 'object') {
+    
+                if (RGraph.is_null(obj.currentValue)) {
+                    obj.currentValue = [];
+                    for (var i=0; i<obj.value.length; ++i) {
+                        obj.currentValue[i] = 0;
+                    }
+                }
+    
+                var diff      = [];
+                var increment = [];
+    
+                for (var i=0; i<obj.value.length; ++i) {
+                    diff[i]      = obj.value[i] - Number(obj.currentValue[i]);
+                    increment[i] = diff[i] / numFrames;
+                }
+                
+                if (initial_value == null) {
+                    initial_value = [];
+                    for (var i=0; i< obj.value.length; ++i) {
+                        initial_value[i] = 0;
+                    }
+                }
+    
+            } else {
+    
+                var diff = obj.value - Number(obj.currentValue);
+                var increment = diff  / numFrames;
+            }
+
+
+
+
+
+
+            function iterator ()
+            {
+                frame++;
+    
+                if (frame <= numFrames) {
+    
+                    if (typeof obj.value == 'object') {
+                        obj.value = [];
+                        for (var i=0; i<initial_value.length; ++i) {
+                            obj.value[i] = initial_value[i] + (increment[i] * frame);
+                        }
+                    } else {
+                        obj.value = initial_value + (increment * frame);
+                    }
+    
+                    RGraph.clear(obj.canvas);
+                    RGraph.redrawCanvas(obj.canvas);
+                    
+                    RGraph.Effects.updateCanvas(iterator);
+                } else {
+                    callback();
+                }
+            }
+            
+            iterator();
+            
+            return this;
+        };
+
+
+
+        RG.att(ca);
 
 
 
@@ -1074,4 +1295,15 @@
         * The chart is now always registered
         */
         RG.Register(this);
-    }
+
+
+
+
+        /**
+        * This is the 'end' of the constructor so if the first argument
+        * contains configuration data - handle that.
+        */
+        if (parseConfObjectForOptions) {
+            RG.parseObjectStyleConfig(this, conf.options);
+        }
+    };

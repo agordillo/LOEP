@@ -1,14 +1,19 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
 
-    if (typeof(RGraph) == 'undefined') RGraph = {};
+    RGraph = window.RGraph || {isRGraph: true};
 
     /**
     * The Fuel widget constructor
@@ -18,29 +23,55 @@
     * @param int max       The maximum value
     * @param int value     The indicated value
     */
-    RGraph.Fuel = function (id, min, max, value)
+    RGraph.Fuel = function (conf)
     {
+        /**
+        * Allow for object config style
+        */
+        if (   typeof conf === 'object'
+            && typeof conf.min === 'number'
+            && typeof conf.max === 'number'
+            && typeof conf.id === 'string') {
+
+            var id                        = conf.id
+            var canvas                    = document.getElementById(id);
+            var min                       = conf.min;
+            var max                       = conf.max;
+            var value                     = conf.value;
+            var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
+        
+        } else {
+        
+            var id     = conf;
+            var canvas = document.getElementById(id);
+            var min    = arguments[1];
+            var max    = arguments[2];
+            var value  = arguments[3];
+        }
+
         // Get the canvas and context objects
         this.id                = id;
-        this.canvas            = document.getElementById(typeof id === 'object' ? id.id : id);
-        this.context           = this.canvas.getContext ? this.canvas.getContext("2d") : null;
+        this.canvas            = canvas;
+        this.context           = this.canvas.getContext ? this.canvas.getContext("2d", {alpha: (typeof id === 'object' && id.alpha === false) ? false : true}) : null;
         this.canvas.__object__ = this;
         this.type              = 'fuel';
         this.isRGraph          = true;
         this.min               = min;
         this.max               = max;
-        this.value             = value;
+        this.value             = RGraph.stringsToNumbers(value);
         this.angles            = {};
         this.currentValue      = null;
         this.uid               = RGraph.CreateUID();
         this.canvas.uid        = this.canvas.uid ? this.canvas.uid : RGraph.CreateUID();
         this.coordsText        = [];
+        this.original_colors   = [];
+        this.firstDraw         = true; // After the first draw this will be false
 
 
         /**
         * Compatibility with older browsers
         */
-        RGraph.OldBrowserCompat(this.context);
+        //RGraph.OldBrowserCompat(this.context);
 
 
         // Check for support
@@ -121,21 +152,25 @@
 
 
 
-        ///////////////////////////////// SHORT PROPERTIES /////////////////////////////////
-
-
-
-
+        // Short variable names
         var RG   = RGraph;
         var ca   = this.canvas;
         var co   = ca.getContext('2d');
         var prop = this.properties;
-        //var $jq  = jQuery;
-
-
-
-
-        //////////////////////////////////// METHODS ///////////////////////////////////////
+        var jq   = jQuery;
+        var pa   = RG.Path;
+        var win  = window;
+        var doc  = document;
+        var ma   = Math;
+        
+        
+        
+        /**
+        * "Decorate" the object with the generic effects if the effects library has been included
+        */
+        if (RG.Effects && typeof RG.Effects.decorate === 'function') {
+            RG.Effects.decorate(this);
+        }
 
 
         /**
@@ -144,8 +179,23 @@
         * @param name  string The name of the property to set
         * @param value mixed  The value of the property
         */
-        this.Set = function (name, value)
+        this.set =
+        this.Set = function (name)
         {
+            var value = typeof arguments[1] === 'undefined' ? null : arguments[1];
+
+            /**
+            * the number of arguments is only one and it's an
+            * object - parse it for configuration data and return.
+            */
+            if (arguments.length === 1 && typeof name === 'object') {
+                RG.parseObjectStyleConfig(this, name);
+                return this;
+            }
+
+
+
+
             name = name.toLowerCase();
     
             /**
@@ -158,7 +208,7 @@
             prop[name] = value;
     
             return this;
-        }
+        };
 
 
 
@@ -168,6 +218,7 @@
         * 
         * @param name  string The name of the property to get
         */
+        this.get =
         this.Get = function (name)
         {
             /**
@@ -178,7 +229,7 @@
             }
     
             return prop[name.toLowerCase()];
-        }
+        };
 
 
 
@@ -186,6 +237,7 @@
         /**
         * The function you call to draw the bar chart
         */
+        this.draw =
         this.Draw = function ()
         {
             /**
@@ -226,6 +278,13 @@
             */
             this.radius = ca.height - this.gutterTop - this.gutterBottom - 20;
             
+                        /**
+            * Stop this growing uncntrollably
+            */
+            this.coordsText = [];
+            
+            
+            
             /**
             * You can now specify chart.centerx, chart.centery and chart.radius
             */
@@ -250,8 +309,8 @@
             /**
             * The start and end angles of the chart
             */
-            this.angles.start  = (PI + HALFPI) - 0.5;
-            this.angles.end    = (PI + HALFPI) + 0.5;
+            this.angles.start  = (RG.PI + RG.HALFPI) - 0.5;
+            this.angles.end    = (RG.PI + RG.HALFPI) + 0.5;
             this.angles.needle = this.getAngle(this.value);
     
     
@@ -293,14 +352,25 @@
             RG.InstallEventListeners(this);
     
     
-    
+
+            /**
+            * Fire the onfirstdraw event
+            */
+            if (this.firstDraw) {
+                RG.fireCustomEvent(this, 'onfirstdraw');
+                this.firstDraw = false;
+                this.firstDrawFunc();
+            }
+
+
+
             /**
             * Fire the RGraph ondraw event
             */
             RG.FireCustomEvent(this, 'ondraw');
             
             return this;
-        }
+        };
 
 
 
@@ -308,6 +378,7 @@
         /**
         * This function actually draws the chart
         */
+        this.drawChart =
         this.DrawChart = function ()
         {
             /**
@@ -318,7 +389,7 @@
             /**
             * Place the icon on the canvas
             */
-            if (!ISOLD) {
+            if (!RG.ISOLD) {
                 this.DrawIcon();
             }
     
@@ -328,7 +399,7 @@
             * Draw the needle
             */
             this.DrawNeedle();
-        }
+        };
 
 
 
@@ -336,6 +407,7 @@
         /**
         * Draws the labels
         */
+        this.drawLabels =
         this.DrawLabels = function ()
         {
             if (!prop['chart.scale.visible']) {
@@ -343,8 +415,8 @@
                 co.fillStyle = prop['chart.text.color'];
                 
                 // Draw the left label
-                var y = this.centery - Math.sin(this.angles.start - PI) * (this.radius - 25);
-                var x = this.centerx - Math.cos(this.angles.start - PI) * (this.radius - 25);
+                var y = this.centery - Math.sin(this.angles.start - RG.PI) * (this.radius - 25);
+                var x = this.centerx - Math.cos(this.angles.start - RG.PI) * (this.radius - 25);
                 RG.Text2(this, {'font':prop['chart.text.font'],
                                     'size':prop['chart.text.size'],
                                     'x':x,
@@ -356,8 +428,8 @@
                                    });
                 
                 // Draw the right label
-                var y = this.centery - Math.sin(this.angles.start - PI) * (this.radius - 25);
-                var x = this.centerx + Math.cos(this.angles.start - PI) * (this.radius - 25);
+                var y = this.centery - Math.sin(this.angles.start - RG.PI) * (this.radius - 25);
+                var x = this.centerx + Math.cos(this.angles.start - RG.PI) * (this.radius - 25);
                 RG.Text2(this, {'font':prop['chart.text.font'],
                                     'size':prop['chart.text.size'],
                                     'x':x,
@@ -368,7 +440,7 @@
                                     'tag': 'labels'
                                    });
             }
-        }
+        };
 
 
 
@@ -377,6 +449,7 @@
         /**
         * Draws the needle
         */
+        this.drawNeedle =
         this.DrawNeedle = function ()
         {
             // Draw the actual needle
@@ -414,14 +487,15 @@
             co.beginPath();
                 co.fillStyle = grad;
                 co.moveTo(this.centerx, this.centery);
-                co.arc(this.centerx, this.centery, 20, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, 20, 0, RG.TWOPI, 0);
             co.fill();
-        }
+        };
     
         
         /**
         * Draws the "scale"
         */
+        this.drawScale =
         this.DrawScale = function ()
         {
             var a, x, y;
@@ -473,8 +547,8 @@
     
                 for (var i=0; i<=numLabels; ++i) {
                     a = ((this.angles.end - this.angles.start) * (i/numLabels)) + this.angles.start;
-                    y = this.centery - Math.sin(a - PI) * (this.radius - 25);
-                    x = this.centerx - Math.cos(a - PI) * (this.radius - 25);
+                    y = this.centery - Math.sin(a - RG.PI) * (this.radius - 25);
+                    x = this.centerx - Math.cos(a - RG.PI) * (this.radius - 25);
                     
                     
                     RG.Text2(this, {'font':font,
@@ -488,7 +562,7 @@
                                        });
                 }
             }
-        }
+        };
 
 
 
@@ -496,9 +570,7 @@
         /**
         * A placeholder function that is here to prevent errors
         */
-        this.getShape = function (e)
-        {
-        }
+        this.getShape = function (e) {};
 
 
 
@@ -528,7 +600,7 @@
                 value = value + this.min;
     
             return value;
-        }
+        };
 
 
 
@@ -560,7 +632,7 @@
     
                 return this;
             }
-        }
+        };
 
 
 
@@ -568,9 +640,10 @@
         /**
         * Draws the icon
         */
+        this.drawIcon =
         this.DrawIcon = function ()
         {
-            if (!ISOLD) {
+            if (!RG.ISOLD) {
                 
                 if (!this.__icon__ || !this.__icon__.__loaded__) {
                     var img = new Image();
@@ -603,7 +676,7 @@
             }
     
             this.DrawNeedle();
-        }
+        };
 
 
 
@@ -613,6 +686,7 @@
         * 
         * @param object e The event object
         */
+        this.adjusting_mousemove =
         this.Adjusting_mousemove = function (e)
         {
             /**
@@ -620,11 +694,11 @@
             */
             if (prop['chart.adjustable'] && RG.Registry.Get('chart.adjusting') && RG.Registry.Get('chart.adjusting').uid == this.uid) {
                 this.value = this.getValue(e);
-                RG.Clear(ca);
-                RG.RedrawCanvas(ca);
-                RG.FireCustomEvent(this, 'onadjust');
+                //RG.Clear(ca);
+                RG.redrawCanvas(ca);
+                RG.fireCustomEvent(this, 'onadjust');
             }
-        }
+        };
 
 
 
@@ -644,7 +718,7 @@
             var angle = (((value - this.min) / (this.max - this.min)) * (this.angles.end - this.angles.start)) + this.angles.start;
     
             return angle;
-        }
+        };
 
 
 
@@ -654,6 +728,12 @@
         */
         this.parseColors = function ()
         {
+            // Save the original colors so that they can be restored when the canvas is reset
+            if (this.original_colors.length === 0) {
+                this.original_colors['chart.colors']       = RG.array_clone(prop['chart.colors']);
+                this.original_colors['chart.needle.color'] = RG.array_clone(prop['chart.needle.color']);
+            }
+
             var props  = this.properties;
             var colors = props['chart.colors'];
     
@@ -662,7 +742,18 @@
             }
             
             props['chart.needle.color'] = this.parseSingleColorForRadialGradient(props['chart.needle.color']);
-        }
+        };
+
+
+
+
+        /**
+        * Use this function to reset the object to the post-constructor state. Eg reset colors if
+        * need be etc
+        */
+        this.reset = function ()
+        {
+        };
 
 
 
@@ -693,7 +784,7 @@
             }
                 
             return grad ? grad : color;
-        }
+        };
 
 
 
@@ -703,7 +794,7 @@
         */
         this.parseSingleColorForRadialGradient = function (color)
         {
-            if (!color || typeof(color) != 'string') {
+            if (!color || typeof color != 'string') {
                 return color;
             }
     
@@ -724,10 +815,101 @@
             }
                 
             return grad ? grad : color;
-        }
+        };
 
 
 
+
+        /**
+        * Using a function to add events makes it easier to facilitate method chaining
+        * 
+        * @param string   type The type of even to add
+        * @param function func 
+        */
+        this.on = function (type, func)
+        {
+            if (type.substr(0,2) !== 'on') {
+                type = 'on' + type;
+            }
+            
+            this[type] = func;
+    
+            return this;
+        };
+
+
+
+
+        /**
+        * This function runs once only
+        * (put at the end of the file (before any effects))
+        */
+        this.firstDrawFunc = function ()
+        {
+        };
+
+
+
+
+        /**
+        * Grow
+        * 
+        * The Fuel chart Grow effect gradually increases the values of the Fuel chart
+        * 
+        * @param object obj The graph object
+        */
+        this.grow = function ()
+        {
+            var callback  = arguments[1] || function () {};
+            var opt       = arguments[0] || {};
+            var numFrames = opt.frames || 30;
+            var frame     = 0;
+            var obj       = this;
+            var origValue = Number(this.currentValue);
+            
+            if (this.currentValue == null) {
+                this.currentValue = this.min;
+                origValue = this.min;
+            }
+    
+            var newValue  = this.value;
+            var diff      = newValue - origValue;
+            var step      = (diff / numFrames);
+            var frame     = 0;
+    
+    
+            function iterator ()
+            {
+                frame++;
+    
+                obj.value = ((frame / numFrames) * diff) + origValue
+    
+                if (obj.value > obj.max) obj.value = obj.max;
+                if (obj.value < obj.min) obj.value = obj.min;
+    
+                RGraph.clear(obj.canvas);
+                RGraph.redrawCanvas(obj.canvas);
+    
+                if (frame < numFrames) {
+                    RGraph.Effects.updateCanvas(iterator);
+                
+                // The callback variable is always function
+                } else  {
+                    callback(obj);
+                }
+            }
+    
+            iterator();
+            
+            return this;
+        };
+
+
+
+        RG.att(ca);
+    
+    
+    
 
         /**
         * Now need to register all chart types. MUST be after the setters/getters are defined
@@ -735,4 +917,15 @@
         * *** MUST BE LAST IN THE CONSTRUCTOR ***
         */
         RG.Register(this);
-    }
+
+
+
+
+        /**
+        * This is the 'end' of the constructor so if the first argument
+        * contains configuration data - handle that.
+        */
+        if (parseConfObjectForOptions) {
+            RG.parseObjectStyleConfig(this, conf.options);
+        }
+    };

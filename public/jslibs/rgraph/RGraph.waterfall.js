@@ -1,14 +1,22 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
-    
-    if (typeof(RGraph) == 'undefined') RGraph = {};
+
+    RGraph = window.RGraph || {isRGraph: true};
+
+
+
 
     /**
     * The bar chart constructor
@@ -16,30 +24,48 @@
     * @param object canvas The canvas object
     * @param array  data   The chart data
     */
-    RGraph.Waterfall = function (id, data)
+    RGraph.Waterfall = function (conf)
     {
-        // Get the canvas and context objects
-        this.id                = id;
-        this.canvas            = document.getElementById(typeof id === 'object' ? id.id : id);
+        /**
+        * Allow for object config style
+        */
+        if (   typeof conf === 'object'
+            && typeof conf.data === 'object'
+            && typeof conf.id === 'string') {
+
+            var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
+        
+        } else {
+        
+            var conf = {
+                        id: conf,
+                        data: arguments[1]
+                       };
+        }
+
+
+
+
+        this.id                = conf.id;
+        this.canvas            = document.getElementById(this.id);
         this.context           = this.canvas.getContext ? this.canvas.getContext("2d") : null;
         this.canvas.__object__ = this;
         this.type              = 'waterfall';
         this.max               = 0;
+        this.data              = conf.data;
         this.isRGraph          = true;
         this.coords            = [];
         this.uid               = RGraph.CreateUID();
         this.canvas.uid        = this.canvas.uid ? this.canvas.uid : RGraph.CreateUID();
         this.colorsParsed      = false;
         this.coordsText        = [];
-
-        /**
-        * Compatibility with older browsers
-        */
-        RGraph.OldBrowserCompat(this.context);
+        this.original_colors   = [];
+        this.firstDraw         = true; // After the first draw this will be false
 
 
         // Various config
-        this.properties = {
+        this.properties =
+        {
             'chart.background.barcolor1':   'rgba(0,0,0,0)',
             'chart.background.barcolor2':   'rgba(0,0,0,0)',
             'chart.background.grid':        true,
@@ -122,7 +148,7 @@
             'chart.scale.decimals':         0,
             'chart.scale.point':            '.',
             'chart.scale.thousand':         ',',
-        //'chart.scale.formatter':        null,
+            //'chart.scale.formatter':        null,
             'chart.crosshairs':             false,
             'chart.crosshairs.color':       '#333',
             'chart.crosshairs.hline':       true,
@@ -156,9 +182,6 @@
             alert('[WATERFALL] No canvas support');
             return;
         }
-
-        // Store the data
-        this.data = data;
         
         /**
         * Create the $ objects
@@ -181,21 +204,25 @@
 
 
 
-        ///////////////////////////////// SHORT PROPERTIES /////////////////////////////////
+        // Short variable names
+        var RG    = RGraph;
+        var ca    = this.canvas;
+        var co    = ca.getContext('2d');
+        var prop  = this.properties;
+        var jq    = jQuery;
+        var pa    = RG.Path;
+        var win   = window;
+        var doc   = document;
+        var ma    = Math;
+        
+        
 
-
-
-
-        var RG   = RGraph;
-        var ca   = this.canvas;
-        var co   = ca.getContext('2d');
-        var prop = this.properties;
-        //var $jq  = jQuery;
-
-
-
-
-        //////////////////////////////////// METHODS ///////////////////////////////////////
+        /**
+        * "Decorate" the object with the generic effects if the effects library has been included
+        */
+        if (RG.Effects && typeof RG.Effects.decorate === 'function') {
+            RG.Effects.decorate(this);
+        }
 
 
 
@@ -206,8 +233,23 @@
         * @param name  string The name of the property to set
         * @param value mixed  The value of the property
         */
+        this.set =
         this.Set = function (name, value)
         {
+            var value = typeof arguments[1] === 'undefined' ? null : arguments[1];
+
+            /**
+            * the number of arguments is only one and it's an
+            * object - parse it for configuration data and return.
+            */
+            if (arguments.length === 1 && typeof name === 'object') {
+                RG.parseObjectStyleConfig(this, name);
+                return this;
+            }
+
+
+
+
             /**
             * This should be done first - prepend the propertyy name with "chart." if necessary
             */
@@ -222,7 +264,7 @@
             prop[name.toLowerCase()] = value;
     
             return this;
-        }
+        };
 
 
 
@@ -232,6 +274,7 @@
         * 
         * @param name  string The name of the property to get
         */
+        this.get =
         this.Get = function (name)
         {
             /**
@@ -242,7 +285,7 @@
             }
     
             return prop[name.toLowerCase()];
-        }
+        };
 
 
 
@@ -250,6 +293,7 @@
         /**
         * The function you call to draw the bar chart
         */
+        this.draw =
         this.Draw = function ()
         {
             /**
@@ -287,12 +331,22 @@
             * Stop the coords array from growing uncontrollably
             */
             this.coords = [];
-            
+
+
+
+            /**
+            * Stop this growing uncontrollably
+            */
+            this.coordsText = [];
+
+
+
+
             /**
             * This gets used a lot
             */
             this.centery = ((ca.height - this.gutterTop - this.gutterBottom) / 2) + this.gutterTop;
-    
+
             /**
             * Work out a few things. They need to be here because they depend on things you can change after you instantiate the object
             */
@@ -361,15 +415,28 @@
             * This installs the event listeners
             */
             RG.InstallEventListeners(this);
-    
-            
+
+
+
+            /**
+            * Fire the onfirstdraw event
+            */
+            if (this.firstDraw) {
+                RG.fireCustomEvent(this, 'onfirstdraw');
+                this.firstDraw = false;
+                this.firstDrawFunc();
+            }
+
+
+
+
             /**
             * Fire the RGraph ondraw event
             */
             RG.FireCustomEvent(this, 'ondraw');
             
             return this;
-        }
+        };
 
 
 
@@ -377,6 +444,7 @@
         /**
         * Draws the charts axes
         */
+        this.drawAxes =
         this.DrawAxes = function ()
         {
             if (prop['chart.noaxes']) {
@@ -466,7 +534,7 @@
             }
     
             co.stroke();
-        }
+        };
 
 
 
@@ -474,6 +542,7 @@
         /**
         * Draws the labels for the graph
         */
+        this.drawLabels =
         this.DrawLabels = function ()
         {
             var context    = co;
@@ -574,7 +643,7 @@
             
             co.stroke();
             co.fill();
-        }
+        };
 
 
 
@@ -582,6 +651,7 @@
         /**
         * Draws the bars on to the chart
         */
+        this.drawbars =
         this.Drawbars = function ()
         {
             var context      = co;
@@ -591,95 +661,95 @@
     
             co.lineWidth = prop['chart.linewidth'] + 0.001;
 
-                for (var i=0,len=this.data.length; i<len; ++i) {
-                    co.beginPath();
-                    co.strokeStyle = prop['chart.strokestyle'];
-    
-                        var x      = Math.round( this.gutterLeft + hmargin + (((this.graphwidth / (this.data.length + (prop['chart.total'] ? 1 : 0))) * i) * prop['chart.multiplier.x']));
-                        var y      = Math.round( this.gutterTop + this.grapharea - (i == 0 ? ((this.data[0] / this.max) * this.grapharea) : (this.data[i] > 0 ? ((runningTotal + this.data[i]) / this.max) * this.grapharea : (runningTotal / this.max) * this.grapharea)));
-                        var w      = ((ca.width - this.gutterLeft - this.gutterRight) / (this.data.length + (prop['chart.total'] ? 1 : 0 )) ) - (2 * prop['chart.hmargin']);
-                            w      = w * prop['chart.multiplier.w'];
-                        var h      = (Math.abs(this.data[i]) / this.max) * this.grapharea;
-    
-                        if (prop['chart.xaxispos'] == 'center') {
-                            h /= 2;
-                            y  = (i == 0 ? ((this.data[0] / this.max) * this.grapharea) : (this.data[i] > 0 ? ((runningTotal + this.data[i]) / this.max) * this.grapharea : (runningTotal / this.max) * this.grapharea));
-                            y  = this.gutterTop + (this.grapharea/2) - (y / 2);
-                        }
-    
-                        // Color
-                        co.fillStyle = this.data[i] >= 0 ? prop['chart.colors'][0] : prop['chart.colors'][1];
-    
-                        
-                        if (prop['chart.shadow']) {
-                            RG.SetShadow(this, prop['chart.shadow.color'], prop['chart.shadow.offsetx'], prop['chart.shadow.offsety'], prop['chart.shadow.blur']);
-                        } else {
-                            RG.NoShadow(this);
-                        }
-    
-                        co.rect(x, y, w, h);
-    
-                        this.coords.push([x, y, w, h]);
-                        
-                        runningTotal += this.data[i];
-    
-                    co.stroke();
-                    co.fill();
-                }
-                
-                // Store the total
-                this.total = runningTotal;
-    
-                if (prop['chart.total']) {
-                
-                    // This is the height of the final bar
-                    h = (runningTotal / this.max) * (this.grapharea / (prop['chart.xaxispos'] == 'center' ? 2 : 1));
+            for (var i=0,len=this.data.length; i<len; ++i) {
+                co.beginPath();
+                co.strokeStyle = prop['chart.strokestyle'];
 
-                    /**
-                    * Set the Y (ie the start point) value
-                    */
+                    var x      = Math.round( this.gutterLeft + hmargin + (((this.graphwidth / (this.data.length + (prop['chart.total'] ? 1 : 0))) * i) * prop['chart.multiplier.x']));
+                    var y      = Math.round( this.gutterTop + this.grapharea - (i == 0 ? ((this.data[0] / this.max) * this.grapharea) : (this.data[i] > 0 ? ((runningTotal + this.data[i]) / this.max) * this.grapharea : (runningTotal / this.max) * this.grapharea)));
+                    var w      = ((ca.width - this.gutterLeft - this.gutterRight) / (this.data.length + (prop['chart.total'] ? 1 : 0 )) ) - (2 * prop['chart.hmargin']);
+                        w      = w * prop['chart.multiplier.w'];
+                    var h      = (Math.abs(this.data[i]) / this.max) * this.grapharea;
+
                     if (prop['chart.xaxispos'] == 'center') {
-                        y = runningTotal > 0 ? this.centery - h : this.centery - h;
-                    } else {
-                        y = ca.height - this.gutterBottom - h;
+                        h /= 2;
+                        y  = (i == 0 ? ((this.data[0] / this.max) * this.grapharea) : (this.data[i] > 0 ? ((runningTotal + this.data[i]) / this.max) * this.grapharea : (runningTotal / this.max) * this.grapharea));
+                        y  = this.gutterTop + (this.grapharea/2) - (y / 2);
                     }
+
+                    // Color
+                    co.fillStyle = this.data[i] >= 0 ? prop['chart.colors'][0] : prop['chart.colors'][1];
+
+                    
+                    if (prop['chart.shadow']) {
+                        RG.SetShadow(this, prop['chart.shadow.color'], prop['chart.shadow.offsetx'], prop['chart.shadow.offsety'], prop['chart.shadow.blur']);
+                    } else {
+                        RG.NoShadow(this);
+                    }
+
+                    co.rect(x, y, w, h);
+
+                    this.coords.push([x, y, w, h]);
+                    
+                    runningTotal += this.data[i];
+
+                co.stroke();
+                co.fill();
+            }
                 
-                    // This is the X position of the final bar
-                    x = x + (prop['chart.hmargin'] * 2) + w;
-                
-                
-                    // Final color
-                    co.fillStyle = prop['chart.colors'][2];
-                
-                    co.beginPath();
-                    co.strokeRect(x, y, w, h);
-                    co.fillRect(x, y, w, h);
-                    co.stroke();
-                    co.fill();
-                
-                    this.coords.push([x, y - (runningTotal > 0 ? 0 : Math.abs(h)), w, Math.abs(h)]);
-                }
-    
-                RG.NoShadow(this);
-    
+            // Store the total
+            this.total = runningTotal;
+
+            if (prop['chart.total']) {
+            
+                // This is the height of the final bar
+                h = (runningTotal / this.max) * (this.grapharea / (prop['chart.xaxispos'] == 'center' ? 2 : 1));
+
                 /**
-                * This draws the connecting lines
+                * Set the Y (ie the start point) value
                 */
-                co.lineWidth = 1;
-    
-                for (var i=1,len=this.coords.length; i<len; i+=1) {
-                    co.strokeStyle = 'gray';
-                    co.beginPath();
-                        if (this.data[i - 1] > 0) {
-                            co.moveTo(this.coords[i - 1][0] + this.coords[i - 1][2], Math.round( this.coords[i - 1][1]));
-                            co.lineTo(this.coords[i - 1][0] + this.coords[i - 1][2] + (2 * hmargin), Math.round( this.coords[i - 1][1]));
-                        } else {
-                            co.moveTo(this.coords[i - 1][0] + this.coords[i - 1][2], Math.round( this.coords[i - 1][1] + this.coords[i - 1][3]));
-                            co.lineTo(this.coords[i - 1][0] + this.coords[i - 1][2] + (2 * hmargin), Math.round( this.coords[i - 1][1] + this.coords[i - 1][3]));
-                        }
-                    co.stroke();
+                if (prop['chart.xaxispos'] == 'center') {
+                    y = runningTotal > 0 ? this.centery - h : this.centery - h;
+                } else {
+                    y = ca.height - this.gutterBottom - h;
                 }
-        }
+            
+                // This is the X position of the final bar
+                x = x + (prop['chart.hmargin'] * 2) + w;
+            
+            
+                // Final color
+                co.fillStyle = prop['chart.colors'][2];
+            
+                co.beginPath();
+                co.strokeRect(x, y, w, h);
+                co.fillRect(x, y, w, h);
+                co.stroke();
+                co.fill();
+            
+                this.coords.push([x, y - (runningTotal > 0 ? 0 : Math.abs(h)), w, Math.abs(h)]);
+            }
+    
+            RG.NoShadow(this);
+    
+            /**
+            * This draws the connecting lines
+            */
+            co.lineWidth = 1;
+
+            for (var i=1,len=this.coords.length; i<len; i+=1) {
+                co.strokeStyle = 'gray';
+                co.beginPath();
+                    if (this.data[i - 1] > 0) {
+                        co.moveTo(this.coords[i - 1][0] + this.coords[i - 1][2], Math.round( this.coords[i - 1][1]));
+                        co.lineTo(this.coords[i - 1][0] + this.coords[i - 1][2] + (2 * hmargin), Math.round( this.coords[i - 1][1]));
+                    } else {
+                        co.moveTo(this.coords[i - 1][0] + this.coords[i - 1][2], Math.round( this.coords[i - 1][1] + this.coords[i - 1][3]));
+                        co.lineTo(this.coords[i - 1][0] + this.coords[i - 1][2] + (2 * hmargin), Math.round( this.coords[i - 1][1] + this.coords[i - 1][3]));
+                    }
+                co.stroke();
+            }
+        };
 
 
 
@@ -725,7 +795,7 @@
             }
             
             return null;
-        }
+        };
 
 
 
@@ -740,11 +810,11 @@
     
             for (var i=0,len=data.length; i<len; i+=1) {
                 runningTotal += data[i];
-                max = Math.max(max, Math.abs(runningTotal));
+                max = ma.max(max, ma.abs(runningTotal));
             }
     
             return max;
-        }
+        };
 
 
 
@@ -753,6 +823,7 @@
         * This function facilitates the installation of tooltip event listeners if
         * tooltips are defined.
         */
+        this.allowTooltips =
         this.AllowTooltips = function ()
         {
             // Preload any tooltip images that are used in the tooltips
@@ -778,7 +849,7 @@
             * function that actually shows the appropriate tooltip (if any).
             */
             RG.InstallCanvasMouseupTooltipListener(this);
-        }
+        };
 
 
 
@@ -788,11 +859,12 @@
         * 
         * @param object shape The shape to highlight
         */
+        this.highlight =
         this.Highlight = function (shape)
         {
             // Add the new highlight
             RG.Highlight.Rect(this, shape);
-        }
+        };
 
 
 
@@ -817,7 +889,7 @@
 
                 return this;
             }
-        }
+        };
 
 
 
@@ -887,7 +959,7 @@
                 img.style.left = ((width * 0.1) - 8.5) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (width / 2)) > document.body.offsetWidth) {
+            } else if ((canvasXY[0] + coordX + (width / 2)) > doc.body.offsetWidth) {
                 tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
                 img.style.left = ((width * 0.9) - 8.5) + 'px';
     
@@ -896,7 +968,7 @@
                 tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
                 img.style.left = ((width * 0.5) - 8.5) + 'px';
             }
-        }
+        };
 
 
 
@@ -931,7 +1003,7 @@
                     coord = coord + this.gutterTop;
                 return ca.height - coord;
             }
-        }
+        };
 
 
 
@@ -941,6 +1013,27 @@
         */
         this.parseColors = function ()
         {
+            // Save the original colors so that they can be restored when the canvas is reset
+            if (this.original_colors.length === 0) {
+                this.original_colors['chart.colors']                = RG.array_clone(prop['chart.colors']);
+                this.original_colors['chart.key.colors']            = RG.array_clone(prop['chart.key.colors']);
+                this.original_colors['chart.crosshairs.color']      = RG.array_clone(prop['chart.crosshairs.color']);
+                this.original_colors['chart.highlight.stroke']      = RG.array_clone(prop['chart.highlight.stroke']);
+                this.original_colors['chart.highlight.fill']        = RG.array_clone(prop['chart.highlight.fill']);
+                this.original_colors['chart.background.barcolor1']  = RG.array_clone(prop['chart.background.barcolor1']);
+                this.original_colors['chart.background.barcolor2']  = RG.array_clone(prop['chart.background.barcolor2']);
+                this.original_colors['chart.background.grid.color'] = RG.array_clone(prop['chart.background.grid.color']);
+                this.original_colors['chart.strokestyle']           = RG.array_clone(prop['chart.strokestyle']);
+                this.original_colors['chart.axis.color']            = RG.array_clone(prop['chart.axis.color']);
+            }
+
+
+
+
+
+
+
+
             // chart.colors
             var colors = prop['chart.colors'];
 
@@ -967,7 +1060,18 @@
              prop['chart.background.grid.color'] = this.parseSingleColorForGradient(prop['chart.background.grid.color']);
              prop['chart.strokestyle']           = this.parseSingleColorForGradient(prop['chart.strokestyle']);
              prop['chart.axis.color']            = this.parseSingleColorForGradient(prop['chart.axis.color']);
-        }
+        };
+
+
+
+
+        /**
+        * Use this function to reset the object to the post-constructor state. Eg reset colors if
+        * need be etc
+        */
+        this.reset = function ()
+        {
+        };
 
 
 
@@ -979,11 +1083,11 @@
         */
         this.parseSingleColorForGradient = function (color)
         {
-            if (!color || typeof(color) != 'string') {
+            if (!color || typeof color != 'string') {
                 return color;
             }
 
-            if (color.match(/^gradient\((.*)\)$/i)) {
+            if (typeof color === 'string' && color.match(/^gradient\((.*)\)$/i)) {
                 
                 var parts = RegExp.$1.split(':');
     
@@ -1001,13 +1105,122 @@
             }
                 
             return grad ? grad : color;
-        }
+        };
 
 
+
+
+        /**
+        * Using a function to add events makes it easier to facilitate method chaining
+        * 
+        * @param string   type The type of even to add
+        * @param function func 
+        */
+        this.on = function (type, func)
+        {
+            if (type.substr(0,2) !== 'on') {
+                type = 'on' + type;
+            }
+            
+            this[type] = func;
+    
+            return this;
+        };
+
+
+
+
+        /**
+        * This function runs once only
+        * (put at the end of the file (before any effects))
+        */
+        this.firstDrawFunc = function ()
+        {
+        };
+
+
+
+
+        /**
+        * Waterfall Grow
+        * 
+        * @param object Options. You can pass frames here - which should be a number
+        * @param function An optional function which is called when the animation is finished
+        */
+        this.grow = function ()
+        {
+            var opt      = arguments[0] || {};
+            var callback = arguments[1] || function () {};
+            var frames   = opt.frames || 30;
+            var numFrame = 0;
+            var obj      = this;
+            var data     = RG.array_clone(obj.data);
+            
+            //Reset The data to zeros
+            for (var i=0,len=obj.data.length; i<len; ++i) {
+                obj.data[i] /= frames;
+            }
+            
+            /**
+            * Fix the scale
+            */
+            if (obj.Get('chart.ymax') == null) {
+                var max   = obj.getMax(data);
+                var scale2 = RG.getScale2(obj, {'max':max});
+                obj.Set('chart.ymax', scale2.max);
+            }
+            
+            //obj.Set('chart.multiplier.x', 0);
+            //obj.Set('chart.multiplier.w', 0);
+    
+            function iterator ()
+            {
+                for (var i=0; i<obj.data.length; ++i) {
+                    
+                    // This produces a very slight easing effect
+                    obj.data[i] = data[i] * RG.Effects.getEasingMultiplier(frames, numFrame);
+                }
+                
+                RGraph.clear(obj.canvas);
+                RGraph.redrawCanvas(obj.canvas);
+    
+                if (++numFrame < frames) {
+                    RGraph.Effects.updateCanvas(iterator);
+                } else {
+                    callback(obj);
+                }
+            }
+            
+            iterator();
+            
+            return this;
+        };
+
+
+
+
+
+        RG.att(ca);
 
 
         /**
         * Now, because canvases can support multiple charts, canvases must always be registered
         */
         RG.Register(this);
-    }
+
+
+
+
+        /**
+        * This is the 'end' of the constructor so if the first argument
+        * contains configuration data - handle that.
+        */
+        if (parseConfObjectForOptions) {
+            RG.parseObjectStyleConfig(this, conf.options);
+        }
+
+
+
+
+        return this;
+    };

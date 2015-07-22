@@ -1,14 +1,19 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
-    
-    if (typeof(RGraph) == 'undefined') RGraph = {};
+
+    RGraph = window.RGraph || {isRGraph: true};
 
     /**
     * The traditional radar chart constructor
@@ -16,49 +21,73 @@
     * @param string id   The ID of the canvas
     * @param array  data An array of data to represent
     */
-    RGraph.Radar = function (id, data)
+    RGraph.Radar = function (conf)
     {
-        this.id                = id;
-        this.canvas            = document.getElementById(typeof id === 'object' ? id.id : id);
-        this.context           = this.canvas.getContext('2d');
-        this.canvas.__object__ = this;
-        this.type              = 'radar';
-        this.coords            = [];
-        this.isRGraph          = true;
-        this.data              = [];
-        this.max               = 0;
-        this.original_data     = [];
-        this.uid               = RGraph.CreateUID();
-        this.canvas.uid        = this.canvas.uid ? this.canvas.uid : RGraph.CreateUID();
-        this.colorsParsed      = false;
-        this.coordsText        = [];
-
         /**
-        * This allows for passing all of the arguments as one big array instead of as individual daatasets
+        * Allow for object config style
         */
-        if (typeof arguments[1] == 'object' && typeof arguments[1][0] == 'object') {
-            for (var i=0,len=arguments[1].length; i<len; ++i) {
-                this.original_data.push(RGraph.array_clone(arguments[1][i]));
-                this.data.push(RGraph.array_clone(arguments[1][i]));
-                this.max = Math.max(this.max, RGraph.array_max(arguments[1][i]));
+        if (   typeof conf === 'object'
+            && typeof conf.data === 'object'
+            && typeof conf.id === 'string') {
+
+            var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
+            
+            // Turn conf.data into a multi-d array if it's not already
+            if (typeof conf.data[0] === 'number') {
+                conf.data = [conf.data];
             }
         
         } else {
-        
-            for (var i=1,len=arguments.length; i<len; ++i) {
-                this.original_data.push(RGraph.array_clone(arguments[i]));
-                this.data.push(RGraph.array_clone(arguments[i]));
-                this.max = Math.max(this.max, RGraph.array_max(arguments[i]));
+
+            var conf = {id: conf, data: []};
+            
+            // Arguments style: var foo = new RGraph.Radar('cvs', [1,2,3], [1,2,3], [1,2,3]);
+            if (typeof arguments[1] === 'object' && typeof arguments[1][0] === 'number') {
+                for (var i=1; i<arguments.length; ++i) {
+                    conf.data.push(RGraph.arrayClone(arguments[i]));
+                }
+
+            // Arguments style: var foo = new RGraph.Radar('cvs', [[1,2,3], [1,2,3], [1,2,3]]);
+            } else if (   typeof arguments[1] === 'object'
+                       && typeof arguments[1][0] === 'object'
+                       && typeof arguments[1][0][0] === 'number') {
+                
+                conf.data = RGraph.arrayClone(arguments[1]);
             }
         }
 
-        /**
-        * Compatibility with older browsers
-        */
-        RGraph.OldBrowserCompat(this.context);
 
-        
-        this.properties = {
+
+
+        this.id                = conf.id;
+        this.canvas            = document.getElementById(conf.id);
+        this.context           = this.canvas.getContext ? this.canvas.getContext("2d") : null;
+        this.canvas.__object__ = this;
+        this.type              = 'radar';
+        this.isRGraph          = true;
+        this.data              = [];
+        this.max               = 0;
+        this.uid               = RGraph.CreateUID();
+        this.canvas.uid        = this.canvas.uid ? this.canvas.uid : RGraph.CreateUID();
+        this.colorsParsed      = false;
+        this.coords            = [];
+        this.coordsText        = [];
+        this.original_data     = [];
+        this.original_colors   = [];
+        this.firstDraw         = true; // After the first draw this will be false
+
+        /**
+        * Add the data to the .original_data array and work out the max value
+        */
+        for (var i=0,len=conf.data.length; i<len; ++i) {
+            this.original_data.push(RGraph.arrayClone(conf.data[i]));
+            this.data.push(RGraph.arrayClone(conf.data[i]));
+            this.max = Math.max(this.max, RGraph.arrayMax(conf.data[i]));
+        }
+
+
+        this.properties =
+        {
             'chart.strokestyle':           '#aaa',
             'chart.gutter.left':           25,
             'chart.gutter.right':          25,
@@ -76,6 +105,7 @@
             'chart.background.circles.count': null,
             'chart.background.circles.color': '#ddd',
             'chart.background.circles.poly':  true,
+            'chart.background.circles.spokes': 24,
             'chart.text.size':             10,
             'chart.text.size.scale':       null,
             'chart.text.font':             'Arial',
@@ -210,21 +240,25 @@
 
 
 
-        ///////////////////////////////// SHORT PROPERTIES /////////////////////////////////
-
-
-
-
+        // Short variable names
         var RG   = RGraph;
         var ca   = this.canvas;
         var co   = ca.getContext('2d');
         var prop = this.properties;
-        //var $jq  = jQuery;
-
-
-
-
-        //////////////////////////////////// METHODS ///////////////////////////////////////
+        var jq   = jQuery;
+        var pa   = RG.Path;
+        var win  = window;
+        var doc  = document;
+        var ma   = Math;
+        
+        
+        
+        /**
+        * "Decorate" the object with the generic effects if the effects library has been included
+        */
+        if (RG.Effects && typeof RG.Effects.decorate === 'function') {
+            RG.Effects.decorate(this);
+        }
 
 
 
@@ -235,8 +269,23 @@
         * @param string name  The name of the property to set
         * @param string value The value of the property
         */
+        this.set =
         this.Set = function (name, value)
         {
+            var value = typeof arguments[1] === 'undefined' ? null : arguments[1];
+
+            /**
+            * the number of arguments is only one and it's an
+            * object - parse it for configuration data and return.
+            */
+            if (arguments.length === 1 && typeof name === 'object') {
+                RG.parseObjectStyleConfig(this, name);
+                return this;
+            }
+
+
+
+
             name = name.toLowerCase();
     
             /**
@@ -260,17 +309,18 @@
             prop[name] = value;
     
             return this;
-        }
+        };
 
 
 
 
 
         /**
-        * A simple hetter
+        * A simple getter
         * 
         * @param string name  The name of the property to get
         */
+        this.get =
         this.Get = function (name)
         {
             /**
@@ -285,7 +335,7 @@
             }
     
             return prop[name];
-        }
+        };
 
 
 
@@ -293,6 +343,7 @@
         /**
         * The draw method which does all the brunt of the work
         */
+        this.draw =
         this.Draw = function ()
         {
             /**
@@ -303,13 +354,14 @@
             // NB: Colors are parsed further down
     
             // Reset the coords array to stop it growing
-            this.coords  = [];
-            this.coords2 = [];
+            this.coords     = [];
+            this.coords2    = [];
+            this.coordsText = [];
     
             /**
             * Reset the data to the original_data
             */
-            this.data = RG.array_clone(this.original_data);
+            this.data = RG.arrayClone(this.original_data);
 
             // Loop thru the data array if chart.accumulative is enable checking to see if all the
             // datasets have the same number of elements.
@@ -354,9 +406,9 @@
             /**
             * Allow these to be set by hand
             */
-            if (typeof(prop['chart.centerx']) == 'number') this.centerx = 2 * prop['chart.centerx'];
-            if (typeof(prop['chart.centery']) == 'number') this.centery = 2 * prop['chart.centery'];
-            if (typeof(prop['chart.radius']) == 'number') this.radius   = prop['chart.radius'];
+            if (typeof prop['chart.centerx'] == 'number') this.centerx = 2 * prop['chart.centerx'];
+            if (typeof prop['chart.centery'] == 'number') this.centery = 2 * prop['chart.centery'];
+            if (typeof prop['chart.radius'] == 'number') this.radius   = prop['chart.radius'];
     
     
             /**
@@ -424,19 +476,20 @@
                                                  });
                 this.max = this.scale2.max;
             }
-    
+
             this.DrawBackground();
             this.DrawAxes();
             this.DrawCircle();
             this.DrawLabels();
             this.DrawAxisLabels();
-            
+
+
             /**
             * Allow clipping
             */
             co.save();
                 co.beginPath();
-                    co.arc(this.centerx, this.centery, this.radius * 2, -HALFPI, (TWOPI * prop['chart.animation.trace.clip']) - HALFPI, false);
+                    co.arc(this.centerx, this.centery, this.radius * 2, -RG.HALFPI, (RG.TWOPI * prop['chart.animation.trace.clip']) - RG.HALFPI, false);
                     co.lineTo(this.centerx, this.centery);
                 co.closePath();
                 co.clip();
@@ -486,13 +539,27 @@
                 this.__fill_click_listeners_installed__ = true;
             }
 
+
+
+            /**
+            * Fire the onfirstdraw event
+            */
+            if (this.firstDraw) {
+                RG.fireCustomEvent(this, 'onfirstdraw');
+                this.firstDraw = false;
+                this.firstDrawFunc();
+            }
+
+
+
+
             /**
             * Fire the RGraph ondraw event
             */
             RGraph.FireCustomEvent(this, 'ondraw');
             
             return this;
-        }
+        };
 
 
 
@@ -500,12 +567,13 @@
         /**
         * Draws the background circles
         */
+        this.drawBackground =
         this.DrawBackground = function ()
         {
             var color   = prop['chart.background.circles.color'];
             var poly    = prop['chart.background.circles.poly'];
             var spacing = prop['chart.background.circles.spacing'];
-    
+            var spokes  = prop['chart.background.circles.spokes'];
     
     
     
@@ -534,7 +602,7 @@
                     // TODO Currently set to 5 - needs changing
                    for (var r=0; r<=this.radius; r+=(this.radius / numrings)) {
                         co.moveTo(this.centerx, this.centery);
-                        co.arc(this.centerx, this.centery,r, 0, TWOPI, false);
+                        co.arc(this.centerx, this.centery,r, 0, RG.TWOPI, false);
                     }
                 co.stroke();
     
@@ -547,13 +615,13 @@
                 */
                 co.strokeStyle = color;
     
-                for (var i=0; i<360; i+=15) {
+                for (var i=0; i<360; i+=(360 / spokes)) {
                     co.beginPath();
                         co.arc(this.centerx,
                                this.centery,
                                this.radius,
-                               (i / 360) * TWOPI,
-                               ((i+0.001) / 360) * TWOPI,
+                               (i / 360) * RG.TWOPI,
+                               ((i+0.001) / 360) * RG.TWOPI,
                                false); // The 0.01 avoids a bug in Chrome 6
                         co.lineTo(this.centerx, this.centery);
                     co.stroke();
@@ -581,8 +649,8 @@
                         co.arc(this.centerx,
                                this.centery,
                                this.radius,
-                               ((i / 360) * TWOPI) - HALFPI,
-                               (((i + 0.001) / 360) * TWOPI) - HALFPI,
+                               ((i / 360) * RG.TWOPI) - RG.HALFPI,
+                               (((i + 0.001) / 360) * RG.TWOPI) - RG.HALFPI,
                                false); // The 0.001 avoids a bug in Chrome 6
                         co.lineTo(this.centerx, this.centery);
                     co.stroke();
@@ -602,15 +670,15 @@
                                 co.arc(this.centerx,
                                        this.centery,
                                        r,
-                                       RG.degrees2Radians(a) - HALFPI,
-                                       RG.degrees2Radians(a) + 0.001 - HALFPI,
+                                       RG.degrees2Radians(a) - RG.HALFPI,
+                                       RG.degrees2Radians(a) + 0.001 - RG.HALFPI,
                                        false);
                             }
                         co.closePath();
                         co.stroke();
                     }
             }
-        }
+        };
 
 
 
@@ -618,6 +686,7 @@
         /**
         * Draws the axes
         */
+        this.drawAxes =
         this.DrawAxes = function ()
         {
             co.strokeStyle = prop['chart.axes.color'];
@@ -664,7 +733,7 @@
     
             // Stroke it
             co.stroke();
-        }
+        };
 
 
 
@@ -672,6 +741,7 @@
         /**
         * The function which actually draws the radar chart
         */
+        this.drawChart =
         this.DrawChart = function ()
         {
             var alpha = prop['chart.colors.alpha'];
@@ -680,7 +750,7 @@
                 var oldAlpha = co.globalAlpha;
                 co.globalAlpha = alpha;
             }
-            
+
             var numDatasets = this.data.length;
     
             for (var dataset=0; dataset<this.data.length; ++dataset) {
@@ -711,7 +781,10 @@
                     */
     
                     co.strokeStyle = (typeof(prop['chart.strokestyle']) == 'object' && prop['chart.strokestyle'][dataset]) ? prop['chart.strokestyle'][dataset] : prop['chart.strokestyle'];
-                    co.fillStyle   = prop['chart.colors'][dataset];
+                    co.fillStyle   = prop['chart.colors'][dataset] ? prop['chart.colors'][dataset] : 'rgba(0,0,0,0)';
+                    if (co.fillStyle === 'transparent') {
+                        co.fillStyle = 'rgba(0,0,0,0)';
+                    }
                     co.lineWidth   = prop['chart.linewidth'];
     
                     for (i=0; i<coords_dataset.length; ++i) {
@@ -750,7 +823,7 @@
             if (typeof(alpha) == 'number') {
                 co.globalAlpha = oldAlpha;
             }
-        }
+        };
 
 
 
@@ -761,6 +834,7 @@
         * @param  number i The index of the data (ie which one it is)
         * @return array    A two element array of the coordinates
         */
+        this.getCoordinates =
         this.GetCoordinates = function (dataset, index)
         {
             // The number  of data points
@@ -772,8 +846,8 @@
             /**
             * Get the angle
             */
-            var angle = (TWOPI / len) * index; // In radians
-angle -= HALFPI;
+            var angle = (RG.TWOPI / len) * index; // In radians
+                angle -= RG.HALFPI;
     
     
             /**
@@ -789,7 +863,7 @@ angle -= HALFPI;
             y = this.centery + y;
             
             return [x,y];
-        }
+        };
 
 
 
@@ -797,6 +871,7 @@ angle -= HALFPI;
         /**
         * This function adds the labels to the chart
         */
+        this.drawLabels =
         this.DrawLabels = function ()
         {
             var labels = prop['chart.labels'];
@@ -817,8 +892,8 @@ angle -= HALFPI;
     
                 for (var i=0; i<labels.length; ++i) {
                     
-                    var angle  = (TWOPI / prop['chart.labels'].length) * i;
-                        angle -= HALFPI;
+                    var angle  = (RG.TWOPI / prop['chart.labels'].length) * i;
+                        angle -= RG.HALFPI;
     
                     var x = this.centerx + (Math.cos(angle) * (radius + offset));
                     var y = this.centery + (Math.sin(angle) * (radius + offset));
@@ -845,7 +920,7 @@ angle -= HALFPI;
                     }
                 }
             }
-        }
+        };
 
 
 
@@ -853,6 +928,7 @@ angle -= HALFPI;
         /**
         * Draws the circle. No arguments as it gets the information from the object properties.
         */
+        this.drawCircle =
         this.DrawCircle = function ()
         {
             var circle     = {};
@@ -868,11 +944,11 @@ angle -= HALFPI;
                 co.strokeStyle = circle.stroke;
     
                 co.beginPath();
-                co.arc(this.centerx, this.centery, r, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, r, 0, RG.TWOPI, 0);
                 co.fill();
                 co.stroke();
             }
-        }
+        };
 
 
 
@@ -880,6 +956,7 @@ angle -= HALFPI;
         /**
         * Unsuprisingly, draws the labels
         */
+        this.drawAxisLabels =
         this.DrawAxisLabels = function ()
         {
             /**
@@ -1000,7 +1077,7 @@ angle -= HALFPI;
                                 'size':size,
                                 'x':centerx,
                                 'y':centery,
-                                'text':RG.number_format(this, (0).toFixed(decimals), units_pre, units_post),
+                                'text':RG.number_format(this, Number(0).toFixed(decimals), units_pre, units_post),
                                 'valign':'center',
                                 'halign':'center',
                                 'bounding':prop['chart.labels.axes.boxed.zero'],
@@ -1009,7 +1086,7 @@ angle -= HALFPI;
                                 'tag': 'scale'
                                });
             }
-        }
+        };
 
 
 
@@ -1017,6 +1094,7 @@ angle -= HALFPI;
         /**
         * Draws specific axis labels
         */
+        this.drawSpecificAxisLabels =
         this.DrawSpecificAxisLabels = function ()
         {
             /**
@@ -1042,7 +1120,7 @@ angle -= HALFPI;
                 if (axes.indexOf('w') > -1) RG.Text2(this, {'tag': 'labels.specific', 'bold':reversed_bold[i],'font':font,'size':size,'x':this.centerx - this.radius + ((this.radius / labels.length) * i),'y':this.centery,'text':reversed_labels[i],'valign':'center','halign':'center','bounding':reversed_boxed[i],'boundingFill':'white'});
                 if (axes.indexOf('e') > -1) RG.Text2(this, {'tag': 'labels.specific', 'bold':bold[i],'font':font,'size':size,'x':this.centerx + ((this.radius / labels.length) * (i+1)),'y':this.centery,'text':labels[i],'valign':'center','halign':'center','bounding':boxed[i],'boundingFill':'white'});
             }
-        }
+        };
 
 
 
@@ -1082,7 +1160,7 @@ angle -= HALFPI;
                            }
                 }
             }
-        }
+        };
 
 
 
@@ -1092,11 +1170,12 @@ angle -= HALFPI;
         * 
         * @param object shape The shape to highlight
         */
+        this.highlight =
         this.Highlight = function (shape)
         {
             // Add the new highlight
             RG.Highlight.Point(this, shape);
-        }
+        };
 
 
 
@@ -1121,7 +1200,7 @@ angle -= HALFPI;
     
                 return this;
             }
-        }
+        };
 
 
 
@@ -1168,7 +1247,7 @@ angle -= HALFPI;
                 img.style.left = ((width * 0.1) - 8.5) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (width / 2)) > document.body.offsetWidth) {
+            } else if ((canvasXY[0] + coordX + (width / 2)) > doc.body.offsetWidth) {
                 tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + 'px';
                 img.style.left = ((width * 0.9) - 8.5) + 'px';
     
@@ -1177,7 +1256,7 @@ angle -= HALFPI;
                 tooltip.style.left = (canvasXY[0] + coordX - (width * 0.5)) + 'px';
                 img.style.left = ((width * 0.5) - 8.5) + 'px';
             }
-        }
+        };
 
 
 
@@ -1185,6 +1264,7 @@ angle -= HALFPI;
         /**
         * This draws highlights on the points
         */
+        this.drawHighlights =
         this.DrawHighlights = function ()
         {
             if (prop['chart.highlights']) {
@@ -1201,7 +1281,7 @@ angle -= HALFPI;
                         co.beginPath();
                             co.strokeStyle = prop['chart.highlights.stroke'];
                             co.fillStyle = prop['chart.highlights.fill'] ? prop['chart.highlights.fill'] : ((typeof(prop['chart.strokestyle']) == 'object' && prop['chart.strokestyle'][dataset]) ? prop['chart.strokestyle'][dataset] : prop['chart.strokestyle']);
-                            co.arc(this.coords[sequentialIdx][0], this.coords[sequentialIdx][1], radius, 0, TWOPI, false);
+                            co.arc(this.coords[sequentialIdx][0], this.coords[sequentialIdx][1], radius, 0, RG.TWOPI, false);
                         co.stroke();
                         co.fill();
                         ++sequentialIdx;
@@ -1209,7 +1289,7 @@ angle -= HALFPI;
                 }
                 
             }
-        }
+        };
 
 
 
@@ -1230,7 +1310,7 @@ angle -= HALFPI;
             var radius = (value / this.max) * this.radius;
             
             return radius;
-        }
+        };
 
 
 
@@ -1243,11 +1323,11 @@ angle -= HALFPI;
         */
         this.getAngle = function (numitems, index)
         {
-            var angle = (TWOPI / numitems) * index;
-                angle -= HALFPI;
+            var angle = (RG.TWOPI / numitems) * index;
+                angle -= RG.HALFPI;
             
             return angle;
-        }
+        };
 
 
 
@@ -1257,6 +1337,18 @@ angle -= HALFPI;
         */
         this.parseColors = function ()
         {
+            // Save the original colors so that they can be restored when the canvas is reset
+            if (this.original_colors.length === 0) {
+                this.original_colors['chart.colors']           = RG.array_clone(prop['chart.colors']);
+                this.original_colors['chart.key.colors']       = RG.array_clone(prop['chart.key.colors']);
+                this.original_colors['chart.title.color']      = RG.array_clone(prop['chart.title.color']);
+                this.original_colors['chart.text.color']       = RG.array_clone(prop['chart.text.color']);
+                this.original_colors['chart.highlight.stroke'] = RG.array_clone(prop['chart.highlight.stroke']);
+                this.original_colors['chart.highlight.fill']   = RG.array_clone(prop['chart.highlight.fill']);
+                this.original_colors['chart.circle.fill']      = RG.array_clone(prop['chart.circle.fill']);
+                this.original_colors['chart.circle.stroke']    = RG.array_clone(prop['chart.circle.stroke']);
+            }
+
             for (var i=0; i<prop['chart.colors'].length; ++i) {
                 prop['chart.colors'][i] = this.parseSingleColorForGradient(prop['chart.colors'][i]);
             }
@@ -1275,7 +1367,18 @@ angle -= HALFPI;
             prop['chart.highlight.fill']   = this.parseSingleColorForGradient(prop['chart.highlight.fill']);
             prop['chart.circle.fill']      = this.parseSingleColorForGradient(prop['chart.circle.fill']);
             prop['chart.circle.stroke']    = this.parseSingleColorForGradient(prop['chart.circle.stroke']);
-        }
+        };
+
+
+
+
+        /**
+        * Use this function to reset the object to the post-constructor state. Eg reset colors if
+        * need be etc
+        */
+        this.reset = function ()
+        {
+        };
 
 
 
@@ -1306,11 +1409,12 @@ angle -= HALFPI;
             }
     
             return grad ? grad : color;
-        }
+        };
 
 
 
 
+        this.addFillListeners =
         this.AddFillListeners = function (e)
         {
             var obj = this;
@@ -1399,7 +1503,7 @@ angle -= HALFPI;
                 } else if (e.type == 'mousemove') {
                     ca.style.cursor = 'default';
                 }
-            }
+            };
             
             /**
             * Add the click listener
@@ -1414,7 +1518,7 @@ angle -= HALFPI;
             if (prop['chart.fill.mousemove'] || !RG.is_null(prop['chart.fill.tooltips'])) {
                 ca.addEventListener('mousemove', func, false);
             }
-        }
+        };
 
 
 
@@ -1424,6 +1528,7 @@ angle -= HALFPI;
         * 
         * @param number dataset The index of the dataset (which starts at zero)
         */
+        this.highlightDataset =
         this.HighlightDataset = function (dataset)
         {
             co.beginPath();
@@ -1449,7 +1554,7 @@ angle -= HALFPI;
     
             co.stroke();
             co.fill();
-        }
+        };
 
 
 
@@ -1458,6 +1563,7 @@ angle -= HALFPI;
         * Shows a tooltip for a dataset (a "fill" tooltip), You can pecify these
         * with chart.fill.tooltips
         */
+        this.datasetTooltip =
         this.DatasetTooltip = function (e, dataset)
         {
             // Highlight the dataset
@@ -1472,7 +1578,7 @@ angle -= HALFPI;
     
             // Show a tooltip
             RG.Tooltip(this, text, x, y, 0, e);
-        }
+        };
 
 
 
@@ -1522,7 +1628,137 @@ angle -= HALFPI;
                 co.lineWidth = pre_linewidth;
                 co.lineCap = pre_linecap;
             }
-        }
+        };
+
+
+
+
+        /**
+        * Using a function to add events makes it easier to facilitate method chaining
+        * 
+        * @param string   type The type of even to add
+        * @param function func 
+        */
+        this.on = function (type, func)
+        {
+            if (type.substr(0,2) !== 'on') {
+                type = 'on' + type;
+            }
+            
+            this[type] = func;
+    
+            return this;
+        };
+
+
+
+
+        /**
+        * This function runs once only
+        * (put at the end of the file (before any effects))
+        */
+        this.firstDrawFunc = function ()
+        {
+        };
+
+
+
+
+        /**
+        * Radar chart grow
+        * 
+        * This effect gradually increases the magnitude of the points on the radar chart
+        * 
+        * @param object     Options for the effect
+        * @param function   An optional callback that is run when the effect is finished
+        */
+        this.grow = function ()
+        {
+            var obj           = this;
+            var callback      = arguments[1] ? arguments[1] : function () {};
+            var opt           = arguments[0] ? arguments[0] : {};
+            var frames        = opt.frames ? opt.frames : 30;
+            var frame         = 0;
+            var data          = RG.array_clone(obj.data);
+
+            function iterator ()
+            {
+                for (var i=0,len=data.length; i<len; ++i) {
+
+                    //if (obj.original_data[i] == null) {
+                    //    obj.original_data[i] = [];
+                    //}
+    
+                    for (var j=0,len2=data[i].length; j<len2; ++j) {
+                        obj.original_data[i][j] = (frame / frames)  * data[i][j];
+                    }
+                }
+    
+                RGraph.clear(obj.canvas);
+                RGraph.redrawCanvas(obj.canvas);
+    
+                if (frame < frames) {
+                    frame++;
+                    RGraph.Effects.updateCanvas(iterator);
+                } else {
+                    callback(obj);
+                }
+            }
+            
+            iterator();
+            
+            return this;
+        };
+
+
+
+
+        /**
+        * Trace (Radar chart)
+        * 
+        * This is a Trace effect for the Radar chart
+        * 
+        * @param object     Options for the effect. Currently only "frames" is available.
+        * @param function   A function that is called when the ffect is complete
+        */
+        this.trace = function ()
+        {
+            var obj       = this;
+            var opt       = arguments[0] || {};
+            var frames    = opt.frames || 60;
+            var frame     = 0;
+            var callback  = arguments[1] || function () {};
+    
+            obj.Set('animation.trace.clip', 0);
+
+
+            var iterator = function ()
+            {
+                if (frame < frames) {
+        
+                    obj.Set('animation.trace.clip', frame / frames);
+        
+                    frame++;
+                    RG.redrawCanvas(obj.canvas);
+                    RG.Effects.updateCanvas(iterator);
+
+                } else {
+
+                    obj.Set('animation.trace.clip', 1);
+                    RG.redrawCanvas(obj.canvas);
+                    callback(obj);
+                }
+            };
+            
+            iterator();
+            
+            return this;
+        };
+        
+        
+        
+        
+        RG.att(ca);
 
 
 
@@ -1531,4 +1767,15 @@ angle -= HALFPI;
         * Always register the object
         */
         RG.Register(this);
-    }
+
+
+
+
+        /**
+        * This is the 'end' of the constructor so if the first argument
+        * contains configuration data - handle that.
+        */
+        if (parseConfObjectForOptions) {
+            RG.parseObjectStyleConfig(this, conf.options);
+        }
+    };

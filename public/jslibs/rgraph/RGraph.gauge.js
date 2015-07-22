@@ -1,39 +1,70 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
-    
-    if (typeof(RGraph) == 'undefined') RGraph = {};
+
+    RGraph = window.RGraph || {isRGraph: true};
 
     /**
     * The line chart constructor
     * 
-    * @param object canvas The cxanvas object
+    * @param object canvas The canvas ID
     * @param array  data   The chart data
     * @param array  ...    Other lines to plot
     */
-    RGraph.Gauge = function (id, min, max, value)
+    RGraph.Gauge = function (conf)
     {
-        // Get the canvas and context objects
+        /**
+        * Allow for object config style
+        */
+        if (   typeof conf === 'object'
+            && typeof conf.min === 'number'
+            && typeof conf.max === 'number'
+            && typeof conf.id === 'string') {
+
+            var id                        = conf.id
+            var canvas                    = document.getElementById(id);
+            var min                       = conf.min;
+            var max                       = conf.max;
+            var value                     = conf.value;
+            var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
+        
+        } else {
+        
+            var id     = conf;
+            var canvas = document.getElementById(id);
+            var min    = arguments[1];
+            var max    = arguments[2];
+            var value  = arguments[3];
+        }
+
+        // id, min, max, value
         this.id                = id;
-        this.canvas            = document.getElementById(typeof id === 'object' ? id.id : id);
-        this.context           = this.canvas.getContext ? this.canvas.getContext("2d") : null;
+        this.canvas            = canvas;
+        this.context           = this.canvas.getContext ? this.canvas.getContext("2d", {alpha: (typeof id === 'object' && id.alpha === false) ? false : true}) : null;
         this.canvas.__object__ = this;
         this.type              = 'gauge';
         this.min               = min;
         this.max               = max;
-        this.value             = value;
+        this.value             = RGraph.stringsToNumbers(value);
         this.isRGraph          = true;
         this.currentValue      = null;
         this.uid               = RGraph.CreateUID();
         this.canvas.uid        = this.canvas.uid ? this.canvas.uid : RGraph.CreateUID();
         this.colorsParsed      = false;
         this.coordsText        = [];
+        this.original_colors   = [];
+        this.firstDraw         = true; // After the first draw this will be false
 
         /**
         * Range checking
@@ -53,11 +84,12 @@
         /**
         * Compatibility with older browsers
         */
-        RGraph.OldBrowserCompat(this.context);
+        //RGraph.OldBrowserCompat(this.context);
 
 
         // Various config type stuff
-        this.properties = {
+        this.properties =
+        {
             'chart.angles.start':  null,
             'chart.angles.end':    null,
             'chart.centerx':       null,
@@ -90,10 +122,16 @@
             'chart.scale.thousand': ',',
             'chart.units.pre':      '',
             'chart.units.post':     '',
-            'chart.value.text':     false,
-            'chart.value.text.y.pos': 0.5,
-            'chart.value.text.units.pre': null,
-            'chart.value.text.units.post': null,
+
+            'chart.value.text':                 false,
+            'chart.value.text.y.pos':           0.5,
+            'chart.value.text.units.pre':       null,
+            'chart.value.text.units.post':      null,
+            'chart.value.text.color':           'black',
+            'chart.value.text.bounding':        true,
+            'chart.value.text.bounding.fill':   'white',
+            'chart.value.text.bounding.stroke': 'black',
+
             'chart.red.start':      0.9 * this.max,
             'chart.red.color':      '#DC3912',
             'chart.yellow.color':   '#FF9900',
@@ -145,21 +183,26 @@
 
 
 
-        ///////////////////////////////// SHORT PROPERTIES /////////////////////////////////
 
-
-
-
+        // Short variable names
         var RG   = RGraph;
         var ca   = this.canvas;
         var co   = ca.getContext('2d');
         var prop = this.properties;
-        //var $jq  = jQuery;
-
-
-
-
-        //////////////////////////////////// METHODS ///////////////////////////////////////
+        var jq   = jQuery;
+        var pa   = RG.Path;
+        var win  = window;
+        var doc  = document;
+        var ma   = Math;
+        
+        
+        
+        /**
+        * "Decorate" the object with the generic effects if the effects library has been included
+        */
+        if (RG.Effects && typeof RG.Effects.decorate === 'function') {
+            RG.Effects.decorate(this);
+        }
 
 
 
@@ -170,8 +213,23 @@
         * @param string name The name of the property
         * @param mixed value The value of the property
         */
-        this.Set = function (name, value)
+        this.set =
+        this.Set = function (name)
         {
+            var value = typeof arguments[1] === 'undefined' ? null : arguments[1];
+
+            /**
+            * the number of arguments is only one and it's an
+            * object - parse it for configuration data and return.
+            */
+            if (arguments.length === 1 && typeof name === 'object') {
+                RG.parseObjectStyleConfig(this, name);
+                return this;
+            }
+
+
+
+
             name = name.toLowerCase();
     
             /**
@@ -198,7 +256,7 @@
             prop[name] = value;
     
             return this;
-        }
+        };
 
 
 
@@ -208,6 +266,7 @@
         * 
         * @param string name The name of the property
         */
+        this.get =
         this.Get = function (name)
         {
             /**
@@ -223,7 +282,7 @@
             }
     
             return prop[name];
-        }
+        };
 
 
 
@@ -234,6 +293,7 @@
         * @param bool An optional bool used internally to ditinguish whether the
         *             line chart is being called by the bar chart
         */
+        this.draw =
         this.Draw = function ()
         {
             /**
@@ -264,8 +324,14 @@
                                     ((ca.width - this.gutterLeft - this.gutterRight) / 2),
                                     ((ca.height - this.gutterTop - this.gutterBottom) / 2)
                                    );
-            this.startAngle = prop['chart.angles.start'] ? prop['chart.angles.start'] : (HALFPI / 3) + HALFPI;
-            this.endAngle   = prop['chart.angles.end'] ? prop['chart.angles.end'] : TWOPI + HALFPI - (HALFPI / 3);
+            this.startAngle = prop['chart.angles.start'] ? prop['chart.angles.start'] : (RG.HALFPI / 3) + RG.HALFPI;
+            this.endAngle   = prop['chart.angles.end'] ? prop['chart.angles.end'] : RG.TWOPI + RG.HALFPI - (RG.HALFPI / 3);
+            
+            
+            /**
+            * Reset this so it doesn't keep growing
+            */
+            this.coordsText = [];
     
     
     
@@ -339,14 +405,26 @@
             */
             RG.InstallEventListeners(this);
     
-            
+
+            /**
+            * Fire the onfirstdraw event
+            */
+            if (this.firstDraw) {
+                RG.fireCustomEvent(this, 'onfirstdraw');
+                this.firstDraw = false;
+                this.firstDrawFunc();
+            }
+
+
+
+
             /**
             * Fire the RGraph ondraw event
             */
             RG.FireCustomEvent(this, 'ondraw');
             
             return this;
-        }
+        };
 
 
 
@@ -354,6 +432,7 @@
         /**
         * Draw the background
         */
+        this.drawBackGround =
         this.DrawBackGround = function ()
         {
             // Shadow //////////////////////////////////////////////
@@ -364,7 +443,7 @@
             co.beginPath();
                 co.fillStyle = prop['chart.background.color'];
                 //co.moveTo(this.centerx, this.centery)
-                co.arc(this.centerx, this.centery, this.radius, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, this.radius, 0, RG.TWOPI, 0);
             co.fill();
             
             // Turn off the shadow
@@ -380,7 +459,7 @@
     
             co.beginPath();
                 co.fillStyle = prop['chart.background.color'];
-                co.arc(this.centerx, this.centery, this.radius, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, this.radius, 0, RG.TWOPI, 0);
             co.fill();
     
             /**
@@ -388,7 +467,7 @@
             */
             co.beginPath();
                 co.fillStyle = prop['chart.border.outer'];
-                co.arc(this.centerx, this.centery, this.radius, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, this.radius, 0, RG.TWOPI, 0);
             co.fill();
     
             /**
@@ -396,7 +475,7 @@
             */
             co.beginPath();
                 co.fillStyle = prop['chart.border.inner'];
-                co.arc(this.centerx, this.centery, this.radius - borderWidth, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, this.radius - borderWidth, 0, RG.TWOPI, 0);
             co.fill();
     
     
@@ -404,7 +483,7 @@
             // Draw the white circle inner border
             co.beginPath();
                 co.fillStyle = prop['chart.background.color'];
-                co.arc(this.centerx, this.centery, this.radius - borderWidth - 4, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, this.radius - borderWidth - 4, 0, RG.TWOPI, 0);
             co.fill();
     
     
@@ -412,7 +491,7 @@
             // Draw the circle background. Can be any colour now.
             co.beginPath();
                 co.fillStyle = prop['chart.background.color'];
-                co.arc(this.centerx, this.centery, this.radius - borderWidth - 4, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, this.radius - borderWidth - 4, 0, RG.TWOPI, 0);
             co.fill();
     
             if (prop['chart.background.gradient']) {
@@ -428,7 +507,7 @@
                                                      this.radius,
                                                      'rgba(255,255,255,0.6)',
                                                      'rgba(255,255,255,0.1)');
-                    co.arc(this.centerx, this.centery, this.radius - borderWidth - 4, 0, TWOPI, 0);
+                    co.arc(this.centerx, this.centery, this.radius - borderWidth - 4, 0, RG.TWOPI, 0);
                 co.fill();
             }
     
@@ -437,9 +516,9 @@
             // Draw a black border around the chart
             co.beginPath();
                 co.strokeStyle = prop['chart.border.outline'];
-                co.arc(this.centerx, this.centery, this.radius, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, this.radius, 0, RG.TWOPI, 0);
             co.stroke();
-        }
+        };
 
 
 
@@ -447,6 +526,7 @@
         /**
         * This function draws the smaller tickmarks
         */
+        this.drawSmallTickmarks =
         this.DrawSmallTickmarks = function ()
         {
             var numTicks = prop['chart.tickmarks.small'];
@@ -460,7 +540,7 @@
                     co.arc(this.centerx, this.centery, this.radius - prop['chart.border.width'] - 10 - 5, a, a + 0.00001, 0);
                 co.stroke();
             }
-        }
+        };
 
 
 
@@ -468,6 +548,7 @@
         /**
         * This function draws the medium sized tickmarks
         */
+        this.drawMediumTickmarks =
         this.DrawMediumTickmarks = function ()
         {
             if (prop['chart.tickmarks.medium']) {
@@ -488,7 +569,7 @@
                     co.stroke();
                 }
             }
-        }
+        };
 
 
 
@@ -496,6 +577,7 @@
         /**
         * This function draws the large, bold tickmarks
         */
+        this.drawBigTickmarks =
         this.DrawBigTickmarks = function ()
         {
             var numTicks = prop['chart.tickmarks.big'];
@@ -510,7 +592,7 @@
                     co.arc(this.centerx, this.centery, this.radius - prop['chart.border.width'] - 10 - 10, a, a + 0.00001, 0);
                 co.stroke();
             }
-        }
+        };
 
 
 
@@ -518,6 +600,7 @@
         /**
         * This function draws the centerpin
         */
+        this.drawCenterpin =
         this.DrawCenterpin = function ()
         {
             var offset = 6;
@@ -528,9 +611,9 @@
     
             co.beginPath();
                 co.fillStyle = grad;
-                co.arc(this.centerx, this.centery, this.centerpinRadius, 0, TWOPI, 0);
+                co.arc(this.centerx, this.centery, this.centerpinRadius, 0, RG.TWOPI, 0);
             co.fill();
-        }
+        };
 
 
 
@@ -538,6 +621,7 @@
         /**
         * This function draws the labels
         */
+        this.drawLabels =
         this.DrawLabels = function ()
         {
             co.fillStyle = prop['chart.text.color'];
@@ -550,7 +634,7 @@
                     var hyp = (this.radius - 25 - prop['chart.border.width']) - prop['chart.labels.offset'];
                     var a   = (this.endAngle - this.startAngle) / num
                         a   = this.startAngle + (i * a);
-                        a  -= HALFPI;
+                        a  -= RG.HALFPI;
     
                     var x = this.centerx - (Math.sin(a) * hyp);
                     var y = this.centery + (Math.cos(a) * hyp);
@@ -559,11 +643,11 @@
                     var vAlign = y > this.centery ? 'bottom' : 'top';
                     
                     // This handles the label alignment when the label is on a PI/HALFPI boundary
-                    if (a == HALFPI) {
+                    if (a == RG.HALFPI) {
                         vAlign = 'center';
-                    } else if (a == PI) {
+                    } else if (a == RG.PI) {
                         hAlign = 'center';
-                    } else if (a == (HALFPI + PI) ) {
+                    } else if (a == (RG.HALFPI + RG.PI) ) {
                         vAlign = 'center';
                     }
                     
@@ -597,22 +681,30 @@
                 var x = this.centerx;
                 var y = this.centery + (prop['chart.value.text.y.pos'] * this.radius);
                 
-                var units_pre  = typeof(prop['chart.value.text.units.pre']) == 'string' ? prop['chart.value.text.units.pre'] : prop['chart.units.pre'];
-                var units_post = typeof(prop['chart.value.text.units.post']) == 'string' ? prop['chart.value.text.units.post'] : prop['chart.units.post'];
+                var units_pre      = typeof(prop['chart.value.text.units.pre']) == 'string' ? prop['chart.value.text.units.pre'] : prop['chart.units.pre'];
+                var units_post     = typeof(prop['chart.value.text.units.post']) == 'string' ? prop['chart.value.text.units.post'] : prop['chart.units.post'];
+                var color          = prop['chart.value.text.color'];
+                var bounding       = prop['chart.value.text.bounding'];
+                var boundingFill   = prop['chart.value.text.bounding.fill'];
+                var boundingStroke = prop['chart.value.text.bounding.stroke'];
+                
+                co.fillStyle = color;
             
-                RG.Text2(this, {'font':font,
-                               'size':size + 2,
-                               'x':x,
-                               'y':y,
-                               'text':RG.number_format(this, this.value.toFixed(prop['chart.scale.decimals']), units_pre, units_post),
-                               'halign':'center',
-                               'valign':'center',
-                               'bounding':true,
-                               'boundingFill':'white',
-                               'tag': 'value.text'
-                              });
+                RG.text2(this, {
+                    'font':font,
+                    'size':size + 2,
+                    'x':x,
+                    'y':y,
+                    'text':RG.number_format(this, this.value.toFixed(prop['chart.scale.decimals']), units_pre, units_post),
+                    'halign':'center',
+                    'valign':'center',
+                    'bounding':bounding,
+                    'bounding.fill':boundingFill,
+                    'bounding.stroke': boundingStroke,
+                    'tag': 'value.text'
+                });
             }
-        }
+        };
 
 
 
@@ -620,6 +712,7 @@
         /**
         * This function draws the top title
         */
+        this.drawTopTitle =
         this.DrawTopTitle = function ()
         {
             var x = this.centerx;
@@ -643,7 +736,7 @@
                                 'tag': 'title.top'
                                });
             }
-        }
+        };
 
 
 
@@ -651,6 +744,7 @@
         /**
         * This function draws the bottom title
         */
+        this.drawBottomTitle =
         this.DrawBottomTitle = function ()
         {
             var x = this.centerx;
@@ -675,7 +769,7 @@
                                 'tag': 'title.bottom'
                                });
             }
-        }
+        };
 
 
 
@@ -685,6 +779,7 @@
         * 
         * @param number value The value to draw the needle for
         */
+        this.drawNeedle =
         this.DrawNeedle = function (value, color, index)
         {
             var type = prop['chart.needle.type'];
@@ -730,7 +825,7 @@
                     co.lineTo(this.centerx, this.centery);
                     
                     if (prop['chart.needle.tail']) {
-                        co.arc(this.centerx, this.centery, this.radius * 0.2  , angle + PI, angle + 0.00001 + PI, false);
+                        co.arc(this.centerx, this.centery, this.radius * 0.2  , angle + RG.PI, angle + 0.00001 + RG.PI, false);
                     }
                     
                     co.lineTo(this.centerx, this.centery);
@@ -742,13 +837,13 @@
         
                 co.beginPath();
                     co.arc(this.centerx, this.centery, size, angle, angle + 0.00001, false);
-                    co.arc(this.centerx, this.centery, this.centerpinRadius * 0.5, angle + HALFPI, angle + 0.00001 + HALFPI, false);
+                    co.arc(this.centerx, this.centery, this.centerpinRadius * 0.5, angle + RG.HALFPI, angle + 0.00001 + RG.HALFPI, false);
                     
                     if (prop['chart.needle.tail']) {
-                        co.arc(this.centerx, this.centery, this.radius * 0.2  , angle + PI, angle + 0.00001 + PI, false);
+                        co.arc(this.centerx, this.centery, this.radius * 0.2  , angle + RG.PI, angle + 0.00001 + RG.PI, false);
                     }
         
-                    co.arc(this.centerx, this.centery, this.centerpinRadius * 0.5, angle - HALFPI, angle - 0.00001 - HALFPI, false);
+                    co.arc(this.centerx, this.centery, this.centerpinRadius * 0.5, angle - RG.HALFPI, angle - 0.00001 - RG.HALFPI, false);
                 co.stroke();
                 co.fill();
                 
@@ -757,7 +852,7 @@
                 */
                 this.angle = angle;
             }
-        }
+        };
 
 
 
@@ -765,6 +860,7 @@
         /**
         * This draws the green background to the tickmarks
         */
+        this.drawColorBands =
         this.DrawColorBands = function ()
         {
             if (RG.is_array(prop['chart.colors.ranges'])) {
@@ -850,7 +946,7 @@
                 co.arc(this.centerx, this.centery, this.radius - 10 - prop['chart.border.width'], redStart, redEnd, false);
                 co.arc(this.centerx, this.centery, this.radius - 20 - prop['chart.border.width'], redEnd, redStart, true);
             co.fill();
-        }
+        };
 
 
 
@@ -860,9 +956,7 @@
         * 
         * @param object The event object
         */
-        this.getShape = function (e)
-        {
-        }
+        this.getShape = function (e) {};
 
 
 
@@ -880,8 +974,8 @@
     
             var angle = RG.getAngleByXY(this.centerx, this.centery, mouseX, mouseY);
     
-            if (angle >= 0 && angle <= HALFPI) {
-                angle += TWOPI;
+            if (angle >= 0 && angle <= RG.HALFPI) {
+                angle += RG.TWOPI;
             }
     
             var value = ((angle - this.startAngle) / (this.endAngle - this.startAngle)) * (this.max - this.min);
@@ -896,7 +990,7 @@
             }
     
             return value;
-        }
+        };
 
 
 
@@ -922,7 +1016,7 @@
     
                 return this;
             }
-        }
+        };
 
 
 
@@ -930,6 +1024,7 @@
         /**
         * This draws the gradient that goes around the Gauge chart
         */
+        this.drawGradient =
         this.DrawGradient = function ()
         {
             if (prop['chart.border.gradient']) {
@@ -941,11 +1036,11 @@
                     grad.addColorStop(1, 'white');
         
                     co.fillStyle = grad;
-                    co.arc(this.centerx, this.centery, this.radius, 0, TWOPI, false)
-                    co.arc(this.centerx, this.centery, this.radius - 15, TWOPI,0, true)
+                    co.arc(this.centerx, this.centery, this.radius, 0, RG.TWOPI, false)
+                    co.arc(this.centerx, this.centery, this.radius - 15, RG.TWOPI,0, true)
                 co.fill();
             }
-        }
+        };
 
 
 
@@ -955,6 +1050,7 @@
         * 
         * @param object e The event object
         */
+        this.adjusting_mousemove =
         this.Adjusting_mousemove = function (e)
         {
             /**
@@ -962,11 +1058,11 @@
             */
             if (prop['chart.adjustable'] && RG.Registry.Get('chart.adjusting') && RG.Registry.Get('chart.adjusting').uid == this.uid) {
                 this.value = this.getValue(e);
-                RG.Clear(this.canvas);
-                RG.RedrawCanvas(this.canvas);
-                RG.FireCustomEvent(this, 'onadjust');
+                //RG.Clear(this.canvas);
+                RG.redrawCanvas(this.canvas);
+                RG.fireCustomEvent(this, 'onadjust');
             }
-        }
+        };
 
 
 
@@ -989,7 +1085,7 @@
             var angle = (((value - this.min) / (this.max - this.min)) * (this.endAngle - this.startAngle)) + this.startAngle;
             
             return angle;
-        }
+        };
 
 
 
@@ -999,6 +1095,18 @@
         */
         this.parseColors = function ()
         {
+            // Save the original colors so that they can be restored when the canvas is reset
+            if (this.original_colors.length === 0) {
+                this.original_colors['chart.background.color'] = RG.array_clone(prop['chart.background.color']);
+                this.original_colors['chart.red.color']        = RG.array_clone(prop['chart.red.color']);
+                this.original_colors['chart.yellow.color']     = RG.array_clone(prop['chart.yellow.color']);
+                this.original_colors['chart.green.color']      = RG.array_clone(prop['chart.green.color']);
+                this.original_colors['chart.border.inner']     = RG.array_clone(prop['chart.border.inner']);
+                this.original_colors['chart.border.outer']     = RG.array_clone(prop['chart.border.outer']);
+                this.original_colors['chart.colors.ranges']    = RG.array_clone(prop['chart.colors.ranges']);
+                this.original_colors['chart.needle.colors']    = RG.array_clone(prop['chart.needle.colors']);
+            }
+
             prop['chart.background.color'] = this.parseSingleColorForGradient(prop['chart.background.color']);
             prop['chart.red.color']        = this.parseSingleColorForGradient(prop['chart.red.color']);
             prop['chart.yellow.color']     = this.parseSingleColorForGradient(prop['chart.yellow.color']);
@@ -1012,7 +1120,7 @@
                 var ranges = prop['chart.colors.ranges'];
     
                 for (var i=0; i<ranges.length; ++i) {
-                    ranges[i][2] = this.parseSingleColorForGradient(ranges[i][2]);
+                    ranges[i][2] = this.parseSingleColorForGradient(ranges[i][2], this.radius - 30);
                 }
             }
     
@@ -1025,16 +1133,33 @@
                     colors[i] = this.parseSingleColorForGradient(colors[i]);
                 }
             }
-        }
+        };
+
+
+
+
+        /**
+        * Use this function to reset the object to the post-constructor state. Eg reset colors if
+        * need be etc
+        */
+        this.reset = function ()
+        {
+        };
 
 
 
 
         /**
         * This parses a single color value
+        * 
+        * @param string color    The color to look for a gradient in
+        * @param radius OPTIONAL The start radius to start the gradient at.
+        *                        If not suppllied the centerx value is used
         */
         this.parseSingleColorForGradient = function (color)
         {
+            var radiusStart = arguments[1] || 0;
+
             if (!color || typeof(color) != 'string') {
                 return color;
             }
@@ -1044,7 +1169,13 @@
                 var parts = RegExp.$1.split(':');
     
                 // Create the gradient
-                var grad = co.createRadialGradient(this.centerx,this.centery,0,this.centerx,this.centery,this.radius);
+                var grad = co.createRadialGradient(this.centerx,
+                                                   this.centery,
+                                                   radiusStart,
+                                                   this.centerx,
+                                                   this.centery,
+                                                   this.radius
+                                                  );
     
                 var diff = 1 / (parts.length - 1);
     
@@ -1056,7 +1187,150 @@
             }
 
             return grad ? grad : color;
-        }
+        };
+
+
+
+
+        /**
+        * Using a function to add events makes it easier to facilitate method chaining
+        * 
+        * @param string   type The type of even to add
+        * @param function func 
+        */
+        this.on = function (type, func)
+        {
+            if (type.substr(0,2) !== 'on') {
+                type = 'on' + type;
+            }
+            
+            this[type] = func;
+    
+            return this;
+        };
+
+
+
+
+        /**
+        * This function runs once only
+        * (put at the end of the file (before any effects))
+        */
+        this.firstDrawFunc = function ()
+        {
+        };
+
+
+
+
+        /**
+        * Gauge Grow
+        * 
+        * This effect gradually increases the represented value
+        * 
+        * @param object       Options for the effect. You can pass frames here
+        * @param function     An optional callback function
+        */
+        this.grow = function ()
+        {
+            var obj      = this;
+            var opt      = arguments[0] ? arguments[0] : {};
+            var callback = arguments[1] ? arguments[1] : function () {};
+            var frames   = opt.frames || 30;
+            var frame    = 0;
+
+            // Single pointer
+            if (typeof obj.value === 'number') {
+    
+                var origValue = Number(obj.currentValue);
+    
+                if (obj.currentValue == null) {
+                    obj.currentValue = obj.min;
+                    origValue = obj.min;
+                }
+    
+                var newValue  = obj.value;
+                var diff      = newValue - origValue;
+    
+    
+                var iterator = function ()
+                {
+                    obj.value = ((frame / frames) * diff) + origValue;
+
+                    if (obj.value > obj.max) obj.value = obj.max;
+                    if (obj.value < obj.min) obj.value = obj.min;
+        
+                    //RGraph.clear(obj.canvas);
+                    RG.redrawCanvas(obj.canvas);
+        
+                    if (frame++ < frames) {
+                        RG.Effects.updateCanvas(iterator);
+                    } else {
+                        callback(obj);
+                    }
+                };
+    
+                iterator();
+
+
+
+            /**
+            * Multiple pointers
+            */
+            } else {
+
+                if (obj.currentValue == null) {
+                    obj.currentValue = [];
+                    
+                    for (var i=0; i<obj.value.length; ++i) {
+                        obj.currentValue[i] = obj.min;
+                    }
+                    
+                    origValue = RG.array_clone(obj.currentValue);
+                }
+
+                var origValue = RG.array_clone(obj.currentValue);
+                var newValue  = RG.array_clone(obj.value);
+                var diff      = [];
+
+                for (var i=0,len=newValue.length; i<len; ++i) {
+                    diff[i] = newValue[i] - Number(obj.currentValue[i]);
+                }
+
+
+
+                var iterator = function ()
+                {
+                    frame++;
+
+                    for (var i=0,len=obj.value.length; i<len; ++i) {
+
+                        obj.value[i] = ((frame / frames) * diff[i]) + origValue[i];
+
+                        if (obj.value[i] > obj.max) obj.value[i] = obj.max;
+                        if (obj.value[i] < obj.min) obj.value[i] = obj.min;
+                    }
+
+                    //RG.clear(obj.canvas);
+                    RG.redrawCanvas(obj.canvas);
+
+
+                    if (frame < frames) {
+                        RG.Effects.updateCanvas(iterator);
+                    } else {
+                        callback(obj);
+                    }
+                };
+        
+                iterator();
+            }
+            
+            return this;
+        };
+
+
+
+        RG.att(ca);
 
 
 
@@ -1065,4 +1339,15 @@
         * Register the object
         */
         RG.Register(this);
-    }
+
+
+
+
+        /**
+        * This is the 'end' of the constructor so if the first argument
+        * contains configuration data - handle that.
+        */
+        if (parseConfObjectForOptions) {
+            RG.parseObjectStyleConfig(this, conf.options);
+        }
+    };

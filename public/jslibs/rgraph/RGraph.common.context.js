@@ -1,14 +1,27 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
 
-    if (typeof(RGraph) == 'undefined') RGraph = {isRGraph:true,type:'common'};
+    RGraph = window.RGraph || {isRGraph: true};
+
+// Module pattern
+(function (win, doc, undefined)
+{
+    var RG  = RGraph,
+        ua  = navigator.userAgent,
+        ma  = Math;
+
 
 
     /**
@@ -19,31 +32,32 @@
     * @param array  menuitems The context menu menuitems
     * @param object e         The event object
     */
-    RGraph.Contextmenu = function (obj, menuitems, e)
+    RG.contextmenu =
+    RG.Contextmenu = function (obj, menuitems, e)
     {
         var canvas = obj.canvas;
 
-        e = RGraph.FixEventObject(e);
+        e = RG.FixEventObject(e);
 
         /**
         * Fire the custom RGraph event onbeforecontextmenu
         */
-        RGraph.FireCustomEvent(obj, 'onbeforecontextmenu');
+        RG.FireCustomEvent(obj, 'onbeforecontextmenu');
 
         /**
         * Hide any existing menu
         */
-        if (RGraph.Registry.Get('chart.contextmenu')) {
-            RGraph.HideContext();
+        if (RG.Registry.Get('chart.contextmenu')) {
+            RG.HideContext();
         }
         
         // Hide any zoomed canvas
-        RGraph.HideZoomedCanvas();
+        RG.HideZoomedCanvas();
 
         /**
         * Hide the palette if necessary
         */
-        RGraph.HidePalette();
+        RG.HidePalette();
         
         /**
         * This is here to ensure annotating is OFF
@@ -99,10 +113,11 @@
                 menuitem.style.padding = '2px 5px 2px 23px';
                 menuitem.style.fontFamily = 'Arial';
                 menuitem.style.fontSize = '10pt';
+                menuitem.style.textAlign = 'left';
                 menuitem.style.fontWeight = 'normal';
                 menuitem.innerHTML = menuitems[i][0];
 
-                if (RGraph.is_array(menuitems[i][1])) {
+                if (RG.is_array(menuitems[i][1])) {
                     menuitem.style.backgroundImage = 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAQUlEQVQImY3NoQ2AMABE0ZewABMyGQ6mqWODzlAclBSFO8HZl8uf0FFxCHtwYkt4Y6ChYE44cGH9/fyae2p2LAleW9oVTQuVf6gAAAAASUVORK5CYII=)';
                     menuitem.style.backgroundRepeat = 'no-repeat';
                     menuitem.style.backgroundPosition = '97% center';
@@ -111,10 +126,10 @@
                 // Add the mouseover event
                 if (menuitems[i][1]) {
                     if (menuitem.addEventListener) {
-                        menuitem.addEventListener("mouseover", function (e) {RGraph.HideContextSubmenu(); e.target.style.backgroundColor = 'rgba(0,0,0,0.2)'; e.target.style.cursor = 'pointer';}, false);
+                        menuitem.addEventListener("mouseover", function (e) {RG.HideContextSubmenu(); e.target.style.backgroundColor = 'rgba(0,0,0,0.2)'; e.target.style.cursor = 'pointer';}, false);
                         menuitem.addEventListener("mouseout", function (e) {e.target.style.backgroundColor = 'inherit'; e.target.style.cursor = 'default';}, false);
                     } else  {
-                        menuitem.attachEvent("onmouseover", function () {RGraph.HideContextSubmenu();event.srcElement.style.backgroundColor = '#eee';event.srcElement.style.cursor = 'pointer';}
+                        menuitem.attachEvent("onmouseover", function () {RG.HideContextSubmenu();event.srcElement.style.backgroundColor = '#eee';event.srcElement.style.cursor = 'pointer';}
                     , false);
                         menuitem.attachEvent("onmouseout", function () {event.srcElement.style.backgroundColor = 'inherit'; event.srcElement.style.cursor = 'default';}, false);
                     }
@@ -143,20 +158,20 @@
                 menuitem.addEventListener('click', menuitems[i][1], false);
             
             // Submenu
-            } else if (menuitems[i] && menuitems[i][1] && RGraph.is_array(menuitems[i][1])) {
+            } else if (menuitems[i] && menuitems[i][1] && RG.is_array(menuitems[i][1])) {
                 (function ()
                 {
                     var tmp = menuitems[i][1]; // This is here because of "references vs primitives" and how they're passed around in Javascript
                     
                     // TODO This may need attention
-                    menuitem.addEventListener('mouseover', function (e) {RGraph.Contextmenu_submenu(obj, tmp, e.target);}, false);
+                    menuitem.addEventListener('mouseover', function (e) {RG.Contextmenu_submenu(obj, tmp, e.target);}, false);
                 })();
             }
         }
 
         /**
         * Now all the menu items have been added, set the shadow width
-        * Shadow now handled by CSS3?
+        * Shadow now handled by CSS3
         */
         div.style.width = (div.offsetWidth + 10) + 'px';
         div.style.height = (div.offsetHeight - 2) + 'px';
@@ -187,24 +202,24 @@
         setTimeout("if (obj = RGraph.Registry.Get('chart.contextmenu.bg')) obj.style.opacity = 1", 250);
 
         // Store the context menu in the registry
-        RGraph.Registry.Set('chart.contextmenu', div);
-        RGraph.Registry.Set('chart.contextmenu.bg', bg);
-        RGraph.Registry.Get('chart.contextmenu').oncontextmenu = function () {return false;};
-        RGraph.Registry.Get('chart.contextmenu.bg').oncontextmenu = function () {return false;};
+        RG.Registry.Set('chart.contextmenu', div);
+        RG.Registry.Set('chart.contextmenu.bg', bg);
+        RG.Registry.Get('chart.contextmenu').oncontextmenu = function () {return false;};
+        RG.Registry.Get('chart.contextmenu.bg').oncontextmenu = function () {return false;};
 
         /**
         * Install the event handlers that hide the context menu
         */
-        canvas.addEventListener('click', function () {RGraph.HideContext();}, false);
+        canvas.addEventListener('click', function () {RG.HideContext();}, false);
 
         window.addEventListener('click', function ()
         {
-            RGraph.HideContext();
+            RG.HideContext();
         }, false);
 
         window.addEventListener('resize', function ()
         {
-            RGraph.HideContext();
+            RG.HideContext();
         }, false);
 
         
@@ -216,7 +231,7 @@
         * Set the shape coords from the .getShape()  method
         */
         if (typeof(obj.getShape) == 'function') {
-            RGraph.Registry.Get('chart.contextmenu').__shape__ = obj.getShape(e);
+            RG.Registry.Get('chart.contextmenu').__shape__ = obj.getShape(e);
         }
 
 
@@ -225,22 +240,25 @@
         /**
         * Fire the (RGraph) oncontextmenu event
         */
-        RGraph.FireCustomEvent(obj, 'oncontextmenu');
+        RG.FireCustomEvent(obj, 'oncontextmenu');
 
         return false;
-    }
+    };
+
+
 
 
     /**
     * Hides the context menu if it's currently visible
     */
-    RGraph.HideContext = function ()
+    RG.hideContext =
+    RG.HideContext = function ()
     {
-        var cm   = RGraph.Registry.Get('chart.contextmenu');
-        var cmbg = RGraph.Registry.Get('chart.contextmenu.bg');
+        var cm   = RG.Registry.Get('chart.contextmenu');
+        var cmbg = RG.Registry.Get('chart.contextmenu.bg');
         
         //Hide any submenu currently being displayed
-        RGraph.HideContextSubmenu();
+        RG.HideContextSubmenu();
 
         if (cm) {
             cm.parentNode.removeChild(cm);
@@ -248,37 +266,43 @@
 
             cm.style.visibility = 'hidden';
             cm.style.display = 'none';
-            RGraph.Registry.Set('chart.contextmenu', null);
+            RG.Registry.Set('chart.contextmenu', null);
             
             cmbg.style.visibility = 'hidden';
             cmbg.style.display = 'none';
-            RGraph.Registry.Set('chart.contextmenu.bg', null);
+            RG.Registry.Set('chart.contextmenu.bg', null);
         }
-    }
+    };
+
+
 
 
     /**
     * Hides the context menus SUBMENU if it's currently visible
     */
-    RGraph.HideContextSubmenu = function ()
+    RG.hideContextSubmenu =
+    RG.HideContextSubmenu = function ()
     {
-        var sub  = RGraph.Registry.Get('chart.contextmenu.submenu');
+        var sub  = RG.Registry.Get('chart.contextmenu.submenu');
 
         if (sub) {
             sub.style.visibility = 'none';
             sub.style.display    = 'none';
-            RGraph.Registry.Set('chart.contextmenu.submenu', null);
+            RG.Registry.Set('chart.contextmenu.submenu', null);
         }
-    }
+    };
+
+
 
 
     /**
     * Shows the context menu after making a few checks - not opera (doesn't support oncontextmenu,
     * not safari (tempermentality), not chrome (hmmm)
     */
-    RGraph.ShowContext = function (obj)
+    RG.showContext =
+    RG.ShowContext = function (obj)
     {
-        RGraph.HidePalette();
+        RG.HidePalette();
 
         if (obj.Get('chart.contextmenu') && obj.Get('chart.contextmenu').length) {
 
@@ -292,11 +316,11 @@
 
                 obj.canvas.oncontextmenu = function (e)
                 {
-                     e = RGraph.FixEventObject(e);
+                     e = RG.FixEventObject(e);
 
                     if (e.ctrlKey) return true;
 
-                    RGraph.Contextmenu(obj, obj.Get('chart.contextmenu'), e);
+                    RG.Contextmenu(obj, obj.Get('chart.contextmenu'), e);
 
                     return false;
                 }
@@ -308,13 +332,15 @@
                 {
                     if (e.ctrlKey) return true;
 
-                    if (!RGraph.Registry.Get('chart.contextmenu')) {
-                        RGraph.Contextmenu(obj, obj.Get('chart.contextmenu'), e);
+                    if (!RG.Registry.Get('chart.contextmenu')) {
+                        RG.Contextmenu(obj, obj.Get('chart.contextmenu'), e);
                     }
                 }, false);
             }
         }
-    }
+    };
+
+
 
 
     /**
@@ -323,9 +349,10 @@
     * @param object obj  The graph object
     * @param object menu The context menu
     */
-    RGraph.Contextmenu_submenu = function (obj, menuitems, parentMenuItem)
+    RG.contextmenu_submenu =
+    RG.Contextmenu_submenu = function (obj, menuitems, parentMenuItem)
     {
-        RGraph.HideContextSubmenu();
+        RG.HideContextSubmenu();
 
         var canvas  = obj.canvas;
         var context = obj.context;
@@ -335,7 +362,7 @@
         subMenu.style.position = 'absolute';
         subMenu.style.width = '100px';
         subMenu.style.top = menu.offsetTop + parentMenuItem.offsetTop + 'px';
-        subMenu.style.left            = (menu.offsetLeft + menu.offsetWidth - (RGraph.isOld() ? 9 : 0)) + 'px';
+        subMenu.style.left            = (menu.offsetLeft + menu.offsetWidth - (RG.ISOLD ? 9 : 0)) + 'px';
         subMenu.style.backgroundColor = 'white';
         subMenu.style.border          = '1px solid black';
         subMenu.className             = 'RGraph_contextmenu';
@@ -359,6 +386,7 @@
                 menuitem.style.fontFamily = 'Arial';
                 menuitem.style.fontSize = '10pt';
                 menuitem.style.fontWeight = 'normal';
+                menuitem.style.textAlign = 'left';
                 menuitem.innerHTML = menuitems[i][0];
         
                 if (menuitems[i][1]) {
@@ -407,8 +435,10 @@
 
         bg  = subMenu.appendChild(bg);
 
-        RGraph.Registry.Set('chart.contextmenu.submenu', subMenu);
-    }
+        RG.Registry.Set('chart.contextmenu.submenu', subMenu);
+    };
+
+
 
 
     /**
@@ -417,9 +447,9 @@
     * 
     * @param      canvas Optionally you can pass in the canvas, which will be used
     */
-    RGraph.showPNG = function ()
+    RG.showPNG = function ()
     {
-        if (RGraph.isIE8()) {
+        if (RG.ISIE8) {
             alert('[RGRAPH PNG] Sorry, showing a PNG is not supported on MSIE8.');
             return;
         }
@@ -428,8 +458,8 @@
             var canvas = arguments[0];
             var event  = arguments[1];
         
-        } else if (RGraph.Registry.Get('chart.contextmenu')) {
-            var canvas = RGraph.Registry.Get('chart.contextmenu').__canvas__;
+        } else if (RG.Registry.Get('chart.contextmenu')) {
+            var canvas = RG.Registry.Get('chart.contextmenu').__canvas__;
         
         } else {
             alert('[RGRAPH SHOWPNG] Could not find canvas!');
@@ -492,7 +522,7 @@
         * Create the image rendition of the graph
         */
         var img = document.createElement('IMG');
-        RGraph.Registry.Set('chart.png', img);
+        RG.Registry.Set('chart.png', img);
         img.__canvas__ = canvas;
         img.__object__ = obj;
         img.id = '__rgraph_image_img__';
@@ -504,7 +534,7 @@
         
         setTimeout(function () {document.getElementById("__rgraph_dataurl__").select();}, 50);
         
-        window.addEventListener('resize', function (e){var img = RGraph.Registry.Get('chart.png');img.style.left = (document.body.clientWidth / 2) - (img.width / 2) + 'px';}, false);
+        window.addEventListener('resize', function (e){var img = RG.Registry.Get('chart.png');img.style.left = (document.body.clientWidth / 2) - (img.width / 2) + 'px';}, false);
         
         bg.onclick = function (e)
         {
@@ -533,23 +563,22 @@
         window.addEventListener('resize', function (e) {bg.onclick(e);}, false)
         
         /**
-        * This sets the image as a global variable, circumventing repeated calls to document.getElementById()
+        * This sets the image BG and the DIV as global variables, circumventing repeated calls to document.getElementById()
         */
-        __rgraph_image_bg__  = bg;
-        __rgraph_image_div__ = div;
+        RG.showpng_image_bg  = bg;
+        RG.showpng_image_div = div;
 
+        setTimeout('RGraph.showpng_image_div.style.opacity = 0.2', 50);
+        setTimeout('RGraph.showpng_image_div.style.opacity = 0.4', 100);
+        setTimeout('RGraph.showpng_image_div.style.opacity = 0.6', 150);
+        setTimeout('RGraph.showpng_image_div.style.opacity = 0.8', 200);
+        setTimeout('RGraph.showpng_image_div.style.opacity = 1', 250);
 
-        setTimeout('__rgraph_image_div__.style.opacity = 0.2', 50);
-        setTimeout('__rgraph_image_div__.style.opacity = 0.4', 100);
-        setTimeout('__rgraph_image_div__.style.opacity = 0.6', 150);
-        setTimeout('__rgraph_image_div__.style.opacity = 0.8', 200);
-        setTimeout('__rgraph_image_div__.style.opacity = 1', 250);
-
-        setTimeout('__rgraph_image_bg__.style.opacity = 0.1', 50);
-        setTimeout('__rgraph_image_bg__.style.opacity = 0.2', 100);
-        setTimeout('__rgraph_image_bg__.style.opacity = 0.3', 150);
-        setTimeout('__rgraph_image_bg__.style.opacity = 0.4', 200);
-        setTimeout('__rgraph_image_bg__.style.opacity = 0.5', 250);
+        setTimeout('RGraph.showpng_image_bg.style.opacity = 0.1', 50);
+        setTimeout('RGraph.showpng_image_bg.style.opacity = 0.2', 100);
+        setTimeout('RGraph.showpng_image_bg.style.opacity = 0.3', 150);
+        setTimeout('RGraph.showpng_image_bg.style.opacity = 0.4', 200);
+        setTimeout('RGraph.showpng_image_bg.style.opacity = 0.5', 250);
 
 
         
@@ -562,4 +591,10 @@
         if (event && event.stopPropagation) {
             event.stopPropagation();
         }
-    }
+    };
+
+
+
+
+// End module pattern
+})(window, document);

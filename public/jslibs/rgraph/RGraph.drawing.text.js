@@ -1,22 +1,26 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
     
     /**
     * Having this here means that the RGraph libraries can be included in any order, instead of you having
     * to include the common core library first.
     */
-    if (typeof(RGraph) == 'undefined') RGraph = {};
-    if (typeof(RGraph.Drawing) == 'undefined') RGraph.Drawing = {};
 
-
-
+    // Define the RGraph global variable
+    RGraph = window.RGraph || {isRGraph: true};
+    RGraph.Drawing = RGraph.Drawing || {};
 
     /**
     * The constructor. This function sets up the object. It takes the ID (the HTML attribute) of the canvas as the
@@ -27,18 +31,47 @@
     * @param number y     The Y position of the text
     * @param number text  The text to show
     */
-    RGraph.Drawing.Text = function (id, x, y, text)
+    RGraph.Drawing.Text = function (conf)
     {
+        /**
+        * Allow for object config style
+        */
+        if (   typeof conf === 'object'
+            && typeof conf.x === 'number'
+            && typeof conf.y === 'number'
+            && typeof conf.text === 'string'
+            && typeof conf.id === 'string') {
+
+            var id   = conf.id
+            var x    = conf.x;
+            var y    = conf.y;
+            var text = conf.text;
+
+            var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
+        
+        } else {
+
+            var id   = conf;
+            var x    = arguments[1];
+            var y    = arguments[2];
+            var text = arguments[3];
+        }
+
+
+
+
         this.id                = id;
-        this.canvas            = document.getElementById(typeof id === 'object' ? id.id : id);
-        this.context           = this.canvas.getContext ? this.canvas.getContext("2d") : null;
+        this.canvas            = document.getElementById(id);
+        this.context           = this.canvas.getContext('2d');
         this.colorsParsed      = false;
         this.canvas.__object__ = this;
         this.x                 = x;
         this.y                 = y;
-        this.text              = text;
+        this.text              = String(text);
         this.coords            = [];
         this.coordsText        = [];
+        this.original_colors   = [];
+        this.firstDraw         = true; // After the first draw this will be false
 
 
         /**
@@ -65,12 +98,6 @@
         this.canvas.uid = this.canvas.uid ? this.canvas.uid : RGraph.CreateUID();
 
 
-        /**
-        * This does a few things, for example adding the .fillText() method to the canvas 2D context when
-        * it doesn't exist. This facilitates the graphs to be still shown in older browser (though without
-        * text obviously). You'll find the function in RGraph.common.core.js
-        */
-        RGraph.OldBrowserCompat(this.context);
 
 
         /**
@@ -136,22 +163,27 @@
 
 
 
-        ///////////////////////////////// SHORT PROPERTIES /////////////////////////////////
 
 
-
-
-        var RG   = RGraph;
-        var ca   = this.canvas;
-        var co   = ca.getContext('2d');
-        var prop = this.properties;
-        var Path = RGraph.Path;
-        //var $jq  = jQuery;
-
-
-
-
-        //////////////////////////////////// METHODS ///////////////////////////////////////
+        // Short variable names
+        var RG    = RGraph;
+        var ca    = this.canvas;
+        var co    = ca.getContext('2d');
+        var prop  = this.properties;
+        var jq    = jQuery;
+        var pa    = RG.Path;
+        var win   = window;
+        var doc   = document;
+        var ma    = Math;
+        
+        
+        
+        /**
+        * "Decorate" the object with the generic effects if the effects library has been included
+        */
+        if (RG.Effects && typeof RG.Effects.decorate === 'function') {
+            RG.Effects.decorate(this);
+        }
 
 
 
@@ -160,11 +192,26 @@
         /**
         * A setter method for setting properties.
         * 
-        * @param name  string The name of the property to set
-        * @param value mixed  The value of the property
+        * @param name  string The name of the property to set OR it can be a map
+        *                     of name/value settings like what you set in the constructor
         */
-        this.Set = function (name, value)
+        this.set =
+        this.Set = function (name)
         {
+            var value = typeof arguments[1] === 'undefined' ? null : arguments[1];
+
+            /**
+            * the number of arguments is only one and it's an
+            * object - parse it for configuration data and return.
+            */
+            if (arguments.length === 1 && typeof name === 'object') {
+                RG.parseObjectStyleConfig(this, name);
+                return this;
+            }
+
+
+
+
             name = name.toLowerCase();
     
             /**
@@ -177,7 +224,7 @@
             prop[name] = value;
     
             return this;
-        }
+        };
 
 
 
@@ -187,6 +234,7 @@
         * 
         * @param name  string The name of the property to get
         */
+        this.get =
         this.Get = function (name)
         {
             /**
@@ -197,7 +245,7 @@
             }
     
             return prop[name.toLowerCase()];
-        }
+        };
 
 
 
@@ -205,6 +253,7 @@
         /**
         * Draws the rectangle
         */
+        this.draw =
         this.Draw = function ()
         {
             /**
@@ -229,7 +278,16 @@
             * Stop the coods array from growing
             */
             this.coords = [];
-            
+
+
+
+            /**
+            * Stop this growing uncntrollably
+            */
+            this.coordsText = [];
+
+
+
             
             /**
             * The font, its size and whether its bold or not can be set by properties,
@@ -270,7 +328,12 @@
     
     
             // store the dimensions
-            this.coords.push({'x':ret.x, 'y':ret.y, 'width':ret.width, 'height':ret.height});
+            this.coords.push({
+                              0: ret.x,      'x':      ret.x,
+                              1: ret.y,      'y':      ret.y,
+                              2: ret.width,  'width':  ret.width,
+                              3: ret.height, 'height': ret.height
+                             });
     
     
     
@@ -279,14 +342,26 @@
             */
             RG.InstallEventListeners(this);
     
-    
+
+            /**
+            * Fire the onfirstdraw event
+            */
+            if (this.firstDraw) {
+                RG.fireCustomEvent(this, 'onfirstdraw');
+                this.firstDraw = false;
+                this.firstDrawFunc();
+            }
+
+
+
+
             /**
             * Fire the ondraw event
             */
             RG.FireCustomEvent(this, 'ondraw');
             
             return this;
-        }
+        };
 
 
 
@@ -299,7 +374,7 @@
             if (this.getShape(e)) {
                 return this;
             }
-        }
+        };
 
 
 
@@ -335,7 +410,7 @@
             }
             
             return null;
-        }
+        };
 
 
 
@@ -383,7 +458,7 @@
                 img.style.left = ((width * 0.1) - 8.5) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + (width / 2)) > document.body.offsetWidth) {
+            } else if ((canvasXY[0] + coordX + (coordW / 2) + (width / 2)) > (doc.body.offsetWidth - 10)) {
                 tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
                 img.style.left = ((width * 0.9) - 8.5) + 'px';
     
@@ -392,7 +467,7 @@
                 tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
                 img.style.left = ((width * 0.5) - 8.5) + 'px';
             }
-        }
+        };
 
 
 
@@ -402,11 +477,12 @@
         * 
         * @param object shape The shape to highlight
         */
+        this.highlight =
         this.Highlight = function (shape)
         {
             // Add the new highlight
             RG.Highlight.Rect(this, shape);
-        }
+        };
 
 
 
@@ -416,14 +492,38 @@
         */
         this.parseColors = function ()
         {
+            // Save the original colors so that they can be restored when the canvas is reset
+            if (this.original_colors.length === 0) {
+                this.original_colors['chart.colors']           = RG.array_clone(prop['chart.colors'])[0];
+                this.original_colors['chart.fillstyle']        = RG.array_clone(prop['chart.fillstyle']);
+                this.original_colors['chart.strokestyle']      = RG.array_clone(prop['chart.strokestyle']);
+                this.original_colors['chart.highlight.stroke'] = RG.array_clone(prop['chart.highlight.stroke']);
+                this.original_colors['chart.highlight.fill']   = RG.array_clone(prop['chart.highlight.fill']);
+            }
+
+
+
+
             /**
             * Parse various properties for colors
             */
+            prop['chart.colors'][0]        = this.parseSingleColorForGradient(prop['chart.colors'][0]);
             prop['chart.fillstyle']        = this.parseSingleColorForGradient(prop['chart.fillstyle']);
             prop['chart.strokestyle']      = this.parseSingleColorForGradient(prop['chart.strokestyle']);
             prop['chart.highlight.stroke'] = this.parseSingleColorForGradient(prop['chart.highlight.stroke']);
             prop['chart.highlight.fill']   = this.parseSingleColorForGradient(prop['chart.highlight.fill']);
-        }
+        };
+
+
+
+
+        /**
+        * Use this function to reset the object to the post-constructor state. Eg reset colors if
+        * need be etc
+        */
+        this.reset = function ()
+        {
+        };
 
 
 
@@ -437,7 +537,7 @@
                 return color;
             }
     
-            if (color.match(/^gradient\((.*)\)$/i)) {
+            if (typeof color === 'string' && color.match(/^gradient\((.*)\)$/i)) {
     
                 var parts = RegExp.$1.split(':');
     
@@ -454,7 +554,44 @@
             }
     
             return grad ? grad : color;
-        }
+        };
+
+
+
+
+        /**
+        * Using a function to add events makes it easier to facilitate method chaining
+        * 
+        * @param string   type The type of even to add
+        * @param function func 
+        */
+        this.on = function (type, func)
+        {
+            if (type.substr(0,2) !== 'on') {
+                type = 'on' + type;
+            }
+            
+            this[type] = func;
+    
+            return this;
+        };
+
+
+
+
+        /**
+        * This function runs once only
+        * (put at the end of the file (before any effects))
+        */
+        this.firstDrawFunc = function ()
+        {
+        };
+
+
+
+
+        RG.att(ca);
+
 
 
 
@@ -463,4 +600,15 @@
         * Objects are now always registered so that the chart is redrawn if need be.
         */
         RG.Register(this);
-    }
+
+
+
+
+        /**
+        * This is the 'end' of the constructor so if the first argument
+        * contains configuration data - handle that.
+        */
+        if (parseConfObjectForOptions) {
+            RG.parseObjectStyleConfig(this, conf.options);
+        }
+    };

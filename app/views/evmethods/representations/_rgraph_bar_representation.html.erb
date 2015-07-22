@@ -1,0 +1,115 @@
+<% isComparison = (@lo.nil? and !representationData["iScores"].is_a? Array) %>
+
+<p class="space-large"></p>
+<div class="graphWrapper">
+	<canvas id="<%=evmethod.id%>"><%=t("evmethods.message.no_canvas_support")%></canvas>
+</div>
+
+<script>
+    $(document).ready(function (){
+    	var canvas = $("#<%=evmethod.id%>");
+		var canvasContainer = $(canvas).parent();
+
+        //Set newWidth depending on the number of bars
+        var widthPerBar = $(canvasContainer).width()*0.3;
+        var newWidth = widthPerBar * Math.min(2,parseInt('<%=representationData["labels"].length%>'));
+        var newHeight = widthPerBar;
+
+		$(canvas).attr("width",newWidth);
+		$(canvas).attr("height",newHeight);
+		$(canvas).width(newWidth);
+		$(canvas).height(newHeight);
+
+		/////////////////
+		//Draw Canvas
+		/////////////////
+
+        var RGraphArgs = ['<%=evmethod.id%>'];
+        var RGraphTooltipArgs = ['tooltips'];
+        var RGraphFillTooltipArgs = ['fill.tooltips',[]];
+        var RGraphKeyArgs = ['key',[]];
+        var RGraphColorsArgs = ['colors',[]];
+        var RGraphKeyColorsArgs = ['key.colors',[]];
+        var grouping = "grouped";
+
+        var graphLabels = [];
+        <%representationData["labels"].each do |l|%>
+            graphLabels.push('<%=l%>');
+        <% end %>
+
+        <% unless isComparison %>
+            //Common case (one LO)
+            var graphValues = <%=representationData["iScores"]%>;
+            RGraphArgs.push(graphValues);
+            RGraphTooltipArgs.push(graphValues.map(function(v){return v.toString()}));
+            <%unless representationData["averageScore"].nil? %>
+                RGraphFillTooltipArgs[1].push((<%=representationData["averageScore"]%>).toString());
+            <% end %>
+            RGraphColorsArgs[1].push(getGradient(0));
+        <% else %>
+            //Comparison case (Several LOs)
+            // grouping = "stacked"; //If stacked, ymax should be 10*numberOfElements
+
+            <%representationData.delete("engine")%>
+            <%representationData.delete("labels")%>
+
+            var graphValues = [];
+            for(var i=0; i<graphLabels.length; i++){
+                graphValues.push([]);
+                <% representationData.each do |key, loData|%>
+                    graphValues[i].push(<%=loData["iScores"]%>[i]);
+                <% end %>
+            }
+
+            var keyIndex = 0;
+            <% representationData.each do |key, loData|%>
+                RGraphColorsArgs[1].push(getColor(keyIndex));
+                <%unless loData["name"].nil? %>
+                    RGraphKeyArgs[1].push(shortString('<%=loData["name"]%>'));
+                <% end %>
+                RGraphFillTooltipArgs[1].push(<%=loData["averageScore"]%>.toString());
+                keyIndex += 1;
+            <% end %>
+
+            var toolTipsArgs = [];
+            for(var j=0; j<graphValues.length; j++){
+                for(var k=0; k<graphValues[j].length; k++){
+                    toolTipsArgs.push(graphValues[j][k].toString())
+                }
+            }
+            RGraphTooltipArgs.push(toolTipsArgs);
+
+            RGraphArgs.push(graphValues);
+        <% end %>
+
+
+        var graph = construct(RGraph.Bar,RGraphArgs);
+        graph.Set.apply(this,RGraphTooltipArgs);
+        graph.Set.apply(this,RGraphFillTooltipArgs);
+        graph.Set.apply(this,RGraphColorsArgs);
+        var keysLength = RGraphKeyArgs[1].length;
+        if(keysLength > 0){
+            graph.Set.apply(this,RGraphKeyArgs);
+            graph.Set('key.interactive', true)
+            for(var i=0; i<keysLength; i++){
+                RGraphKeyColorsArgs[1].push(getColor(i));
+            }
+            graph.Set.apply(this,RGraphKeyColorsArgs);
+        }
+        graph.Set('labels', graphLabels)
+            .Set('ymax', '10')
+            .Set('labels.axes', '')
+            .Set('gutter.left', 45)
+            .Set('colors.alpha', 0.3)
+            .Set('axes.color', 'rgba(0,0,0,0)')
+            .Set('highlights', true)
+            .Set('strokestyle', 'black')
+            .Set('background.barcolor1', 'white')
+            .Set('background.barcolor2', 'white')
+            .Set('bevel', 'true')
+            .Set('hmargin', 10)
+            .Set('background.grid', true)
+            .Set('grouping', grouping)
+            .Draw();
+    })
+</script>

@@ -1,14 +1,19 @@
+// version: 2015-06-28
     /**
-    * o-------------------------------------------------------------------------------o
-    * | This file is part of the RGraph package. RGraph is Free software, licensed    |
-    * | under the MIT license - so it's free to use for all purposes. Extended        |
-    * | support is available if required and donations are always welcome! You can    |
-    * | read more here:                                                               |
-    * |                         http://www.rgraph.net/support                         |
-    * o-------------------------------------------------------------------------------o
+    * o--------------------------------------------------------------------------------o
+    * | This file is part of the RGraph package - you can learn more at:               |
+    * |                                                                                |
+    * |                          http://www.rgraph.net                                 |
+    * |                                                                                |
+    * | RGraph is dual licensed under the Open Source GPL (General Public License)     |
+    * | v2.0 license and a commercial license which does not mean that you're bound by |
+    * | the terms of the GPL. The commercial license is just £99 (GBP) and you can     |
+    * | read about it here:                                                            |
+    * |                      http://www.rgraph.net/license                             |
+    * o--------------------------------------------------------------------------------o
     */
 
-    if (typeof(RGraph) == 'undefined') RGraph = {};
+    RGraph = window.RGraph || {isRGraph: true};
 
     /**
     * The bi-polar/age frequency constructor.
@@ -19,11 +24,35 @@
     * 
     * REMEMBER If ymin is implemented you need to update the .getValue() method
     */
-    RGraph.Bipolar = function (id, left, right)
+    RGraph.Bipolar = function (conf)
     {
+        /**
+        * Allow for object config style
+        */
+        if (   typeof conf === 'object'
+            && typeof conf.left === 'object'
+            && typeof conf.right === 'object'
+            && typeof conf.id === 'string') {
+
+            var id                        = conf.id
+            var canvas                    = document.getElementById(id);
+            var left                      = conf.left;
+            var right                     = conf.right;
+            var parseConfObjectForOptions = true; // Set this so the config is parsed (at the end of the constructor)
+        
+        } else {
+        
+            var id     = conf;
+            var canvas = document.getElementById(id);
+            var left   = arguments[1];
+            var right  = arguments[2];
+        }
+
+
+
         // Get the canvas and context objects
         this.id                = id;
-        this.canvas            = document.getElementById(typeof id === 'object' ? id.id : id);
+        this.canvas            = canvas;
         this.context           = this.canvas.getContext('2d');
         this.canvas.__object__ = this;
         this.type              = 'bipolar';
@@ -35,20 +64,23 @@
         this.uid               = RGraph.CreateUID();
         this.canvas.uid        = this.canvas.uid ? this.canvas.uid : RGraph.CreateUID();
         this.coordsText        = [];
+        this.original_colors   = [];
+        this.firstDraw         = true; // After the first draw this will be false
 
 
         /**
         * Compatibility with older browsers
         */
-        RGraph.OldBrowserCompat(this.context);
+        //RGraph.OldBrowserCompat(this.context);
 
         
         // The left and right data respectively
-        this.left       = left;
-        this.right      = right;
-        this.data       = [left, right];
+        this.left  = left;
+        this.right = right;
+        this.data  = [left, right];
 
-        this.properties = {
+        this.properties =
+        {
             'chart.margin':                 2,
             'chart.xtickinterval':          null,
             'chart.labels':                 [],
@@ -62,7 +94,7 @@
             'chart.gutter.left':            25,
             'chart.gutter.right':           25,
             'chart.gutter.top':             25,
-            'chart.gutter.bottom':          25,
+            'chart.gutter.bottom':          30,
             'chart.title':                  '',
             'chart.title.background':       null,
             'chart.title.hpos':             null,
@@ -137,6 +169,7 @@
         * Create the dollar objects so that functions can be added to them
         */
         var linear_data = RGraph.array_linearize(this.left, this.right);
+
         for (var i=0; i<linear_data.length; ++i) {
             this['$' + i] = {};
         }
@@ -155,21 +188,28 @@
 
 
 
-        ///////////////////////////////// SHORT PROPERTIES /////////////////////////////////
+        // Short variable names
+        var RG    = RGraph;
+        var ca    = this.canvas;
+        var co    = ca.getContext('2d');
+        var prop  = this.properties;
+        var jq    = jQuery;
+        var pa    = RG.Path;
+        var win   = window;
+        var doc   = document;
+        var ma    = Math;
+        
+        
+        
+        /**
+        * "Decorate" the object with the generic effects if the effects library has been included
+        */
+        if (RG.Effects && typeof RG.Effects.decorate === 'function') {
+            RG.Effects.decorate(this);
+        }
 
 
 
-
-        var RG   = RGraph;
-        var ca   = this.canvas;
-        var co   = ca.getContext('2d');
-        var prop = this.properties;
-        //var $jq  = jQuery;
-
-
-
-
-        //////////////////////////////////// METHODS ///////////////////////////////////////
 
 
 
@@ -180,8 +220,23 @@
         * @param name  string The name of the parameter to set
         * @param value mixed  The value of the paraneter 
         */
-        this.Set = function (name, value)
+        this.set =
+        this.Set = function (name)
         {
+            var value = typeof arguments[1] === 'undefined' ? null : arguments[1];
+
+            /**
+            * the number of arguments is only one and it's an
+            * object - parse it for configuration data and return.
+            */
+            if (arguments.length === 1 && typeof name === 'object') {
+                RG.parseObjectStyleConfig(this, name);
+                return this;
+            }
+
+
+
+
             name = name.toLowerCase();
     
             /**
@@ -194,7 +249,7 @@
             prop[name] = value;
     
             return this;
-        }
+        };
 
 
 
@@ -204,6 +259,7 @@
         * 
         * @param name string The name of the parameter to get
         */
+        this.get =
         this.Get = function (name)
         {
             /**
@@ -214,7 +270,7 @@
             }
     
             return this.properties[name.toLowerCase()];
-        }
+        };
 
 
 
@@ -222,6 +278,7 @@
         /**
         * Draws the graph
         */
+        this.draw =
         this.Draw = function ()
         {
             /**
@@ -264,7 +321,17 @@
             * Reset the coords array
             */
             this.coords = [];
-    
+
+
+
+            /**
+            * Stop this growing uncontrollably
+            */
+            this.coordsText = [];
+
+
+
+
             this.GetMax();
             this.DrawAxes();
             this.DrawTicks();
@@ -301,7 +368,17 @@
             */
             RG.InstallEventListeners(this);
     
-    
+
+            /**
+            * Fire the onfirstdraw event
+            */
+            if (this.firstDraw) {
+                RG.fireCustomEvent(this, 'onfirstdraw');
+                this.firstDraw = false;
+                this.firstDrawFunc();
+            }
+
+
             /**
             * Fire the RGraph ondraw event
             */
@@ -316,11 +393,12 @@
         /**
         * Draws the axes
         */
+        this.drawAxes =
         this.DrawAxes = function ()
         {
             // Set the linewidth
             co.lineWidth = prop['chart.axis.linewidth'] + 0.001;
-    
+
     
             // Draw the left set of axes
             co.beginPath();
@@ -356,7 +434,7 @@
             co.lineTo(ca.width - this.gutterRight, Math.round( ca.height - this.gutterBottom));
     
             co.stroke();
-        }
+        };
 
 
 
@@ -364,6 +442,7 @@
         /**
         * Draws the tick marks on the axes
         */
+        this.drawTicks =
         this.DrawTicks = function ()
         {
             // Set the linewidth
@@ -436,7 +515,7 @@
                     co.stroke();
                 }
             }
-        }
+        };
 
 
 
@@ -444,6 +523,7 @@
         /**
         * Figures out the maximum value, or if defined, uses xmax
         */
+        this.getMax =
         this.GetMax = function()
         {
             var dec  = prop['chart.scale.decimals'];
@@ -455,17 +535,17 @@
                 var min = prop['chart.xmin'];
     
                 this.scale2 = RG.getScale2(this, {
-                                                      'max':max,
-                                                      'min':min,
-                                                      'strict': true,
-                                                      'scale.thousand':prop['chart.scale.thousand'],
-                                                      'scale.point':prop['chart.scale.point'],
-                                                      'scale.decimals':prop['chart.scale.decimals'],
-                                                      'ylabels.count':prop['chart.labels.count'],
-                                                      'scale.round':prop['chart.scale.round'],
-                                                      'units.pre': prop['chart.units.pre'],
-                                                      'units.post': prop['chart.units.post']
-                                                     });
+                    'max':max,
+                    'min':min,
+                    'strict': true,
+                    'scale.thousand':prop['chart.scale.thousand'],
+                    'scale.point':prop['chart.scale.point'],
+                    'scale.decimals':prop['chart.scale.decimals'],
+                    'ylabels.count':prop['chart.labels.count'],
+                    'scale.round':prop['chart.scale.round'],
+                    'units.pre': prop['chart.units.pre'],
+                    'units.post': prop['chart.units.post']
+                });
                 this.max = this.scale2.max;
                 this.min = this.scale2.min;
     
@@ -496,7 +576,7 @@
             }
     
             // Don't need to return it as it is stored in this.max
-        }
+        };
 
 
 
@@ -504,6 +584,7 @@
         /**
         * Function to draw the left hand bars
         */
+        this.drawLeftBars =
         this.DrawLeftBars = function ()
         {
             // Set the stroke colour
@@ -547,7 +628,7 @@
                                   this.barHeight];
     
                     // Draw the IE shadow if necessary
-                    if (ISOLD && prop['chart.shadow']) {
+                    if (RG.ISOLD && prop['chart.shadow']) {
                         this.DrawIEShadow(coords);
                     }
         
@@ -574,7 +655,7 @@
             
             // Reset the linewidth
             co.lineWidth = 1;
-        }
+        };
 
 
 
@@ -582,6 +663,7 @@
         /**
         * Function to draw the right hand bars
         */
+        this.drawRightBars =
         this.DrawRightBars = function ()
         {
             // Set the stroke colour
@@ -622,7 +704,7 @@
                                 ];
         
                         // Draw the IE shadow if necessary
-                        if (ISOLD && prop['chart.shadow']) {
+                        if (RG.ISOLD && prop['chart.shadow']) {
                             this.DrawIEShadow(coords);
                         }
                     if (this.right[i]) {
@@ -648,7 +730,7 @@
             
             // Reset the linewidth
             co.lineWidth = 1;
-        }
+        };
 
 
 
@@ -656,6 +738,7 @@
         /**
         * Draws the titles
         */
+        this.drawLabels =
         this.DrawLabels = function ()
         {
             co.fillStyle = prop['chart.text.color'];
@@ -769,18 +852,20 @@
                     }
     
                     var coords = this.coordsRight[i];
-                    RG.Text2(this, {'font':font,
-                                        'size':size,
-                                        'x':coords[0] + coords[2] +  5,
-                                        'y':coords[1] + (coords[3] / 2),
-                                        'text':RG.number_format(this, this.right[i], prop['chart.units.pre'], prop['chart.units.post']),
-                                        'valign':'center',
-                                        'halign':'left',
-                                        'tag': 'labels.above'
-                                       });
+                    
+                    RG.Text2(this, {
+                        'font':font,
+                        'size':size,
+                        'x':coords[0] + coords[2] +  5,
+                        'y':coords[1] + (coords[3] / 2),
+                        'text':RG.number_format(this, this.right[i], prop['chart.units.pre'], prop['chart.units.post']),
+                        'valign':'center',
+                        'halign':'left',
+                        'tag': 'labels.above'
+                    });
                 }
             }
-        }
+        };
 
 
 
@@ -788,33 +873,42 @@
         /**
         * Draws the titles
         */
+        this.drawTitles =
         this.DrawTitles = function ()
         {
-            RG.Text2(this, {'font':prop['chart.text.font'],
-                         'size':prop['chart.text.size'],
-                         'x':this.gutterLeft + 5,
-                         'y':this.gutterTop - 5,
-                         'text':String(prop['chart.title.left']),
-                         'halign':'left',
-                         'valign':'bottom',
-                         'tag': 'title.left'
-                        });
+            RG.Text2(this, {
+                'font':prop['chart.text.font'],
+                'size':prop['chart.text.size'],
+                'x':this.gutterLeft + 5,
+                'y':this.gutterTop - 5,
+                'text':String(prop['chart.title.left']),
+                'halign':'left',
+                'valign':'bottom',
+                'tag': 'title.left'
+            });
     
-            RG.Text2(this, {'font':prop['chart.text.font'],
-                         'size':prop['chart.text.size'],
-                         'x': ca.width - this.gutterRight - 5,
-                         'y':this.gutterTop - 5,
-                         'text':String(prop['chart.title.right']),
-                         'halign':'right',
-                         'valign':'bottom',
-                         'tag': 'title.right'
-                        });
-    
+            RG.Text2(this, {
+                'font':prop['chart.text.font'],
+                'size':prop['chart.text.size'],
+                'x': ca.width - this.gutterRight - 5,
+                'y':this.gutterTop - 5,
+                'text':String(prop['chart.title.right']),
+                'halign':'right',
+                'valign':'bottom',
+                'tag': 'title.right'
+            });
+
     
             
             // Draw the main title for the whole chart
-            RG.DrawTitle(this, prop['chart.title'], this.gutterTop, null, prop['chart.title.size'] ? prop['chart.title.size'] : null);
-        }
+            RG.drawTitle(
+                this,
+                prop['chart.title'],
+                this.gutterTop,
+                null,
+                prop['chart.title.size'] ? prop['chart.title.size'] : null
+            );
+        };
 
 
 
@@ -824,6 +918,7 @@
         * 
         * @param array coords The coords for the bar
         */
+        this.drawIEShadow =
         this.DrawIEShadow = function (coords)
         {
             var prevFillStyle = co.fillStyle;
@@ -882,7 +977,7 @@
             }
     
             return null;
-        }
+        };
 
 
 
@@ -892,11 +987,12 @@
         * 
         * @param object shape The shape to highlight
         */
+        this.highlight =
         this.Highlight = function (shape)
         {
             // Add the new highlight
             RG.Highlight.Rect(this, shape);
-        }
+        };
 
 
 
@@ -931,7 +1027,7 @@
             }
             
             return value;
-        }
+        };
 
 
 
@@ -956,7 +1052,7 @@
     
                 return this;
             }
-        }
+        };
 
 
 
@@ -1004,7 +1100,7 @@
                 img.style.left = ((width * 0.1) - 8.5) + 'px';
     
             // RIGHT edge
-            } else if ((canvasXY[0] + coordX + width) > document.body.offsetWidth) {
+            } else if ((canvasXY[0] + coordX + width) > doc.body.offsetWidth) {
                 tooltip.style.left = canvasXY[0] + coordX - (width * 0.9) + (coordW / 2) + 'px';
                 img.style.left = ((width * 0.9) - 8.5) + 'px';
     
@@ -1013,7 +1109,7 @@
                 tooltip.style.left = (canvasXY[0] + coordX + (coordW / 2) - (width * 0.5)) + 'px';
                 img.style.left = ((width * 0.5) - 8.5) + 'px';
             }
-        }
+        };
 
 
 
@@ -1021,6 +1117,7 @@
         /**
         * Redraw the bar so that the shadow is NOT on top
         */
+        this.redrawBars =
         this.RedrawBars = function ()
         {
             var coords = this.coords;
@@ -1063,7 +1160,7 @@
                 }
             co.stroke();
             co.fill();
-        }
+        };
 
 
 
@@ -1089,8 +1186,7 @@
             ret[1] = (ca.width - this.gutterRight - this.axisWidth) + offset;
             
             return ret;
-    
-        }
+        };
 
 
 
@@ -1100,6 +1196,15 @@
         */
         this.parseColors = function ()
         {
+            // Save the original colors so that they can be restored when the canvas is reset
+            if (this.original_colors.length === 0) {
+                this.original_colors['chart.colors']           = RG.array_clone(prop['chart.colors']);
+                this.original_colors['chart.highlight.stroke'] = RG.array_clone(prop['chart.highlight.fill']);
+                this.original_colors['chart.highlight.fill']   = RG.array_clone(prop['chart.highlight.fill']);
+                this.original_colors['chart.axis.color']       = RG.array_clone(prop['chart.axis.color']);
+                this.original_colors['chart.strokestyle']      = RG.array_clone(prop['chart.strokestyle']);
+            }
+
             var props = this.properties;
             var colors = props['chart.colors'];
     
@@ -1111,7 +1216,18 @@
             props['chart.highlight.fill']   = this.parseSingleColorForGradient(props['chart.highlight.fill']);
             props['chart.axis.color']       = this.parseSingleColorForGradient(props['chart.axis.color']);
             props['chart.strokestyle']      = this.parseSingleColorForGradient(props['chart.strokestyle']);
-        }
+        };
+
+
+
+
+        /**
+        * Use this function to reset the object to the post-constructor state. Eg reset colors if
+        * need be etc
+        */
+        this.reset = function ()
+        {
+        };
 
 
 
@@ -1142,7 +1258,42 @@
             }
                 
             return grad ? grad : color;
-        }
+        };
+
+
+
+
+        /**
+        * Using a function to add events makes it easier to facilitate method chaining
+        * 
+        * @param string   type The type of even to add
+        * @param function func 
+        */
+        this.on = function (type, func)
+        {
+            if (type.substr(0,2) !== 'on') {
+                type = 'on' + type;
+            }
+            
+            this[type] = func;
+    
+            return this;
+        };
+
+
+
+
+        /**
+        * This function runs once only
+        * (put at the end of the file (before any effects))
+        */
+        this.firstDrawFunc = function ()
+        {
+        };
+
+
+
+
 
 
 
@@ -1152,4 +1303,87 @@
         * is called this chart will be redrawn.
         */
         RG.Register(this);
-    }
+
+
+
+
+        /**
+        * This is the 'end' of the constructor so if the first argument
+        * contains configuration dsta - handle that.
+        */
+        if (parseConfObjectForOptions) {
+            RG.parseObjectStyleConfig(this, conf.options);
+        }
+
+
+
+
+        /**
+        * Grow
+        * 
+        * The Bipolar chart Grow effect gradually increases the values of the bars
+        * 
+        * @param object       An object of options - eg: {frames: 30}
+        * @param function     A function to call when the effect is complete
+        */
+        this.grow = function ()
+        {
+            // Callback
+            var opt      = arguments[0] || {};
+            var frames   = opt.frames || 30;
+            var frame    = 0;
+            var callback = arguments[1] || function () {};
+            var obj      = this;
+    
+            // Save the data
+            var originalLeft  = RG.arrayClone(this.left);
+            var originalRight = RG.arrayClone(this.right);
+
+    
+            // Stop the scale from changing by setting xmax (if it's not already set)
+            if (RG.isNull(prop['chart.xmax'])) {
+    
+                var xmax = 0;
+    
+                // Go through the left and right data
+                for (var i=0; i<this.left.length; i+=1) { xmax = ma.max(xmax, ma.abs(this.left[i])); }
+                for (var i=0; i<this.right.length; i+=1) { xmax = ma.max(xmax, ma.abs(this.right[i])); }
+
+                var scale = RG.getScale2(obj, {'max':xmax});
+                this.Set('chart.xmax', scale.max);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            var iterator = function ()
+            {
+                var easingMultiplier = RG.Effects.getEasingMultiplier(frames, frame);
+
+                for (var i=0; i<obj.left.length; i+=1) { obj.left[i] = easingMultiplier * originalLeft[i]; }
+                for (var i=0; i<obj.right.length; i+=1) { obj.right[i] = easingMultiplier * originalRight[i]; }
+
+                RG.redrawCanvas(obj.canvas);
+
+                // Repeat or call the end function if one is defined
+                if (frame < frames) {
+                    frame += 1;
+                    RG.Effects.updateCanvas(iterator);
+                } else {
+                    callback(obj);
+                }
+            };
+    
+            iterator();
+            
+            return this;
+        };
+    };

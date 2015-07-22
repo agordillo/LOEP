@@ -1,11 +1,1 @@
-<% if representationData.nil? %>
-	<%= render "evmethods/empty_representation" %>
-<% else %>
-	<% if representationData["engine"] == "Rgraph"%>
-		<%= render "evmethods/rgraph_representation", :representationData => representationData, :evmethod => evmethod %>
-	<% elsif !@shortname.nil? and lookup_context.template_exists?("representation", "evmethods/"+@shortname, true)%>
-		<%= render "evmethods/"+@shortname+"/representation", :representationData => representationData, :evmethod => evmethod %>
-	<% else %>
-		<%= render "evmethods/empty_representation" %>
-	<% end %>
-<% end %>
+<%= render "evmethods/representations/representation", :representationData => representationData, :evmethod => evmethod %>
