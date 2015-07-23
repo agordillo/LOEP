@@ -59,7 +59,7 @@ class Evmethod < ActiveRecord::Base
     end
 
     representationData["name"] = lo.name
-    representationData["labels"] = self.module.constantize.getItemsWithType("integer").map{|li| li[:shortname] || li[:name]}
+    representationData["labels"] = self.module.constantize.getItemsWithType("numeric").map{|li| li[:shortname] || li[:name]}
     representationData["engine"] = "Rgraph"
     representationData
   end
@@ -67,7 +67,7 @@ class Evmethod < ActiveRecord::Base
   def representationDataForLos(los)
     representationData = Hash.new
     evModule = self.module.constantize
-    items = evModule.getItemsWithType("integer")
+    items = evModule.getItemsWithType("numeric")
 
     graphEngine = nil
     nItems = items.length

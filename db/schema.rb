@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150721100506) do
+ActiveRecord::Schema.define(:version => 20150723163029) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -200,6 +200,26 @@ ActiveRecord::Schema.define(:version => 20150721100506) do
     t.string   "loc_context"
     t.text     "loc_grade"
     t.string   "loc_strategy"
+    t.decimal  "ditem1",                            :precision => 12, :scale => 6
+    t.decimal  "ditem2",                            :precision => 12, :scale => 6
+    t.decimal  "ditem3",                            :precision => 12, :scale => 6
+    t.decimal  "ditem4",                            :precision => 12, :scale => 6
+    t.decimal  "ditem5",                            :precision => 12, :scale => 6
+    t.decimal  "ditem6",                            :precision => 12, :scale => 6
+    t.decimal  "ditem7",                            :precision => 12, :scale => 6
+    t.decimal  "ditem8",                            :precision => 12, :scale => 6
+    t.decimal  "ditem9",                            :precision => 12, :scale => 6
+    t.decimal  "ditem10",                           :precision => 12, :scale => 6
+    t.decimal  "ditem11",                           :precision => 12, :scale => 6
+    t.decimal  "ditem12",                           :precision => 12, :scale => 6
+    t.decimal  "ditem13",                           :precision => 12, :scale => 6
+    t.decimal  "ditem14",                           :precision => 12, :scale => 6
+    t.decimal  "ditem15",                           :precision => 12, :scale => 6
+    t.decimal  "ditem16",                           :precision => 12, :scale => 6
+    t.decimal  "ditem17",                           :precision => 12, :scale => 6
+    t.decimal  "ditem18",                           :precision => 12, :scale => 6
+    t.decimal  "ditem19",                           :precision => 12, :scale => 6
+    t.decimal  "ditem20",                           :precision => 12, :scale => 6
   end
 
   create_table "evmethods", :force => true do |t|

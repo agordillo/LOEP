@@ -10,7 +10,9 @@ class Metrics::LomMetadata < Metrics::WAM
 
   def self.itemWeights
     [
-      BigDecimal(1)
+      BigDecimal(1/3.to_f,8),
+      BigDecimal(1/3.to_f,8),
+      BigDecimal(1/3.to_f,8)
     ]
   end
 

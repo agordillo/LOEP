@@ -13,7 +13,13 @@ class Evaluations::Metadata < Evaluation
     [
       { :name => "Completeness",
         :description => "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource.", 
-        :type=> "integer" }
+        :type=> "decimal" },
+        { :name => "ItemInteger",
+        :description => "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource.", 
+        :type=> "integer" },
+      { :name => "Completeness2",
+        :description => "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource.", 
+        :type=> "decimal" }
     ]
   end
 
@@ -29,8 +35,9 @@ class Evaluations::Metadata < Evaluation
   def self.createAutomaticEvaluation(lo)
     evaluation = super
     #Code here...
-    evaluation.item1 = Metrics::LomMetadataCompleteness.getScoreForLo(lo)
-    evaluation.item2 = Metrics::LomMetadataCompleteness.getScoreForLo(lo)
+    evaluation.ditem1 = Metrics::LomMetadataCompleteness.getScoreForLo(lo)
+    evaluation.ditem2 = Metrics::LomMetadataCompleteness.getScoreForLo(lo)
+    evaluation.item1 = 5
     evaluation.save!
     evaluation
   end

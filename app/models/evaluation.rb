@@ -81,6 +81,7 @@ class Evaluation < ActiveRecord::Base
   end
 
   def self.getItems
+    []
   end
 
   def self.getScale
@@ -93,7 +94,7 @@ class Evaluation < ActiveRecord::Base
   ################################
 
   def self.ALL_ITEM_TYPES
-    ["integer","string","text"]
+    ["integer","decimal","string","text"]
   end
 
   #######################
@@ -219,50 +220,63 @@ class Evaluation < ActiveRecord::Base
     Utils.getReadableDate(self.completed_at)
   end
 
-  def self.getValidEvaluationsForItem(evaluations,nItem)
-    unless nItem.is_a? Array
-      nItem = [nItem]
-    end
-    getValidEvaluationsForItems(evaluations,nItem)
+  def self.getValidEvaluationsForItem(evaluations,itemName)
+    itemName = [itemName] unless itemName.is_a? Array
+    getValidEvaluationsForItems(evaluations,itemName)
   end
 
-  def self.getValidEvaluationsForItems(evaluations,nItems)
+  def self.getValidEvaluationsForItems(evaluations,itemNames)
     # Evaluation.where(:lo_id => Lo.first.id).where('item1!=-1 and item2 !=-1 and item3!=-1 and item17 IS NOT NULL')
-    # Usage example: Evaluation.getValidEvaluationsForItems(Evaluation,[1,2,3])
+    # Usage example: Evaluation.getValidEvaluationsForItems(Evaluation,["item1","item2","item3","ditem1"])
     query = "";
-    nItems.each_with_index do |nItem,index|
-      if(index!=0)
-        query = query + " and "
-      end
-      query = query + 'item' + (nItem.to_s) + ' != -1'
+    itemNames.each_with_index do |itemName,index|
+      query = query + " and " if (index!=0)
+      query = query + (itemName.to_s) + ' != -1'
     end
-
-    if evaluations.is_a? Array
-      evaluations = Evaluation.where("id in (?)",evaluations.map{|ev| ev.id})
-    end
-
+    evaluations = Evaluation.where("id in (?)",evaluations.map{|ev| ev.id}) if evaluations.is_a? Array
     evaluations.where(query)
   end
 
-  def self.getItemsArray
-    items = []
-    getItems.length.times do |i|
-      items.push(i+1)
+  def self.getItemsArray(itemTypes=nil)
+    itemNames = []
+    itemTypes = processItemTypesArray(itemTypes)
+
+    itemTypesIndex = Hash.new
+    itemTypes.each do |itemType|
+      itemTypesIndex[itemType] = 1
     end
-    items
+
+    getItemsWithType(itemTypes).each do |item|
+      case item[:type]
+      when "integer"
+        itemFieldName = "item"
+      when "decimal"
+        itemFieldName = "ditem"
+      when "string"
+        itemFieldName = "sitem"
+      when "text"
+        itemFieldName = "titem"
+      end
+      itemNames.push(itemFieldName + (itemTypesIndex[item[:type]]).to_s) if itemFieldName.is_a? String
+      itemTypesIndex[item[:type]] += 1
+    end
+    itemNames
   end
 
   def self.getItemsWithType(types=nil,items=nil)
-    if types.nil?
-      types = self.ALL_ITEM_TYPES
-    end
-    unless types.is_a? Array
-      types = [types]
-    end
-    if items.nil?
-      items = getItems
-    end
+    types = processItemTypesArray(types)
+    items = getItems if items.nil?
     items.reject{|item| item[:type].nil? or !types.include? item[:type]}
+  end
+
+  def self.processItemTypesArray(itemTypes)
+    itemTypes = self.ALL_ITEM_TYPES if itemTypes.blank?
+    itemTypes = [itemTypes] unless itemTypes.is_a? Array
+    if itemTypes.include?("numeric")
+      itemTypes.delete("numeric")
+      itemTypes += ["integer","decimal"]
+    end
+    itemTypes.uniq
   end
 
   def automatic?
