@@ -31,7 +31,7 @@ class Metadata < ActiveRecord::Base
     require 'open-uri'
     begin
       metadata_content = nil
-      doc = Nokogiri::HTML(open(metadata_url))
+      doc = Nokogiri::HTML(open(metadata_url,:read_timeout => 10))
       
       if Metadata::Lom.compliant?(doc)
         self.schema = Metadata::Lom.schema
