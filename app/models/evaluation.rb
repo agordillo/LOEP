@@ -97,30 +97,36 @@ class Evaluation < ActiveRecord::Base
     ["integer","decimal","string","text"]
   end
 
+  def self.ALL_ITEM_FIELDS
+    self.ALL_ITEM_TYPES.map{|itemType| fieldNameForItemType(itemType)}
+  end
+
+  def self.fieldNameForItemType(itemType)
+    case itemType
+    when "integer"
+      "item"
+    when "decimal"
+      "ditem"
+    when "string"
+      "sitem"
+    when "text"
+      "titem"
+    else
+      nil
+    end
+  end
+
   #######################
   # Get extended Evaluation Data
   #######################
 
   def extended_attributes
     evModule = self.evmethod.module.constantize
-    nIntegerItems = evModule.getItemsWithType("integer").length
-    nStringItems = evModule.getItemsWithType("string").length
-    nTextItems = evModule.getItemsWithType("text").length
-    itemNamesToReject = []
-    100.times do |i|
-      if i > nIntegerItems
-        itemNamesToReject.push("item"+i.to_s)
-      end
-      if i > nStringItems
-        itemNamesToReject.push("sitem"+i.to_s)
-      end
-      if i > nTextItems
-        itemNamesToReject.push("titem"+i.to_s)
-      end
-    end
-    
-    attrs = self.attributes.reject{ |key,value| (key.start_with?(*itemNamesToReject))}
-    attrs["Reviewer"] = self.user.name
+    itemFieldPrefixNames = evModule.ALL_ITEM_FIELDS
+    itemKeys = evModule.getItemsArray
+    attrs = self.attributes.reject{ |key,value| key.start_with?(*itemFieldPrefixNames) and !itemKeys.include?(key)}
+
+    attrs["Reviewer"] = (self.user.nil? ? "Automatic" : self.user.name)
     attrs["loName"] = self.lo.name
     attrs["evMethodName"] = self.evmethod.name
 
@@ -128,8 +134,7 @@ class Evaluation < ActiveRecord::Base
     attrs["updated_at"] = Utils.getReadableDate(attrs["updated_at"])
     attrs["completed_at"] = Utils.getReadableDate(attrs["completed_at"])
 
-    commonKeys = attrs.reject{ |key,value| (key.start_with?(*["item","sitem","titem","comments","score"]))}.keys
-    itemKeys = ["item","sitem","titem"]
+    commonKeys = attrs.reject{ |key,value| (key.start_with?(*(itemFieldPrefixNames + ["comments","score"])))}.keys
     sortedKeys = attrs.keys.sort{ |k1,k2|
       iK1 = commonKeys.include? k1
       iK2 = commonKeys.include? k2
@@ -143,8 +148,8 @@ class Evaluation < ActiveRecord::Base
         if iK2
           1
         else
-          iiK1 = k1.start_with?(*itemKeys)
-          iiK2 = k2.start_with?(*itemKeys)
+          iiK1 = k1.start_with?(*itemFieldPrefixNames)
+          iiK2 = k2.start_with?(*itemFieldPrefixNames)
           if iiK1
             if iiK2
               if k1.match(/[a-z]+/).values_at(0).first == k2.match(/[a-z]+/).values_at(0).first
@@ -247,16 +252,7 @@ class Evaluation < ActiveRecord::Base
     end
 
     getItemsWithType(itemTypes).each do |item|
-      case item[:type]
-      when "integer"
-        itemFieldName = "item"
-      when "decimal"
-        itemFieldName = "ditem"
-      when "string"
-        itemFieldName = "sitem"
-      when "text"
-        itemFieldName = "titem"
-      end
+      itemFieldName = fieldNameForItemType(item[:type])
       itemNames.push(itemFieldName + (itemTypesIndex[item[:type]]).to_s) if itemFieldName.is_a? String
       itemTypesIndex[item[:type]] += 1
     end

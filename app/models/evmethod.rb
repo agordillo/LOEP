@@ -127,7 +127,7 @@ class Evmethod < ActiveRecord::Base
       return nil
     end
 
-    representationData["labels"] = evModule.getItemsWithType("integer").map{|li| li[:shortname] || li[:name]}
+    representationData["labels"] = evModule.getItemsWithType("numeric").map{|li| li[:shortname] || li[:name]}
     
     if !representationData.values.first.nil? and !representationData.values.first["engine"].nil?
       representationData["engine"] = representationData.values.first["engine"]
