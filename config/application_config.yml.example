@@ -23,8 +23,8 @@ development:
   #   public_key: ""
   #   private_key: ""
   surveys: "false"
-  evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T"]
-  metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean"]
+  evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T","Metadata Quality"]
+  metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean","LOM Metadata Quality Metric","LOM Completeness Metadata Quality Metric"]
   allow_external_evaluations: ["WBLT-S","WBLT-T"]
   #Register Policy valid values ["FREE","INVITATION_ONLY","HYBRID"]
   register_policy: "FREE"
@@ -42,7 +42,7 @@ production:
   #   private_key: ""
   surveys: "false"
   evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T","Metadata Quality"]
-  metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean","LOM Metadata Quality Metric"]
+  metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean","LOM Metadata Quality Metric","LOM Completeness Metadata Quality Metric"]
   allow_external_evaluations: ["WBLT-S","WBLT-T"]
   register_policy: "FREE"
   default_role: "User"

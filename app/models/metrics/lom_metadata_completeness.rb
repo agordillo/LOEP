@@ -2,6 +2,10 @@
 
 class Metrics::LomMetadataCompleteness < Metrics::LomMetadata
 
+  def getScoreForLo(lo)
+    self.class.getScoreForLo(lo)
+  end
+
   def self.getScoreForLo(lo)
     score = 0
     fieldWeights = Metrics::LomMetadata.fieldWeights

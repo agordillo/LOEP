@@ -279,7 +279,8 @@ namespace :db do
 				{name:"WBLT-S Arithmetic Mean", module_name:"Metrics::WBLTSAM", evmethods:["WBLT-S"]},
 				{name:"WBLT-T Arithmetic Mean", module_name:"Metrics::WBLTTAM", evmethods:["WBLT-T"]},
 				{name:"LORIEM", module_name:"Metrics::LORIEM", evmethods:["LORI v1.5","LOEM"]},
-				{name:"LOM Metadata Quality Metric", module_name:"Metrics::LomMetadata", evmethods:["Metadata Quality"]}
+				{name:"LOM Metadata Quality Metric", module_name:"Metrics::LomMetadata", evmethods:["Metadata Quality"]},
+				{name:"LOM Completeness Metadata Quality Metric", module_name:"Metrics::LomMetadataCompleteness", evmethods:["Metadata Quality"]}
 			]
 
 			LOEP_VANILLA_Metrics.each do |metric|

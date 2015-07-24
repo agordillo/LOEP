@@ -43,6 +43,10 @@ class Metric < ActiveRecord::Base
     end
   end
 
+  def automatic?
+    self.evmethods.map{|ev| ev.automatic?}.uniq == [true]
+  end
+
   ################################
   # Method for metrics to inherit
   ################################
