@@ -162,8 +162,9 @@ class Lo < ActiveRecord::Base
   end
 
   def getMetadata(options={})
+    metadata = Metadata.find_by_lo_id(self.id)
     options = {:format => "json", :schema => Metadata::Lom.schema }.merge(options)
-    if self.metadata.nil?
+    if metadata.nil?
       case options[:format]
       when "json"
         return {}
@@ -173,7 +174,7 @@ class Lo < ActiveRecord::Base
         return nil
       end
     else
-      return self.metadata.getMetadata(options)
+      return metadata.getMetadata(options)
     end
   end
 
