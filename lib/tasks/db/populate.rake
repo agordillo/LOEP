@@ -309,6 +309,13 @@ namespace :db do
 					s.save
 				end
 			end
+
+			puts "Recalculating automatic scores..."
+			Evmethod.allc_automatic.each do |evmethod|
+				Lo.all.each do |lo|
+					evmethod.getEvaluationModule.createAutomaticEvaluation(lo)
+				end
+			end
 		end
 
 		task :create_users => :environment do
