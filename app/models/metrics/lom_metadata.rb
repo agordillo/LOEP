@@ -8,6 +8,18 @@ class Metrics::LomMetadata < Metrics::WAM
     super
   end
 
+  def self.getScoreForMetadata(metadataFields)
+    score = 0
+    items = []
+    items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataFields))
+    items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataFields))
+    items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataFields))
+    items.each_with_index do |value,index|
+        score += value * itemWeights[index]
+    end
+    score
+  end
+
   def self.itemWeights
     [
       BigDecimal(1/3.to_f,8),

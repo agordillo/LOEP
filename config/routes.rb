@@ -75,6 +75,8 @@ LOEP::Application.routes.draw do
   match '/tags' => 'application#serve_tags'
   match '/surveys' => 'surveys#index'
   match '/generateToken' => 'application#generateToken'
+  match '/lom_validator' => 'lom_validator#index', via: [:get]
+  match '/lom_validator/validate' => 'lom_validator#validate', via: [:post]
 
   #LOEP API
   namespace :api do

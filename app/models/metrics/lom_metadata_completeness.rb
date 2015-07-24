@@ -7,9 +7,13 @@ class Metrics::LomMetadataCompleteness < Metrics::LomMetadata
   end
 
   def self.getScoreForLo(lo)
+    metadataFields = lo.getMetadata({:schema => "LOMv1.0", :format => "json", :fields => true})
+    return getScoreForMetadata(metadataFields)
+  end
+
+  def self.getScoreForMetadata(metadataFields)
     score = 0
     fieldWeights = Metrics::LomMetadata.fieldWeights
-    metadataFields = lo.getMetadata({:schema => "LOMv1.0", :format => "json", :fields => true})
     unless metadataFields.blank?
       metadataFields.each do |key, value|
         unless value.blank?

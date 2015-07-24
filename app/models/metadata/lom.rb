@@ -3,11 +3,13 @@ class Metadata::Lom < Metadata
   class << self
 
     def compliant?(xmlDoc)
+      return false unless xmlDoc.is_a? Nokogiri::XML::Document
       lom = xmlDoc.at_xpath('//lom') rescue nil
+      lom = xmlDoc.root if (lom.nil? and xmlDoc.root.name == "lom") rescue nil
       return false unless lom.is_a? Nokogiri::XML::Element
-      return false unless lom.attributes.is_a? Hash
-      return false unless lom.attributes["xmlns"].is_a? Nokogiri::XML::Attr
-      return false unless lom.attributes["xmlns"].value.include? "LOM"
+      # return false unless lom.attributes.is_a? Hash
+      # return false unless lom.attributes["xmlns"].is_a? Nokogiri::XML::Attr
+      # return false unless lom.attributes["xmlns"].value.include? "LOM"
       true
     end
 

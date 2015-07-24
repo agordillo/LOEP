@@ -1,0 +1,92 @@
+<script src="/assets/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/assets/ace/mode-html.js" type="text/javascript" charset="utf-8"></script>
+<script src="/assets/ace/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+<script src="/assets/ace/mode-xml.js" type="text/javascript" charset="utf-8"></script>
+<script src="/assets/ace/theme-chrome.js" type="text/javascript" charset="utf-8"></script>
+<script src="/assets/ace/worker-javascript.js" type="text/javascript" charset="utf-8"></script>
+<script src="/assets/ace/worker-html.js" type="text/javascript" charset="utf-8"></script>
+<script src="/assets/ace/worker-xml.js" type="text/javascript" charset="utf-8"></script>
+
+<%= render '/application/notifications' %>
+
+<div id="lom_validator_wrapper">
+  <div id="lom_validator_editor_wrapper">
+    <div id="lom_validator_header">
+      <h1>LOM Validator</h1>
+    </div>
+    <div id="lom_validator_body">
+      <div id="lom_validator_editor">Paste here your LOM XML file</div>
+    </div>
+	</div>
+  <div id="lom_validator_footer">
+    <form id="lom_validator_form" action="/lom_validator/validate" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="lom_xml"/>
+      <input type="submit" class="loep_button loep_evaluation_button" value="Validate"></input>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $("#container").css("padding-top","1%");
+
+    $(document).ready(function(){
+      var editor = ace.edit("lom_validator_editor");
+      editor.setTheme("ace/theme/chrome");
+      editor.getSession().setMode("ace/mode/xml");
+
+      $("#lom_validator_form").click(function(event){
+        //beforeSend is not working properly, so we code that functionality here.
+        //Include content file
+        if(typeof editor != "undefined"){
+          $("#lom_validator_form input[name='lom_xml']").val(editor.getValue());
+        }
+      });
+
+      $("#lom_validator_form").ajaxForm({
+        beforeSend: function() {
+          //Not working properly
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+        },
+        complete: function(xhr) {
+            var response = {errors: ["Server error"]};
+            try {
+              var response = JSON.parse(xhr.responseText);
+            } catch(e){}
+            processResponse(response);
+        },
+        error: function(error){
+          console.log("Error");
+        }
+      }); 
+    });
+
+  var processResponse = function(response){
+    cleanResponse();
+    if(typeof response == "object"){
+      if((response.errors instanceof Array)&&(response.errors.length > 0)){
+        //Render errors
+        renderErrors(response.errors);
+      } else {
+        //Render results
+        if(typeof response["quality_score"] != "undefined"){
+          renderScore(response["quality_score"]);
+        }
+      }
+    }
+  };
+
+  var cleanResponse = function(){
+    LOEP.Main.cleanNotifications();
+  }; 
+
+  var renderErrors = function(errors){
+    for(var i=0; i<errors.length; i++){
+      LOEP.Main.createNotification("alert",errors[i]);
+    }
+  };
+
+  var renderScore = function(score){
+    LOEP.Main.createNotification("notice","Metadata Quality: " + score.toString());
+  };
+</script>

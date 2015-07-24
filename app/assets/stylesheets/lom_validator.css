@@ -1,0 +1,39 @@
+#lom_validator_wrapper {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	margin-top: 0%;
+}
+
+#lom_validator_editor_wrapper {
+	width: 100%;
+	height: 100%;
+	border: 2px solid green;
+}
+
+#lom_validator_header {
+	text-align: center;
+}
+
+#lom_validator_header h1 {
+	font-size: 1.4rem;
+	width: 100%;
+	margin: 0px;
+	padding: 8px;
+}
+
+#lom_validator_body {
+	border-top: 2px solid green;
+	padding-top: 10px;
+}
+
+#lom_validator_editor {
+	position: relative;
+	height: 500px;
+	width: 100%;
+    margin-top: 0px;
+}
+
+#lom_validator_footer {
+	padding: 20px 0px;
+}
