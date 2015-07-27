@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150723163029) do
+ActiveRecord::Schema.define(:version => 20150727082212) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -310,6 +310,17 @@ ActiveRecord::Schema.define(:version => 20150723163029) do
     t.text     "lom_content"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "metadata_fields", :force => true do |t|
+    t.string   "name"
+    t.string   "field_type"
+    t.string   "value"
+    t.integer  "n",           :default => 1
+    t.integer  "metadata_id"
+    t.string   "repository"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "metrics", :force => true do |t|

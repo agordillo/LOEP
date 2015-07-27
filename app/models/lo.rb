@@ -16,11 +16,9 @@ class Lo < ActiveRecord::Base
   validates :language_id, :presence => { :message => I18n.t("dictionary.errors.unspecified") }
   validates :language_id, :exclusion => { :in => [-1], :message => I18n.t("dictionary.errors.unspecified")}
 
-  validates :lotype,
-  :presence => true
+  validates :lotype, :presence => true
 
-  validates :technology,
-  :presence => true
+  validates :technology, :presence => true
 
   validates :scope,
   :presence => true

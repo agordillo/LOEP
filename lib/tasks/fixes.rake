@@ -14,7 +14,12 @@ namespace :fixes do
 				s.save
 			end
 		end
-		puts "Updating scores finished"
+		puts "Updating automatic scores..."
+		Evmethod.allc_automatic.each do |evmethod|
+			Lo.all.each do |lo|
+				evmethod.getEvaluationModule.createAutomaticEvaluation(lo)
+			end
+		end
 	end
 
 	task :setAssignmentsDeadlines => :environment do |t, args|
