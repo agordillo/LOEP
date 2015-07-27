@@ -10,31 +10,35 @@ namespace :metadata do
 		#Remove previous metadata records
 		MetadataField.all.map{|mf| mf.destroy}
 
+		#Get conformance items
+		conformanceItems = Metrics::LomMetadataConformance.conformanceItems
+
 		Metadata.all.each do |metadataRecord|
 			metadata_fields = metadataRecord.getMetadata({:fields => true})
-			
-			#Title
-			unless metadata_fields["1.2"].blank?
-				Metrics::LomMetadataConformance.processFreeText(metadata_fields["1.2"]).each do |key,value|
-					mf = MetadataField.new({:name => "1.2", :field_type => "freetext", :value => key, :n => value, :metadata_id => metadataRecord.id})
-					mf.save
+			conformanceItems.each do |key,value|
+				case conformanceItems[key][:type]
+				when "freetext"
+					generateFreeTextMetadataField(key,metadata_fields[key],metadataRecord)
+				when "categorical"
+					generateCategoricalMetadataField(key,metadata_fields[key],metadataRecord)
 				end
 			end
+		end
+	end
 
-			#Language
-			unless metadata_fields["1.3"].blank?
-				mf = MetadataField.new({:name => "1.3", :field_type => "categorical", :value => metadata_fields["1.3"], :n => 1, :metadata_id => metadataRecord.id})
+	def generateFreeTextMetadataField(metadataKey,metadataValue,metadataRecord)
+		unless metadataValue.blank?
+			Metrics::LomMetadataConformance.processFreeText(metadataValue).each do |key,value|
+				mf = MetadataField.new({:name => metadataKey, :field_type => "freetext", :value => key, :n => value, :metadata_id => metadataRecord.id})
 				mf.save
 			end
+		end
+	end
 
-			#Description
-			unless metadata_fields["1.4"].blank?
-				Metrics::LomMetadataConformance.processFreeText(metadata_fields["1.4"]).each do |key,value|
-					mf = MetadataField.new({:name => "1.4", :field_type => "freetext", :value => key, :n => value, :metadata_id => metadataRecord.id})
-					mf.save
-				end
-			end
-
+	def generateCategoricalMetadataField(metadataKey,metadataValue,metadataRecord)
+		unless metadataValue.blank?
+			mf = MetadataField.new({:name => metadataKey, :field_type => "categorical", :value => metadataValue, :n => 1, :metadata_id => metadataRecord.id})
+			mf.save
 		end
 	end
 

@@ -205,7 +205,9 @@ class Evaluation < ActiveRecord::Base
   ###########
 
   def self.allc(params = {})
-    Evaluation.where("evmethod_id in (?)",LOEP::Application.config.evmethods.map{|evmethod| evmethod.id})
+    evmethods = LOEP::Application.config.evmethods
+    evmethods = evmethods.reject{|ev| ev.automatic} if params[:automatic] === false
+    Evaluation.where("evmethod_id in (?)", evmethods.map{|evmethod| evmethod.id})
   end
 
   #Get the real reviewer of the Evaluation

@@ -7,10 +7,11 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
   def self.getScoreForMetadata(metadataFields,options={})
     score = 0
     fieldWeights = Metrics::LomMetadataConformance.fieldWeights
+    conformanceItems = Metrics::LomMetadataConformance.conformanceItems
     unless metadataFields.blank?
       metadataFields.each do |key, value|
-        unless value.blank?
-          score += getScoreForMetadataField(key,value,options) * fieldWeights[key]
+        unless value.blank? or conformanceItems[key].blank?
+          score += getScoreForMetadataField(key,value,options,conformanceItems) * fieldWeights[key]
         end
       end
     end
@@ -18,18 +19,18 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     return score
   end
 
-  def self.getScoreForMetadataField(key,value,options={})
+  def self.getScoreForMetadataField(key,value,options={},conformanceItems)
     score = 0
-    case key
-    when "1.2"
-      score = getScoreForFreeTextMetadataField(key,value,options)
-    when "1.3"
-      score = getScoreForCategoricalMetadataField(key,value,options)
+    case conformanceItems[key][:type]
+    when "freetext"
+      score = getScoreForFreeTextMetadataField(key,value,options,conformanceItems)
+    when "categorical"
+      score = getScoreForCategoricalMetadataField(key,value,options,conformanceItems)
     end
     [0,[score,1].min].max
   end
 
-  def self.getScoreForFreeTextMetadataField(key,value,options={})
+  def self.getScoreForFreeTextMetadataField(key,value,options={},conformanceItems)
     score = 0
 
     allInstances =  MetadataField.where(:name => key)
@@ -57,32 +58,35 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
       score = Math.log(score)
 
       #Normalize score
-      allMaxInstances =  MetadataField.where(:name => key + "_max")
-      unless options[:repository].blank?
-        allMaxInstances =  allMaxInstances.where(:repository => options[:repository])
-      end
-      metadataFieldMaxValueInstance = allMaxInstances.first
+      maxiumValue = conformanceItems[key][:max]
 
-      if metadataFieldMaxValueInstance.nil?
-        metadataFieldMaxValueInstance = MetadataField.new({:name => key + "_max", :field_type => "max", :value => score, :n => 1, :metadata_id => -1, :repository => options[:repository]})
-        metadataFieldMaxValueInstance.save!
-      else
-        if metadataFieldMaxValueInstance.repository == options[:repository]
-          if score > metadataFieldMaxValueInstance.value.to_f
-            #Update
-            metadataFieldMaxValueInstance.value = score
-            metadataFieldMaxValueInstance.save!
-          end
-        end
-      end
+      #Store max instance (uncomment to calculate maximumns)
+      # allMaxInstances =  MetadataField.where(:name => key + "_max")
+      # unless options[:repository].blank?
+      #   allMaxInstances =  allMaxInstances.where(:repository => options[:repository])
+      # end
+      # metadataFieldMaxValueInstance = allMaxInstances.first
 
-      score = [0,[score/metadataFieldMaxValueInstance.value.to_f,1].min].max
+      # if metadataFieldMaxValueInstance.nil?
+      #   metadataFieldMaxValueInstance = MetadataField.new({:name => key + "_max", :field_type => "max", :value => score, :n => 1, :metadata_id => -1, :repository => options[:repository]})
+      #   metadataFieldMaxValueInstance.save!
+      # else
+      #   if metadataFieldMaxValueInstance.repository == options[:repository]
+      #     if score > metadataFieldMaxValueInstance.value.to_f
+      #       #Update
+      #       metadataFieldMaxValueInstance.value = score
+      #       metadataFieldMaxValueInstance.save!
+      #     end
+      #   end
+      # end
+
+      score = [0,[score/(maxiumValue.to_f),1].min].max
     end
 
     score
   end
 
-  def self.getScoreForCategoricalMetadataField(key,value,options={})
+  def self.getScoreForCategoricalMetadataField(key,value,options={},conformanceItems)
     score = 0
     allInstances =  MetadataField.where(:name => key)
     unless options[:repository].blank?
@@ -113,15 +117,25 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     words
   end
 
+  def self.conformanceItems
+    cItems = Hash.new
+    cItems["1.1.2"] = {type: "freetext", max: 1.5}
+    cItems["1.2"] = {type: "freetext", max: 3.25}
+    cItems["1.3"] = {type: "categorical"}
+    cItems["1.4"] = {type: "freetext", max: 5.5}
+    cItems["1.5"] = {type: "freetext", max: 4.25}
+    cItems
+  end
+
   def self.fieldWeights
     fieldWeights = {}
 
     fieldWeights["1.1.1"] = BigDecimal(0,6)
-    fieldWeights["1.1.2"] = BigDecimal(0,6)
-    fieldWeights["1.2"] = BigDecimal(0.5,6)
-    fieldWeights["1.3"] = BigDecimal(0.5,6)
-    fieldWeights["1.4"] = BigDecimal(0,6)
-    fieldWeights["1.5"] = BigDecimal(0,6)
+    fieldWeights["1.1.2"] = BigDecimal(0.2,6)
+    fieldWeights["1.2"] = BigDecimal(0.25,6)
+    fieldWeights["1.3"] = BigDecimal(0.15,6)
+    fieldWeights["1.4"] = BigDecimal(0.2,6)
+    fieldWeights["1.5"] = BigDecimal(0.2,6)
     fieldWeights["1.6"] = BigDecimal(0,6)
     fieldWeights["1.7"] = BigDecimal(0,6)
     fieldWeights["1.8"] = BigDecimal(0,6)

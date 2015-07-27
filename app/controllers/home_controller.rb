@@ -20,7 +20,7 @@ class HomeController < ApplicationController
 			authorize! :index, @assignments
 			@los = Lo.all(:order => 'created_at DESC').first(5)
 			authorize! :index, @los
-			@evaluations = Evaluation.allc.order('updated_at DESC').first(5)
+			@evaluations = Evaluation.allc({:automatic => false}).order('updated_at DESC').first(5)
 			authorize! :index, @evaluations
 			@users = User.all(:order => 'created_at DESC').first(5)
 			authorize! :index, @users

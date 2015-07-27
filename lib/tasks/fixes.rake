@@ -14,6 +14,12 @@ namespace :fixes do
 				s.save
 			end
 		end
+		Rake::Task["fixes:updateAutomaticScores"].invoke
+	end
+
+	#How to use: bundle exec rake fixes:updateAutomaticScores
+	#In production: bundle exec rake fixes:updateAutomaticScores RAILS_ENV=production
+	task :updateAutomaticScores => :environment do |t, args|
 		puts "Updating automatic scores..."
 		Evmethod.allc_automatic.each do |evmethod|
 			Lo.all.each do |lo|
