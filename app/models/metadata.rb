@@ -19,6 +19,7 @@ class Metadata < ActiveRecord::Base
       if self.new_record?
         self.save
       else
+        self.update_column :schema, self.schema
         self.update_column :content, self.content
         self.update_column :lom_content, self.lom_content
         self.update_column :updated_at, Time.now
@@ -40,6 +41,7 @@ class Metadata < ActiveRecord::Base
         self.schema = Metadata::Dc.schema
         metadata_content = Metadata::Dc.getContent(doc)
       else
+        return if self.schema != "Unknown" and !self.content.nil?
         self.schema = "Unknown"
         metadata_content = doc
       end
@@ -62,6 +64,7 @@ class Metadata < ActiveRecord::Base
       end
 
     rescue
+      return if self.schema != "Unknown" and !self.content.nil?
       populate_from_lo
     end
   end
