@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150727082212) do
+ActiveRecord::Schema.define(:version => 20150728162829) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -234,6 +234,16 @@ ActiveRecord::Schema.define(:version => 20150727082212) do
   create_table "evmethods_metrics", :id => false, :force => true do |t|
     t.integer "evmethod_id"
     t.integer "metric_id"
+  end
+
+  create_table "grouped_metadata_fields", :force => true do |t|
+    t.string   "name"
+    t.string   "field_type"
+    t.string   "value"
+    t.integer  "n",          :default => 1
+    t.string   "repository"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "icodes", :force => true do |t|

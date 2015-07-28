@@ -32,52 +32,16 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
   end
 
   def self.getScoreForFreeTextMetadataField(key,value,options={},conformanceItems)
-    score = 0
-
-    allInstances =  MetadataField.where(:name => key)
-    unless options[:repository].blank?
-      allInstances =  allInstances.where(:repository => options[:repository])
-    end
-    allInstancesLength = [1,allInstances.count].max
-
-    processFreeText(value).each do |word,occurrences|
-      docWordFrequency = occurrences
-      
-      #Calculate repositoryWordFrequency
-      repositoryWordFrequency = 0
-      instancesWithValue = allInstances.where(:value => word)
-      instancesWithValueLength = [1,instancesWithValue.count].max
-      repositoryWordFrequency = (instancesWithValueLength.to_f / allInstancesLength)
-      
-      wordScore = docWordFrequency * Math.log(1/repositoryWordFrequency) rescue 0
-      score += wordScore
-    end
+    score = FreeTextTFIDF(value,options.merge({:key => key}))
 
     unless score==0
       score = Math.log(score)
 
+      #Store max instance (uncomment to calculate maximums)
+      # maxiumValue = MetadataField.updateMax(key,score,options)
+
       #Normalize score
       maxiumValue = conformanceItems[key][:max]
-
-      #Store max instance (uncomment to calculate maximumns)
-      # allMaxInstances =  MetadataField.where(:name => key + "_max")
-      # unless options[:repository].blank?
-      #   allMaxInstances =  allMaxInstances.where(:repository => options[:repository])
-      # end
-      # metadataFieldMaxValueInstance = allMaxInstances.first
-
-      # if metadataFieldMaxValueInstance.nil?
-      #   metadataFieldMaxValueInstance = MetadataField.new({:name => key + "_max", :field_type => "max", :value => score, :n => 1, :metadata_id => -1, :repository => options[:repository]})
-      #   metadataFieldMaxValueInstance.save!
-      # else
-      #   if metadataFieldMaxValueInstance.repository == options[:repository]
-      #     if score > metadataFieldMaxValueInstance.value.to_f
-      #       #Update
-      #       metadataFieldMaxValueInstance.value = score
-      #       metadataFieldMaxValueInstance.save!
-      #     end
-      #   end
-      # end
 
       score = [0,[score/(maxiumValue.to_f),1].min].max
     end
@@ -91,7 +55,7 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     unless options[:repository].blank?
       allInstances =  allInstances.where(:repository => options[:repository])
     end
-    instancesWithValue = allInstances.where(:value => value)
+    instancesWithValue = allInstances.where(:value => value.downcase)
     n = [1,allInstances.count].max
     times = [1,instancesWithValue.count].max
     unless n == 1
@@ -105,13 +69,51 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
   def self.processFreeText(text,options={})
     return {} unless text.is_a? String
     options = {:separator => " "}.merge(options)
-    text = text.gsub(/([,.;:?¿¡!\"'_-])/,"").gsub(/([\n])/," ")
+    text = text.gsub(/([\n])/," ").gsub(/[^0-9a-záéíóúñçÁÉÍÓÚÑÇº|\s]/i,"").downcase
     words = Hash.new
     text.split(options[:separator]).each do |word|
       words[word] = 0 if words[word].nil?
       words[word] += 1
     end
     words
+  end
+
+  def self.TFIDF(word,text,options)
+    if options[:occurrences].is_a? Numeric
+      occurrencesOfWordInText = options[:occurrences]
+    else
+      occurrencesOfWordInText = Metrics::LomMetadataConformance.processFreeText(text)[word]
+    end
+    textWordFrequency = occurrencesOfWordInText
+    return 0 if textWordFrequency==0
+    
+    query = {:field_type => "freetext"}
+    unless options[:key].blank?
+      query = query.merge({:name => options[:key]})
+    end
+    unless options[:repository].blank?
+      query = query.merge({:repository => options[:repository]})
+    end
+    
+    allGroupedMetadataInstances = GroupedMetadataField.where(query)
+    allResourcesInRepository = [1,allGroupedMetadataInstances.find_by_value(nil).n].max rescue 1
+    occurrencesOfWordInRepository = [1,allGroupedMetadataInstances.find_by_value(word.downcase).n].max rescue 1
+
+    # This code do the same (than the previous lines) but it is slower. We use the GroupedMetadataField to make things fast.
+    # allMetadataInstances = MetadataField.where(query)
+    # allResourcesInRepository = [1,allMetadataInstances.group(:metadata_id).length].max
+    # occurrencesOfWordInRepository = [1,allMetadataInstances.where(:value => word.downcase).group(:metadata_id).length].max
+
+    repositoryWordFrequency = (occurrencesOfWordInRepository.to_f / allResourcesInRepository)
+    textWordFrequency * Math.log(1/repositoryWordFrequency) rescue 0
+  end
+
+  def self.FreeTextTFIDF(freeText,options)
+    freeTextTFIDF = 0
+    processFreeText(freeText).each do |word,occurrences|
+      freeTextTFIDF += TFIDF(word,freeText,options.merge({:occurrences => occurrences}))
+    end
+    freeTextTFIDF
   end
 
   def self.conformanceItems

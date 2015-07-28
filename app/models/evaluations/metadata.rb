@@ -19,6 +19,9 @@ class Evaluations::Metadata < Evaluation
         :type=> "decimal" },
       { :name => "Consistency",
         :description => "Degree to which the metadata instance matches the metadata standard definition.", 
+        :type=> "decimal" },
+      { :name => "Coherence",
+        :description => "Degree to which all the fields of the metadata instance describe the same object in a similar way.",
         :type=> "decimal" }
     ]
   end
@@ -38,6 +41,7 @@ class Evaluations::Metadata < Evaluation
     evaluation.ditem1 = Metrics::LomMetadataCompleteness.getScoreForLo(lo)
     evaluation.ditem2 = Metrics::LomMetadataConformance.getScoreForLo(lo)
     evaluation.ditem3 = Metrics::LomMetadataConsistency.getScoreForLo(lo)
+    evaluation.ditem4 = Metrics::LomMetadataCoherence.getScoreForLo(lo)
     evaluation.save!
     evaluation
   end
