@@ -730,9 +730,9 @@ class Metadata::Lom < Metadata
 
       tree["lifecycle"] = {"size" => 1}
       tree["lifecycle"]["version"] = {"size" => 1, "datatype" => "LangString"}
-      tree["lifecycle"]["status"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["lifecycle"]["status"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["draft","final","revised","unavailable"]}
       tree["lifecycle"]["contribute"] = {"size" => 30}
-      tree["lifecycle"]["contribute"]["role"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["lifecycle"]["contribute"]["role"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["author","publisher","unknown","initiator", "terminator", "validator", "editor", "graphical designer", "technical implementer", "content provider", "technical validator", "educational validator", "script writer", "instructional designer", "subject matter expert"]}
       tree["lifecycle"]["contribute"]["entity"] = {"size" => 40, "datatype" => "CharacterString"}
       tree["lifecycle"]["contribute"]["date"] = {"size" => 1, "datatype" => "DateTime"}
 
@@ -741,7 +741,7 @@ class Metadata::Lom < Metadata
       tree["metametadata"]["identifier"]["catalog"] = {"size" => 1, "datatype" => "CharacterString"}
       tree["metametadata"]["identifier"]["entry"] = {"size" => 1, "datatype" => "CharacterString"}
       tree["metametadata"]["contribute"] = {"size" => 10}
-      tree["metametadata"]["contribute"]["role"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["metametadata"]["contribute"]["role"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["creator","validator"]}
       tree["metametadata"]["contribute"]["entity"] = {"size" => 10, "datatype" => "CharacterString"}
       tree["metametadata"]["contribute"]["date"] = {"size" => 1, "datatype" => "DateTime"}
       tree["metametadata"]["metadataschema"] = {"size" => 10, "datatype" => "CharacterString"}
@@ -753,8 +753,8 @@ class Metadata::Lom < Metadata
       tree["technical"]["location"] = {"size" => 10, "datatype" => "CharacterString"}
       tree["technical"]["requirement"] = {"size" => 40}
       tree["technical"]["requirement"]["orcomposite"] = {"size" => 40}
-      tree["technical"]["requirement"]["orcomposite"]["type"] = {"size" => 1, "datatype" => "Vocabulary"}
-      tree["technical"]["requirement"]["orcomposite"]["name"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["technical"]["requirement"]["orcomposite"]["type"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["operating system","browser"]}
+      tree["technical"]["requirement"]["orcomposite"]["name"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["pc-dos","ms-windows","macos","unix","multi-os","none","any","netscape communicator","ms-internet explorer","opera","amaya"]}
       tree["technical"]["requirement"]["orcomposite"]["minimumversion"] = {"size" => 1, "datatype" => "CharacterString"}
       tree["technical"]["requirement"]["orcomposite"]["maximumversion"] = {"size" => 1, "datatype" => "CharacterString"}
       tree["technical"]["installationremarks"] = {"size" => 1, "datatype" => "LangString"}
@@ -762,25 +762,25 @@ class Metadata::Lom < Metadata
       tree["technical"]["duration"] = {"size" => 1, "datatype" => "Duration"}
 
       tree["educational"] = {"size" => 100}
-      tree["educational"]["interactivitytype"] = {"size" => 1, "datatype" => "Vocabulary"}
-      tree["educational"]["learningresourcetype"] = {"size" => 10, "datatype" => "Vocabulary"}
-      tree["educational"]["interactivitylevel"] = {"size" => 1, "datatype" => "Vocabulary"}
-      tree["educational"]["semanticdensity"] = {"size" => 1, "datatype" => "Vocabulary"}
-      tree["educational"]["intendedenduserrole"] = {"size" => 10, "datatype" => "Vocabulary"}
-      tree["educational"]["context"] = {"size" => 10, "datatype" => "Vocabulary"}
+      tree["educational"]["interactivitytype"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["active","expositive","mixed"]}
+      tree["educational"]["learningresourcetype"] = {"size" => 10, "datatype" => "Vocabulary", "valuespace" => ["exercise","simulation","questionnaire","diagram","figure","graph","index","slide","table","narrative text","exam","experiment","problem statement","self assessment","lecture"]}
+      tree["educational"]["interactivitylevel"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["very low","low","medium","high","very high"]}
+      tree["educational"]["semanticdensity"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["very low","low","medium","high","very high"]}
+      tree["educational"]["intendedenduserrole"] = {"size" => 10, "datatype" => "Vocabulary", "valuespace" => ["teacher","author","learner","manager"]}
+      tree["educational"]["context"] = {"size" => 10, "datatype" => "Vocabulary", "valuespace" => ["school","higher education","training","other"]}
       tree["educational"]["typicalagerange"] = {"size" => 5, "datatype" => "LangString"}
-      tree["educational"]["difficulty"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["educational"]["difficulty"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["very easy","easy","medium","difficult","very difficult"]}
       tree["educational"]["typicallearningtime"] = {"size" => 1, "datatype" => "Duration"}
       tree["educational"]["description"] = {"size" => 10, "datatype" => "LangString"}
       tree["educational"]["language"] = {"size" => 10, "datatype" => "CharacterString"}
 
       tree["rights"] = {"size" => 1}
-      tree["rights"]["cost"] = {"size" => 1, "datatype" => "Vocabulary"}
-      tree["rights"]["copyrightandotherrestrictions"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["rights"]["cost"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["yes","no"]}
+      tree["rights"]["copyrightandotherrestrictions"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["yes","no"]}
       tree["rights"]["description"] = {"size" => 1, "datatype" => "LangString"}
 
       tree["relation"] = {"size" => 100}
-      tree["relation"]["kind"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["relation"]["kind"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["ispartof","haspart","isversionof","hasversion","isformatof","hasformat","references","isreferencedby","isbasedon","isbasisfor","requires","isrequiredby"]}
       tree["relation"]["resource"] = {"size" => 1}
       tree["relation"]["resource"]["identifier"] = {"size" => 10}
       tree["relation"]["resource"]["identifier"]["catalog"] = {"size" => 1, "datatype" => "CharacterString"}
@@ -793,7 +793,7 @@ class Metadata::Lom < Metadata
       tree["annotation"]["description"] = {"size" => 1, "datatype" => "LangString"}
 
       tree["classification"] = {"size" => 40}
-      tree["classification"]["purpose"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["classification"]["purpose"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["discipline","idea","prerequisite","educational objective","accesibility","restrictions","educational level","skill level","security level","competency"]}
       tree["classification"]["taxonpath"] = {"size" => 15}
       tree["classification"]["taxonpath"]["source"] = {"size" => 1, "datatype" => "LangString"}
       tree["classification"]["taxonpath"]["taxon"] = {"size" => 15}
