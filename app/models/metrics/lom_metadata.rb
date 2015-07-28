@@ -8,12 +8,12 @@ class Metrics::LomMetadata < Metrics::WAM
     super
   end
 
-  def self.getScoreForMetadata(metadataFields,options={})
+  def self.getScoreForMetadata(metadataJSON,options={})
     score = 0
     items = []
-    items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataFields,options))
-    items.push(Metrics::LomMetadataConformance.getScoreForMetadata(metadataFields,options))
-    items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataFields,options))
+    items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataJSON,options))
+    items.push(Metrics::LomMetadataConformance.getScoreForMetadata(metadataJSON,options))
+    items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataJSON,options))
     items.each_with_index do |value,index|
         score += value * itemWeights[index]
     end
@@ -24,7 +24,7 @@ class Metrics::LomMetadata < Metrics::WAM
     itemWeights = []
     nItems = self.getInstance.evmethods.first.getEvaluationModule.getItems.length
     nItems.times do
-        itemWeights << BigDecimal(1/nItems.to_f,6)
+      itemWeights << BigDecimal(1/nItems.to_f,6)
     end
     itemWeights
   end

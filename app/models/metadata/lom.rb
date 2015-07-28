@@ -713,8 +713,158 @@ class Metadata::Lom < Metadata
       duration["duration"]["value"] if (!duration.nil? and duration["duration"].is_a? Hash and duration["duration"]["value"].is_a? String)
     end
 
-    def categories
-      ["general","lifecycle","metametadata","technical","educational","rights","relation","annotation","classification"]
+    def tree
+      tree = Hash.new
+
+      tree["general"] = {"size" => 1}
+      tree["general"]["identifier"] = {"size" => 10}
+      tree["general"]["identifier"]["catalog"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["general"]["identifier"]["entry"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["general"]["title"] = {"size" => 1, "datatype" => "LangString"}
+      tree["general"]["language"] = {"size" => 10, "datatype" => "CharacterString"}
+      tree["general"]["description"] = {"size" => 10, "datatype" => "LangString"}
+      tree["general"]["keyword"] = {"size" => 10, "datatype" => "LangString"}
+      tree["general"]["coverage"] = {"size" => 10, "datatype" => "LangString"}
+      tree["general"]["structure"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["atomic","collection","networked","hierarchical","linear"]}
+      tree["general"]["aggregationlevel"] = {"size" => 1, "datatype" => "Vocabulary", "valuespace" => ["1","2","3","4"]}
+
+      tree["lifecycle"] = {"size" => 1}
+      tree["lifecycle"]["version"] = {"size" => 1, "datatype" => "LangString"}
+      tree["lifecycle"]["status"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["lifecycle"]["contribute"] = {"size" => 30}
+      tree["lifecycle"]["contribute"]["role"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["lifecycle"]["contribute"]["entity"] = {"size" => 40, "datatype" => "CharacterString"}
+      tree["lifecycle"]["contribute"]["date"] = {"size" => 1, "datatype" => "DateTime"}
+
+      tree["metametadata"] = {"size" => 1}
+      tree["metametadata"]["identifier"] = {"size" => 10}
+      tree["metametadata"]["identifier"]["catalog"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["metametadata"]["identifier"]["entry"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["metametadata"]["contribute"] = {"size" => 10}
+      tree["metametadata"]["contribute"]["role"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["metametadata"]["contribute"]["entity"] = {"size" => 10, "datatype" => "CharacterString"}
+      tree["metametadata"]["contribute"]["date"] = {"size" => 1, "datatype" => "DateTime"}
+      tree["metametadata"]["metadataschema"] = {"size" => 10, "datatype" => "CharacterString"}
+      tree["metametadata"]["language"] = {"size" => 1, "datatype" => "CharacterString"}
+
+      tree["technical"] = {"size" => 1}
+      tree["technical"]["format"] = {"size" => 40, "datatype" => "CharacterString"}
+      tree["technical"]["size"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["technical"]["location"] = {"size" => 10, "datatype" => "CharacterString"}
+      tree["technical"]["requirement"] = {"size" => 40}
+      tree["technical"]["requirement"]["orcomposite"] = {"size" => 40}
+      tree["technical"]["requirement"]["orcomposite"]["type"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["technical"]["requirement"]["orcomposite"]["name"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["technical"]["requirement"]["orcomposite"]["minimumversion"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["technical"]["requirement"]["orcomposite"]["maximumversion"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["technical"]["installationremarks"] = {"size" => 1, "datatype" => "LangString"}
+      tree["technical"]["otherplatformrequirements"] = {"size" => 1, "datatype" => "LangString"}
+      tree["technical"]["duration"] = {"size" => 1, "datatype" => "Duration"}
+
+      tree["educational"] = {"size" => 100}
+      tree["educational"]["interactivitytype"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["educational"]["learningresourcetype"] = {"size" => 10, "datatype" => "Vocabulary"}
+      tree["educational"]["interactivitylevel"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["educational"]["semanticdensity"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["educational"]["intendedenduserrole"] = {"size" => 10, "datatype" => "Vocabulary"}
+      tree["educational"]["context"] = {"size" => 10, "datatype" => "Vocabulary"}
+      tree["educational"]["typicalagerange"] = {"size" => 5, "datatype" => "LangString"}
+      tree["educational"]["difficulty"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["educational"]["typicallearningtime"] = {"size" => 1, "datatype" => "Duration"}
+      tree["educational"]["description"] = {"size" => 10, "datatype" => "LangString"}
+      tree["educational"]["language"] = {"size" => 10, "datatype" => "CharacterString"}
+
+      tree["rights"] = {"size" => 1}
+      tree["rights"]["cost"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["rights"]["copyrightandotherrestrictions"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["rights"]["description"] = {"size" => 1, "datatype" => "LangString"}
+
+      tree["relation"] = {"size" => 100}
+      tree["relation"]["kind"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["relation"]["resource"] = {"size" => 1}
+      tree["relation"]["resource"]["identifier"] = {"size" => 10}
+      tree["relation"]["resource"]["identifier"]["catalog"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["relation"]["resource"]["identifier"]["entry"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["relation"]["resource"]["description"] = {"size" => 10, "datatype" => "LangString"}
+
+      tree["annotation"] = {"size" => 30}
+      tree["annotation"]["entity"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["annotation"]["date"] = {"size" => 1, "datatype" => "DateTime"}
+      tree["annotation"]["description"] = {"size" => 1, "datatype" => "LangString"}
+
+      tree["classification"] = {"size" => 40}
+      tree["classification"]["purpose"] = {"size" => 1, "datatype" => "Vocabulary"}
+      tree["classification"]["taxonpath"] = {"size" => 15}
+      tree["classification"]["taxonpath"]["source"] = {"size" => 1, "datatype" => "LangString"}
+      tree["classification"]["taxonpath"]["taxon"] = {"size" => 15}
+      tree["classification"]["taxonpath"]["taxon"]["id"] = {"size" => 1, "datatype" => "CharacterString"}
+      tree["classification"]["taxonpath"]["taxon"]["entry"] = {"size" => 1, "datatype" => "LangString"}
+      tree["classification"]["description"] = {"size" => 1, "datatype" => "LangString"}
+      tree["classification"]["keyword"] = {"size" => 40, "datatype" => "LangString"}
+
+      return tree
+    end
+
+    def getElements(metadataJSON,options={})
+      elements = getElementsInElement(metadataJSON,tree).uniq
+      unless options["lomcompliant"].nil?
+        options["lomcompliant"] = (options["lomcompliant"] == true)
+        elements = elements.select{|e| e["lomcompliant"] == options["lomcompliant"]}
+      end
+      if options["datatype"].is_a? String
+        elements = elements.select{|e| e["datatype"] == options["datatype"]}
+      end
+      unless options["valid"].nil?
+        options["valid"] = (options["valid"] == true)
+        elements = elements.select{|e| e["valid"] == options["valid"]}
+      end
+      elements
+    end
+
+    def getElementsInElement(elementJSON,tree,rootPath="")
+      elements = []
+
+      if elementJSON.is_a? Array
+        return [{"path" => (rootPath + "ArrayElement"), "valid" => false}] unless (!tree["size"].nil? and tree["size"] > 1)
+        elementJSON.each do |element|
+          elements += getElementsInElement(element,tree.merge({"size" => 1}),rootPath)
+        end
+        return elements
+      end
+
+      if tree["datatype"].nil?
+        rootPath = rootPath + " >> " unless rootPath.blank?
+        elementJSON.keys.reject{|k| k.start_with?("@")}.each do |key|
+          keyPath = rootPath + key
+          if tree.keys.include? key
+            elements += getElementsInElement(elementJSON[key],tree[key],keyPath)
+          else
+            elements << {"path" => keyPath, "lomcompliant" => false}
+          end
+        end
+      else
+        #This is an element itself
+        case tree["datatype"]
+        when "CharacterString"
+          itemValue = Metadata::Lom.getCharacterString(elementJSON)
+          itemValid = !itemValue.blank?
+        when "LangString"
+          itemValue = Metadata::Lom.getLangString(elementJSON)
+          itemValid = !itemValue.blank?
+        when "Vocabulary"
+          itemValue = Metadata::Lom.getVocabularyItem(elementJSON)
+          itemValid = (tree["valuespace"].nil? or tree["valuespace"].include?(itemValue))
+        when "Duration"
+          itemValue = Metadata::Lom.getDuration(elementJSON)
+          itemValid = !itemValue.blank?
+        else
+          itemValue = ""
+          itemValid = false
+        end
+        elements << {"path" => rootPath, "datatype" => tree["datatype"], "value" => itemValue, "valid" => itemValid, "lomcompliant" => true}
+      end
+
+      elements
     end
 
     #Helpers

@@ -23,8 +23,8 @@ class LomValidatorController < ApplicationController
       else
         if Metadata::Lom.compliant?(doc)
           #Calculate Metadata Quality
-          metadataFields = Metadata::Lom.metadata_fields_from_json(metadata["lom"]) rescue {}
-          result[:quality_score] = Metrics::LomMetadata.getScoreForMetadata(metadataFields).round(1)
+          metadataJSON = metadata["lom"] rescue {}
+          result[:quality_score] = Metrics::LomMetadata.getScoreForMetadata(metadataJSON).round(1)
         else
           result[:errors] << "XML file is not LOM compliant"
         end

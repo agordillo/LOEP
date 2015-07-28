@@ -17,12 +17,13 @@ class Evaluations::Metadata < Evaluation
         { :name => "Conformance",
         :description => "Conformance to expectations measures the degree to which the metadata instance fulfills the requirements of a given community of users for a given task.",
         :type=> "decimal" },
-      { :name => "Completeness3",
-        :description => "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource.", 
+      { :name => "Consistency",
+        :description => "Degree to which the metadata instance matches the metadata standard definition.", 
         :type=> "decimal" }
     ]
   end
 
+  
   def self.getScale
     return [0,10]
   end
@@ -36,7 +37,7 @@ class Evaluations::Metadata < Evaluation
     evaluation = super
     evaluation.ditem1 = Metrics::LomMetadataCompleteness.getScoreForLo(lo)
     evaluation.ditem2 = Metrics::LomMetadataConformance.getScoreForLo(lo)
-    evaluation.ditem3 = Metrics::LomMetadataCompleteness.getScoreForLo(lo)
+    evaluation.ditem3 = Metrics::LomMetadataConsistency.getScoreForLo(lo)
     evaluation.save!
     evaluation
   end

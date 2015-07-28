@@ -1,13 +1,14 @@
 # encoding: utf-8
 
-#Metadata Quality Metric: Completeness
+#Metadata Quality Metric: Conformance
 
 class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
 
-  def self.getScoreForMetadata(metadataFields,options={})
+  def self.getScoreForMetadata(metadataJSON,options={})
     score = 0
     fieldWeights = Metrics::LomMetadataConformance.fieldWeights
     conformanceItems = Metrics::LomMetadataConformance.conformanceItems
+    metadataFields = Metadata::Lom.metadata_fields_from_json(metadataJSON) rescue {}
     unless metadataFields.blank?
       metadataFields.each do |key, value|
         unless value.blank? or conformanceItems[key].blank?

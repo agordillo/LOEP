@@ -4,9 +4,10 @@
 
 class Metrics::LomMetadataCompleteness < Metrics::LomMetadataItem
 
-  def self.getScoreForMetadata(metadataFields,options={})
+  def self.getScoreForMetadata(metadataJSON,options={})
     score = 0
     fieldWeights = Metrics::LomMetadataCompleteness.fieldWeights
+    metadataFields = Metadata::Lom.metadata_fields_from_json(metadataJSON) rescue {}
     unless metadataFields.blank?
       metadataFields.each do |key, value|
         unless value.blank?
