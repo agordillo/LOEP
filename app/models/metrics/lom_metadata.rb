@@ -13,7 +13,7 @@ class Metrics::LomMetadata < Metrics::WAM
     items = []
     items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataJSON,options))
     items.push(Metrics::LomMetadataConformance.getScoreForMetadata(metadataJSON,options))
-    items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataJSON,options))
+    items.push(Metrics::LomMetadataConsistency.getScoreForMetadata(metadataJSON,options))
     items.each_with_index do |value,index|
         score += value * itemWeights[index]
     end

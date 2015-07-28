@@ -38,21 +38,19 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     unless options[:repository].blank?
       allInstances =  allInstances.where(:repository => options[:repository])
     end
-    allInstancesLength = allInstances.count
+    allInstancesLength = [1,allInstances.count].max
 
     processFreeText(value).each do |word,occurrences|
       docWordFrequency = occurrences
+      
       #Calculate repositoryWordFrequency
       repositoryWordFrequency = 0
       instancesWithValue = allInstances.where(:value => word)
-      instancesWithValueLength = instancesWithValue.count
-      unless allInstancesLength == 0
-        repositoryWordFrequency = (instancesWithValueLength.to_f / allInstancesLength)
-      end
-      unless repositoryWordFrequency==0
-        wordScore = docWordFrequency * Math.log(1/repositoryWordFrequency) rescue 0
-        score += wordScore
-      end
+      instancesWithValueLength = [1,instancesWithValue.count].max
+      repositoryWordFrequency = (instancesWithValueLength.to_f / allInstancesLength)
+      
+      wordScore = docWordFrequency * Math.log(1/repositoryWordFrequency) rescue 0
+      score += wordScore
     end
 
     unless score==0
@@ -94,14 +92,12 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
       allInstances =  allInstances.where(:repository => options[:repository])
     end
     instancesWithValue = allInstances.where(:value => value)
-    n = allInstances.count
-    times = instancesWithValue.count
-    unless times == 0 or n == 0
-      unless n === 1
-        score = (1 - (Math.log(times)/Math.log(n))) rescue 0
-      else
-        score = 1 if times>0 # n=1 and times€{0,1}
-      end
+    n = [1,allInstances.count].max
+    times = [1,instancesWithValue.count].max
+    unless n == 1
+      score = (1 - (Math.log(times)/Math.log(n))) rescue 0
+    else
+      score = 1 if times>0 # n=1 and times€{0,1}
     end
     score
   end
