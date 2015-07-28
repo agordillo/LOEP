@@ -142,7 +142,7 @@
      $("#stat_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
+        _showLOEPDialog('<%=t("dictionary.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/los/stats",[["lo_ids", lo_ids]]);
@@ -152,7 +152,7 @@
      $("#compare_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
+        _showLOEPDialog('<%=t("dictionary.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/los/compare",[["lo_ids", lo_ids]]);
@@ -162,7 +162,7 @@
     $("#assign_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
+        _showLOEPDialog('<%=t("dictionary.no_item_selected")%>', false);
         return;
       }
       var url = LOEP.Main.createURL("/assignments/new",[["lo_ids", lo_ids]]);
@@ -182,11 +182,11 @@
     $("#remove_los").click(function(){
       var lo_ids = getSelectedLos();
       if(lo_ids.length===0){
-        _showLOEPDialog('<%t("dictionary.no_item_selected")%>', false);
+        _showLOEPDialog('<%=t("dictionary.no_item_selected")%>', false);
         return;
       }
 
-     _showLOEPDialog('<%t("dictionary.are_you_sure")%>', true, function(result){
+     _showLOEPDialog('<%=t("dictionary.are_you_sure")%>', true, function(result){
         if(result==true){
           var lo_ids = getSelectedLos();
           if(lo_ids.length===0){
