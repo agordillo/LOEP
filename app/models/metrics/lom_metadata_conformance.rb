@@ -82,7 +82,7 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     if options[:occurrences].is_a? Numeric
       occurrencesOfWordInText = options[:occurrences]
     else
-      occurrencesOfWordInText = Metrics::LomMetadataConformance.processFreeText(text)[word]
+      occurrencesOfWordInText = Metrics::LomMetadataConformance.processFreeText(text)[word] || 0
     end
     textWordFrequency = occurrencesOfWordInText
     return 0 if textWordFrequency==0

@@ -26,7 +26,7 @@ class Metrics::LomMetadataCoherence < Metrics::LomMetadataItem
     words.each do |word|
       tfidf1 = Metrics::LomMetadataConformance.TFIDF(word,textA,options)
       tfidf2 = Metrics::LomMetadataConformance.TFIDF(word,textB,options)
-      numerator += tfidf1 * tfidf2
+      numerator += (tfidf1 * tfidf2)
       denominatorA += tfidf1**2
       denominatorB += tfidf2**2
     end
