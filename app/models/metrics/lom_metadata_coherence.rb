@@ -9,7 +9,6 @@ class Metrics::LomMetadataCoherence < Metrics::LomMetadataItem
     metadataFields = Metadata::Lom.metadata_fields_from_json(metadataJSON) rescue {}
     metadataTextFields = {"1.2" => metadataFields["1.2"], "1.4" => metadataFields["1.4"]}.reject{|k,v| v.blank?}
     score = getScoreForFreeTextMetadataFields(metadataTextFields,options)
-    score = [1,score * 2].min  #Increase score by a correction factor to compensate low semantic distance values
     score *= 10
     return score
   end
@@ -22,7 +21,9 @@ class Metrics::LomMetadataCoherence < Metrics::LomMetadataItem
     denominatorA = 0
     denominatorB = 0
 
-    words = Metrics::LomMetadataConformance.processFreeText(textA).merge(Metrics::LomMetadataConformance.processFreeText(textB)).keys
+    # words = Metrics::LomMetadataConformance.processFreeText(textA).merge(Metrics::LomMetadataConformance.processFreeText(textB)).keys
+    words = [Metrics::LomMetadataConformance.processFreeText(textA).keys, Metrics::LomMetadataConformance.processFreeText(textB).keys].sort_by{|words| words.length}.first
+
     words.each do |word|
       tfidf1 = Metrics::LomMetadataConformance.TFIDF(word,textA,options)
       tfidf2 = Metrics::LomMetadataConformance.TFIDF(word,textB,options)
