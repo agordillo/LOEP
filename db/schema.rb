@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150728162829) do
+ActiveRecord::Schema.define(:version => 20150729075716) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -331,6 +331,14 @@ ActiveRecord::Schema.define(:version => 20150728162829) do
     t.string   "repository"
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
+  end
+
+  create_table "metadata_graph_links", :force => true do |t|
+    t.integer  "metadata_id"
+    t.string   "keyword"
+    t.string   "repository"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "metrics", :force => true do |t|

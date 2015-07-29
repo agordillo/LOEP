@@ -59,3 +59,6 @@ gem 'nokogiri', '1.6.3.1'
 
 #Internacionalization
 gem 'i18n', '0.6.11'
+
+#Statistics
+gem 'descriptive_statistics', '~> 2.4.0', :require => 'descriptive_statistics/safe'

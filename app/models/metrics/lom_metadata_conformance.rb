@@ -51,7 +51,7 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
 
   def self.getScoreForCategoricalMetadataField(key,value,options={},conformanceItems)
     score = 0
-    allInstances =  MetadataField.where(:name => key)
+    allInstances =  MetadataField.where(:name => key, :field_type => "categorical")
     unless options[:repository].blank?
       allInstances =  allInstances.where(:repository => options[:repository])
     end

@@ -40,7 +40,7 @@ class MetadataField < ActiveRecord::Base
 
   # Store and update max values of MetadataFields
   def self.updateMax(key,candidateValue,options)
-    allMaxInstances =  MetadataField.where(:name => key + "_max")
+    allMaxInstances =  MetadataField.where(:name => key + "_max", :field_type => "max")
     unless options[:repository].blank?
       allMaxInstances =  allMaxInstances.where(:repository => options[:repository])
     end
@@ -60,6 +60,19 @@ class MetadataField < ActiveRecord::Base
     end
     #Return max value
     metadataFieldMaxValueInstance.value
+  end
+
+  def self.getMax(key,options={})
+    allMaxInstances =  MetadataField.where(:name => key + "_max", :field_type => "max")
+    unless options[:repository].blank?
+      allMaxInstances =  allMaxInstances.where(:repository => options[:repository])
+    end
+    metadataFieldMaxValueInstance = allMaxInstances.first
+    if metadataFieldMaxValueInstance.nil?
+      1
+    else
+      metadataFieldMaxValueInstance.value.to_f
+    end
   end
 
 

@@ -6,6 +6,15 @@ namespace :metadata do
 	#In production: bundle exec rake metadata:updateContext RAILS_ENV=production
 	task :updateContext => :environment do |t, args|
 		puts "Updating metadata context"
+		Rake::Task["metadata:updateMetadataFieldRecords"].invoke
+		Rake::Task["metadata:updateGraphs"].invoke
+		puts "Task finished"
+	end
+
+	#How to use: bundle exec rake metadata:updateMetadataFieldRecords
+	#In production: bundle exec rake metadata:updateMetadataFieldRecords RAILS_ENV=production
+	task :updateMetadataFieldRecords => :environment do |t, args|
+		puts "Updating MetadataFields and GroupedMetadataFields"
 
 		#Remove previous metadata records
 		MetadataField.all.map{|mf| mf.destroy}
@@ -30,7 +39,7 @@ namespace :metadata do
 		repositories = MetadataField.all.map{|mf| mf.repository}.uniq
 		conformanceItems.each do |key,value|
 			if conformanceItems[key][:type] == "freetext"
-				metadataFields = MetadataField.where(:name => key)
+				metadataFields = MetadataField.where(:name => key, :field_type => "freetext")
 				repositories.each do |repository|
 					metadataFieldsOfRepository = metadataFields.where(:repository => repository)
 					#Store the total number of resources that have defined a value for this key/repository pair.
@@ -51,6 +60,46 @@ namespace :metadata do
 				end
 			end
 		end
+	end
+
+	#How to use: bundle exec rake metadata:updateGraphs
+	#In production: bundle exec rake metadata:updateGraphs RAILS_ENV=production
+	task :updateGraphs => :environment do |t, args|
+		puts "Updating graphs"
+		MetadataGraphLink.all.map{|mgl| mgl.destroy}
+		
+		metadataMapping = Metadata.all.map{|m| [m.id,m.repository,m.getMetadata(:schema => "LOMv1.0", :format => "json", :fields => true)]}.reject{|map| map[2].blank? or map[2]["1.5"].blank? }.map{|map| [map[0],map[1],map[2]["1.5"].split(", ").reject{|s| s.blank?}.map{|keyword| keyword.downcase}.uniq]}
+		metadataMapping.each do |metadataMapping|
+			# metadata_id = metadataMapping[0]
+			# repository = metadataMapping[1]
+			# keywords = metadataMapping[2]
+			metadataMapping[2].each do |keyword|
+				mgl = MetadataGraphLink.new({:metadata_id => metadataMapping[0], :keyword => keyword})
+				mgl.save!
+			end
+		end
+
+		#Calculate maximum number of links (most connected object)
+		maxLinks = {}
+		repositories = metadataMapping.map{|map| map[1]}.uniq
+		repositories.each do |repository|
+			maxLinks[repository] = []
+		end
+		metadataMapping.each do |metadataMapping|
+			links = MetadataGraphLink.getLinksForKeywords(metadataMapping[2],{:repository => metadataMapping[1]})
+			maxLinks[metadataMapping[1]].push(links)
+		end
+		MetadataField.where(:name => "metadataGraphLink_max", :field_type => "max").map{ |mf| mf.destroy}
+		maxLinks.each do |repository,maxLinksForRepository|
+			maxLinksForRepository = [1] if maxLinksForRepository.blank?
+
+			# maxLink = maxLinksForRepository.max
+			require 'descriptive_statistics'
+			maxLink = maxLinksForRepository.percentile(70)
+
+			maxLink = MetadataField.updateMax("metadataGraphLink",maxLink,{:repository => repository})
+		end
+		
 	end
 
 	def generateFreeTextMetadataField(metadataKey,metadataValue,metadataRecord)

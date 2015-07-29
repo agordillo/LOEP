@@ -153,4 +153,8 @@ class Metadata < ActiveRecord::Base
     return xmlMetadata.target!
   end
 
+  def repository
+    self.lo.repository rescue nil
+  end
+
 end

@@ -14,6 +14,9 @@ class Metrics::LomMetadata < Metrics::WAM
     items.push(Metrics::LomMetadataCompleteness.getScoreForMetadata(metadataJSON,options))
     items.push(Metrics::LomMetadataConformance.getScoreForMetadata(metadataJSON,options))
     items.push(Metrics::LomMetadataConsistency.getScoreForMetadata(metadataJSON,options))
+    items.push(Metrics::LomMetadataCoherence.getScoreForMetadata(metadataJSON,options))
+    items.push(Metrics::LomMetadataFindability.getScoreForMetadata(metadataJSON,options))
+
     items.each_with_index do |value,index|
         score += value * itemWeights[index]
     end
