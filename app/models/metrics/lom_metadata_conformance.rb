@@ -49,20 +49,21 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     score
   end
 
-  def self.getScoreForCategoricalMetadataField(key,value,options={},conformanceItems)
+  def self.getScoreForCategoricalMetadataField(key,value,options={},conformanceItems={})
     score = 0
-    allInstances =  MetadataField.where(:name => key, :field_type => "categorical")
-    unless options[:repository].blank?
-      allInstances =  allInstances.where(:repository => options[:repository])
-    end
-    instancesWithValue = allInstances.where(:value => value.downcase)
-    n = [1,allInstances.count].max
-    times = [1,instancesWithValue.count].max
+
+    query = {:name => key, :field_type => "categorical", :repository => options[:repository]}
+    allGroupedMetadataInstances = GroupedMetadataField.where(query)
+
+    n = [1,allGroupedMetadataInstances.find_by_value(nil).n].max rescue 1
+    times = [1,allGroupedMetadataInstances.find_by_value(value.downcase).n].max rescue 1
+
     unless n == 1
       score = (1 - (Math.log(times)/Math.log(n))) rescue 0
     else
       score = 1 if times>0 # n=1 and times€{0,1}
     end
+
     score
   end
 
@@ -87,12 +88,9 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     textWordFrequency = occurrencesOfWordInText
     return 0 if textWordFrequency==0
     
-    query = {:field_type => "freetext"}
+    query = {:field_type => "freetext", :repository => options[:repository]}
     unless options[:key].blank?
       query = query.merge({:name => options[:key]})
-    end
-    unless options[:repository].blank?
-      query = query.merge({:repository => options[:repository]})
     end
     
     allGroupedMetadataInstances = GroupedMetadataField.where(query)

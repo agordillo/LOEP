@@ -26,11 +26,13 @@ namespace :metadata do
 		Metadata.all.each do |metadataRecord|
 			metadata_fields = metadataRecord.getMetadata({:fields => true})
 			conformanceItems.each do |key,value|
-				case conformanceItems[key][:type]
-				when "freetext"
-					generateFreeTextMetadataField(key,metadata_fields[key],metadataRecord)
-				when "categorical"
-					generateCategoricalMetadataField(key,metadata_fields[key],metadataRecord)
+				unless metadata_fields[key].blank?
+					case conformanceItems[key][:type]
+					when "freetext"
+						generateFreeTextMetadataField(key,metadata_fields[key],metadataRecord)
+					when "categorical"
+						generateCategoricalMetadataField(key,metadata_fields[key],metadataRecord)
+					end
 				end
 			end
 		end
@@ -38,24 +40,27 @@ namespace :metadata do
 		#Create grouped metadata fields
 		repositories = MetadataField.all.map{|mf| mf.repository}.uniq
 		conformanceItems.each do |key,value|
-			if conformanceItems[key][:type] == "freetext"
-				metadataFields = MetadataField.where(:name => key, :field_type => "freetext")
-				repositories.each do |repository|
+			fieldType = conformanceItems[key][:type]
+			metadataFields = MetadataField.where(:name => key, :field_type => fieldType)
+			repositories.each do |repository|
+				unless repository.nil?
 					metadataFieldsOfRepository = metadataFields.where(:repository => repository)
-					#Store the total number of resources that have defined a value for this key/repository pair.
-					nTotal = metadataFieldsOfRepository.map{|m| m.metadata_id}.uniq.length
-					if nTotal > 0
-						g = GroupedMetadataField.new({:name => key, :field_type => "freetext", :repository => repository, :value => nil, :n => nTotal})
+				else
+					metadataFieldsOfRepository = metadataFields
+				end
+				#Store the total number of resources that have defined a value for this key/repository pair.
+				nTotal = metadataFieldsOfRepository.map{|m| m.metadata_id}.uniq.length
+				if nTotal > 0
+					g = GroupedMetadataField.new({:name => key, :field_type => fieldType, :repository => repository, :value => nil, :n => nTotal})
+					g.save!
+				end
+				#Values. Store the total number of each value for this key/repository pair.
+				values = metadataFieldsOfRepository.map{|m| m.value}.uniq
+				values.each do |value|
+					n = metadataFieldsOfRepository.where(:value => value).map{|m| m.metadata_id}.uniq.length
+					if n > 0
+						g = GroupedMetadataField.new({:name => key, :field_type => fieldType, :repository => repository, :value => value, :n => n})
 						g.save!
-					end
-					#Values. Store the total number of each value for this key/repository pair.
-					values = metadataFieldsOfRepository.map{|m| m.value}.uniq
-					values.each do |value|
-						n = metadataFieldsOfRepository.where(:value => value).map{|m| m.metadata_id}.uniq.length
-						if n > 0
-							g = GroupedMetadataField.new({:name => key, :field_type => "freetext", :repository => repository, :value => value, :n => n})
-							g.save!
-						end
 					end
 				end
 			end
@@ -86,7 +91,9 @@ namespace :metadata do
 			maxLinks[repository] = []
 		end
 		metadataMapping.each do |metadataMapping|
-			links = MetadataGraphLink.getLinksForKeywords(metadataMapping[2],{:repository => metadataMapping[1]})
+			options = {}
+			options.merge({:repository => metadataMapping[1]}) unless metadataMapping[1].blank?
+			links = MetadataGraphLink.getLinksForKeywords(metadataMapping[2],options)
 			maxLinks[metadataMapping[1]].push(links)
 		end
 		MetadataField.where(:name => "metadataGraphLink_max", :field_type => "max").map{ |mf| mf.destroy}

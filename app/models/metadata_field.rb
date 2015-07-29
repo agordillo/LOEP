@@ -40,39 +40,32 @@ class MetadataField < ActiveRecord::Base
 
   # Store and update max values of MetadataFields
   def self.updateMax(key,candidateValue,options)
-    allMaxInstances =  MetadataField.where(:name => key + "_max", :field_type => "max")
-    unless options[:repository].blank?
-      allMaxInstances =  allMaxInstances.where(:repository => options[:repository])
-    end
-    metadataFieldMaxValueInstance = allMaxInstances.first
+    metadataFieldMaxValueInstance = MetadataField.where(:name => key + "_max", :field_type => "max", :repository => options[:repository]).first
 
     if metadataFieldMaxValueInstance.nil?
       metadataFieldMaxValueInstance = MetadataField.new({:name => key + "_max", :field_type => "max", :value => candidateValue, :n => 1, :metadata_id => -1, :repository => options[:repository]})
       metadataFieldMaxValueInstance.save!
     else
-      if metadataFieldMaxValueInstance.repository == options[:repository]
-        if candidateValue > metadataFieldMaxValueInstance.value.to_f
-          #Update
-          metadataFieldMaxValueInstance.value = candidateValue
-          metadataFieldMaxValueInstance.save!
-        end
+      if candidateValue > metadataFieldMaxValueInstance.value.to_f
+        #Update
+        metadataFieldMaxValueInstance.value = candidateValue
+        metadataFieldMaxValueInstance.save!
       end
     end
+
+    unless options[:repository].nil?
+      #Update Max for nil repository
+      updateMax(key,candidateValue,options.merge({:repository => nil}))
+    end
+
     #Return max value
     metadataFieldMaxValueInstance.value
   end
 
   def self.getMax(key,options={})
-    allMaxInstances =  MetadataField.where(:name => key + "_max", :field_type => "max")
-    unless options[:repository].blank?
-      allMaxInstances =  allMaxInstances.where(:repository => options[:repository])
-    end
-    metadataFieldMaxValueInstance = allMaxInstances.first
-    if metadataFieldMaxValueInstance.nil?
-      1
-    else
-      metadataFieldMaxValueInstance.value.to_f
-    end
+    metadataFieldMaxValueInstance = MetadataField.where(:name => key + "_max", :field_type => "max", :repository => options[:repository]).first
+    return 1 if metadataFieldMaxValueInstance.nil?
+    metadataFieldMaxValueInstance.value.to_f
   end
 
 

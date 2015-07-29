@@ -27,9 +27,7 @@ class MetadataGraphLink < ActiveRecord::Base
     return 0 unless keywords.is_a? Array
     keywords = keywords.reject{|k| k.blank?}.map{|k| k.downcase}.uniq
     query = {:keyword => keywords}
-    unless options[:repository].blank?
-      query = query.merge({:repository => options[:repository]})
-    end
+    query = query.merge({:repository => options[:repository]}) unless options[:repository].blank?
     MetadataGraphLink.where(query).group(:metadata_id).length
   end
 
