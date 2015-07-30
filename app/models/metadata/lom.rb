@@ -612,9 +612,10 @@ class Metadata::Lom < Metadata
               end
               unless Metadata::Lom.getLangString(annotation["description"]).blank?
                 myxml.description do
+                  annotationLanguageOpts = {}
                   annotationLanguage = annotation["description"]["@attributes"]["language"] if annotation["description"]["@attributes"].is_a? Hash and annotation["description"]["@attributes"]["language"].is_a? String
-                  annotationLanguage = metadataLanguage if annotationLanguage.nil?
-                  myxml.string(Metadata::Lom.getLangString(annotation["description"]), :language=> annotationLanguage)
+                  annotationLanguageOpts = {:language=> annotationLanguage} unless annotationLanguage.blank?
+                  myxml.string(Metadata::Lom.getLangString(annotation["description"]), annotationLanguageOpts)
                 end
               end
             end
@@ -637,7 +638,10 @@ class Metadata::Lom < Metadata
                   myxml.taxonPath do
                     unless Metadata::Lom.getLangString(taxonPath["source"]).blank?
                       myxml.source do
-                        myxml.string(Metadata::Lom.getLangString(taxonPath["source"]))
+                        taxonPathSourceLanguageOpts = {}
+                        taxonPathSourceLanguage = taxonPath["source"]["string"]["@attributes"]["language"] if taxonPath["source"]["string"]["@attributes"].is_a? Hash and taxonPath["source"]["string"]["@attributes"]["language"].is_a? String
+                        taxonPathSourceLanguageOpts = {:language=> taxonPathSourceLanguage} unless taxonPathSourceLanguage.blank?
+                        myxml.string(Metadata::Lom.getLangString(taxonPath["source"]), taxonPathSourceLanguageOpts)
                       end
                     end
                     unless taxonPath["taxon"].blank?
@@ -645,8 +649,13 @@ class Metadata::Lom < Metadata
                       taxonPath["taxon"].each do |taxon|
                         myxml.taxon do
                           myxml.id(Metadata::Lom.getCharacterString(taxon["id"])) unless Metadata::Lom.getCharacterString(taxon["id"]).blank?
-                          myxml.entry do
-                            myxml.string(Metadata::Lom.getLangString(taxon["entry"])) unless Metadata::Lom.getLangString(taxon["entry"]).blank?
+                          unless Metadata::Lom.getLangString(taxon["entry"]).blank?
+                            myxml.entry do
+                              taxonPathEntryLanguageOpts = {}
+                              taxonPathEntryLanguage = taxon["entry"]["string"]["@attributes"]["language"] if taxon["entry"]["string"]["@attributes"].is_a? Hash and taxon["entry"]["string"]["@attributes"]["language"].is_a? String
+                              taxonPathEntryLanguageOpts = {:language=> taxonPathEntryLanguage} unless taxonPathEntryLanguage.blank?
+                              myxml.string(Metadata::Lom.getLangString(taxon["entry"]), taxonPathEntryLanguageOpts)
+                            end
                           end
                         end
                       end
