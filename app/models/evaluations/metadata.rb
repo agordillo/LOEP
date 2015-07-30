@@ -13,19 +13,24 @@ class Evaluations::Metadata < Evaluation
     [
       { :name => "Completeness",
         :description => "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource.", 
-        :type=> "decimal" },
-        { :name => "Conformance",
+        :type=> "decimal",
+        :metric =>  "Metrics::LomMetadataCompleteness"},
+      { :name => "Conformance",
         :description => "Conformance to expectations measures the degree to which the metadata instance fulfills the requirements of a given community of users for a given task.",
-        :type=> "decimal" },
+        :type=> "decimal",
+        :metric =>  "Metrics::LomMetadataConformance"},
       { :name => "Consistency",
         :description => "Degree to which the metadata instance matches the metadata standard definition.", 
-        :type=> "decimal" },
+        :type=> "decimal",
+        :metric =>  "Metrics::LomMetadataConsistency"},
       { :name => "Coherence",
         :description => "Degree to which all the fields of the metadata instance describe the same object in a similar way.",
-        :type=> "decimal" },
+        :type=> "decimal",
+        :metric =>  "Metrics::LomMetadataCoherence"},
       { :name => "Findability",
         :description => "The level to which a metadata instance can be found.",
-        :type=> "decimal" }
+        :type=> "decimal",
+        :metric =>  "Metrics::LomMetadataFindability"}
     ]
   end
 

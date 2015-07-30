@@ -293,17 +293,17 @@ class Evaluation < ActiveRecord::Base
     evData[evmethodName] = Hash.new
     evData[evmethodName][:evaluations] = [self]
     evData[evmethodName][:items] = []
-
-    validEvaluations = Evaluation.getValidEvaluationsForItem([self],evmethodModule.getItemsArray)
-    nItems = evmethodModule.getItems.length
+    
+    evMethodItems = evmethodModule.getItemsArray("numeric")
+    validEvaluations = Evaluation.getValidEvaluationsForItem([self],evMethodItems)
 
     if validEvaluations.length === 0
-      nItems.times do |i|
+      evMethodItems.each do |itemName|
         evData[evmethodName][:items].push(nil)
       end
     else
-      nItems.times do |i|
-        iScore = validEvaluations.average("item"+(i+1).to_s).to_f
+      evMethodItems.each do |itemName|
+        iScore = validEvaluations.average(itemName).to_f
         evData[evmethod.name][:items].push(iScore)
       end
     end

@@ -1,5 +1,16 @@
 class Metrics::LomMetadataItem < Metric
 
+  def self.getLoScore(evData)
+    evData[self.getInstance.evmethods.first.name][:items][getItemNumber] rescue nil
+  end
+
+  def self.getItemNumber
+    Evaluations::Metadata.getItemsWithType("numeric").each_with_index do |item,index|
+      return index if item[:metric] == self.name
+    end
+    nil
+  end
+
   def getScoreForLo(lo)
     self.class.getScoreForLo(lo)
   end
