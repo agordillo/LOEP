@@ -455,7 +455,6 @@ class LosController < ApplicationController
   #Download evaluations
   def downloadevs
     @los = Lo.find(params[:lo_ids].split(",").map{|id| id.to_i})
-    
     evaluations = @los.map{|lo| lo.evaluations.allc}.flatten.sort_by{|ev| ev.evmethod.id}
     
     respond_to do |format|

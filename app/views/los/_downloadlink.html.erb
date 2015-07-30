@@ -1,2 +1,11 @@
-<a href="<%=download_path(@los,"xlsx")%>"><%=t("actions.download")%></a> |
-<a href="<%=download_evs_path(@los,"xlsx")%>"><%=t("actions.download_evaluations")%></a>
+<% format ||= "xlsx" %>
+
+<%= form_tag("/los/download." + format, :method=>'post', :multipart => true) do %>
+	<%= hidden_field_tag(:lo_ids, getLoIds(@los)) %>
+	<%= submit_tag(t("actions.download")) %>
+<% end %>
+|
+<%= form_tag("/los/downloadevs." + format, :method=>'post', :multipart => true) do %>
+	<%= hidden_field_tag(:lo_ids, getLoIds(@los)) %>
+	<%= submit_tag(t("actions.download_evaluations")) %>
+<% end %>

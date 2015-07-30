@@ -5,5 +5,5 @@
 <%unless @los.nil? %>
 	<h1 class="loep_title"><%=t("los.name.plural")%></h1>
 	<%= render '/los/index', :showTools => true %>
-	<p class="link_wrapper"><%= render '/los/downloadlink' %></p>
+	<div class="link_wrapper"><%= render '/los/downloadlink' %></div>
 <%end%>

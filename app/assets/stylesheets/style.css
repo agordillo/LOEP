@@ -328,6 +328,33 @@ p.link_wrapper {
 	padding-right: 5px;
 }
 
+div.link_wrapper {
+	display: inline-block;
+	text-align: right;
+	width: 100%;
+	margin-top: 2px;
+	font-size: 0.7rem;
+	text-align: right;
+	padding-right: 5px;
+}
+
+div.link_wrapper form {
+	display: inline-block;
+}
+
+div.link_wrapper form input[type="submit"]{
+	background: none;
+	border: none;
+	color: #428bca;
+	cursor: pointer;
+	outline: none;
+}
+
+div.link_wrapper form input[type="submit"]:hover{
+	text-decoration: underline;
+	color: #2a6496;
+}
+
 
 /* loep table for forms */
 

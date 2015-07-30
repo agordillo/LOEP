@@ -1,9 +1,9 @@
 <h1 class="loep_title"><%=t("los.name.plural")%></h1>
 <%= render '/los/index', :showTools => true %>
-<p class="link_wrapper">
+<div class="link_wrapper">
 	<%if @los.length > 0%>
 		<%= render '/los/downloadlink' %> |
 	<%end%>
 	<%= link_to t("los.actions.add_new"), new_lo_path %>
-</p>
+</div>
 

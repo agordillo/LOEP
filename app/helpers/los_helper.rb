@@ -19,23 +19,9 @@ module LosHelper
 	private
 
 	def getLoIds(los)
-		if los.is_a? ActiveRecord::Relation
-			los = los.all
-		end
-
-		if !los.is_a? Array
-			los = [los]
-		end
-
-		lo_ids = nil
-		los.each do |lo|
-			if lo_ids.nil?
-				lo_ids = lo.id.to_s
-			else
-				lo_ids = lo_ids + "," + lo.id.to_s
-			end
-		end
-		lo_ids
+		los = los.all if los.is_a? ActiveRecord::Relation
+		los = [los] unless los.is_a? Array
+		los.map{|lo| lo.id.to_s}.join(",")
 	end
 
 end
