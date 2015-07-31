@@ -338,11 +338,11 @@ class LosController < ApplicationController
    
     queries = []
 
-    if !params["query"].blank?
+    unless params["query"].blank?
       if params["queryStatement"] == "1" and can?(:performQueryStatements, nil)
         queries << params["query"]
       else
-        queries << "los.name LIKE '" + params["query"] + "'"
+        queries << "los.name LIKE '%" + params["query"] + "%'"
       end
     end
 

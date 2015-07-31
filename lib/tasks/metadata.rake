@@ -38,7 +38,7 @@ namespace :metadata do
 		end
 
 		#Create grouped metadata fields
-		repositories = MetadataField.all.map{|mf| mf.repository}.uniq
+		repositories = (MetadataField.all.map{|mf| mf.repository} + [nil]).uniq
 		conformanceItems.each do |key,value|
 			fieldType = conformanceItems[key][:type]
 			metadataFields = MetadataField.where(:name => key, :field_type => fieldType)
@@ -86,7 +86,7 @@ namespace :metadata do
 
 		#Calculate maximum number of links (most connected object)
 		maxLinks = {}
-		repositories = metadataMapping.map{|map| map[1]}.uniq
+		repositories = (metadataMapping.map{|map| map[1]} + [nil]).uniq
 		repositories.each do |repository|
 			maxLinks[repository] = []
 		end

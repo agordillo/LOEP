@@ -101,7 +101,6 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     # allMetadataInstances = MetadataField.where(query)
     # allResourcesInRepository = [1,allMetadataInstances.group(:metadata_id).length].max
     # occurrencesOfWordInRepository = [1,allMetadataInstances.where(:value => word.downcase).group(:metadata_id).length].max
-
     repositoryWordFrequency = (occurrencesOfWordInRepository.to_f / allResourcesInRepository)
     textWordFrequency * Math.log(1/repositoryWordFrequency) rescue 0
   end
