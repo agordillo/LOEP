@@ -79,10 +79,8 @@ class Evmethod < ActiveRecord::Base
     
     los.each do |lo|
       rpdLo = evModule.representationData(lo)
-      if !graphEngine and !rpdLo.nil? and !rpdLo["engine"].nil?
-        graphEngine = rpdLo["engine"]
-      end
       unless rpdLo.nil?
+        graphEngine = rpdLo["engine"] if !graphEngine and !rpdLo["engine"].nil?
         iScoresLo = rpdLo["iScores"]
         nItems.times do |i|
           unless iScoresLo[i].nil?
@@ -93,6 +91,9 @@ class Evmethod < ActiveRecord::Base
             end
           end
         end
+      else
+        #All LOs need to have evaluation data for being represented
+        return nil
       end
     end
 

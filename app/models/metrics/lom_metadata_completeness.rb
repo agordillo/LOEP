@@ -16,6 +16,7 @@ class Metrics::LomMetadataCompleteness < Metrics::LomMetadataItem
       end
     end
     score *= 10
+    score = ([[score,0].max,10].min).round(2)
     return score
   end
 
