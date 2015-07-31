@@ -1,0 +1,6 @@
+message: "Deploying to EXAMPLE!"
+repository: git@github.com:agordillo/LOEP.git
+server_url: 127.0.0.1 #server URL (e.g. example.com)
+username: ubuntu
+keys: /home/username/.ssh/ssh-keypair #empty or remove this line if you don't have any key
+branch: master
