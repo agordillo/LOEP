@@ -29,7 +29,7 @@ class Lo < ActiveRecord::Base
   validate :checkRepositoryId
 
   def checkRepositoryId
-    if self.id.nil? and !self.repository.blank? and !self.id_repository.blank?
+    if self.new_record? and !self.repository.blank? and !self.id_repository.blank?
       #Create a new LO with repository and repository ID
       #Check if the ID is uniq for this repository
       if Lo.where(:repository => self.repository, :id_repository => self.id_repository).length > 0
@@ -52,6 +52,7 @@ class Lo < ActiveRecord::Base
   belongs_to :app
   has_one :metadata
 
+  before_validation :normalize_blank_values
   after_save :save_metadata
   after_save :calculate_automatic_scores
 
@@ -310,6 +311,10 @@ class Lo < ActiveRecord::Base
 
 
   private
+
+  def normalize_blank_values
+    self.repository = nil if self.repository.blank?
+  end
 
   def save_metadata
     self.update_metadata
