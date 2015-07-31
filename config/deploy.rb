@@ -15,9 +15,9 @@ begin
   username = config["username"]
   keys = config["keys"]
   branch = config["branch"] || "master"
-  deploy_to = config["deploy_to"] || "/home/#{ user }/#{ application }"
+  deploy_to = config["deploy_to"]
 rescue Exception => e
-  #puts e.message
+  puts e.message
   unless deployEnvironment.nil?
     puts "Sorry, the file config/deploy/" + deployEnvironment + '.yml does not exist.'
   else
@@ -32,6 +32,7 @@ set :application, "LOEP"
 set :repository,  repository
 
 set :user, username
+deploy_to = "/home/#{ user }/#{ application }" if deploy_to.nil?
 set :deploy_to, deploy_to
 set :use_sudo, false
 
