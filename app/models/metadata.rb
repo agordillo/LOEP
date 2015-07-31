@@ -78,7 +78,11 @@ class Metadata < ActiveRecord::Base
 
     unless self.lo.nil?
       metadata["lom"]["general"] = {}
-      metadata["lom"]["general"]["entry"] = {"value" => self.lo.url} unless self.lo.url.nil?
+      unless self.lo.url.nil?
+        metadata["lom"]["general"]["identifier"] = {}
+        metadata["lom"]["general"]["identifier"]["catalog"] = {"value" => "URI"}
+        metadata["lom"]["general"]["identifier"]["entry"] = {"value" => self.lo.url}
+      end
       metadata["lom"]["general"]["title"] = {"string" => {"value" => self.lo.name}} unless self.lo.name.blank?
       metadata["lom"]["general"]["language"] = {"value" => self.lo.language.code} unless self.lo.language.nil?
       metadata["lom"]["general"]["description"] = {"string" => {"value" => self.lo.description}} unless self.lo.description.blank?
