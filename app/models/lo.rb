@@ -206,15 +206,14 @@ class Lo < ActiveRecord::Base
       evMethodFullValidEvaluations = Evaluation.getValidEvaluationsForItems(evMethodEvaluations,mandatoryItemsArray)
       attrs["Completed Evaluations with " + evmethod.name] = evMethodFullValidEvaluations.length
 
-      unless evData.blank? or evData[evmethod.name].blank? or evData[evmethod.name][:items].blank?
-        evDataItems = evData[evmethod.name][:items]
-        itemsArray.each_with_index do |itemName,index|
-          attrKey = evmethod.name + " " + itemName.to_s
-          unless evDataItems[index].blank?
-            attrs[attrKey] = evDataItems[index].to_f.round(2)
-          else
-            attrs[attrKey] = ""
-          end
+      evDataItems = []
+      evDataItems = evData[evmethod.name][:items] unless evData.blank? or evData[evmethod.name].blank? or evData[evmethod.name][:items].blank?
+      itemsArray.each_with_index do |itemName,index|
+        attrKey = evmethod.name + " " + itemName.to_s
+        unless evDataItems[index].blank?
+          attrs[attrKey] = evDataItems[index].to_f.round(2)
+        else
+          attrs[attrKey] = ""
         end
       end
     end
