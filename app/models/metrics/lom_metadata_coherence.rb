@@ -7,7 +7,7 @@ class Metrics::LomMetadataCoherence < Metrics::LomMetadataItem
   def self.getScoreForMetadata(metadataJSON,options={})
     score = 0
     metadataFields = Metadata::Lom.metadata_fields_from_json(metadataJSON) rescue {}
-    metadataTextFields = {"1.2" => metadataFields["1.2"], "1.4" => metadataFields["1.4"]}.reject{|k,v| v.blank?}
+    metadataTextFields = {"1.2" => metadataFields["1.2"], "1.4" => metadataFields["1.4"]}
     score = getScoreForFreeTextMetadataFields(metadataTextFields,options)
     score *= 10
     return score
