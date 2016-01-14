@@ -633,7 +633,9 @@ es:
       item14:
         name: "¿Qué consejo le darías a futuros docentes sobre el uso de este objeto de aprendizaje en sus clases?"
   footer:
-    main: "Learning Object Evaluation Platform. Código disponible en Github"
+    blog: "Blog del proyecto"
+    main: "Learning Object Evaluation Platform"
+    repository: "Repositorio de GitHub"
   forms:
     evmethod:
       evaluating_lo_with_evmethod: "Evaluando %{lo} con %{evmethod}"
