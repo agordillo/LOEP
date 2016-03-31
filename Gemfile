@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.22'
 gem 'rake', '10.3.2'
 
 # DBMS
@@ -25,6 +25,7 @@ gem 'multi_json', '1.10.1'
 gem 'rubyzip', '1.0.0'
 gem 'rest-client', '= 1.6.7'
 gem 'vpim', '= 13.11.11'
+gem 'test-unit'
 
 group :development do
   # Deploy with Capistrano
