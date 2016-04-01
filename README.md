@@ -5,7 +5,7 @@ LOEP is an open source web platform developed using Ruby on Rails that aims to f
 LOEP can provide Learning Object evaluation to e-Learning systems in an open, low cost, reliable and effective way.
 Repositories of educational resources can use LOEP to implement quality control policies and to enhance search services and recommender systems. 
 
-The last release can be seen [here](https://github.com/agordillo/LOEP/releases).
+The last releases can be seen [here](https://github.com/agordillo/LOEP/releases), and the future features and ongoing developments are shown on this [page](https://github.com/agordillo/LOEP/milestones).  
   
   
 # Features and components
@@ -61,9 +61,15 @@ The last release can be seen [here](https://github.com/agordillo/LOEP/releases).
 * MySQL 5.5+
 
 
-# Discussion and contribution
+# Discussion and contribution  
   
-Feel free to raise an issue or send us your comments and suggestions at [github](http://github.com/agordillo/LOEP/issues).  
+Feel free to raise an issue at [github](http://github.com/agordillo/LOEP/issues).  
+
+
+# News
+
+Follow the LOEP news on the [blog](https://loepblog.wordpress.com/). 
+
 
 # Installation and documentation
 
