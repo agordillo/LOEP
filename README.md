@@ -23,6 +23,7 @@ The last release can be seen [here](https://github.com/agordillo/LOEP/releases).
   * Registration and edition
   * Ranking
   * Search
+* LOM (Learning Object Metadata) support, and quality metrics based on LOM
 * Assignments: appoint reviewers to evaluate Learning Objects
   * Manually
   * Automatically using differeht matching stategies:
