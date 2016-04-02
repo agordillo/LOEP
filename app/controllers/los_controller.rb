@@ -62,7 +62,7 @@ class LosController < ApplicationController
     @assignments = @lo.assignments.sort{|b,a| a.compareAssignmentForAdmins(b)}
     authorize! :index, @assignments
 
-    @evaluations = @lo.evaluations.sort_by{ |ev| [ev.evmethod.name,ev.updated_at]}
+    @evaluations = @lo.evaluations.allc.sort_by{ |ev| [ev.evmethod.name,ev.updated_at]}
     authorize! :index, @evaluations
     
     @scores = @lo.scoresc.sort_by{|s| [s.metric.evmethods.sort_by{|ev| ev.name}.first.name,s.metric.name]}
@@ -102,10 +102,10 @@ class LosController < ApplicationController
     end
 
     unless user.role?("Admin")
-      @evaluations = user.evaluations.where(:lo_id=>@lo.id)
+      @evaluations = user.evaluations.where(:lo_id=>@lo.id).allc
       authorize! :rshow, @evaluations
     else
-      @evaluations = @lo.evaluations
+      @evaluations = @lo.evaluations.allc
       authorize! :show, @evaluations
     end
     @evaluations = @evaluations.sort_by{ |ev| ev.updated_at}.reverse

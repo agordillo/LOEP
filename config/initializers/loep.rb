@@ -26,7 +26,9 @@ if ActiveRecord::Base.connection.table_exists? "evmethods" and ActiveRecord::Bas
   #See app/models/evaluations for more possible methods to add
   LOEP::Application.config.evmethod_names = LOEP::Application.config.APP_CONFIG['evmethods'].reject{ |n| Evmethod.find_by_name(n).nil? }
   LOEP::Application.config.evmethods = LOEP::Application.config.evmethod_names.map{|n| Evmethod.find_by_name(n)}
-
+  LOEP::Application.config.evmethods_ids = LOEP::Application.config.evmethods.map{|evmethod| evmethod.id }
+  LOEP::Application.config.evmethods_human_ids = LOEP::Application.config.evmethods.reject{|ev| ev.automatic}.map{|evmethod| evmethod.id}
+  
   #Configure the metrics you want to use in your LOEP instance
   #See app/models/metrics for more possible metrics to add
   LOEP::Application.config.metric_names = LOEP::Application.config.APP_CONFIG['metrics'].reject{ |n|

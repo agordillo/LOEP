@@ -548,6 +548,27 @@ es:
       short:
         one: "Método"
         plural: "Métodos"
+    SUS:
+      item1:
+        name: "Creo que me gustaría usar con frecuencia este sistema"
+      item2:
+        name: "Encontré el sistema innecesariamente complejo"
+      item3:
+        name: "Pensé que el sistema era fácil de usar"
+      item4:
+        name: "Creo que necesitaría el apoyo de un técnico o experto para ser capaz de utilizar este sistema"
+      item5:
+        name: "Me pareció que las diversas funciones de este sistema estaban bien integradas"
+      item6:
+        name: "Pensé que había demasiada inconsistencia en este sistema"
+      item7:
+        name: "Imagino que la mayoría de la gente aprendería a utilizar este sistema muy rápido"
+      item8:
+        name: "Encontré el sistema muy incómodo de usar"
+      item9:
+        name: "Me sentí muy seguro al usar el sistema"
+      item10:
+        name: "Tuve que aprender muchas cosas antes de que pudiese trabajar con el sistema"
     Wblts:
       item1:
         name: "El objeto de aprendizaje estaba bien organizado"

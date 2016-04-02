@@ -16,56 +16,77 @@ namespace :generate do
   end
 
   # How to use: 
-  # bundle exec rake generate:evmethod["MethodName","ModuleName","Multiple"]
-  # bundle exec rake generate:evmethod["MethodName","ModuleName","Multiple"] RAILS_ENV=production
-  # For instance: bundle exec rake generate:evmethod["Lori v1.5","Lori","false"]
-  task :evmethod, [:name,:module_name,:multiple] => :environment do |t, args|
-    desc "Generate new evaluation method"
+  # bundle exec rake generate:evmethod["MethodName","ModuleName","multiple","automatic"]
+  # bundle exec rake generate:evmethod["MethodName","ModuleName","multiple","automatic"] RAILS_ENV=production
+  # For instance: bundle exec rake generate:evmethod["LORI v1.5","Lori","false","false"]
+  task :evmethod, [:name,:module_name,:multiple,:automatic] => :environment do |t, args|
     puts "Generating new evaluation method"
-    puts ""
 
-    if !args[:name]
-      fail "You need to specify a name for the evmethod: bundle exec rake generate:evmethod[\"MethodName\",\"ModuleName\",\"Multiple\"]"
-    end
+    Evmethod.find_by_name("SUS").destroy unless Evmethod.find_by_name("SUS").nil? #TODO
 
-    unless args[:multiple]
-      multiple = false
-    else
-      multiple = (args[:multiple]=="true")
-    end
+    abort("Task aborted. Invalid Sintax for task 'bundle exec rake generate:evmethod[\"MethodName\",\"ModuleName\",\"Multiple\",\"Automatic\"]'") if args[:name].blank?
 
-    if !args[:module_name]
+    if args[:module_name].blank?
       #Try to get from name
       moduleName = args[:name].split(" ")[0].downcase.capitalize
     else
       moduleName = args[:module_name]
     end
+    if moduleName.pluralize == moduleName
+      puts("The name '" + moduleName + "' needs an inflection rule since it has an irregular plural.")
+      puts("You need to add the following line in the 'config/initializers/inflections.rb' file:")
+      puts "inflect.irregular '" + moduleName + "', '" + moduleName + "es'"
+      abort("Task aborted. Apply this change and execute the task again.")
+    end
     moduleName = "Evaluations::" + moduleName
 
-    #Create ev method
+    begin
+      moduleClass = moduleName.constantize
+      # abort("Task aborted. Module '" + moduleName + "' already exists.") TODO
+    rescue
+      #Module not found
+    end
+
+    multiple = (args[:multiple]=="true")
+    automatic = (args[:automatic]=="true")
+
+    #Create the new ev method
     ev = Evmethod.new
     ev.name = args[:name]
     ev.module = moduleName
     ev.allow_multiple_evaluations = multiple
+    ev.automatic = automatic
     ev.valid?
 
-    unless ev.errors.blank?
-      puts "Some error has ocurred:"
-      puts ev.errors.full_messages
-      puts ""
-      abort("Task aborted")
-    end
+    if ev.errors.blank? and ev.save
+      #Create model
+      evaluationModelClassName = ev.module.split("Evaluations::")[1]
+      modelContent = "# encoding: utf-8\n\n";
+      modelContent += "class Evaluations::" + evaluationModelClassName + " < Evaluation\n";
+      modelContent += "  # this is for Evaluations with evMethod=" + ev.name + " (type=" + evaluationModelClassName + "Evaluation)\n\n"
+      modelContent += "  def init\n    self.evmethod_id ||= Evmethod.find_by_name(\"" + ev.name + "\").id\n    super\n  end\n\n"
+      modelContent += "  def self.getItems\n    [\n      {\n        :name => \"Item1\",\n        :type=> \"integer\"\n      },{\n        :name => \"Item2\",\n        :type=> \"integer\"\n      }\n    ]\n  end\n\n"
+      modelContent += "  def self.getScale\n    return [1,5]\n  end\n\n"
+      modelContent += "end"
+      modelFilePath = Rails.root.join('app', 'models', 'evaluations').to_s + "/" + evaluationModelClassName.downcase + ".rb"
+      File.open(modelFilePath, 'w') {|f| f.write(modelContent) }
 
-    if ev.save
+      #Create controller
+      evaluationControllerClassName = evaluationModelClassName.pluralize
+      controllerContent = "class Evaluations::" + evaluationControllerClassName + "Controller < EvaluationsController\nend"
+      controllerFilePath = Rails.root.join('app', 'controllers', 'evaluations').to_s + "/" + evaluationControllerClassName.downcase + "_controller.rb"
+      File.open(controllerFilePath, 'w') {|f| f.write(controllerContent) }
+      
+      puts("The model was created in " + modelFilePath)
+      puts("The controller was created in " + controllerFilePath)
       puts "The evaluation method was succesfully generated"
       puts ev.to_json
     else
       puts "Some error has ocurred:"
       puts ev.errors.full_messages
       puts ""
-      abort("Task aborted")
+      abort("Task aborted.")
     end
-
   end
 
 

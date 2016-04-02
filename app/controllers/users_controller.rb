@@ -21,12 +21,12 @@ class UsersController < ApplicationController
 		if current_user.isAdmin?
 			@assignments = @user.assignments.sort{|b,a| a.compareAssignmentForAdmins(b)}
 			authorize! :show, @assignments
-			@evaluations = @user.evaluations.sort_by{ |ev| ev.updated_at}.reverse
+			@evaluations = @user.evaluations.allc.sort_by{ |ev| ev.updated_at}.reverse
 			authorize! :show, @evaluations
 		else
 			@assignments = @user.assignments.sort{|b,a| a.compareAssignmentForReviewers(b)}
 			authorize! :rshow, @assignments
-			@evaluations = @user.evaluations.sort_by{ |ev| ev.updated_at}.reverse
+			@evaluations = @user.evaluations.allc.sort_by{ |ev| ev.updated_at}.reverse
 			authorize! :rshow, @evaluations
 		end
 

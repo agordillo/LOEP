@@ -177,7 +177,7 @@ class Evmethod < ActiveRecord::Base
   end
 
   def self.getShortnameFromName(name)
-    Evmethod.find_by_name("LORI v1.5").shortname
+    Evmethod.find_by_name(name).shortname
   end
 
   def self.getNameFromShortname(shortname)
