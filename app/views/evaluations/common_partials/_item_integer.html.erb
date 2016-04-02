@@ -1,0 +1,47 @@
+<% itemName ||= "item" + nItem.to_s %>
+<% scale ||= [1,5] %>
+<% explicitSkipAnswer ||= nil %>
+<%# explicitSkipAnswer = {:title => t("forms.evmethod.na")} %>
+
+<div class="survey_block" item="<%=nItem%>">
+  <% unless nItem.nil? %>
+    <p class="survey_question_title"><%=nItem%>. <%=item[:name]%></p>
+    <%unless item[:description].blank?%>
+      <p class="survey_question_subtitle"><%=item[:description]%></p>
+    <%end%>
+  <% end %>
+
+  <p class="survey_block_top_space"></p>
+
+  <div class="rating_wrapper">
+    <div class="stars_wrapper">
+      <span  class="hover-star_legend_left"><%=t("forms.evmethod.low")%></span>
+      <% (scale[1]-scale[0]+1).times do |s| %>
+        <% scaleValue = scale[0] + s %>
+        <%= f.radio_button itemName, scaleValue.to_s, :class=>'hover-star', :title => scaleValue.to_s, :readonly => readonly ? "true" : nil %>
+      <% end %>
+      <span  class="hover-star_legend_right"><%=t("forms.evmethod.high")%></span>
+    </div>
+    <% unless explicitSkipAnswer.blank? %>
+      <div class="na-check">
+        <span><%=t("forms.evmethod.na")%></span>
+        <%= f.radio_button itemName, "-1", :class=>'na-input', :title => (explicitSkipAnswer[:title]||t("forms.evmethod.na")), :disabled => readonly ? "disabled" : nil %>
+      </div>
+    <% end %>
+    <div class="hover-start_text">
+      <% if readonly %>
+        <% iValue = @evaluation.send(itemName)%>
+        <% if iValue===-1 %>
+          <div class='numberCircle numberCircleSmall'>
+            <span><%=t("forms.evmethod.na")%></span>
+          </div>
+        <% else %>
+          <div class='numberCircle'>
+            <span><%=iValue %></span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> <%=t("forms.evmethod.remove")%></div>
+  </div>
+</div>

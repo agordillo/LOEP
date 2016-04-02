@@ -1,0 +1,10 @@
+<% itemName ||= "sitem" + nItem.to_s %>
+
+<div class="survey_block">
+	<p class="survey_question_title"><%=item[:name]%></p>
+	<%unless item[:description].blank?%>
+		<p class="survey_question_subtitle"><%=item[:description]%></p>
+	<%end%>
+
+  <%= f.text_field itemName, :class=>'loep_input optionalInput', :readonly => readonly ? "true" : nil %>
+</div>

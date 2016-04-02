@@ -1,10 +1,10 @@
 <% contexts ||= Hash.new %>
 
 <% unless contexts[:user_context].blank? %> 
-  <%= render 'user_context', :f => f , :readonly => readonly, :items => contexts[:user_context] %>
+  <%= render 'evaluations/common_partials/user_context', :f => f , :readonly => readonly, :items => contexts[:user_context] %>
 <%end%>
 <% unless contexts[:lo_context].blank? %> 
-  <%= render 'lo_context', :f => f , :readonly => readonly, :items => contexts[:lo_context] %>
+  <%= render 'evaluations/common_partials/lo_context', :f => f , :readonly => readonly, :items => contexts[:lo_context] %>
 <%end%>
 
 <%unless contexts.blank? %>

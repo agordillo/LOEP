@@ -1,5 +1,5 @@
 <%if embed%>
-  <%= render 'contexts', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"]} %>
+  <%= render 'evaluations/common_partials/contexts', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"]} %>
 <%end%>
 
 <% @evmethodItems.each_with_index do |item,i| %>

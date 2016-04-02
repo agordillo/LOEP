@@ -1,0 +1,12 @@
+<% itemName ||= "ditem" + nItem.to_s %>
+<% scale ||= [0,5] %>
+<% step ||= (scale[1]-scale[0])/10.to_f %>
+
+<div class="survey_block">
+	<p class="survey_question_title"><%=item[:name]%></p>
+	<%unless item[:description].blank?%>
+		<p class="survey_question_subtitle"><%=item[:description]%></p>
+	<%end%>
+
+  <%= f.number_field itemName, :class=>'loep_input optionalInput', :step => step, :min => scale[0], :max => scale[1], :readonly => readonly ? "true" : nil %>
+</div>

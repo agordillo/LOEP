@@ -1,90 +1,3 @@
-<%integerItemsIndex=0%>
-<%textItemsIndex=0%>
-
-<%= render 'evaluations/common_partials/contexts', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"], :lo_context => ["all"]} %>
-
-<% @evmethodItems.each_with_index do |item,i| %>
-  <%nItem = i+1%>
-  <div class="survey_block" item="<%=nItem%>">
-    <%
-      case nItem
-      when 1
-        sectionTitle = "1. " + t("dictionary.quality")
-      when 5
-        sectionTitle = "2. " + t("dictionary.learning")
-      when 10
-        sectionTitle = "3. " + t("dictionary.engagement")
-      when 14
-        sectionTitle = "4. " + item[:name]
-      when 15
-        sectionTitle = "5. " + item[:name]
-      else
-        sectionTitle = nil
-      end
-    %>
-    <%
-      case nItem
-      when 1,2,3,4
-        nItemToShow = (nItem+96).chr
-      when 5,6,7,8,9
-        nItemToShow = (nItem-4+96).chr
-      when 10,11,12,13
-        nItemToShow = (nItem-9+96).chr
-      else
-        nItemToShow = nil
-      end
-    %>
-
-    <% unless sectionTitle.nil? %>
-      <p class="survey_question_group_title"><%=sectionTitle%></p>
-    <% end %>
-
-    <% unless nItemToShow.nil? %>
-      <p class="survey_question_title"><%=nItemToShow%>. <%=item[:name]%></p>
-      <%unless item[:description].blank?%>
-        <p class="survey_question_subtitle"><%=item[:description]%></p>
-      <%end%>
-    <% end %>
-
-    <p class="survey_block_top_space"></p>
-
-    <%if item[:type] == "integer" %>
-      <%integerItemsIndex+=1%>
-      <div class="rating_wrapper">
-        <div class="stars_wrapper">
-          <span  class="hover-star_legend_left"><%=t("forms.evmethod.sdagree")%></span>
-          <%= f.radio_button "item" + integerItemsIndex.to_s, "1", :class=>'hover-star', :title => "1", :readonly => readonly ? "true" : nil %>
-          <%= f.radio_button "item" + integerItemsIndex.to_s, "2", :class=>'hover-star', :title => "2", :readonly => readonly ? "true" : nil %>
-          <%= f.radio_button "item" + integerItemsIndex.to_s, "3", :class=>'hover-star', :title => "3", :readonly => readonly ? "true" : nil %>
-          <%= f.radio_button "item" + integerItemsIndex.to_s, "4", :class=>'hover-star', :title => "4", :readonly => readonly ? "true" : nil %>
-          <%= f.radio_button "item" + integerItemsIndex.to_s, "5", :class=>'hover-star', :title => "5", :readonly => readonly ? "true" : nil %>
-          <%= f.radio_button "item" + integerItemsIndex.to_s, "6", :class=>'hover-star', :title => "6", :readonly => readonly ? "true" : nil %>
-          <%= f.radio_button "item" + integerItemsIndex.to_s, "7", :class=>'hover-star', :title => "7", :readonly => readonly ? "true" : nil %>
-          <span  class="hover-star_legend_right"><%=t("forms.evmethod.sagree")%></span>
-        </div>
-        <div class="hover-start_text">
-          <% if readonly %>
-            <% iValue = @evaluation.send("item" + integerItemsIndex.to_s)%>
-            <% if iValue===-1 %>
-              <div class='numberCircle numberCircleSmall'>
-                <span><%=t("forms.evmethod.na")%></span>
-              </div>
-            <% else %>
-              <div class='numberCircle'>
-                <span><%=iValue %></span>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-        <div class="remove_item-value"><span class="glyphicon glyphicon glyphicon-remove"></span> <%=t("forms.evmethod.remove")%></div>
-      </div>
-  <%elsif item[:type] == "text" %>
-    <%textItemsIndex+=1%>
-    <%= f.text_area "titem" + textItemsIndex.to_s, :class=>'loep_input evaluation_survey_text_item_input optionalInput', :readonly => readonly ? "true" : nil %>
-  <%end%>
-  </div>
-<% end %>
-
 <script type="text/javascript">
   $(document).ready(function(){
     <% if !readonly %>
@@ -173,7 +86,7 @@
         var selectedValue = $(starTextDOM).attr("selectedValue");
         if(selectedValue){
           var classes = 'numberCircle';
-           var na = '<%=t("forms.evmethod.na")%>';
+          var na = '<%=t("forms.evmethod.na")%>';
           if(selectedValue == na){
             classes += " numberCircleSmall";
           }

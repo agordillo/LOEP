@@ -1,7 +1,7 @@
 <%integerItemsIndex=0%>
 <%textItemsIndex=0%>
 
-<%= render 'contexts_print', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"], :lo_context => ["all"], :print_context => ["all"]} %>
+<%= render 'evaluations/common_partials/contexts_print', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"], :lo_context => ["all"], :print_context => ["all"]} %>
 
 <% @evmethodItems.each_with_index do |item,i| %>
   <%nItem = i+1%>

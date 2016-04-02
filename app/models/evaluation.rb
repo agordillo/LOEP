@@ -80,8 +80,16 @@ class Evaluation < ActiveRecord::Base
   def init
   end
 
+  def getItems
+    self.class.getItems
+  end
+
   def self.getItems
     []
+  end
+
+  def getScale
+    self.class.getScale
   end
 
   def self.getScale
