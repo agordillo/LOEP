@@ -54,7 +54,7 @@
       <%integerItemsIndex+=1%>
       <div class="rating_wrapper">
         <div class="stars_wrapper">
-          <span  class="hover-star_legend_left"><%=t("forms.evmethod.sdagree")%></span>
+          <span  class="hover-star_legend_left"><%=t("forms.evmethod.low_likert")%></span>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "1", :class=>'hover-star', :title => "1", :readonly => readonly ? "true" : nil %>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "2", :class=>'hover-star', :title => "2", :readonly => readonly ? "true" : nil %>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "3", :class=>'hover-star', :title => "3", :readonly => readonly ? "true" : nil %>
@@ -62,7 +62,7 @@
           <%= f.radio_button "item" + integerItemsIndex.to_s, "5", :class=>'hover-star', :title => "5", :readonly => readonly ? "true" : nil %>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "6", :class=>'hover-star', :title => "6", :readonly => readonly ? "true" : nil %>
           <%= f.radio_button "item" + integerItemsIndex.to_s, "7", :class=>'hover-star', :title => "7", :readonly => readonly ? "true" : nil %>
-          <span  class="hover-star_legend_right"><%=t("forms.evmethod.sagree")%></span>
+          <span  class="hover-star_legend_right"><%=t("forms.evmethod.high_likert")%></span>
         </div>
         <div class="hover-start_text">
           <% if readonly %>

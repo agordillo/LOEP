@@ -312,6 +312,7 @@ en:
       subsection_title: "Evaluation"
     message:
       error:
+        automatic: "The Learning Object couldn't be automatically evaluated using the evaluation method: %{evmethod}"
         duplicated: "The evaluation hasn't been created because this user had already evaluated the Learning Object."
         external_evaluations_disabled: "Error: This evaluation method does not allow external evaluations."
         generic_create: "An error occurred and the evaluation could not be created. Check all the fields and try again."
@@ -320,6 +321,7 @@ en:
         uc_age: "The specified age is not valid. Please, check it."
       no_evaluations: "You haven't evaluated any Learning Object yet.</p><p> When you evaluate one, the evaluation will appear in this panel."
       success:
+        automatic: "The Learning Object has been automatically evaluated using the evaluation method: %{evmethod}"
         create: "The evaluation was successfully submitted."
         update: "The evaluation was successfully updated."
     name:
@@ -553,25 +555,25 @@ en:
         plural: "Methods"
     SUS:
       item1:
-        name: "I think that I would like to use this system frequently"
+        name: "I think that I would like to use this %{system} frequently"
       item2:
-        name: "I found the system unnecessarily complex"
+        name: "I found the %{system} unnecessarily complex"
       item3:
-        name: "I thought the system was easy to use"
+        name: "I thought the %{system} was easy to use"
       item4:
-        name: "I think that I would need the support of a technical person to be able to use this system"
+        name: "I think that I would need the support of a technical person to be able to use this %{system}"
       item5:
-        name: "I found the various functions in this system were well integrated"
+        name: "I found the various functions in this %{system} were well integrated"
       item6:
-        name: "I thought there was too much inconsistency in this system"
+        name: "I thought there was too much inconsistency in this %{system}"
       item7:
-        name: "I  would imagine that most people would learn to use this system very quickly"
+        name: "I  would imagine that most people would learn to use this %{system} very quickly"
       item8:
-        name: "I found the system very cumbersome to use"
+        name: "I found the %{system} very cumbersome to use"
       item9:
-        name: "I felt very confident using the system"
+        name: "I felt very confident using the %{system}"
       item10:
-        name: "I needed to learn a lot of things before I could get going with this system"
+        name: "I needed to learn a lot of things before I could get going with this %{system}"
     Wblts:
       item1:
         name: "The learning object was well organized"
@@ -672,8 +674,6 @@ en:
       loURL: "Learning Object URL"
       na: "N/A"
       remove: "Remove"
-      sagree: "Strongly Agree"
-      sdagree: "Strongly Disagree"
       title: "%{evmethod} Evaluation Form"
       title_for_embed: "Evaluation Form: '%{lo}'"
     submit: "Submit"

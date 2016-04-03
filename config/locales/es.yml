@@ -309,6 +309,7 @@ es:
       subsection_title: "Evaluación"
     message:
       error:
+        automatic: "El Objeto de Aprendizaje no pudo ser evaluado automáticamente empleando el método de evaluación: %{evmethod}"
         duplicated: "La evaluación no fue creada porque este usuario ya había evaluado el Objeto de Aprendizaje."
         external_evaluations_disabled: "Error: Este método de evaluación no admite evaluaciones externas."
         generic_create: "Ocurrió un error y la evaluación no pudo ser creada. Comprueba todos los campos y vuelve a intentarlo."
@@ -317,6 +318,7 @@ es:
         uc_age: "La edad especificada no es válida. Por favor, revísela."
       no_evaluations: "Todavía no has evaluado ningún Objeto de Aprendizaje.</p><p>Cuando evalúes uno, la evaluación aparecerá en este panel."
       success:
+        automatic: "El Objeto de Aprendizaje ha sido automáticamente evaluado mediante el método de evaluación: %{evmethod}"
         create: "La evaluación fue enviada correctamente."
         update: "La evaluación fue actualizada correctamente."
     name:
@@ -550,25 +552,25 @@ es:
         plural: "Métodos"
     SUS:
       item1:
-        name: "Creo que me gustaría usar con frecuencia este sistema"
+        name: "Creo que me gustaría usar con frecuencia este %{system}"
       item2:
-        name: "Encontré el sistema innecesariamente complejo"
+        name: "Encontré el %{system} innecesariamente complejo"
       item3:
-        name: "Pensé que el sistema era fácil de usar"
+        name: "Pensé que el %{system} era fácil de usar"
       item4:
-        name: "Creo que necesitaría el apoyo de un técnico o experto para ser capaz de utilizar este sistema"
+        name: "Creo que necesitaría el apoyo de un técnico o experto para ser capaz de utilizar este %{system}"
       item5:
-        name: "Me pareció que las diversas funciones de este sistema estaban bien integradas"
+        name: "Me pareció que las diversas funciones de este %{system} estaban bien integradas"
       item6:
-        name: "Pensé que había demasiada inconsistencia en este sistema"
+        name: "Pensé que había demasiada inconsistencia en este %{system}"
       item7:
-        name: "Imagino que la mayoría de la gente aprendería a utilizar este sistema muy rápido"
+        name: "Imagino que la mayoría de la gente aprendería a utilizar este %{system} muy rápido"
       item8:
-        name: "Encontré el sistema muy incómodo de usar"
+        name: "Encontré el %{system} muy incómodo de usar"
       item9:
-        name: "Me sentí muy seguro al usar el sistema"
+        name: "Me sentí muy seguro al usar el %{system}"
       item10:
-        name: "Tuve que aprender muchas cosas antes de que pudiese trabajar con el sistema"
+        name: "Tuve que aprender muchas cosas antes de que pudiese trabajar con el %{system}"
     Wblts:
       item1:
         name: "El objeto de aprendizaje estaba bien organizado"
@@ -669,8 +671,6 @@ es:
       loURL: "URL del Objeto de Aprendizaje"
       na: "N/A"
       remove: "Borrar"
-      sagree: "Muy de acuerdo"
-      sdagree: "Muy en desacuerdo"
       title: "Formulario de evaluación con %{evmethod}"
       title_for_embed: "Formulario de Evaluación: '%{lo}'"
     submit: "Enviar"

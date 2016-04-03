@@ -10,7 +10,7 @@ class Evaluations::Sus < Evaluation
     items = []
     10.times do |i|
       items << {
-        :name => I18n.t("evmethods.SUS.item" + (i+1).to_s + ".name") + ".",
+        :name => I18n.t("evmethods.SUS.item" + (i+1).to_s + ".name", :system => I18n.t("los.name.one").downcase) + ".",
         :type=> "integer"
       }
     end

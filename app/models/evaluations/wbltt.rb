@@ -10,47 +10,21 @@ class Evaluations::Wbltt < Evaluation
   end
 
   def self.getItems
-    [
-      {:name => I18n.t("evmethods.Wbltt.item1.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item1.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item2.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item2.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item3.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item3.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item4.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item4.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item5.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item5.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item6.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item6.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item7.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item7.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item8.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item8.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item9.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item9.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item10.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item10.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item11.name") + ".",
-        :shortname => I18n.t("evmethods.Wbltt.item11.shortname"),
-        :type=> "integer"},
-      {:name => I18n.t("evmethods.Wbltt.item12.name"),
-        :type=> "text"},
-      {:name => I18n.t("evmethods.Wbltt.item13.name"),
-        :type=> "text"},
-      {:name => I18n.t("evmethods.Wbltt.item14.name"),
-        :type=> "text"}
-    ]
+    items = []
+    11.times do |i|
+      items << {
+        :name => I18n.t("evmethods.Wbltt.item" + (i+1).to_s + ".name") + ".",
+        :shortname => I18n.t("evmethods.Wbltt.item" + (i+1).to_s + ".shortname"),
+        :type=> "integer"
+      }
+    end
+    3.times do |i|
+      items << {
+        :name => I18n.t("evmethods.Wbltt.item" + (i+12).to_s + ".name") + ".",
+        :type=> "text"
+      }
+    end
+    items
   end
 
   def self.getScale

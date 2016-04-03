@@ -89,9 +89,9 @@ class EvaluationsController < ApplicationController
   def new_automatic
     @evaluation = @evModel.createAutomaticEvaluation(@lo)
     unless @evaluation.nil? or @evaluation.new_record?
-      flash[:notice] = "The learning object has been automatically evaluated using the evalution method: " + @evmethod.name
+      flash[:notice] = I18n.t("evaluations.message.success.automatic", :evmethod => @evmethod.name)
     else
-      flash[:alert] = "The learning object couldn't be automatically evaluated using the evaluation method: " + @evmethod.name
+      flash[:alert] = I18n.t("evaluations.message.error.automatic", :evmethod => @evmethod.name)
     end
     redirect_to(:back)
   end

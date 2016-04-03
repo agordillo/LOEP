@@ -10,35 +10,15 @@ class Evaluations::Lori < Evaluation
   end
 
   def self.getItems
-    [
-      {:name => I18n.t("evmethods.lori.item1.name"),
-         :description => I18n.t("evmethods.lori.item1.description"), 
-         :type=> "integer"},
-      {:name => I18n.t("evmethods.lori.item2.name"),
-         :description => I18n.t("evmethods.lori.item2.description"), 
-         :type=> "integer"},
-      {:name => I18n.t("evmethods.lori.item3.name"),
-         :description => I18n.t("evmethods.lori.item3.description"), 
-         :type=> "integer"},
-      {:name => I18n.t("evmethods.lori.item4.name"),
-         :description => I18n.t("evmethods.lori.item4.description"), 
-         :type=> "integer"},
-      {:name => I18n.t("evmethods.lori.item5.name"),
-         :description => I18n.t("evmethods.lori.item5.description"), 
-         :type=> "integer"},
-      {:name => I18n.t("evmethods.lori.item6.name"),
-         :description => I18n.t("evmethods.lori.item6.description"), 
-         :type=> "integer"},
-      {:name => I18n.t("evmethods.lori.item7.name"),
-         :description => I18n.t("evmethods.lori.item7.description"), 
-         :type=> "integer"},
-      {:name => I18n.t("evmethods.lori.item8.name"),
-         :description => I18n.t("evmethods.lori.item8.description"), 
-         :type=> "integer"},
-      {:name => I18n.t("evmethods.lori.item9.name"),
-         :description => I18n.t("evmethods.lori.item9.description"), 
-         :type=> "integer"}
-    ]
+    items = []
+    9.times do |i|
+      items << {
+        :name => I18n.t("evmethods.lori.item" + (i+1).to_s + ".name") + ".",
+        :description => I18n.t("evmethods.lori.item" + (i+1).to_s + ".description"), 
+        :type=> "integer"
+      }
+    end
+    items
   end
 
   def self.getScale
