@@ -1,7 +1,7 @@
 <% itemName ||= "item" + nItem.to_s %>
 <% scale ||= [1,5] %>
-<% explicitSkipAnswer ||= nil %>
-<%# explicitSkipAnswer = {:title => t("forms.evmethod.na")} %>
+<% formOptions ||= {} %>
+<% formOptions = {:scaleLegend => {:min => t("forms.evmethod.low"), :max => t("forms.evmethod.high")}}.merge(formOptions) %>
 
 <div class="survey_block" item="<%=nItem%>">
   <% unless nItem.nil? %>
@@ -15,17 +15,21 @@
 
   <div class="rating_wrapper">
     <div class="stars_wrapper">
-      <span  class="hover-star_legend_left"><%=t("forms.evmethod.low")%></span>
+      <% unless formOptions[:scaleLegend].blank? or formOptions[:scaleLegend][:min].blank? %>
+        <span  class="hover-star_legend_left"><%=formOptions[:scaleLegend][:min]%></span>
+      <% end %>
       <% (scale[1]-scale[0]+1).times do |s| %>
         <% scaleValue = scale[0] + s %>
         <%= f.radio_button itemName, scaleValue.to_s, :class=>'hover-star', :title => scaleValue.to_s, :readonly => readonly ? "true" : nil %>
       <% end %>
-      <span  class="hover-star_legend_right"><%=t("forms.evmethod.high")%></span>
+      <% unless formOptions[:scaleLegend].blank? or formOptions[:scaleLegend][:max].blank? %>
+        <span  class="hover-star_legend_right"><%=formOptions[:scaleLegend][:max]%></span>
+      <% end %>
     </div>
-    <% unless explicitSkipAnswer.blank? %>
+    <% unless formOptions[:explicitSkipAnswer].blank? %>
       <div class="na-check">
-        <span><%=t("forms.evmethod.na")%></span>
-        <%= f.radio_button itemName, "-1", :class=>'na-input', :title => (explicitSkipAnswer[:title]||t("forms.evmethod.na")), :disabled => readonly ? "disabled" : nil %>
+        <span><%=(formOptions[:explicitSkipAnswer][:title]||t("forms.evmethod.na"))%></span>
+        <%= f.radio_button itemName, "-1", :class=>'na-input', :title => (formOptions[:explicitSkipAnswer][:title]||t("forms.evmethod.na")), :disabled => readonly ? "disabled" : nil %>
       </div>
     <% end %>
     <div class="hover-start_text">

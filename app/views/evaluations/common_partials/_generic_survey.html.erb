@@ -1,28 +1,29 @@
+<% embed ||= false %>
+<% formOptions ||= @evaluation.getFormOptions %>
 <% scale ||= @evaluation.getScale %>
-<% explicitSkipAnswer ||= nil %>
 
-<%if embed%>
-  <%= render 'evaluations/common_partials/contexts', :f => f , :readonly => readonly, :contexts => {:user_context => ["all"]} %>
-<%end%>
+<% if embed %>
+  <%= render 'evaluations/common_partials/contexts', :f => f, :readonly => readonly, :formOptions => formOptions, :contexts => {:user_context => ["all"]} %>
+<% end %>
 
 <% nItems = {} %>
 <% @evmethodItems.each_with_index do |item,i| %>
   <% nItems[item[:type]] = nItems[item[:type]].nil? ? 1 : nItems[item[:type]]+1 %>
   <% case item[:type] %>
   <% when "integer" %>
-    <%= render 'evaluations/common_partials/item_integer', :f => f , :readonly => readonly, :item => item, :nItem => nItems[item[:type]], :scale => scale, :explicitSkipAnswer =>  explicitSkipAnswer %>
+    <%= render 'evaluations/common_partials/item_integer', :f => f, :readonly => readonly, :formOptions => formOptions, :item => item, :nItem => nItems[item[:type]], :scale => scale %>
   <% when "text" %>
-    <%= render 'evaluations/common_partials/item_text', :f => f , :readonly => readonly, :item => item, :nItem => nItems[item[:type]] %>
+    <%= render 'evaluations/common_partials/item_text', :f => f, :readonly => readonly, :formOptions => formOptions, :item => item, :nItem => nItems[item[:type]] %>
   <% when "string" %>
-    <%= render 'evaluations/common_partials/item_string', :f => f , :readonly => readonly, :item => item, :nItem => nItems[item[:type]] %>
+    <%= render 'evaluations/common_partials/item_string', :f => f, :readonly => readonly, :formOptions => formOptions, :item => item, :nItem => nItems[item[:type]] %>
   <% when "decimal" %>
-    <%= render 'evaluations/common_partials/item_decimal', :f => f , :readonly => readonly, :item => item, :nItem => nItems[item[:type]] %>
+    <%= render 'evaluations/common_partials/item_decimal', :f => f, :readonly => readonly, :formOptions => formOptions, :item => item, :nItem => nItems[item[:type]] %>
   <% else %>
   <% end %>
 <% end %>
 
-<%= render 'evaluations/common_partials/common_items', :f => f , :readonly => readonly %>
+<%= render 'evaluations/common_partials/common_items', :f => f , :readonly => readonly, :formOptions => formOptions %>
 
 <% if nItems["integer"].is_a? Integer and nItems["integer"] > 0 %>
-  <%= render 'evaluations/common_partials/item_integer_js', :f => f , :readonly => readonly %>
+  <%= render 'evaluations/common_partials/item_integer_js', :f => f , :readonly => readonly, :formOptions => formOptions %>
 <% end %>

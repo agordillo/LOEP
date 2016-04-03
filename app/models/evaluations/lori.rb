@@ -45,6 +45,18 @@ class Evaluations::Lori < Evaluation
     return [1,5]
   end
 
+  def self.getFormOptions
+    {
+      :scaleLegend => {
+        :min => I18n.t("forms.evmethod.low"), 
+        :max => I18n.t("forms.evmethod.high")
+      },
+      :explicitSkipAnswer => {
+        :title => I18n.t("forms.evmethod.na")
+      }
+    }
+  end
+
 
   #############
   # Representation Data

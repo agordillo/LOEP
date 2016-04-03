@@ -93,8 +93,16 @@ class Evaluation < ActiveRecord::Base
   end
 
   def self.getScale
-    #Override me
+    # Default scale. Override.
     return [0,10]
+  end
+
+  def getFormOptions
+    self.class.getFormOptions
+  end
+
+  def self.getFormOptions
+    {}
   end
 
   ################################
