@@ -16,13 +16,11 @@ namespace :generate do
   end
 
   # How to use: 
-  # bundle exec rake generate:evmethod["MethodName","ModuleName","multiple","automatic"]
-  # bundle exec rake generate:evmethod["MethodName","ModuleName","multiple","automatic"] RAILS_ENV=production
-  # For instance: bundle exec rake generate:evmethod["LORI v1.5","Lori","false","false"]
-  task :evmethod, [:name,:module_name,:multiple,:automatic] => :environment do |t, args|
+  # bundle exec rake generate:evmethod["methodName","multiple","automatic","moduleName"]
+  # bundle exec rake generate:evmethod["methodName","multiple","automatic","moduleName"] RAILS_ENV=production
+  # For instance: bundle exec rake generate:evmethod["LORI v1.5","false","false","Lori"]
+  task :evmethod, [:name,:multiple,:automatic,:module_name] => :environment do |t, args|
     puts "Generating new evaluation method"
-
-    Evmethod.find_by_name("SUS").destroy unless Evmethod.find_by_name("SUS").nil? #TODO
 
     abort("Task aborted. Invalid Sintax for task 'bundle exec rake generate:evmethod[\"MethodName\",\"ModuleName\",\"Multiple\",\"Automatic\"]'") if args[:name].blank?
 
@@ -42,7 +40,7 @@ namespace :generate do
 
     begin
       moduleClass = moduleName.constantize
-      # abort("Task aborted. Module '" + moduleName + "' already exists.") TODO
+      abort("Task aborted. Module '" + moduleName + "' already exists.")
     rescue
       #Module not found
     end
