@@ -662,6 +662,7 @@ en:
     repository: "GitHub Repository"
   forms:
     evmethod:
+      completion_date: "Completion Date"
       evaluating_lo_with_evmethod: "Evaluating %{lo} with %{evmethod}"
       evmethod_documentation: "%{evmethod} documentation"
       high: "High"

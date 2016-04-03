@@ -1,20 +1,20 @@
 <% readonly ||= false %>
 <% ajax ||= (@embed and (params["ajax"]=="true")) %>
-<div class="loep_form_wrapper <%=@evaluation.evmethod.shortname%>_evmethod_form_wrapper">
 
+<div class="loep_form_wrapper <%=@evaluation.evmethod.shortname%>_evmethod_form_wrapper">
   <%= form_for(@evaluation, remote: ajax, :html => {:'data-type' => (ajax ? "json" : "html")}) do |f| %>
 
     <% if @embed %>
-      <%user = @app.user%>
+      <% user = @app.user %>
       <%= hidden_field_tag "embed", true, class: "skipValidation" %>
       <%= hidden_field_tag "session_token", @sessionToken, class: "skipValidation" %>
       <%= hidden_field_tag "app_id", @app.id, class: "skipValidation" %>
       <% surveyTitle = t("forms.evmethod.title_for_embed", lo: @lo.name) %>
       <% submitButtonText = t("forms.submit") %>
     <% elsif user_signed_in? %>
-      <%user = current_user%>
+      <% user = current_user %>
       <% surveyTitle = t("forms.evmethod.title", evmethod: @evmethod.name) %>
-      <%unless params["action"] == "edit"%>
+      <% unless params["action"] == "edit" %>
         <% submitButtonText = t("forms.submit_with_evmethod", evmethod: @evmethod.name) %>
       <% else %>
         <% submitButtonText = t("forms.submit_edit_with_evmethod", evmethod: @evmethod.name) %>
@@ -23,11 +23,11 @@
 
     <%= f.hidden_field :user_id, :value => user.id, :class => "skipValidation" %>
 
-    <% if !@assignment.nil? %>
+    <% unless @assignment.nil? %>
       <%= f.hidden_field :assignment_id, :value => @assignment.id, :class => "skipValidation" %>
     <% end %>
-    <%= f.hidden_field :lo_id, :value => @lo.id, :class => "skipValidation"%>
-    <%= f.hidden_field :evmethod_id, :value => @evmethod.id, :class => "skipValidation"%>
+    <%= f.hidden_field :lo_id, :value => @lo.id, :class => "skipValidation" %>
+    <%= f.hidden_field :evmethod_id, :value => @evmethod.id, :class => "skipValidation" %>
 
     <p class="survey_title"><%=surveyTitle%></p>
 
@@ -35,149 +35,14 @@
     <%= render survey_partial, :f => f , :readonly => readonly, :embed => @embed %>
 
     <% if iamAdmin? and !@evaluation.completed_at.nil? %>
-      <p class="form_legend">Completion Date</p>
-      <%= f.text_field :completed_at, :value => @evaluation.readable_completed_at, :class=>'loep_input, skipValidation', :id=>"completed_at_datepicker", :readonly => readonly ? "true" : nil%>
+      <p class="form_legend"><%= t("forms.evmethod.completion_date") %></p>
+      <%= f.text_field :completed_at, :value => @evaluation.readable_completed_at, :class=>'loep_input, skipValidation', :id=>"completed_at_datepicker", :readonly => readonly ? "true" : nil %>
     <% end %>
 
     <p class="form_before_button">&nbsp;</p>
-    <%= f.submit "#{submitButtonText}", :class => 'loep_button' if !readonly %>
+    <%= f.submit "#{submitButtonText}", :class => 'loep_button' unless readonly %>
 
   <% end %>
 </div>
 
-<script type="text/javascript">
-  jQuery(document).ready(function($){
-
-    if (($("#completed_at_datepicker").length > 0)&&(typeof $("#completed_at_datepicker").attr("readonly") == "undefined")){
-      <%= render "application/datepicker_language" %> //Translate datepicker
-      $('#completed_at_datepicker').datetimepicker({
-        yearRange: "-1:+10",
-        showOn: "both",
-        dateFormat : 'dd/mm/yy',
-        changeMonth : true,
-        changeYear : true,
-        minDate: '0d',
-        buttonImage: "/assets/calendar_icon.png", 
-        buttonImageOnly: true,
-        firstDay: '<%=t("datepicker.firstDay")%>', //start on monday or sunday regarding the locale
-        timeFormat: "HH:mm tt",
-        stepHour: 1,
-        stepMinute: 15
-      });
-    };
-
-
-    var validateForm = true;
-
-    $('form').submit(function(event){
-      if(validateForm==true){
-        event.preventDefault();
-        event.stopPropagation(); //Neccesary for Ajax forms
-        _beforeSubmit($(this), function(error){
-          if(typeof error != "undefined"){
-            //onError or Cancel
-            return false;
-          } else {
-            //onSuccess or Ok
-            validateForm = false;
-            $('form').trigger("submit");
-            return true;
-          }
-        });
-      }
-    });
-
-    var _beforeSubmit = function(form, callback){
-      if(typeof callback != "function"){
-          return;
-      }
-
-      var fields = _getFieldsOfForm(form);
-      var unfilledFields = _getUnfilledFields(form,fields);
-      var numberOfFilledFields = fields.length - unfilledFields.length;
-
-      if(numberOfFilledFields == 0){
-        var error = {};
-        error.msg = '<%=t("forms.validation.blank_form")%>';
-        _showLOEPDialog(error.msg,false);
-        callback(error);
-      } else if (unfilledFields.length > 0){
-        //Warning
-
-        var warningDialogMsg;
-        if(unfilledFields.length == 1){
-          warningDialogMsg = '<%=t("forms.validation.question_blank.one")%>';
-        } else {
-          warningDialogMsg = '<%=t("forms.validation.question_blank.several.a")%> ' + unfilledFields.length + ' <%=t("forms.validation.question_blank.several.b")%>';
-        }
-        warningDialogMsg += ' <%=t("forms.validation.are_you_sure")%>';
-
-        _showLOEPDialog(warningDialogMsg, true, function(result){
-          if(result==true){
-            //Ok
-            callback();
-          } else {
-            //Cancel
-            callback({"msg":"Incompleted survey"});
-          }
-        })
-      } else {
-          callback();
-      }
-    };
-
-    var _getFieldsOfForm = function(form){
-      //Ignore submit fields, and also inputs with 'optionalInput' or 'skipValidation' class
-      var inputs = $(form).find(':input:not(.optionalInput):not(.skipValidation)[type!="submit"][name!=utf8][name!=authenticity_token][name!=_method]');
-      var fields = [];
-
-      $(inputs).each(function(index,input){
-        var fieldName = $(input).attr("name");
-        if(fields.indexOf(fieldName) == -1){
-          fields.push(fieldName);
-        }
-      });
-
-      return fields;
-    };
-
-    var _getUnfilledFields = function(form,fields){
-      var unfilledFields = [];
-      $(fields).each(function(index,field){
-        var fieldValue;
-        var input = $(form).find('input[name="'+field+'"]');
-        if($(input).is(":radio")){
-          fieldValue = $(form).find('input[name="'+field+'"]:checked', form).val();
-        } else {
-          //hidden, text
-          fieldValue = $(input).val();
-        }
-        if((typeof fieldValue != "string")||(fieldValue.trim()=="")){
-          unfilledFields.push(field);
-        }
-      });
-      return unfilledFields;
-    };
-
-  });
-</script>
-
-<%if ajax%>
-  <script type="text/javascript">
-    $(document).ajaxSuccess( function(data){
-      //Ajax Success
-      _showLOEPDialog('<%=t("evaluations.message.success.create")%>', false, function(result){
-          _sendLOEPMessage({"type": "LOEPMessage","success": true});
-      });
-    });
-    $(document).ajaxError( function(data){
-      //Ajax Error
-      _showLOEPDialog('<%=t("evaluations.message.error.generic_create")%>', false)
-    });
-
-    var _sendLOEPMessage = function(msg){
-      window.parent.postMessage(msg,'*');
-    }
-  </script>
-<%end%>
-  
+<%= render 'evaluations/common_partials/common_js', :ajax => ajax, :readonly => readonly, :embed => @embed %>

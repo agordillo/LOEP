@@ -1,0 +1,135 @@
+<script type="text/javascript">
+  jQuery(document).ready(function($){
+
+    if (($("#completed_at_datepicker").length > 0)&&(typeof $("#completed_at_datepicker").attr("readonly") == "undefined")){
+      <%= render "application/datepicker_language" %> //Translate datepicker
+      $('#completed_at_datepicker').datetimepicker({
+        yearRange: "-1:+10",
+        showOn: "both",
+        dateFormat : 'dd/mm/yy',
+        changeMonth : true,
+        changeYear : true,
+        minDate: '0d',
+        buttonImage: "/assets/calendar_icon.png", 
+        buttonImageOnly: true,
+        firstDay: '<%=t("datepicker.firstDay")%>', //start on monday or sunday regarding the locale
+        timeFormat: "HH:mm tt",
+        stepHour: 1,
+        stepMinute: 15
+      });
+    };
+
+
+    var validateForm = true;
+
+    $('form').submit(function(event){
+      if(validateForm==true){
+        event.preventDefault();
+        event.stopPropagation(); //Neccesary for Ajax forms
+        _beforeSubmit($(this), function(error){
+          if(typeof error != "undefined"){
+            //onError or Cancel
+            return false;
+          } else {
+            //onSuccess or Ok
+            validateForm = false;
+            $('form').trigger("submit");
+            return true;
+          }
+        });
+      }
+    });
+
+    var _beforeSubmit = function(form, callback){
+      if(typeof callback != "function"){
+          return;
+      }
+
+      var fields = _getFieldsOfForm(form);
+      var unfilledFields = _getUnfilledFields(form,fields);
+      var numberOfFilledFields = fields.length - unfilledFields.length;
+
+      if(numberOfFilledFields == 0){
+        var error = {};
+        error.msg = '<%=t("forms.validation.blank_form")%>';
+        _showLOEPDialog(error.msg,false);
+        callback(error);
+      } else if (unfilledFields.length > 0){
+        //Warning
+
+        var warningDialogMsg;
+        if(unfilledFields.length == 1){
+          warningDialogMsg = '<%=t("forms.validation.question_blank.one")%>';
+        } else {
+          warningDialogMsg = '<%=t("forms.validation.question_blank.several.a")%> ' + unfilledFields.length + ' <%=t("forms.validation.question_blank.several.b")%>';
+        }
+        warningDialogMsg += ' <%=t("forms.validation.are_you_sure")%>';
+
+        _showLOEPDialog(warningDialogMsg, true, function(result){
+          if(result==true){
+            //Ok
+            callback();
+          } else {
+            //Cancel
+            callback({"msg":"Incompleted survey"});
+          }
+        })
+      } else {
+          callback();
+      }
+    };
+
+    var _getFieldsOfForm = function(form){
+      //Ignore submit fields, and also inputs with 'optionalInput' or 'skipValidation' class
+      var inputs = $(form).find(':input:not(.optionalInput):not(.skipValidation)[type!="submit"][name!=utf8][name!=authenticity_token][name!=_method]');
+      var fields = [];
+
+      $(inputs).each(function(index,input){
+        var fieldName = $(input).attr("name");
+        if(fields.indexOf(fieldName) == -1){
+          fields.push(fieldName);
+        }
+      });
+
+      return fields;
+    };
+
+    var _getUnfilledFields = function(form,fields){
+      var unfilledFields = [];
+      $(fields).each(function(index,field){
+        var fieldValue;
+        var input = $(form).find('input[name="'+field+'"]');
+        if($(input).is(":radio")){
+          fieldValue = $(form).find('input[name="'+field+'"]:checked', form).val();
+        } else {
+          //hidden, text
+          fieldValue = $(input).val();
+        }
+        if((typeof fieldValue != "string")||(fieldValue.trim()=="")){
+          unfilledFields.push(field);
+        }
+      });
+      return unfilledFields;
+    };
+
+  });
+</script>
+
+<% if ajax %>
+  <script type="text/javascript">
+    $(document).ajaxSuccess( function(data){
+      //Ajax Success
+      _showLOEPDialog('<%=t("evaluations.message.success.create")%>', false, function(result){
+          _sendLOEPMessage({"type": "LOEPMessage","success": true});
+      });
+    });
+    $(document).ajaxError( function(data){
+      //Ajax Error
+      _showLOEPDialog('<%=t("evaluations.message.error.generic_create")%>', false)
+    });
+
+    var _sendLOEPMessage = function(msg){
+      window.parent.postMessage(msg,'*');
+    }
+  </script>
+<% end %>

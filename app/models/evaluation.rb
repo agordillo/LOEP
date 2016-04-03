@@ -124,6 +124,10 @@ class Evaluation < ActiveRecord::Base
     end
   end
 
+  def self.ALL_COMMON_FIELDS
+    ["comments","score"]
+  end
+
   #######################
   # Get extended Evaluation Data
   #######################
@@ -193,6 +197,11 @@ class Evaluation < ActiveRecord::Base
     new_attrs
   end
 
+  def items_attributes(itemTypes=nil)
+    itemsArray = (self.getItemsArray(itemTypes) + self.class.ALL_COMMON_FIELDS).uniq
+    self.attributes.select{ |key,value| itemsArray.include?(key) }
+  end
+
 
   #Path Methods
 
@@ -255,6 +264,10 @@ class Evaluation < ActiveRecord::Base
     evaluations.where(query)
   end
 
+  def getItemsArray(itemTypes=nil)
+    self.class.getItemsArray(itemTypes)
+  end
+
   def self.getItemsArray(itemTypes=nil)
     itemNames = []
     itemTypes = processItemTypesArray(itemTypes)
@@ -269,6 +282,7 @@ class Evaluation < ActiveRecord::Base
       itemNames.push(itemFieldName + (itemTypesIndex[item[:type]]).to_s) if itemFieldName.is_a? String
       itemTypesIndex[item[:type]] += 1
     end
+
     itemNames
   end
 
