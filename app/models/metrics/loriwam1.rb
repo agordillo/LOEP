@@ -2,7 +2,7 @@
 #Use the weights obtained from the LORI survey
 
 class Metrics::LORIWAM1 < Metrics::WAM
-  # this is for Metrics with type=LORIWAM1
+  #this is for Metrics with type=LORIWAM1
 
   def self.itemWeights
     [

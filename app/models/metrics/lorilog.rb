@@ -1,7 +1,7 @@
 #LORI Logarithmic Metric
 
 class Metrics::LORILOG < Metrics::LORIORT
-  # this is for Metrics with type=LORILOG
+  #this is for Metrics with type=LORILOG
   #Override methods here
 
   def self.getOverallScore(scorePWAM,scoreTWAM)

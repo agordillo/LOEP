@@ -22,7 +22,7 @@ namespace :generate do
   task :evmethod, [:name,:multiple,:automatic,:module_name] => :environment do |t, args|
     puts "Generating new evaluation method"
 
-    abort("Task aborted. Invalid Sintax for task 'bundle exec rake generate:evmethod[\"MethodName\",\"ModuleName\",\"Multiple\",\"Automatic\"]'") if args[:name].blank?
+    abort("Task aborted. Invalid Sintax for task 'bundle exec rake generate:evmethod[\"methodName\",\"multiple\",\"automatic\",\"moduleName\"]'") if args[:name].blank?
 
     if args[:module_name].blank?
       #Try to get from name
@@ -38,15 +38,11 @@ namespace :generate do
     end
     moduleName = "Evaluations::" + moduleName
 
-    begin
-      moduleClass = moduleName.constantize
-      abort("Task aborted. Module '" + moduleName + "' already exists.")
-    rescue
-      #Module not found
-    end
-
     multiple = (args[:multiple]=="true")
     automatic = (args[:automatic]=="true")
+
+    ev = Evmethod.where(:module => moduleName).first
+    abort("Task aborted. An evaluation method with module '" + moduleName + "' already exists.") unless ev.nil?
 
     #Create the new ev method
     ev = Evmethod.new
@@ -67,16 +63,20 @@ namespace :generate do
       modelContent += "  def self.getScale\n    return [1,5]\n  end\n\n"
       modelContent += "end"
       modelFilePath = Rails.root.join('app', 'models', 'evaluations').to_s + "/" + evaluationModelClassName.downcase + ".rb"
-      File.open(modelFilePath, 'w') {|f| f.write(modelContent) }
+      unless File.exist?(modelFilePath)
+        File.open(modelFilePath, 'w') {|f| f.write(modelContent) }
+        puts("The model was created in " + modelFilePath)
+      end
 
       #Create controller
       evaluationControllerClassName = evaluationModelClassName.pluralize
       controllerContent = "class Evaluations::" + evaluationControllerClassName + "Controller < EvaluationsController\nend"
       controllerFilePath = Rails.root.join('app', 'controllers', 'evaluations').to_s + "/" + evaluationControllerClassName.downcase + "_controller.rb"
-      File.open(controllerFilePath, 'w') {|f| f.write(controllerContent) }
+      unless File.exist?(controllerFilePath)
+        File.open(controllerFilePath, 'w') {|f| f.write(controllerContent) }
+        puts("The controller was created in " + controllerFilePath)
+      end
       
-      puts("The model was created in " + modelFilePath)
-      puts("The controller was created in " + controllerFilePath)
       puts "The evaluation method was succesfully generated"
       puts ev.to_json
     else
@@ -89,43 +89,64 @@ namespace :generate do
 
 
   # How to use: 
-  # bundle exec rake generate:metric["MetricName","ModuleName","EvMethodNames"]
-  # bundle exec rake generate:metric["MetricName","ModuleName","EvMethodNames"] RAILS_ENV=production
-  # For instance: bundle exec rake generate:metric["LOEM Arithmetic Mean","LOEMAM","LOEM"]
-  task :metric, [:name,:module_name,:evmethodslist] => :environment do |t, args|
-    desc "Generate new metric"
+  # bundle exec rake generate:metric["metricName","evMethodNames","moduleName"]
+  # bundle exec rake generate:metric["metricName","evMethodNames","moduleName"] RAILS_ENV=production
+  # For instance: bundle exec rake generate:metric["LOEM Arithmetic Mean","LOEM","LOEMAM"]
+  task :metric, [:name,:evMethods,:module_name] => :environment do |t, args|
     puts "Generating new metric"
-    puts ""
+    abort("Task aborted. Invalid Sintax for task 'bundle exec rake generate:metric[\"metricName\",\"evMethodNames\",\"moduleName\"]'") if args[:name].blank? or args[:evMethods].blank?
 
-    if !args[:name] or !args[:module_name] or !args[:evmethodslist]
-      fail "You need to specify a name, module name and evmethods for the metric: bundle exec rake generate:metric[\"MetricName\",\"ModuleName\",\"EvMethodNames\"]"
+    if args[:module_name].blank?
+      #Try to get from name
+      moduleName = args[:name].split(" ").join("_").downcase.capitalize
+    else
+      moduleName = args[:module_name]
+    end
+    moduleName = "Metrics::" + moduleName
+
+    begin
+      moduleClass = moduleName.constantize
+      abort("Task aborted. Module '" + moduleName + "' already exists.")
+    rescue
+      #Module not found
     end
 
-    moduleName = "Metrics::" + args[:module_name]
+    #Validate evmethods
+    evMethods = (Evmethod.find_all_by_name(args[:evMethods].split(",").map{|s| s.strip})) rescue []
+    abort("Task aborted. Evmethods '" + args[:evMethods] + "' not found.") if evMethods.blank?
 
-    #Create metric
+    #Check that metric doesn't exists
+    m = Metric.where(:module_name => moduleName).first
+    abort("Task aborted. A metric with module name '" + moduleName + "' already exists.") unless m.nil?
+
+    #Create model
+    metricModelClassName = moduleName.split("Metrics::")[1]
+    modelContent = "# encoding: utf-8\n\n";
+    modelContent += "class Metrics::" + metricModelClassName + " < Metric\n";
+    modelContent += "  #this is for Metrics with type=" + metricModelClassName + "\n"
+    modelContent += "  #Override methods here\n\n"
+    modelContent += "  def self.getLoScore(evData)\n  end\n"
+    modelContent += "end"
+    modelFilePath = Rails.root.join('app', 'models', 'metrics').to_s + "/" + metricModelClassName.downcase + ".rb"
+    unless File.exist?(modelFilePath)
+      File.open(modelFilePath, 'w') {|f| f.write(modelContent) }
+      puts("The model was created in " + modelFilePath)
+    end
+
+    #Create database instance for the metric
     m = moduleName.constantize.new
     m.name = args[:name]
-    m.evmethods.push(Evmethod.find_all_by_name(args[:evmethodslist].split("&&").map{|s| s.strip}))
+    m.evmethods.push(evMethods)
     m.valid?
 
-    unless m.errors.blank?
-      puts "Some error has ocurred:"
-      puts m.errors.full_messages
-      puts ""
-      abort("Task aborted")
-    end
-
-    if m.save
+    if m.errors.blank? and m.save
       puts "The metric was succesfully generated"
       puts m.to_json
     else
       puts "Some error has ocurred:"
       puts m.errors.full_messages
-      puts ""
       abort("Task aborted")
     end
-
   end
 
 end

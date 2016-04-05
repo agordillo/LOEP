@@ -1,8 +1,10 @@
+# encoding: utf-8
+
 #Generic Weighted Arithmetic Mean Metric
-#The aim of  this class is to facilitate the creation of specific Weighted Arithmetic Mean Metrics.
+#The aim of this class is to facilitate the creation of specific Weighted Arithmetic Mean Metrics
 
 class Metrics::WAM < Metric
-  # this is for Metrics with type=WAM
+  #this is for Metrics with type=WAM
   #Override methods here
 
   def self.getLoScore(evData)

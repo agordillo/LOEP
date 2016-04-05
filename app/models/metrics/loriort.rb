@@ -1,7 +1,7 @@
 #LORI Orthogonal Metric
 
 class Metrics::LORIORT < Metric
-  # this is for Metrics with type=LORIORT
+  #this is for Metrics with type=LORIORT
   #Override methods here
 
   def self.getLoScore(evData)

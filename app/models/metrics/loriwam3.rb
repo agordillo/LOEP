@@ -2,7 +2,7 @@
 #Use the current weights obtained from the LORI survey
 
 class Metrics::LORIWAM3 < Metrics::WAM
-  # this is for Metrics with type=LORIWAM3
+  #this is for Metrics with type=LORIWAM3
 
   def self.itemWeights
     getItemWeightsFromSurvey

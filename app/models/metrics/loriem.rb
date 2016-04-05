@@ -1,7 +1,7 @@
 #Metric combinining LORI and LOEM methods. 50%LORI,50%LOEM
 
 class Metrics::LORIEM < Metric
-  # this is for Metrics with type=LORIEM
+  #this is for Metrics with type=LORIEM
   #Override methods here
 
   def self.getLoScore(evData)

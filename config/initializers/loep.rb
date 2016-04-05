@@ -1,6 +1,6 @@
 # Be sure to restart your server when you modify this file.
 
-LOEP::Application.config.version = "1.0.1"
+LOEP::Application.config.version = "1.1"
 
 LOEP::Application.config.full_domain = "http://" + LOEP::Application.config.APP_CONFIG["domain"]
 

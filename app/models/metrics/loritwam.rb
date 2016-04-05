@@ -2,7 +2,7 @@
 #Weighted Arithmetic Mean of LORI items related to technology.
 
 class Metrics::LORITWAM < Metrics::WAM
-  # this is for Metrics with type=LORITWAM
+  #this is for Metrics with type=LORITWAM
 
   def self.itemWeights
     [

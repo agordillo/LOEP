@@ -2,7 +2,7 @@
 #Use the weights inferred from the Evaluations
 
 class Metrics::LORIWAM2 < Metrics::WAM
-  # this is for Metrics with type=LORIWAM2
+  #this is for Metrics with type=LORIWAM2
 
   def self.itemWeights
     [

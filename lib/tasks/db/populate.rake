@@ -167,7 +167,6 @@ namespace :db do
 		#bundle exec rake db:populate:upgrade
 		#bundle exec rake db:populate:upgrade RAILS_ENV=production
 		task :upgrade => :environment do
-			desc 'Upgrade LOEP to the new version'
 			puts "Upgrading LOEP to the version: " + LOEP::Application.config.version
 
 			#Apply new migrations
@@ -243,7 +242,8 @@ namespace :db do
 				{name:"LOEM", module_name:"Evaluations::Loem", multiple:false, automatic: false},
 				{name:"WBLT-S", module_name:"Evaluations::Wblts", multiple:true, automatic: false},
 				{name:"WBLT-T", module_name:"Evaluations::Wbltt", multiple:false, automatic: false},
-				{name:"Metadata Quality", module_name:"Evaluations::Metadata", multiple:false, automatic: true}
+				{name:"Metadata Quality", module_name:"Evaluations::Metadata", multiple:false, automatic: true},
+				{name:"SUS", module_name:"Evaluations::Sus", multiple:false, automatic: false}
 			]
 
 			LOEP_VANILLA_EvMethods.each do |evmethod|
@@ -280,7 +280,8 @@ namespace :db do
 				{name:"WBLT-T Arithmetic Mean", module_name:"Metrics::WBLTTAM", evmethods:["WBLT-T"]},
 				{name:"LORIEM", module_name:"Metrics::LORIEM", evmethods:["LORI v1.5","LOEM"]},
 				{name:"LOM Metadata Quality Metric", module_name:"Metrics::LomMetadata", evmethods:["Metadata Quality"]},
-				{name:"LOM Completeness Metadata Quality Metric", module_name:"Metrics::LomMetadataCompleteness", evmethods:["Metadata Quality"]}
+				{name:"LOM Completeness Metadata Quality Metric", module_name:"Metrics::LomMetadataCompleteness", evmethods:["Metadata Quality"]},
+				{name:"Global SUS Score", module_name:"Metrics::SUSG", evmethods:["SUS"]}
 			]
 
 			LOEP_VANILLA_Metrics.each do |metric|
@@ -296,6 +297,8 @@ namespace :db do
 			end
 
 			#Create new scores for the metrics
+			#TODO:!!: Only if metrics added rely on evmethods with evaluations...
+			#TODO: Only for that metrics...
 			Rake::Task["db:populate:scores"].invoke
 		end
 

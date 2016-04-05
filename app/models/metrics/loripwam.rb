@@ -2,7 +2,7 @@
 #Weighted Arithmetic Mean of Pedagogical LORI items.
 
 class Metrics::LORIPWAM < Metrics::WAM
-  # this is for Metrics with type=LORIPWAM
+  #this is for Metrics with type=LORIPWAM
 
   def self.itemWeights
     [

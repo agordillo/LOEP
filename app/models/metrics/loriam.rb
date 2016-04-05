@@ -3,7 +3,7 @@
 #All items have the same importance (same weight)
 
 class Metrics::LORIAM < Metrics::WAM
-  # this is for Metrics with type=LORIAM
+  #this is for Metrics with type=LORIAM
 
   def self.itemWeights
     [
