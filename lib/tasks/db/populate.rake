@@ -246,6 +246,8 @@ namespace :db do
 				{name:"SUS", module_name:"Evaluations::Sus", multiple:false, automatic: false}
 			]
 
+			addedEvmethods = []
+
 			LOEP_VANILLA_EvMethods.each do |evmethod|
 				ev = Evmethod.find_by_name(evmethod[:name])
 				if ev.nil?
@@ -257,8 +259,12 @@ namespace :db do
 					ev.allow_multiple_evaluations = evmethod[:multiple]
 					ev.automatic = evmethod[:automatic]
 					ev.save!
+					addedEvmethods.push(ev)
 				end
 			end
+
+			#Create scores for the new evaluation methods (only possible for automatic evmethods)
+			Rake::Task["db:populate:scores"].invoke([],addedEvmethods.map{|m| m.name}.join(","))
 		end
 
 		task :metrics => :environment do
@@ -284,6 +290,8 @@ namespace :db do
 				{name:"Global SUS Score", module_name:"Metrics::SUSG", evmethods:["SUS"]}
 			]
 
+			addedMetrics = []
+
 			LOEP_VANILLA_Metrics.each do |metric|
 				m = Metric.find_by_name(metric[:name])
 				if m.nil?
@@ -293,18 +301,20 @@ namespace :db do
 					m.name = metric[:name]
 					m.evmethods.push(Evmethod.find_all_by_name(metric[:evmethods]))
 					m.save!
+					addedMetrics.push(m)
 				end
 			end
 
-			#Create new scores for the metrics
-			#TODO:!!: Only if metrics added rely on evmethods with evaluations...
-			#TODO: Only for that metrics...
-			Rake::Task["db:populate:scores"].invoke
+			#Create scores for the new metrics
+			Rake::Task["db:populate:scores"].invoke(addedMetrics.map{|m| m.name}.join(","),[])
 		end
 
-		task :scores => :environment do
+		task :scores, [:metrics,:evmethods] => :environment do |t, args|
 			puts "Recalculating scores..."
-			Metric.allc.each do |m|
+			metrics = Metric.allc
+			metrics = (metrics & (Metric.find_all_by_name(args[:metrics].split(",").map{|s| s.strip}))) rescue [] unless args[:metrics].nil?
+			metrics.each do |m|
+				puts "Recalculating scores for metric: " + m.name
 				Lo.all.each do |lo|
 					s = Score.new
 					s.metric_id = m.id
@@ -314,7 +324,10 @@ namespace :db do
 			end
 
 			puts "Recalculating automatic scores..."
-			Evmethod.allc_automatic.each do |evmethod|
+			evmethods = Evmethod.allc_automatic
+			evmethods = (evmethods & (Evmethod.find_all_by_name(args[:evmethods].split(",").map{|s| s.strip}))) rescue [] unless args[:evmethods].nil?
+			evmethods.each do |evmethod|
+				puts "Recalculating scores for automatic evmethod: " + evmethod.name
 				Lo.all.each do |lo|
 					evmethod.getEvaluationModule.createAutomaticEvaluation(lo)
 				end
