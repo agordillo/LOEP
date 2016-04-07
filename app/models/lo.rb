@@ -129,6 +129,14 @@ class Lo < ActiveRecord::Base
     return true
   end
 
+  def hasBeenEvaluatedWithEvmethods(evmethods)
+    return false if evmethods.blank?
+    evmethods.each do |evmethod|
+      return false if self.hasBeenEvaluatedWithEvmethod(evmethod)!=true
+    end
+    return true
+  end
+
   def getScoreForMetric(metric)
     self.scores.where(:metric_id => metric.id).first
   end
@@ -307,6 +315,15 @@ class Lo < ActiveRecord::Base
 
   def self.Public
     Lo.where("los.scope!='private'")
+  end
+
+  def self.evaluatedWithEvmethods(evmethods=[])
+    evmethods = [evmethods] unless evmethods.is_a? ActiveRecord::Relation or evmethods.is_a? Array
+    evmethods = evmethods & Evmethod.allc
+    los = Evaluation.where("evaluations.evmethod_id in (?)", evmethods).map{|ev| ev.lo}.uniq
+    los.select{ |lo|
+      lo.hasBeenEvaluatedWithEvmethods(evmethods)
+    }
   end
 
 

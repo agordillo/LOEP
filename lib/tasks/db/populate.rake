@@ -264,6 +264,7 @@ namespace :db do
 			end
 
 			#Create scores for the new evaluation methods (only possible for automatic evmethods)
+			Rake::Task["db:populate:scores"].reenable
 			Rake::Task["db:populate:scores"].invoke([],addedEvmethods.map{|m| m.name}.join(","))
 		end
 
@@ -306,10 +307,13 @@ namespace :db do
 			end
 
 			#Create scores for the new metrics
-			Rake::Task["db:populate:scores"].invoke(addedMetrics.map{|m| m.name}.join(","),[])
+			uploadScoreMetrics = addedMetrics.select{|m| Lo.evaluatedWithEvmethods(m.evmethods).length > 0}
+			Rake::Task["db:populate:scores"].reenable
+			Rake::Task["db:populate:scores"].invoke(uploadScoreMetrics.map{|m| m.name}.join(","),[])
 		end
 
 		task :scores, [:metrics,:evmethods] => :environment do |t, args|
+			load("#{Rails.root}/config/initializers/loep.rb")
 			puts "Recalculating scores..."
 			metrics = Metric.allc
 			metrics = (metrics & (Metric.find_all_by_name(args[:metrics].split(",").map{|s| s.strip}))) rescue [] unless args[:metrics].nil?
