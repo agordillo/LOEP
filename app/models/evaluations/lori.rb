@@ -46,12 +46,4 @@ class Evaluations::Lori < Evaluation
     super(lo,Metric.find_by_type("Metrics::LORIAM"))
   end
 
-  def self.representationDataForLos(los)
-    super
-  end
-
-  def self.representationDataForComparingLos(los)
-    super
-  end
-
 end

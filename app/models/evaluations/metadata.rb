@@ -34,7 +34,6 @@ class Evaluations::Metadata < Evaluation
     ]
   end
 
-  
   def self.getScale
     return [0,10]
   end
@@ -55,20 +54,13 @@ class Evaluations::Metadata < Evaluation
     evaluation
   end
 
+
   #############
   # Representation Data
   #############
 
   def self.representationData(lo)
     super(lo,Metric.find_by_type("Metrics::LomMetadata"))
-  end
-
-  def self.representationDataForLos(los)
-    super
-  end
-
-  def self.representationDataForComparingLos(los)
-    super
   end
 
 end

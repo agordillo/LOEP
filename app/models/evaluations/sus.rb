@@ -30,4 +30,27 @@ class Evaluations::Sus < Evaluation
     }
   end
 
+
+  #############
+  # Representation Data
+  #############
+  
+  def self.representationData(lo,metric=nil)
+    evmethod = Evmethod.find_by_module(self.name)
+    metric = Metric.find_by_name("Global SUS Score") if metric.nil?
+    metric = Metric.allc.select{|m| m.evmethods == [evmethod]}.first  if metric.nil?
+    return if metric.nil?
+
+    loSUSscore = lo.scores.find_by_metric_id(metric.id)
+    return if loSUSscore.nil?
+
+    representationData = Hash.new
+    representationData["name"] = lo.name
+    representationData["averageScore"] = loSUSscore.value.to_f.round(2)
+    representationData["iScores"] = [representationData["averageScore"]]
+    representationData["labels"] = [metric.name]
+    representationData["engine"] = "Rgraph"
+    representationData
+  end
+
 end

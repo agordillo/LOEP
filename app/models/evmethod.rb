@@ -32,16 +32,12 @@ class Evmethod < ActiveRecord::Base
   ################################
 
   def buildRepresentationData(lo,metric=nil)
-    if metric.nil?
-      metric = Metric.allc.select{|m| m.evmethods == [self]}.first
-    end
+    metric = Metric.allc.select{|m| m.evmethods == [self]}.first if metric.nil?
 
     evData = lo.getEvaluationData(self)[self.name]
 
     iScores = evData[:items]
-    if iScores.blank? or iScores.include? nil
-      return nil
-    end
+    return nil if iScores.blank? or iScores.include? nil
 
     scale = self.module.constantize.getScale
     iScores.each_with_index do |iScore,index|
@@ -65,75 +61,58 @@ class Evmethod < ActiveRecord::Base
   end
 
   def representationDataForLos(los)
-    representationData = Hash.new
     evModule = self.module.constantize
-    items = evModule.getItemsWithType("numeric")
 
     graphEngine = nil
-    nItems = items.length
-
+    labels = []
     iScores =  []
-    nItems.times do |i|
-      iScores.push(nil)
-    end
     
     los.each do |lo|
       rpdLo = evModule.representationData(lo)
-      unless rpdLo.nil?
-        graphEngine = rpdLo["engine"] if !graphEngine and !rpdLo["engine"].nil?
-        iScoresLo = rpdLo["iScores"]
-        nItems.times do |i|
-          unless iScoresLo[i].nil?
-            if iScores[i].nil?
-              iScores[i] = iScoresLo[i]
-            else
-              iScores[i] = iScores[i] + iScoresLo[i]
-            end
-          end
+      break if rpdLo.nil?
+      graphEngine = rpdLo["engine"] if graphEngine.blank? and !rpdLo["engine"].blank?
+      labels = rpdLo["labels"] if labels.blank? and !rpdLo["labels"].blank?
+      iScoresLo = rpdLo["iScores"]
+      unless iScoresLo.nil?
+        iScoresLo.length.times do |i|
+          iScores[i] = (iScores[i].nil? ? 0 : iScores[i]) + iScoresLo[i]  unless iScoresLo[i].nil?
         end
-      else
-        #All LOs need to have evaluation data for being represented
-        return nil
       end
     end
 
+    graphEngine ||= "Rgraph"
+    #All LOs need to have evaluation data for being represented
+    return nil if labels.blank? or iScores.blank?
+
+    #Average scores
     losL = los.length
-    nItems.times do |i|
-      if !iScores[i].nil?
-        iScores[i] = (iScores[i]/losL).round(2)
-      end
+    iScores.length.times do |i|
+      iScores[i] = (iScores[i]/losL).round(2) unless iScores[i].nil?
     end
 
+    representationData = Hash.new
     representationData["iScores"] = iScores
     representationData["averageScore"] = (representationData["iScores"].sum/representationData["iScores"].size.to_f).round(2)
-    representationData["labels"] = items.map{|li| li[:shortname] || li[:name]}
-    unless graphEngine.nil?
-      representationData["engine"] = graphEngine
-    end
+    representationData["labels"] = labels
+    representationData["engine"] = graphEngine unless graphEngine.nil?
     representationData
   end
 
   def representationDataForComparingLos(los)
+    return if los.blank?
+    
     representationData = Hash.new
     evModule = self.module.constantize
 
     los.each do |lo|
       rpdLo = evModule.representationData(lo)
-      if !rpdLo.nil? and !rpdLo["iScores"].nil? and !rpdLo["iScores"].include? nil
-        representationData[lo.id] = rpdLo
-      end
+      representationData[lo.id] = rpdLo unless rpdLo.nil? or rpdLo["iScores"].blank? or rpdLo["iScores"].include? nil
     end
 
-    if representationData.length < 2
-      return nil
-    end
+    return nil if representationData.length < 2
 
-    representationData["labels"] = evModule.getItemsWithType("numeric").map{|li| li[:shortname] || li[:name]}
-    
-    if !representationData.values.first.nil? and !representationData.values.first["engine"].nil?
-      representationData["engine"] = representationData.values.first["engine"]
-    end
-
+    representationData["labels"] = representationData.values.first["labels"]
+    representationData["engine"] = representationData.values.first["engine"] unless representationData.values.first["engine"].blank?
     representationData
   end
 

@@ -31,20 +31,13 @@ class Evaluations::Wblts < Evaluation
     return [1,7]
   end
 
+
   #############
   # Representation Data
   #############
 
   def self.representationData(lo)
-    super
-  end
-
-  def self.representationDataForLos(los)
-    super
-  end
-
-  def self.representationDataForComparingLos(los)
-    super
+    super(lo,Metric.find_by_type("Metrics::WBLTSAM"))
   end
 
 end

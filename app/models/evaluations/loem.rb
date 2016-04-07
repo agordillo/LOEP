@@ -63,21 +63,13 @@ class Evaluations::Loem < Evaluation
     return [1,3]
   end
 
+
   #############
   # Representation Data
   #############
 
   def self.representationData(lo)
-    super
-    # super(lo,Metric.find_by_type("Metrics::LOEMAM"))
-  end
-
-  def representationDataForLos(los)
-    super
-  end
-
-  def representationDataForComparingLos(los)
-    super
+    super(lo,Metric.find_by_type("Metrics::LOEMAM"))
   end
 
 end
