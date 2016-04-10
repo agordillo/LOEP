@@ -112,7 +112,7 @@ class Metric < ActiveRecord::Base
   # Method for metrics to implement and override
   ################################
 
-  def self.getLoScore(evData,evaluations=nil)
+  def self.getLoScore(evData)
     #Override me
   end
 

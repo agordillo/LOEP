@@ -104,19 +104,12 @@ namespace :generate do
     end
     moduleName = "Metrics::" + moduleName
 
-    begin
-      moduleClass = moduleName.constantize
-      abort("Task aborted. Module '" + moduleName + "' already exists.")
-    rescue
-      #Module not found
-    end
-
     #Validate evmethods
     evMethods = (Evmethod.find_all_by_name(args[:evMethods].split(",").map{|s| s.strip})) rescue []
     abort("Task aborted. Evmethods '" + args[:evMethods] + "' not found.") if evMethods.blank?
 
     #Check that metric doesn't exists
-    m = Metric.where(:module_name => moduleName).first
+    m = Metric.where(:name => moduleName).first
     abort("Task aborted. A metric with module name '" + moduleName + "' already exists.") unless m.nil?
 
     #Create model
