@@ -4,10 +4,10 @@ LOEP::Application.configure do
   loepMailConf = config.APP_CONFIG["mail"]
 
   unless loepMailConf.nil?
-    config.action_mailer.default_url_options = { :host => config.APP_CONFIG["domain"] }
-    ActionMailer::Base.default :from => loepMailConf["no_reply_mail"]
-
+    config.action_mailer.default_url_options = {:host => config.APP_CONFIG["domain"]}
+    
     if loepMailConf["type"] === "SENDMAIL"
+      ActionMailer::Base.default :from => loepMailConf["no_reply_mail"]
       config.action_mailer.delivery_method = :sendmail
       ActionMailer::Base.sendmail_settings = {
         :location => "/usr/sbin/sendmail",
@@ -16,6 +16,7 @@ LOEP::Application.configure do
     else
       config.action_mailer.delivery_method = :smtp
        if loepMailConf["gmail_credentials"].nil?
+        ActionMailer::Base.default :from => loepMailConf["no_reply_mail"]
         #Local SMTP server
         #(Suppose you have a SMTP server on localhost:25)
         config.action_mailer.smtp_settings = {
