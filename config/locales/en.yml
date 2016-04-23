@@ -1,4 +1,14 @@
 en:
+  i18n:
+    transliterate:
+      rule:
+        ª: "ª"
+        º: "º"
+        ´: "´"
+        ?: "?"
+        ¿: "¿"
+        ¡: "¡"
+        ́ : ""
   #Dictionary should be the first block.
   dictionary:
     age: "Age"

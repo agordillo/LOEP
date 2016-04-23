@@ -6,49 +6,36 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
 
   def self.getScoreForMetadata(metadataJSON,options={})
     score = 0
-    fieldWeights = Metrics::LomMetadataConformance.fieldWeights
-    conformanceItems = Metrics::LomMetadataConformance.conformanceItems
+    
     metadataFields = Metadata::Lom.metadata_fields_from_json(metadataJSON) rescue {}
     return 0 if metadataFields.blank?
+    fieldWeights = Metrics::LomMetadataConformance.fieldWeights
+    conformanceItems = Metrics::LomMetadataConformance.conformanceItems
 
     metadataFields.each do |key, value|
       unless value.blank? or conformanceItems[key].blank?
-        score += getScoreForMetadataField(key,value,options,conformanceItems) * fieldWeights[key]
+        score += getScoreForMetadataField(key,value,options) * fieldWeights[key]
       end
     end
 
-    score *= 10
-    score
+    score * 10
   end
 
-  def self.getScoreForMetadataField(key,value,options={},conformanceItems)
+  def self.getScoreForMetadataField(key,value,options={})
     score = 0
-    case conformanceItems[key][:type]
+    case Metrics::LomMetadataConformance.conformanceItems[key][:type]
     when "freetext"
-      score = getScoreForFreeTextMetadataField(key,value,options,conformanceItems)
+      score = getScoreForFreeTextMetadataField(key,value,options)
     when "categorical"
       score = getScoreForCategoricalMetadataField(key,value,options)
     end
     [0,[score,1].min].max
   end
 
-  def self.getScoreForFreeTextMetadataField(key,value,options={},conformanceItems)
-    # score = UtilsTfidf.TFIDFFreeText(value,options.merge({:key => key}))
-
-    # unless score==0
-    #   score = Math.log(score)
-
-    #   #Store max instance (uncomment to calculate maximums)
-    #   # maxiumValue = MetadataField.updateMax(key,score,options)
-
-    #   #Normalize score
-    #   maxiumValue = conformanceItems[key][:max]
-
-    #   score = [0,[score/(maxiumValue.to_f),1].min].max
-    # end
-
-    # score
-    return 0
+  def self.getScoreForFreeTextMetadataField(key,value,options={})
+    score = UtilsTfidf.TFIDFFreeText(value,options.merge({:key => key}))
+    return 0 if score==0
+    [0,[Math.log(score)/(LOEP::Application::config.metadata_fields_max[key].to_f),1].min].max
   end
 
   def self.getScoreForCategoricalMetadataField(key,value,options={})
@@ -58,13 +45,13 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
   end
 
   def self.conformanceItems
-    cItems = Hash.new
-    cItems["1.1.2"] = {type: "freetext", max: 1.5}
-    cItems["1.2"] = {type: "freetext", max: 3.25}
-    cItems["1.3"] = {type: "categorical"}
-    cItems["1.4"] = {type: "freetext", max: 5.5}
-    cItems["1.5"] = {type: "freetext", max: 4.25}
-    cItems
+    {
+      "1.1.2" =>  {type: "freetext"},
+      "1.2" =>    {type: "freetext"},
+      "1.3" =>    {type: "categorical"},
+      "1.4" =>    {type: "freetext"},
+      "1.5" =>    {type: "freetext"}
+    }
   end
 
   def self.fieldWeights
