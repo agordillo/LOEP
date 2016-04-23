@@ -21,12 +21,12 @@ class Metrics::LomMetadataCoherence < Metrics::LomMetadataItem
     denominatorA = 0
     denominatorB = 0
 
-    # words = Metrics::LomMetadataConformance.processFreeText(textA).merge(Metrics::LomMetadataConformance.processFreeText(textB)).keys
-    words = [Metrics::LomMetadataConformance.processFreeText(textA).keys, Metrics::LomMetadataConformance.processFreeText(textB).keys].sort_by{|words| words.length}.first
+    # words = UtilsTfidf.processFreeText(textA).merge(UtilsTfidf.processFreeText(textB)).keys
+    words = [UtilsTfidf.processFreeText(textA).keys, UtilsTfidf.processFreeText(textB).keys].sort_by{|words| words.length}.first
 
     words.each do |word|
-      tfidf1 = Metrics::LomMetadataConformance.TFIDF(word,textA,options)
-      tfidf2 = Metrics::LomMetadataConformance.TFIDF(word,textB,options)
+      tfidf1 = UtilsTfidf.TFIDF(word,textA,options)
+      tfidf2 = UtilsTfidf.TFIDF(word,textB,options)
       numerator += (tfidf1 * tfidf2)
       denominatorA += tfidf1**2
       denominatorB += tfidf2**2

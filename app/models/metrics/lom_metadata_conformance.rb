@@ -9,15 +9,16 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     fieldWeights = Metrics::LomMetadataConformance.fieldWeights
     conformanceItems = Metrics::LomMetadataConformance.conformanceItems
     metadataFields = Metadata::Lom.metadata_fields_from_json(metadataJSON) rescue {}
-    unless metadataFields.blank?
-      metadataFields.each do |key, value|
-        unless value.blank? or conformanceItems[key].blank?
-          score += getScoreForMetadataField(key,value,options,conformanceItems) * fieldWeights[key]
-        end
+    return 0 if metadataFields.blank?
+
+    metadataFields.each do |key, value|
+      unless value.blank? or conformanceItems[key].blank?
+        score += getScoreForMetadataField(key,value,options,conformanceItems) * fieldWeights[key]
       end
     end
+
     score *= 10
-    return score
+    score
   end
 
   def self.getScoreForMetadataField(key,value,options={},conformanceItems)
@@ -26,91 +27,34 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
     when "freetext"
       score = getScoreForFreeTextMetadataField(key,value,options,conformanceItems)
     when "categorical"
-      score = getScoreForCategoricalMetadataField(key,value,options,conformanceItems)
+      score = getScoreForCategoricalMetadataField(key,value,options)
     end
     [0,[score,1].min].max
   end
 
   def self.getScoreForFreeTextMetadataField(key,value,options={},conformanceItems)
-    score = FreeTextTFIDF(value,options.merge({:key => key}))
+    # score = UtilsTfidf.TFIDFFreeText(value,options.merge({:key => key}))
 
-    unless score==0
-      score = Math.log(score)
+    # unless score==0
+    #   score = Math.log(score)
 
-      #Store max instance (uncomment to calculate maximums)
-      # maxiumValue = MetadataField.updateMax(key,score,options)
+    #   #Store max instance (uncomment to calculate maximums)
+    #   # maxiumValue = MetadataField.updateMax(key,score,options)
 
-      #Normalize score
-      maxiumValue = conformanceItems[key][:max]
+    #   #Normalize score
+    #   maxiumValue = conformanceItems[key][:max]
 
-      score = [0,[score/(maxiumValue.to_f),1].min].max
-    end
+    #   score = [0,[score/(maxiumValue.to_f),1].min].max
+    # end
 
-    score
+    # score
+    return 0
   end
 
-  def self.getScoreForCategoricalMetadataField(key,value,options={},conformanceItems={})
-    score = 0
-
-    query = {:name => key, :field_type => "categorical", :repository => options[:repository]}
-    allGroupedMetadataInstances = GroupedMetadataField.where(query)
-
-    n = [1,allGroupedMetadataInstances.find_by_value(nil).n].max rescue 1
-    times = [1,allGroupedMetadataInstances.find_by_value(value.downcase).n].max rescue 1
-
-    unless n == 1
-      score = (1 - (Math.log(times)/Math.log(n))) rescue 0
-    else
-      score = 1 if times>0 # n=1 and times€{0,1}
-    end
-
-    score
-  end
-
-  def self.processFreeText(text,options={})
-    return {} unless text.is_a? String
-    options = {:separator => " "}.merge(options)
-    text = text.gsub(/([\n])/," ").gsub(/[^0-9a-záéíóúñçÁÉÍÓÚÑÇº|\s]/i,"").downcase
-    words = Hash.new
-    text.split(options[:separator]).each do |word|
-      words[word] = 0 if words[word].nil?
-      words[word] += 1
-    end
-    words
-  end
-
-  def self.TFIDF(word,text,options)
-    if options[:occurrences].is_a? Numeric
-      occurrencesOfWordInText = options[:occurrences]
-    else
-      occurrencesOfWordInText = Metrics::LomMetadataConformance.processFreeText(text)[word] || 0
-    end
-    textWordFrequency = occurrencesOfWordInText
-    return 0 if textWordFrequency==0
-    
-    query = {:field_type => "freetext", :repository => options[:repository]}
-    unless options[:key].blank?
-      query = query.merge({:name => options[:key]})
-    end
-    
-    allGroupedMetadataInstances = GroupedMetadataField.where(query)
-    allResourcesInRepository = [1,allGroupedMetadataInstances.find_by_value(nil).n].max rescue 1
-    occurrencesOfWordInRepository = [1,allGroupedMetadataInstances.find_by_value(word.downcase).n].max rescue 1
-
-    # This code do the same (than the previous lines) but it is slower. We use the GroupedMetadataField to make things fast.
-    # allMetadataInstances = MetadataField.where(query)
-    # allResourcesInRepository = [1,allMetadataInstances.group(:metadata_id).length].max
-    # occurrencesOfWordInRepository = [1,allMetadataInstances.where(:value => word.downcase).group(:metadata_id).length].max
-    repositoryWordFrequency = (occurrencesOfWordInRepository.to_f / allResourcesInRepository)
-    textWordFrequency * Math.log(1/repositoryWordFrequency) rescue 0
-  end
-
-  def self.FreeTextTFIDF(freeText,options)
-    freeTextTFIDF = 0
-    processFreeText(freeText).each do |word,occurrences|
-      freeTextTFIDF += TFIDF(word,freeText,options.merge({:occurrences => occurrences}))
-    end
-    freeTextTFIDF
+  def self.getScoreForCategoricalMetadataField(key,value,options={})
+    n = (LOEP::Application::config.categorical_fields[options[:repository]][key + "_total"] || 1) rescue 1
+    times = (LOEP::Application::config.categorical_fields[options[:repository]][key][value] || 0) rescue 0
+    (1 - (Math.log(1+times)/Math.log(1+n)))
   end
 
   def self.conformanceItems

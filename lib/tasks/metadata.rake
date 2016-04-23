@@ -111,7 +111,7 @@ namespace :metadata do
 
 	def generateFreeTextMetadataField(metadataKey,metadataValue,metadataRecord)
 		unless metadataValue.blank?
-			Metrics::LomMetadataConformance.processFreeText(metadataValue).each do |word,occurrences|
+			UtilsTfidf.processFreeText(metadataValue).each do |word,occurrences|
 				mf = MetadataField.new({:name => metadataKey, :field_type => "freetext", :value => word, :n => occurrences, :metadata_id => metadataRecord.id})
 				mf.save!
 			end
