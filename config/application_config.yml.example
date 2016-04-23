@@ -6,6 +6,8 @@ development:
   mail:
     no_reply_mail: "no-reply@loep.global.dit.upm.es"
     main_mail: "no-reply@loep.global.dit.upm.es"
+    #Enable Exception Notification
+    #exception_notification_mails: ["mynotificationmail"]
     # Type can be "SENDMAIL" or "SMTP" (default)
     type: "SMTP"
     #  gmail_credentials:
