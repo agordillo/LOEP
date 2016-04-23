@@ -5,11 +5,9 @@
 class Metrics::LomMetadataFindability < Metrics::LomMetadataItem
 
   def self.getScoreForMetadata(metadataJSON,options={})
-    score = 0
     metadataFields = Metadata::Lom.metadata_fields_from_json(metadataJSON) rescue {}
     score = getScoreForKeywords(metadataFields["1.5"],options)
-    score *= 10
-    return score
+    ([[score*10,0].max,10].min).round(2)
   end
 
   def self.getScoreForKeywords(keywords,options={})
@@ -18,7 +16,7 @@ class Metrics::LomMetadataFindability < Metrics::LomMetadataItem
     return 0 unless keywords.is_a? Array
 
     links = MetadataGraphLink.getLinksForKeywords(keywords,options)
-    maxLink = MetadataField.getMax("metadataGraphLink",options)
+    maxLink = LOEP::Application::config.max_graph_links[options[:repository]] || 1
 
     [links.to_f/maxLink,1].min
   end

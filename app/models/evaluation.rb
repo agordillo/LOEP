@@ -206,7 +206,8 @@ class Evaluation < ActiveRecord::Base
   end
 
   def items_attributes(itemTypes=nil)
-    itemsArray = (self.getItemsArray(itemTypes) + self.class.ALL_COMMON_FIELDS).uniq
+    itemsArray = self.getItemsArray(itemTypes)
+    itemsArray = (itemsArray + self.class.ALL_COMMON_FIELDS).uniq if !itemTypes.blank? and itemTypes.include?("common")
     self.attributes.select{ |key,value| itemsArray.include?(key) }
   end
 

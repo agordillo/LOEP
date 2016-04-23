@@ -17,6 +17,7 @@ LOEP::Application.configure do
       total_entries = {}
       categorical_fields = {}
       words = {}
+      max_graph_links = {}
 
       conformanceItems = Metrics::LomMetadataConformance.conformanceItems
       categoricalFields = conformanceItems.select{|k,v| v[:type]=="categorical"}
@@ -51,6 +52,9 @@ LOEP::Application.configure do
           words[repository][gmf.value] = 0 if words[repository][gmf.value].nil?
           words[repository][gmf.value] += [gmf.n,total_entries[repository]-1].min
         end
+
+        #Graphs
+        max_graph_links[repository] = MetadataField.getMax("metadataGraphLink",{:repository => repository})
       end
 
       #Metadata field fixed thresholds (max values)
@@ -66,7 +70,9 @@ LOEP::Application.configure do
       config.total_entries = total_entries
       config.categorical_fields = categorical_fields
       config.words = words
+      config.max_graph_links = max_graph_links
       config.metadata_fields_max = metadata_fields_max
+      config.max_text_length = 100
     end
   end
 end

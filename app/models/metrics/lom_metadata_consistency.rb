@@ -60,8 +60,7 @@ class Metrics::LomMetadataConsistency < Metrics::LomMetadataItem
       end
     end
 
-    score *= 10
-    return score
+    ([[score*10,0].max,10].min).round(2)
   end
 
   def self.ruleWeights

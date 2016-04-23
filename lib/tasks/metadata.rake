@@ -73,13 +73,16 @@ namespace :metadata do
 		puts "Updating graphs"
 		MetadataGraphLink.all.map{|mgl| mgl.destroy}
 		
-		metadataMapping = Metadata.all.map{|m| [m.id,m.repository,m.getMetadata(:schema => "LOMv1.0", :format => "json", :fields => true)]}.reject{|map| map[2].blank? or map[2]["1.5"].blank? }.map{|map| [map[0],map[1],map[2]["1.5"].split(", ").reject{|s| s.blank?}.map{|keyword| keyword.downcase}.uniq]}
-		metadataMapping.each do |metadataMapping|
-			# metadata_id = metadataMapping[0]
-			# repository = metadataMapping[1]
-			# keywords = metadataMapping[2]
-			metadataMapping[2].each do |keyword|
-				mgl = MetadataGraphLink.new({:metadata_id => metadataMapping[0], :keyword => keyword})
+		metadataMapping = Metadata.all.map{|m| [m.id,m.repository,m.getMetadata(:schema => "LOMv1.0", :format => "json", :fields => true)]}.reject{|map| map[2].blank? or map[2]["1.5"].blank? }.map{|map| [map[0],map[1],map[2]["1.5"].split(", ")]}
+		metadataMapping.each do |metadataMappingItem|
+			# metadata_id = metadataMappingItem[0]
+			# repository = metadataMappingItem[1]
+			# keywords = metadataMappingItem[2]
+
+			#Normalize keywords and remove duplicates
+			metadataMappingItem[2] = UtilsTfidf.normalizeArray(metadataMappingItem[2])
+			metadataMappingItem[2].each do |keyword|
+				mgl = MetadataGraphLink.new({:metadata_id => metadataMappingItem[0], :keyword => keyword})
 				mgl.save!
 			end
 		end
@@ -106,23 +109,20 @@ namespace :metadata do
 
 			maxLink = MetadataField.updateMax("metadataGraphLink",maxLink,{:repository => repository})
 		end
-		
 	end
 
 	def generateFreeTextMetadataField(metadataKey,metadataValue,metadataRecord)
-		unless metadataValue.blank?
-			UtilsTfidf.processFreeText(metadataValue).each do |word,occurrences|
-				mf = MetadataField.new({:name => metadataKey, :field_type => "freetext", :value => word, :n => occurrences, :metadata_id => metadataRecord.id})
-				mf.save!
-			end
+		return if  metadataValue.blank?
+		UtilsTfidf.processFreeText(metadataValue).each do |word,occurrences|
+			mf = MetadataField.new({:name => metadataKey, :field_type => "freetext", :value => word, :n => occurrences, :metadata_id => metadataRecord.id})
+			mf.save!
 		end
 	end
 
 	def generateCategoricalMetadataField(metadataKey,metadataValue,metadataRecord)
-		unless metadataValue.blank?
-			mf = MetadataField.new({:name => metadataKey, :field_type => "categorical", :value => metadataValue, :n => 1, :metadata_id => metadataRecord.id})
-			mf.save!
-		end
+		return if  metadataValue.blank?
+		mf = MetadataField.new({:name => metadataKey, :field_type => "categorical", :value => UtilsTfidf.normalizeText(metadataValue), :n => 1, :metadata_id => metadataRecord.id})
+		mf.save!
 	end
 
 end

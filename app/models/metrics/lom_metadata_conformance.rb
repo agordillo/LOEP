@@ -18,7 +18,7 @@ class Metrics::LomMetadataConformance < Metrics::LomMetadataItem
       end
     end
 
-    score * 10
+    ([[score*10,0].max,10].min).round(2)
   end
 
   def self.getScoreForMetadataField(key,value,options={})

@@ -20,30 +20,28 @@ class MetadataGraphLink < ActiveRecord::Base
     true
   end
 
-  before_validation :lowercase_keyword
+  before_validation :normalize_keyword
   before_validation :fill_data
 
   def self.getLinksForKeywords(keywords,options={})
     return 0 unless keywords.is_a? Array
-    keywords = keywords.reject{|k| k.blank?}.map{|k| k.downcase}.uniq
-    query = {:keyword => keywords}
+    query = {:keyword => UtilsTfidf.normalizeArray(keywords)}
     query = query.merge({:repository => options[:repository]}) unless options[:repository].blank?
+    # metadataGraphLinks.map{|gl| gl.metadata_id}.uniq.length
     MetadataGraphLink.where(query).group(:metadata_id).length
   end
 
+
   private
 
-  def lowercase_keyword
-    self.keyword = self.keyword.downcase if self.keyword.is_a? String
+  def normalize_keyword
+    self.keyword = UtilsTfidf.normalizeText(self.keyword) if self.keyword.is_a? String
   end
 
   def fill_data
-    unless self.metadata_id.blank?
-      metadata = Metadata.find_by_id(metadata_id)
-      unless metadata.nil? or metadata.lo.nil? or metadata.lo.repository.blank?
-        self.repository = metadata.lo.repository
-      end
-    end
+    return if self.metadata_id.blank?
+    metadata = Metadata.find_by_id(metadata_id)
+    self.repository = metadata.lo.repository unless metadata.nil? or metadata.lo.nil? or metadata.lo.repository.blank?
   end
 
 end

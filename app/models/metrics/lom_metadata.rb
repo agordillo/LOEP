@@ -16,11 +16,10 @@ class Metrics::LomMetadata < Metrics::WAM
     items.push(Metrics::LomMetadataConsistency.getScoreForMetadata(metadataJSON,options))
     items.push(Metrics::LomMetadataCoherence.getScoreForMetadata(metadataJSON,options))
     items.push(Metrics::LomMetadataFindability.getScoreForMetadata(metadataJSON,options))
-
     items.each_with_index do |value,index|
         score += value * itemWeights[index]
     end
-    score
+    [0,[10,score].min].max
   end
 
   def self.itemWeights

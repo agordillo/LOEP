@@ -15,9 +15,7 @@ class Metrics::LomMetadataCompleteness < Metrics::LomMetadataItem
         end
       end
     end
-    score *= 10
-    score = ([[score,0].max,10].min).round(2)
-    return score
+    ([[score*10,0].max,10].min).round(2)
   end
 
   def self.fieldWeights
