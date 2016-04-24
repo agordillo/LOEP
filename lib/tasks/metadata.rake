@@ -17,8 +17,12 @@ namespace :metadata do
 		puts "Updating MetadataFields and GroupedMetadataFields"
 
 		#Remove previous metadata records
-		MetadataField.all.map{|mf| mf.destroy}
-		GroupedMetadataField.all.map{|gmf| gmf.destroy}
+		# MetadataField.destroy_all
+		# GroupedMetadataField.destroy_all
+		#Delete all is much faster than destroy all, but should be used only when there is no relations with other models.
+		MetadataField.delete_all
+		GroupedMetadataField.delete_all
+		
 
 		#Get conformance items
 		conformanceItems = Metrics::LomMetadataConformance.conformanceItems
