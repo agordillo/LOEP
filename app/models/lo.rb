@@ -55,6 +55,7 @@ class Lo < ActiveRecord::Base
   before_validation :normalize_blank_values
   after_save :save_metadata
   after_save :calculate_automatic_scores
+  after_destroy :remove_dependencies
 
   #---------------------------------------------------------------------------------
 
@@ -341,6 +342,10 @@ class Lo < ActiveRecord::Base
     Evmethod.allc_automatic.each do |evmethod|
       evmethod.getEvaluationModule.createAutomaticEvaluation(self)
     end
+  end
+
+  def remove_dependencies
+    self.metadata.destroy unless self.metadata.nil?
   end
 
 end

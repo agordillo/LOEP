@@ -61,6 +61,31 @@ namespace :fixes do
 		end
 	end
 
+	task :updateLOsFromMetadata => :environment do |t, args|
+		puts "Updating LOs from Metadata"
+		Metadata.all.each do |m|
+			lo = m.lo
+			metadataFields = m.getMetadata({:fields => true})
+			#Title
+			if !metadataFields["1.2"].blank? and metadataFieldNormalizeText(metadataFields["1.2"])!=metadataFieldNormalizeText(lo.name)
+				lo.update_column :name, metadataFields["1.2"]
+			end
+			#Description
+			if !metadataFields["1.4"].blank? and metadataFieldNormalizeText(metadataFields["1.4"])!=metadataFieldNormalizeText(lo.description)
+				lo.update_column :description, metadataFields["1.4"]
+			end
+			#Language
+			if !metadataFields["1.3"].blank? and metadataFields["1.3"]!=lo.language.code
+				language = Language.find_by_code(metadataFields["1.3"])
+				lo.update_column :language_id, language.id unless language.blank?
+			end
+		end
+	end
+
+	def metadataFieldNormalizeText(str)
+		str.gsub(/([\n|\r])/,"") if str.is_a? String
+	end
+
 	task :rolesValue => :environment do
 		roles = [
 			{name:"SuperAdmin", value:9},
