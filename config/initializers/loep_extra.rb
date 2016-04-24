@@ -50,7 +50,7 @@ LOEP::Application.configure do
 
         allGroupedTextMetadataInstances.each do |gmf|
           words[repository][gmf.value] = 0 if words[repository][gmf.value].nil?
-          words[repository][gmf.value] += [gmf.n,total_entries[repository]-1].min
+          words[repository][gmf.value] = [words[repository][gmf.value] + gmf.n, total_entries[repository]-1].min
         end
 
         #Graphs
