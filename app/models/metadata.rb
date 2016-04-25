@@ -8,22 +8,22 @@ class Metadata < ActiveRecord::Base
   validates :content, :presence => true
 
   def update
-    unless self.lo.nil?
-      unless self.lo.metadata_url.blank?
-        #Save metadata from url
-        self.populate_from_url
-      else
-        self.populate_from_lo
-      end
+    return if self.lo.nil?
+    
+    unless self.lo.metadata_url.blank?
+      #Save metadata from url
+      self.populate_from_url
+    else
+      self.populate_from_lo
+    end
 
-      if self.new_record?
-        self.save
-      else
-        self.update_column :schema, self.schema
-        self.update_column :content, self.content
-        self.update_column :lom_content, self.lom_content
-        self.update_column :updated_at, Time.now
-      end
+    if self.new_record?
+      self.save
+    else
+      self.update_column :schema, self.schema
+      self.update_column :content, self.content
+      self.update_column :lom_content, self.lom_content
+      self.update_column :updated_at, Time.now
     end
   end
 
