@@ -1,0 +1,2 @@
+class Evaluations::QinteractionsController < EvaluationsController
+end
