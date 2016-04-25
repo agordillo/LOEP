@@ -51,6 +51,7 @@ class Lo < ActiveRecord::Base
   has_many :evmethods, through: :evaluations
   belongs_to :app
   has_one :metadata
+  has_one :lo_interaction, :dependent => :destroy
 
   before_validation :normalize_blank_values
   after_save :save_metadata

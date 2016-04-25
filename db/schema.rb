@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150729075716) do
+ActiveRecord::Schema.define(:version => 20160425163843) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -266,6 +266,22 @@ ActiveRecord::Schema.define(:version => 20150729075716) do
   create_table "languages_users", :id => false, :force => true do |t|
     t.integer "language_id"
     t.integer "user_id"
+  end
+
+  create_table "lo_interaction_fields", :force => true do |t|
+    t.integer "lo_interaction_id"
+    t.string  "name"
+    t.decimal "average_value",     :precision => 12, :scale => 6
+    t.decimal "std",               :precision => 12, :scale => 6
+    t.decimal "min_value",         :precision => 12, :scale => 6
+    t.decimal "max_value",         :precision => 12, :scale => 6
+    t.decimal "percentil",         :precision => 12, :scale => 6
+    t.decimal "percentil_value",   :precision => 12, :scale => 6
+  end
+
+  create_table "lo_interactions", :force => true do |t|
+    t.integer "lo_id"
+    t.integer "nsamples"
   end
 
   create_table "lorics", :force => true do |t|
