@@ -2,15 +2,6 @@
 
 namespace :metadata do
 
-	#How to use: bundle exec rake metadata:updateContext
-	#In production: bundle exec rake metadata:updateContext RAILS_ENV=production
-	task :updateContext => :environment do |t, args|
-		puts "Updating metadata context"
-		Rake::Task["metadata:updateMetadataFieldRecords"].invoke
-		Rake::Task["metadata:updateGraphs"].invoke
-		puts "Task finished"
-	end
-
 	#How to use: bundle exec rake metadata:updateMetadataFieldRecords
 	#In production: bundle exec rake metadata:updateMetadataFieldRecords RAILS_ENV=production
 	task :updateMetadataFieldRecords => :environment do |t, args|

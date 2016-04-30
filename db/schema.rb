@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160425163843) do
+ActiveRecord::Schema.define(:version => 20160430142154) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -269,19 +269,23 @@ ActiveRecord::Schema.define(:version => 20160425163843) do
   end
 
   create_table "lo_interaction_fields", :force => true do |t|
-    t.integer "lo_interaction_id"
-    t.string  "name"
-    t.decimal "average_value",     :precision => 12, :scale => 6
-    t.decimal "std",               :precision => 12, :scale => 6
-    t.decimal "min_value",         :precision => 12, :scale => 6
-    t.decimal "max_value",         :precision => 12, :scale => 6
-    t.decimal "percentil",         :precision => 12, :scale => 6
-    t.decimal "percentil_value",   :precision => 12, :scale => 6
+    t.integer  "lo_interaction_id"
+    t.string   "name"
+    t.decimal  "average_value",     :precision => 12, :scale => 6
+    t.decimal  "std",               :precision => 12, :scale => 6
+    t.decimal  "min_value",         :precision => 12, :scale => 6
+    t.decimal  "max_value",         :precision => 12, :scale => 6
+    t.decimal  "percentil",         :precision => 12, :scale => 6
+    t.decimal  "percentil_value",   :precision => 12, :scale => 6
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
   end
 
   create_table "lo_interactions", :force => true do |t|
-    t.integer "lo_id"
-    t.integer "nsamples"
+    t.integer  "lo_id"
+    t.integer  "nsamples"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "lorics", :force => true do |t|
@@ -396,6 +400,14 @@ ActiveRecord::Schema.define(:version => 20160425163843) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.boolean  "permanent",  :default => false
+  end
+
+  create_table "settings", :force => true do |t|
+    t.string   "key"
+    t.text     "value"
+    t.string   "repository"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "survey_ranking_as", :force => true do |t|

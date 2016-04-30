@@ -18,19 +18,26 @@ class Metrics::QinteractionItem < Metric
   def self.getScoreForLo(lo)
     return nil if lo.lo_interaction.nil?
     interactions = lo.lo_interaction.extended_attributes
-    ([[getScoreForInteractions(interactions),0].max,10].min).round(2)
+    ([[getScoreForInteractions(interactions,thresholds(lo.repository)[self.name]),0].max,10].min).round(2)
   end
 
   def self.getScoreForInteractions(interactions={})
     #Override me
   end
 
-  def self.threshold
-    {
-      "Metrics::QinteractionTime" => 524,
-      "Metrics::QinteractionPermanency" => 73,
-      "Metrics::QinteractionClickFrequency" => 18
-    }[self.name]
+  def self.thresholds(repository=nil)
+    thresholdValues = LOEP::Application::config.respond_to?("interaction_thresholds") ? LOEP::Application::config.interaction_thresholds : {};
+    thresholdValues = thresholdValues[repository] unless thresholdValues[repository].blank?
+    thresholdValues = thresholdValues[nil] if thresholdValues.blank? and !thresholdValues[nil].blank?
+    thresholds = {
+      "Metrics::QinteractionTime" => thresholdValues["Metrics::QinteractionTime"],
+      "Metrics::QinteractionPermanency" => thresholdValues["Metrics::QinteractionPermanency"],
+      "Metrics::QinteractionClickFrequency" => thresholdValues["Metrics::QinteractionClickFrequency"]
+    }
+    thresholds.map{|k,v| 
+      thresholds[k] = (v.blank? ? v : v.to_f)
+    }
+    thresholds
   end
 
 end

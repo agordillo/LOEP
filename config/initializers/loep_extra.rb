@@ -6,12 +6,11 @@ LOEP::Application.configure do
   config.after_initialize do
 
     #Keep some data on config to speed up Metadata quality metrics and TFIDF calculations
-
     if ActiveRecord::Base.connection.table_exists?('metadata_fields') and ActiveRecord::Base.connection.table_exists?('grouped_metadata_fields')
       
       #Get all repositories (nil means all repositories)
       # repositories = (MetadataField.all.map{|mf| mf.repository} + [nil]).uniq
-      repositories = (Lo.all.map{|lo| lo.repository} + [nil]).uniq
+      repositories = LOEP::Application.config.repositories
 
       #Initial values
       total_entries = {}
@@ -74,5 +73,19 @@ LOEP::Application.configure do
       config.metadata_fields_max = metadata_fields_max
       config.max_text_length = 100
     end
+
+    if ActiveRecord::Base.connection.table_exists?('settings')
+      interaction_thresholds = {}
+      thresholdKeys = Metrics::QinteractionItem.thresholds.map{|k,v| k}
+      repositories.each do |repository|
+        interaction_thresholds[repository] = {}
+        thresholdKeys.each do |thresholdKey|
+          s = Setting.where(:key => thresholdKey, :repository => repository).first
+          interaction_thresholds[repository][thresholdKey] = s.value unless s.nil?
+        end
+      end
+      config.interaction_thresholds = interaction_thresholds
+    end
+
   end
 end

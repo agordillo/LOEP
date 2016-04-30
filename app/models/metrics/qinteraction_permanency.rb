@@ -2,7 +2,7 @@
 
 class Metrics::QinteractionPermanency < Metrics::QinteractionItem
 
-  def self.getScoreForInteractions(interactions={})
+  def self.getScoreForInteractions(interactions={},threshold=73)
     [1,interactions["permanency_rate"]["average_value"]/threshold].min*10 rescue 0
   end
 

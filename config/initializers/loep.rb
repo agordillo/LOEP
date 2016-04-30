@@ -1,42 +1,45 @@
 # Be sure to restart your server when you modify this file.
+LOEP::Application.configure do
+  config.version = "1.1"
+  config.full_domain = "http://" + config.APP_CONFIG["domain"]
+  #Secret key for verifying the integrity of signed cookies.
+  config.secret_token = config.APP_CONFIG['secret_token']
+  config.session_store :cookie_store, key: '_LOEP_session'
 
-LOEP::Application.config.version = "1.1"
-
-LOEP::Application.config.full_domain = "http://" + LOEP::Application.config.APP_CONFIG["domain"]
-
-#Secret key for verifying the integrity of signed cookies.
-LOEP::Application.config.secret_token = LOEP::Application.config.APP_CONFIG['secret_token']
-
-LOEP::Application.config.session_store :cookie_store, key: '_LOEP_session'
-
-#Recaptcha
-LOEP::Application.config.enable_recaptcha = !LOEP::Application.config.APP_CONFIG['recaptcha'].blank?
-if LOEP::Application.config.enable_recaptcha
-  Recaptcha.configure do |config|
-    config.public_key  = LOEP::Application.config.APP_CONFIG['recaptcha']['public_key']
-    config.private_key = LOEP::Application.config.APP_CONFIG['recaptcha']['private_key']
+  #Recaptcha
+  config.enable_recaptcha = !config.APP_CONFIG['recaptcha'].blank?
+  if config.enable_recaptcha
+    Recaptcha.configure do |config|
+      config.public_key  = config.APP_CONFIG['recaptcha']['public_key']
+      config.private_key = config.APP_CONFIG['recaptcha']['private_key']
+    end
   end
+
+  config.register_policy = config.APP_CONFIG['register_policy'] || "FREE"
+  config.default_role = config.APP_CONFIG['default_role'] || "User"
+
+  if ActiveRecord::Base.connection.table_exists? "evmethods" and ActiveRecord::Base.connection.table_exists? "metrics"
+    #Configure the evaluation models you want to use in your LOEP instance
+    #See app/models/evaluations for more possible methods to add
+    config.evmethod_names = config.APP_CONFIG['evmethods'].reject{ |n| Evmethod.find_by_name(n).nil? }
+    config.evmethods = config.evmethod_names.map{|n| Evmethod.find_by_name(n)}
+    config.evmethods_ids = config.evmethods.map{|evmethod| evmethod.id }
+    config.evmethods_human_ids = config.evmethods.reject{|ev| ev.automatic}.map{|evmethod| evmethod.id}
+    
+    #Configure the metrics you want to use in your LOEP instance
+    #See app/models/metrics for more possible metrics to add
+    config.metric_names = config.APP_CONFIG['metrics'].reject{ |n|
+      m = Metric.find_by_name(n);
+      m.nil? or !(m.evmethods - config.evmethods).empty?
+    }
+    config.metrics = config.metric_names.map{|n| Metric.find_by_name(n)}
+  end
+
+  if ActiveRecord::Base.connection.table_exists? "los"
+    #Get all repositories (nil means all repositories)
+    config.repositories = (Lo.all.map{|lo| lo.repository} + [nil]).uniq
+  end
+
+  #UI
+  config.show_surveys = (config.APP_CONFIG['surveys']=="true")
 end
-
-LOEP::Application.config.register_policy = LOEP::Application.config.APP_CONFIG['register_policy'] || "FREE"
-LOEP::Application.config.default_role = LOEP::Application.config.APP_CONFIG['default_role'] || "User"
-
-if ActiveRecord::Base.connection.table_exists? "evmethods" and ActiveRecord::Base.connection.table_exists? "metrics"
-  #Configure the evaluation models you want to use in your LOEP instance
-  #See app/models/evaluations for more possible methods to add
-  LOEP::Application.config.evmethod_names = LOEP::Application.config.APP_CONFIG['evmethods'].reject{ |n| Evmethod.find_by_name(n).nil? }
-  LOEP::Application.config.evmethods = LOEP::Application.config.evmethod_names.map{|n| Evmethod.find_by_name(n)}
-  LOEP::Application.config.evmethods_ids = LOEP::Application.config.evmethods.map{|evmethod| evmethod.id }
-  LOEP::Application.config.evmethods_human_ids = LOEP::Application.config.evmethods.reject{|ev| ev.automatic}.map{|evmethod| evmethod.id}
-  
-  #Configure the metrics you want to use in your LOEP instance
-  #See app/models/metrics for more possible metrics to add
-  LOEP::Application.config.metric_names = LOEP::Application.config.APP_CONFIG['metrics'].reject{ |n|
-    m = Metric.find_by_name(n);
-    m.nil? or !(m.evmethods - LOEP::Application.config.evmethods).empty?
-  }
-  LOEP::Application.config.metrics = LOEP::Application.config.metric_names.map{|n| Metric.find_by_name(n)}
-end
-
-#UI
-LOEP::Application.config.show_surveys = (LOEP::Application.config.APP_CONFIG['surveys']=="true")

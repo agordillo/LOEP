@@ -187,6 +187,10 @@ class Lo < ActiveRecord::Base
     end
   end
 
+  def createLoInteraction(h={})
+    LoInteraction.createWithHash(self,h)
+  end
+
 
   #######################
   # Get extended LO Data
