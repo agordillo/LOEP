@@ -4,6 +4,7 @@ namespace :db do
 
 	desc 'Populate database with fake data for development'
 	task :populate => 'db:populate:reload'
+	task :upgrade => 'db:populate:upgrade'
 
 	namespace :populate do
 
@@ -242,8 +243,9 @@ namespace :db do
 				{name:"LOEM", module_name:"Evaluations::Loem", multiple:false, automatic: false},
 				{name:"WBLT-S", module_name:"Evaluations::Wblts", multiple:true, automatic: false},
 				{name:"WBLT-T", module_name:"Evaluations::Wbltt", multiple:false, automatic: false},
+				{name:"SUS", module_name:"Evaluations::Sus", multiple:false, automatic: false},
 				{name:"Metadata Quality", module_name:"Evaluations::Metadata", multiple:false, automatic: true},
-				{name:"SUS", module_name:"Evaluations::Sus", multiple:false, automatic: false}
+				{name:"Interaction Quality", module_name:"Evaluations::Qinteraction", multiple:false, automatic: true}
 			]
 
 			addedEvmethods = []
@@ -285,10 +287,11 @@ namespace :db do
 				{name:"LOEM Arithmetic Mean", module_name:"Metrics::LOEMAM", evmethods:["LOEM"]},
 				{name:"WBLT-S Arithmetic Mean", module_name:"Metrics::WBLTSAM", evmethods:["WBLT-S"]},
 				{name:"WBLT-T Arithmetic Mean", module_name:"Metrics::WBLTTAM", evmethods:["WBLT-T"]},
+				{name:"Global SUS Score", module_name:"Metrics::SUSG", evmethods:["SUS"]},
 				{name:"LORIEM", module_name:"Metrics::LORIEM", evmethods:["LORI v1.5","LOEM"]},
 				{name:"LOM Metadata Quality Metric", module_name:"Metrics::LomMetadata", evmethods:["Metadata Quality"]},
 				{name:"LOM Completeness Metadata Quality Metric", module_name:"Metrics::LomMetadataCompleteness", evmethods:["Metadata Quality"]},
-				{name:"Global SUS Score", module_name:"Metrics::SUSG", evmethods:["SUS"]}
+				{name:"Interaction Quality Metric", module_name:"Metrics::Qinteraction", evmethods:["Interaction Quality"]}
 			]
 
 			addedMetrics = []

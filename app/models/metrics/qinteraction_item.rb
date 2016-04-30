@@ -16,12 +16,21 @@ class Metrics::QinteractionItem < Metric
   end
 
   def self.getScoreForLo(lo)
+    return nil if lo.lo_interaction.nil?
     interactions = lo.lo_interaction.extended_attributes
     ([[getScoreForInteractions(interactions),0].max,10].min).round(2)
   end
 
   def self.getScoreForInteractions(interactions={})
     #Override me
+  end
+
+  def self.threshold
+    {
+      "Metrics::QinteractionTime" => 524,
+      "Metrics::QinteractionPermanency" => 73,
+      "Metrics::QinteractionClickFrequency" => 18
+    }[self.name]
   end
 
 end

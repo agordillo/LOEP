@@ -4,7 +4,7 @@ class Evaluations::Qinteraction < Evaluation
   # this is for Evaluations with evMethod=QInteraction (type=QinteractionEvaluation)
 
   def init
-    self.evmethod_id ||= Evmethod.find_by_name("QInteraction").id
+    self.evmethod_id ||= Evmethod.find_by_name("Interaction Quality").id
     super
   end
 
@@ -20,7 +20,7 @@ class Evaluations::Qinteraction < Evaluation
         :type=> "decimal",
         :metric =>  "Metrics::QinteractionPermanency"
       },{ 
-        :name => "Clicks frequency",
+        :name => "Clicks Frequency",
         :description => "Average number of performed clicks per time unit.", 
         :type=> "decimal",
         :metric =>  "Metrics::QinteractionClickFrequency"
@@ -38,6 +38,7 @@ class Evaluations::Qinteraction < Evaluation
   ##################
 
   def self.createAutomaticEvaluation(lo)
+    return nil if lo.lo_interaction.nil?
     evaluation = super
     evaluation.ditem1 = Metrics::QinteractionTime.getScoreForLo(lo)
     evaluation.ditem2 = Metrics::QinteractionPermanency.getScoreForLo(lo)
