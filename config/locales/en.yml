@@ -360,6 +360,16 @@ en:
     form:
       available: "Available Evaluation Methods"
       documentation: "%{evmethod} documentation"
+    interactions:
+      item1:
+        name: "Time Spent"
+        description: "Average time spent by the users in the Learning Object"
+      item2:
+        name: "Permanency Rate"
+        description: "Percentage of users that do not abandon the Learning Object after a few seconds"
+      item3:
+        name: "Clicks Frequency"
+        description: "Average number of performed clicks per time unit"
     loem:
       item1:
         name: "Meaningful Interactions"
@@ -563,6 +573,22 @@ en:
       short:
         one: "Method"
         plural: "Methods"
+    metadata:
+      item1:
+        name: "Completeness"
+        description: "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource"
+      item2:
+        name: "Conformance"
+        description: "Degree to which the metadata instance fulfills the requirements of a given community of users for a given task"
+      item3:
+        name: "Consistency"
+        description: "Degree to which the metadata instance matches the metadata standard definition"
+      item4:
+        name: "Coherence"
+        description: "Degree to which all the fields of the metadata instance describe the same object in a similar way"
+      item5:
+        name: "Findability"
+        description: "Ease with which the metadata instance can be found"
     SUS:
       item1:
         name: "I think that I would like to use this %{system} frequently"

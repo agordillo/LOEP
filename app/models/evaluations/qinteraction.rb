@@ -10,18 +10,19 @@ class Evaluations::Qinteraction < Evaluation
 
   def self.getItems
     [
-      { :name => "Time Spent",
-        :description => "Average time spent by the users in the Learning Object.", 
+      { 
+        :name => I18n.t("evmethods.interactions.item1.name"),
+        :description => I18n.t("evmethods.interactions.item1.description"),
         :type=> "decimal",
         :metric =>  "Metrics::QinteractionTime"
-      },{ 
-        :name => "Permanency Rate",
-        :description => "Percentage of users that do not abandon the Learning Object after a few seconds.",
+      },{
+        :name => I18n.t("evmethods.interactions.item2.name"),
+        :description => I18n.t("evmethods.interactions.item2.description"),
         :type=> "decimal",
         :metric =>  "Metrics::QinteractionPermanency"
-      },{ 
-        :name => "Clicks Frequency",
-        :description => "Average number of performed clicks per time unit.", 
+      },{
+        :name => I18n.t("evmethods.interactions.item3.name"),
+        :description => I18n.t("evmethods.interactions.item3.description"), 
         :type=> "decimal",
         :metric =>  "Metrics::QinteractionClickFrequency"
       }

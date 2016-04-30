@@ -347,6 +347,16 @@ es:
     form:
       available: "Métodos de Evaluación Disponibles"
       documentation: "Documentación de %{evmethod}"
+    interactions:
+      item1:
+        name: "Tiempo Empleado"
+        description: "Tiempo medio empleado por los usuarios en el Objeto de Aprendizaje"
+      item2:
+        name: "Ratio de Permanencia"
+        description: "Porcentaje de usuarios que no abandonan el Objeto de Aprendizaje despues de unos pocos segundos"
+      item3:
+        name: "Frecuencia de clics"
+        description: "Número medio de clics realizados por unidad de tiempo"
     loem:
       item1:
         name: "Interacciones Significativas"
@@ -550,6 +560,22 @@ es:
       short:
         one: "Método"
         plural: "Métodos"
+    metadata:
+      item1:
+        name: "Completitud"
+        description: "Grado en que la instancia de metadatos contiene toda la información necesaria para tener una representación integral del recurso descrito"
+      item2:
+        name: "Conformidad"
+        description: "Grado en que la instancia de metadatos cumple los requisitos de una determinada comunidad de usuarios para una tarea específica"
+      item3:
+        name: "Consistencia"
+        description: "Grado en que la instancia de metadatos encaja con la definición del estándar de metadatos"
+      item4:
+        name: "Coherencia"
+        description: "Grado en que todos los campos de la instancia de metadatos describen el mismo objeto de forma similar"
+      item5:
+        name: "Encontrabilidad"
+        description: "Facilidad con la que puede ser encontrada la instancia de metadatos"
     SUS:
       item1:
         name: "Creo que me gustaría usar con frecuencia este %{system}"

@@ -13,8 +13,8 @@ class Evaluations::Lori < Evaluation
     items = []
     9.times do |i|
       items << {
-        :name => I18n.t("evmethods.lori.item" + (i+1).to_s + ".name") + ".",
-        :description => I18n.t("evmethods.lori.item" + (i+1).to_s + ".description"), 
+        :name => I18n.t("evmethods.lori.item" + (i+1).to_s + ".name"),
+        :description => I18n.t("evmethods.lori.item" + (i+1).to_s + ".description"),
         :type=> "integer"
       }
     end

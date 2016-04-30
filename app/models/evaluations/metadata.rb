@@ -11,26 +11,31 @@ class Evaluations::Metadata < Evaluation
 
   def self.getItems
     [
-      { :name => "Completeness",
-        :description => "Degree to which the metadata instance contains all the information needed to have a comprehensive representation of the described resource.", 
+      { :name => I18n.t("evmethods.metadata.item1.name"),
+        :description => I18n.t("evmethods.metadata.item1.description"),
         :type=> "decimal",
-        :metric =>  "Metrics::LomMetadataCompleteness"},
-      { :name => "Conformance",
-        :description => "Conformance to expectations measures the degree to which the metadata instance fulfills the requirements of a given community of users for a given task.",
+        :metric =>  "Metrics::LomMetadataCompleteness"
+      },{ 
+        :name => I18n.t("evmethods.metadata.item2.name"),
+        :description => I18n.t("evmethods.metadata.item2.description"),
         :type=> "decimal",
-        :metric =>  "Metrics::LomMetadataConformance"},
-      { :name => "Consistency",
-        :description => "Degree to which the metadata instance matches the metadata standard definition.", 
+        :metric =>  "Metrics::LomMetadataConformance"
+      },{ 
+        :name => I18n.t("evmethods.metadata.item3.name"),
+        :description => I18n.t("evmethods.metadata.item3.description"),
         :type=> "decimal",
-        :metric =>  "Metrics::LomMetadataConsistency"},
-      { :name => "Coherence",
-        :description => "Degree to which all the fields of the metadata instance describe the same object in a similar way.",
+        :metric =>  "Metrics::LomMetadataConsistency"
+      },{ 
+        :name => I18n.t("evmethods.metadata.item4.name"),
+        :description => I18n.t("evmethods.metadata.item4.description"),
         :type=> "decimal",
-        :metric =>  "Metrics::LomMetadataCoherence"},
-      { :name => "Findability",
-        :description => "The level to which a metadata instance can be found.",
+        :metric =>  "Metrics::LomMetadataCoherence"
+      },{ 
+        :name => I18n.t("evmethods.metadata.item5.name"),
+        :description => I18n.t("evmethods.metadata.item5.description"),
         :type=> "decimal",
-        :metric =>  "Metrics::LomMetadataFindability"}
+        :metric =>  "Metrics::LomMetadataFindability"
+      }
     ]
   end
 
