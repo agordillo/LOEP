@@ -18,7 +18,9 @@ class Metrics::QinteractionItem < Metric
   def self.getScoreForLo(lo)
     return nil if lo.lo_interaction.nil?
     interactions = lo.lo_interaction.extended_attributes
-    ([[getScoreForInteractions(interactions,thresholds(lo.repository)[self.name]),0].max,10].min).round(2)
+    threshold = thresholds(lo.repository)[self.name]
+    score = threshold.blank? ? getScoreForInteractions(interactions) : getScoreForInteractions(interactions,threshold)
+    ([[score,0].max,10].min).round(2)
   end
 
   def self.getScoreForInteractions(interactions={})
@@ -27,8 +29,12 @@ class Metrics::QinteractionItem < Metric
 
   def self.thresholds(repository=nil)
     thresholdValues = LOEP::Application::config.respond_to?("interaction_thresholds") ? LOEP::Application::config.interaction_thresholds : {};
-    thresholdValues = thresholdValues[repository] unless thresholdValues[repository].blank?
-    thresholdValues = thresholdValues[nil] if thresholdValues.blank? and !thresholdValues[nil].blank?
+    unless thresholdValues[repository].blank? or (repository.blank? and LOEP::Application::config.repositories.length > 1)
+      thresholdValues = thresholdValues[repository]
+    else
+      thresholdValues = {} #Use default thresholds
+      # thresholdValues = thresholdValues[nil] unless thresholdValues[nil].blank? #Use max thresholds in LOEP
+    end
     thresholds = {
       "Metrics::QinteractionTime" => thresholdValues["Metrics::QinteractionTime"],
       "Metrics::QinteractionPermanency" => thresholdValues["Metrics::QinteractionPermanency"],
