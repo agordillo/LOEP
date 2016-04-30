@@ -48,7 +48,7 @@ class Evaluations::Sus < Evaluation
     representationData["name"] = lo.name
     representationData["averageScore"] = loSUSscore.value.to_f.round(2)
     representationData["iScores"] = [representationData["averageScore"]]
-    representationData["labels"] = [metric.name]
+    representationData["labels"] = [I18n.t("evmethods.SUS.score.name")]
     representationData["engine"] = "Rgraph"
     representationData
   end

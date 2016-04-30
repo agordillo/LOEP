@@ -610,6 +610,8 @@ en:
         name: "I felt very confident using the %{system}"
       item10:
         name: "I needed to learn a lot of things before I could get going with this %{system}"
+      score: 
+        name: "Global SUS Score"
     Wblts:
       item1:
         name: "The learning object was well organized"

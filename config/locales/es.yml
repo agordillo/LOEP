@@ -597,6 +597,8 @@ es:
         name: "Me sentí muy seguro al usar el %{system}"
       item10:
         name: "Tuve que aprender muchas cosas antes de que pudiese trabajar con el %{system}"
+      score: 
+        name: "Puntuación SUS Global"
     Wblts:
       item1:
         name: "El objeto de aprendizaje estaba bien organizado"
