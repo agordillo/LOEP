@@ -54,3 +54,11 @@
 .glyphiconfull.leaf:before {
 	content: "\E002";
 }
+
+.glyphiconfull.flash:before {
+	content: "\E242";
+}
+
+.glyphiconfull.group:before {
+	content: "\E044";
+}

@@ -27,7 +27,7 @@
 
     <p class="space_small"></p>
 
-    <p class="form_legend"><%=t("dictionary.auth_tokens_active")%> | <%= link_to I18n.t("session_tokens.message.new_fast"), app_new_session_token_path(@app) %> | <%= link_to I18n.t("session_tokens.message.new"), new_session_token_path() %></p>
+    <p class="form_legend"><%=t("dictionary.auth_tokens_active")%> | <%= link_to I18n.t("session_tokens.new_fast"), app_new_session_token_path(@app) %> | <%= link_to I18n.t("session_tokens.new"), new_session_token_path({:app_id => @app.id}) %></p>
     <% sessionTokens = @app.valid_session_tokens.first(10) %>
     <% unless sessionTokens.blank? %>
       <% sessionTokens.each do |s| %>
@@ -35,9 +35,14 @@
           <p>
             <%=text_field_tag nil, s.auth_token, class: 'loep_input', readonly: true %>
             <% if s.permanent %>
-              <span title="Permanent" class="glyphicon glyphiconfull globeb"></span>
+              <span title="<%=t("dictionary.permanent.permanent").capitalize%>" class="glyphicon glyphiconfull globe2"></span>
             <% else %>
-              <span title="Expires in less than <%=s.hours_to_expire%> hours" class="glyphicon glyphiconfull leaf"></span>
+              <span title="<%=t("session_tokens.message.expires",:hours => s.hours_to_expire)%>" class="glyphicon glyphiconfull leaf"></span>
+              <% if s.multiple %>
+                <span title="<%=t("dictionary.permanent.unlimiteduse").capitalize%>" class="glyphicon glyphiconfull group"></span>
+              <% else %>
+                <span title="<%=t("dictionary.permanent.oneuse").capitalize%>" class="glyphicon glyphicon-user"></span>
+              <% end %>
             <% end %>
           </p>
           <p class="session_token_actions">

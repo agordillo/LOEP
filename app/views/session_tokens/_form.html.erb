@@ -1,0 +1,47 @@
+<div class="loep_form_wrapper new_lo_form">
+  
+  <p class="form_before_button">&nbsp;</p>
+
+  <%= form_for(@session_token) do |f| %>
+
+    <p class="form_legend"><%=t("applications.name.one")%></p>
+    <% if @session_token.app_id %>
+      <p><%=@session_token.app.name%></p>
+      <%= f.hidden_field :app_id, { :value=> @session_token.app_id } %>
+    <% elsif current_user.apps.length > 0 %>
+      <%= f.select :app_id, options_for_select(current_user.apps.map{|app| [app.name,app.id]},@session_token.app_id), {} ,{ :id=> "session_token_app", :class=>'optionalInput loep_input select_without_bottom_margin'} %>
+    <% end %>
+
+    <p class="form_legend"><%=t("dictionary.type")%></p>
+    <%= f.select :permanent, options_for_select([[t("dictionary.permanent.permanent"),true],[t("dictionary.permanent.temporary"),false]],false), {} ,{ :id=> "session_token_permanent", :class=>'optionalInput loep_input select_without_bottom_margin'} %>
+
+    <p class="form_legend"><%=t("dictionary.number_of_uses")%></p>
+    <%= f.select :multiple, options_for_select([[t("dictionary.permanent.unlimiteduse"),true],[t("dictionary.permanent.oneuse"),false]],false), {} ,{ :id=> "session_token_use",:class=>'optionalInput loep_input select_without_bottom_margin'} %>
+
+    <p class="form_legend"><%=t("session_tokens.period")%></p>
+    <%= f.number_field :hours, { :value=> 12, :id => "session_token_hours" } %>
+
+    <p class="form_before_button">&nbsp;</p>
+    <p class="form_before_button">&nbsp;</p>
+    <%unless params["action"]=="edit"%>
+      <%submitButtonText = t("dictionary.create_model", :model => t("session_tokens.name.one"))%>
+    <% else %>
+      <%submitButtonText = t("dictionary.update_model", :model => t("session_tokens.name.one"))%>
+    <% end %>
+    <%= f.submit submitButtonText, :class => 'loep_button' %>
+
+  <% end %>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+      $("#session_token_permanent").on("change", function(e){
+        if($(this).val()==="true"){
+          //Permanent
+          $("#session_token_hours, #session_token_use").attr("disabled","disabled").attr("readonly","readonly")
+        } else {
+          $("#session_token_hours, #session_token_use").removeAttr("disabled").removeAttr("readonly")
+        }
+      })
+    });
+  </script>

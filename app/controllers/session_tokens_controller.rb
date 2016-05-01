@@ -2,7 +2,7 @@ class SessionTokensController < ApplicationController
   before_filter :authenticate_admin!
 
   def new
-    @session_token = SessionToken.new
+    @session_token = SessionToken.new({:app_id => params[:app_id]})
     authorize! :create, @session_token
 
     respond_to do |format|

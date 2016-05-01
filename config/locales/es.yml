@@ -74,13 +74,16 @@ es:
     no_evaluated: "No evaluado"
     no_item_selected: "No ha seleccionado ningún elemento."
     no_resources_yet: "No hay %{resources} todavía."
+    number_of_uses: "Número de usos"
     ok: "Ok"
     or: "O"
     other: &other "Otro"
-    owner: "Dueño"
+    owner: "Dueño"     
     permanent:
-      permanent: "Permanente"
       oneuse: "Un sólo uso"
+      permanent: "Permanente"
+      temporary: "Temporal"
+      unlimiteduse: "Usos limitados"
     process_completed: "Proceso completado"
     quality: "Calidad"
     quiz:
@@ -901,6 +904,19 @@ es:
     name:
       one: "Puntuación"
       plural: "Puntuaciones"
+  session_tokens:
+    name:
+      one: "Token de Sesión"
+      plural: "Tokens de Sesión"
+    new: "Crear nuevo token de sesión"
+    new_fast: "Crear token inmediatamente"
+    message:
+      expires: "Expira en menos de %{hours} horas"
+      notokens: "No hay tokens de sesión activos para esta aplicación."
+      success:
+        create: "El token de sesión fue creado satisfactoriamente"
+        destroy: "El token de sesión fue borrado satisfactoriamente"
+    period: "Periodo de validez"
   settings:
     title: "Ajustes"
   surveys:
