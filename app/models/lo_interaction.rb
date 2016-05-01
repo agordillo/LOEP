@@ -24,7 +24,7 @@ class LoInteraction < ActiveRecord::Base
   def self.createWithHash(lo,h={})
     h = {} unless h.is_a? Hash
     h = h.parse_types #Convert strings to numbers when possible
-    
+
     loInteraction = lo.getInteraction
     loInteraction.destroy unless loInteraction.blank? #Remove previous record
 

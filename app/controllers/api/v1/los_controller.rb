@@ -32,13 +32,25 @@ class Api::V1::LosController < Api::V1::BaseController
     end
   end
 
+  #Create or update a Learning Object in the LOEP Platform
   # POST /api/v1/los
   def create
-    @lo = Lo.new(params[:lo])
-    authorize! :create, @lo
+    #Look for an existing Learning Object
+    if params[:lo] and params[:lo][:repository] and params[:lo][:id_repository]
+      @lo = Lo.where(:repository => params[:lo][:repository], :id_repository => params[:lo][:id_repository]).first
+    end
 
-    @lo.app_id = current_app.id
-    @lo.owner_id = current_app.user.id
+    if @lo.nil?
+      #Create new Learning Object
+      @lo = Lo.new(params[:lo])
+      authorize! :create, @lo
+
+      @lo.app_id = current_app.id
+      @lo.owner_id = current_app.user.id
+    else
+      @lo.assign_attributes(params[:lo])
+      authorize! :update, @lo
+    end
 
     @lo.valid?
 
@@ -55,11 +67,14 @@ class Api::V1::LosController < Api::V1::BaseController
 
   # PUT /api/v1/los/:id
   def update
+    @lo.assign_attributes(params[:lo])
     authorize! :update, @lo
 
+    @lo.valid?
+
     respond_to do |format|
-        format.any { 
-          if @lo.update_attributes(params[:lo])
+        format.any {
+          if @lo.errors.blank? and @lo.save
             render json: @lo.extended_attributes, :content_type => "application/json"
           else
             render json: @lo.errors, status: :bad_request, :content_type => "application/json"
