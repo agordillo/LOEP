@@ -1,0 +1,14 @@
+div.session_token_wrapper {
+  margin-bottom: 3px;
+}
+
+div.session_token_wrapper p {
+  margin: 0px;
+}
+
+div.session_token_wrapper p.session_token_actions {
+  font-size: 11px;
+
+div.session_token_wrapper p > span.glyphicon {
+  margin-left: 3px;
+}

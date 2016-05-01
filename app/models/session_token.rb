@@ -26,6 +26,17 @@ class SessionToken < ActiveRecord::Base
 #-------------------------------------------------------------------------------------
 
   ###########
+  # Class Methods
+  ###########
+  
+  def self.deleteExpiredTokens   
+    expiredSessionTokens = SessionToken.where("expire_at < ?", Time.now)
+    expiredSessionTokens.each do |s|
+      s.destroy
+    end
+  end
+
+  ###########
   # Methods
   ###########
 
@@ -38,26 +49,21 @@ class SessionToken < ActiveRecord::Base
   end
 
   def invalidate(force=false)
-    unless self.permanent and force==false
-      self.expire_at = Time.now
-      self.save!
-    end
+    return if self.permanent and force==false
+    self.expire_at = Time.now
+    self.save!
   end
 
-  def self.deleteExpiredTokens   
-    expiredSessionTokens = SessionToken.where("expire_at < ?", Time.now)
-    expiredSessionTokens.each do |s|
-      s.destroy
-    end
+  def hours_to_expire
+    return 0 if expired?
+    ((self.expire_at - Time.now)/3600).ceil
   end
 
 
   private
 
   def checkAuthToken
-    if self.auth_token.nil?
-      self.auth_token = Utils.build_token(SessionToken)
-    end
+    self.auth_token = Utils.build_token(SessionToken) if self.auth_token.nil?
   end
 
   def checkExpirationDate

@@ -23,6 +23,10 @@ class Ability
             can [:update, :destroy], Icode do |icode|
                 icode.owner.nil? or icode.owner.value < user.value or icode.owner==user
             end
+            can :create, SessionToken
+            can [:update, :destroy], SessionToken do |s|
+                s.app.nil? or can?(:update, s.app)
+            end
 
             can :evaluate, :all
             can :complete, :all
@@ -52,6 +56,10 @@ class Ability
             end
             can [:update, :destroy], Icode do |icode|
                 icode.owner.nil? or icode.owner.value < user.value or icode.owner==user
+            end
+            can :create, SessionToken
+            can [:update, :destroy], SessionToken do |s|
+                s.app.nil? or can?(:update, s.app)
             end
 
             can :evaluate, :all

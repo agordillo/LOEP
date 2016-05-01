@@ -62,6 +62,9 @@ LOEP::Application.routes.draw do
   devise_for :apps
   match '/apps/:id/create_session_token' => 'apps#create_session_token', via: [:get, :post]
   resources :apps
+
+  #Session Tokens
+  resources :session_tokens
   
   #Surveys
   match '/surveys/completed' => 'surveys#completed'
@@ -90,7 +93,6 @@ LOEP::Application.routes.draw do
       resources :app_tokens,:only => [:create, :destroy]
       match '/session_token/current' => 'session_token#current'
       resources :session_token
-
       resources :los
     end
   end

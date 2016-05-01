@@ -42,3 +42,15 @@
 .glyphiconfull.vector_path_polygon:before {
 	content: "\E097";
 }
+
+.glyphiconfull.globe:before {
+	content: "\E341";
+}
+
+.glyphiconfull.globe2:before {
+	content: "\E372";
+}
+
+.glyphiconfull.leaf:before {
+	content: "\E002";
+}

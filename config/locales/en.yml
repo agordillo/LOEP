@@ -913,6 +913,14 @@ en:
     name:
       one: "Score"
       plural: "Scores"
+  session_tokens:
+    message:
+      new_fast: "Create token immediately"
+      new: "Create new session token"
+      notokens: "There are no active session tokens for this application."
+      success:
+        create: "Session token was sucesfully created"
+        destroy: "Session token was sucesfully destroyed"
   settings:
     title: "Settings"
   surveys:

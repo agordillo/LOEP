@@ -142,8 +142,7 @@ class EvaluationsController < ApplicationController
     if params[:embed]
       unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evaluation.evmethod.name
         @message = I18n.t("evaluations.message.error.external_evaluations_disabled")
-        render "application/embed_empty", :layout => 'embed'
-        return
+        return render "application/embed_empty", :layout => 'embed'
       end
       action = "embed"
       @evaluation.anonymous = true
@@ -163,9 +162,10 @@ class EvaluationsController < ApplicationController
             redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("evaluations.message.success.create") 
           }
         else
-          #Invalidate session Token (Only 1 evaluation can be created with a session token)
+          #Invalidate session Token 
+          #Only 1 evaluation can be created with a session token, unless the token is 'multiple'
           sessionToken = SessionToken.find_by_auth_token(params["session_token"])
-          sessionToken.invalidate unless sessionToken.nil?
+          sessionToken.invalidate unless sessionToken.nil? or sessionToken.multiple
 
           format.html {
             render "embed_finish", :layout => 'embed' 
