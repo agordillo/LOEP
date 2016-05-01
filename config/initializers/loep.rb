@@ -10,8 +10,8 @@ LOEP::Application.configure do
   config.enable_recaptcha = !config.APP_CONFIG['recaptcha'].blank?
   if config.enable_recaptcha
     Recaptcha.configure do |config|
-      config.public_key  = config.APP_CONFIG['recaptcha']['public_key']
-      config.private_key = config.APP_CONFIG['recaptcha']['private_key']
+      config.public_key  = LOEP::Application::config.APP_CONFIG['recaptcha']['public_key']
+      config.private_key = LOEP::Application::config.APP_CONFIG['recaptcha']['private_key']
     end
   end
 
