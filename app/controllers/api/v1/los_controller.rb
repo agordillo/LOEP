@@ -2,7 +2,7 @@
 
 class Api::V1::LosController < Api::V1::BaseController
   before_filter :getLO, :only => [:show, :update, :destroy, :showEvaluationsRepresentation]
-  before_filter :filterLOLanguage, :only => [:create, :update]
+  before_filter :filterParams, :only => [:create, :update]
 
   # API REST for LOs
 
@@ -40,23 +40,15 @@ class Api::V1::LosController < Api::V1::BaseController
     @lo.app_id = current_app.id
     @lo.owner_id = current_app.user.id
 
-    if @lo.scope.nil? or !["Private", "Protected", "Public"].include? @lo.scope
-      @lo.scope = "Private"
-    end
-
-    if @lo.lotype.nil? or !I18n.t("los.types").map{|k,v| k.to_s}.include? @lo.lotype
-      @lo.lotype = "unspecified"
-    end
-
-    if @lo.technology.nil? or !I18n.t("los.technology_or_format").map{|k,v| k.to_s}.include? @lo.technology
-      @lo.technology = "unspecified"
-    end
-
     @lo.valid?
+    if @lo.errors.blank? and @lo.save
+      #Look for interactions
+      @lo.createLoInteraction(params[:lo_interactions]) unless params[:lo_interactions].blank?
+    end
 
     respond_to do |format|
       format.any { 
-        if @lo.errors.blank? and @lo.save
+        if @lo.errors.blank? and @lo.persisted?
           render :json => @lo.extended_attributes, :content_type => "application/json"
         else
           render json: @lo.errors, status: :bad_request, :content_type => "application/json"
@@ -103,18 +95,23 @@ class Api::V1::LosController < Api::V1::BaseController
     end
   end
 
-  def filterLOLanguage
-    if params[:lo]
-      if params[:lo][:lanCode]
-        begin
-        	params[:lo][:language_id] = Language.find_by_code(params[:lo][:lanCode]).id
-        rescue
-          params[:lo][:language_id] = Language.find_by_code("lanot").id
-        end
-        params[:lo].delete :lanCode
-      else
-        params[:lo][:language_id] = Language.find_by_code("lanot").id
-      end
+  def filterParams
+    return unless params[:lo]
+
+    #Filter LO Language
+    language = nil
+    if params[:lo][:lanCode]
+      language = Language.find_by_code(params[:lo][:lanCode])
+      params[:lo].delete :lanCode
+    end
+    language = Language.find_by_code("lanot") if language.nil?
+    params[:lo][:language_id] = language.id
+
+    #Filter LO interactions
+    if params[:lo][:interactions]
+      params[:lo_interactions] = params[:lo][:interactions]
+      params[:lo].delete :interactions
+      params[:lo_interactions] = params[:lo_interactions].parse_types
     end
   end
 

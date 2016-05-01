@@ -1,8 +1,11 @@
 <div class="show_wrapper loep_form_wrapper">
 
   <h2><%=t("assignments.name.plural")%></h2>
-  <% if iamAdmin? %>
+  <% if can?(:edit,@assignment) %>
     <%= link_to t("dictionary.edit"), edit_assignment_path(@assignment) %>
+  <% end %>
+  <% if can?(:destroy,@assignment) %>
+    | <a class="ralink" href="<%=assignment_path(@assignment)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><%=t("dictionary.remove")%></a>
   <% end %>
   <p class="space_medium"></p>
 

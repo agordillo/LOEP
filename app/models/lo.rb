@@ -3,31 +3,18 @@ class Lo < ActiveRecord::Base
 
   acts_as_xlsx
 
-  validates :url,
-  :presence => true,
-  :uniqueness => {
-    :case_sensitive => false
-  }
+  before_validation :fill_values
 
-  validates :name,
-  :presence => true,
-  :length => { :in => 3..255 }
-
+  validates :url, :presence => true, :uniqueness => { :case_sensitive => false }
+  validates :name, :presence => true, :length => { :in => 3..255 }
   validates :language_id, :presence => { :message => I18n.t("dictionary.errors.unspecified") }
   validates :language_id, :exclusion => { :in => [-1], :message => I18n.t("dictionary.errors.unspecified")}
-
   validates :lotype, :presence => true
-
   validates :technology, :presence => true
-
-  validates :scope,
-  :presence => true
+  validates :scope, :presence => true
   validates_inclusion_of :scope, :in => ["Private", "Protected", "Public"], :allow_nil => false, :message => ": " + I18n.t("dictionary.invalid")
-
   validates :owner_id, :presence => { :message => I18n.t("dictionary.errors.unspecified") }
-
   validate :checkRepositoryId
-
   def checkRepositoryId
     if self.new_record? and !self.repository.blank? and !self.id_repository.blank?
       #Create a new LO with repository and repository ID
@@ -50,13 +37,11 @@ class Lo < ActiveRecord::Base
   has_many :metrics, through: :scores
   has_many :evmethods, through: :evaluations
   belongs_to :app
-  has_one :metadata
+  has_one :metadata, :dependent => :destroy
   has_one :lo_interaction, :dependent => :destroy
 
-  before_validation :normalize_blank_values
   after_save :save_metadata
   after_save :calculate_automatic_scores
-  after_destroy :remove_dependencies
 
   #---------------------------------------------------------------------------------
 
@@ -335,8 +320,11 @@ class Lo < ActiveRecord::Base
 
   private
 
-  def normalize_blank_values
+  def fill_values
     self.repository = nil if self.repository.blank?
+    self.scope = "Private" unless !self.scope.blank? and ["Private", "Protected", "Public"].include? self.scope
+    self.lotype = "unspecified" unless !self.lotype.blank? and I18n.t("los.types").map{|k,v| k.to_s}.include? self.lotype
+    self.technology = "unspecified" unless !self.technology.blank? and I18n.t("los.technology_or_format").map{|k,v| k.to_s}.include? self.technology
   end
 
   def save_metadata
@@ -347,10 +335,6 @@ class Lo < ActiveRecord::Base
     Evmethod.allc_automatic.each do |evmethod|
       evmethod.getEvaluationModule.createAutomaticEvaluation(self)
     end
-  end
-
-  def remove_dependencies
-    self.metadata.destroy unless self.metadata.nil?
   end
 
 end

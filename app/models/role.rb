@@ -1,12 +1,7 @@
 class Role < ActiveRecord::Base
   has_and_belongs_to_many :users
 
-  validates :name,
-  :allow_nil => false,
-  :length => { :in => 1..255 },
-  :uniqueness => {
-    :case_sensitive => false
-  }
+  validates :name, :allow_nil => false, :length => { :in => 1..255 }, :uniqueness => { :case_sensitive => false }
 
   def self.superadmin
     Role.find_by_name("SuperAdmin")

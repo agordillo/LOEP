@@ -798,6 +798,7 @@ en:
         repository_id: "If the repository lo identifier is included, it must be unique"
       success:
         create: "The Learning Object was successfully created."
+        delete: "The Learning Object was successfully deleted."
         update: "The Learning Object was successfully updated."
     name:
       all: "All Learning Objects"

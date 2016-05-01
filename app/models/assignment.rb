@@ -6,25 +6,14 @@ class Assignment < ActiveRecord::Base
   belongs_to :evmethod
   has_many :evaluations #optional
 
-  validates :author_id,
-  :presence => true
-
-  validates :user_id,
-  :presence => true
-
-  validates :lo_id,
-  :presence => true
-
-  validates :evmethod_id,
-  :presence => true
-
-  validates :status,
-  :presence => true
-
+  validates :author_id, :presence => true
+  validates :user_id, :presence => true
+  validates :lo_id, :presence => true
+  validates :evmethod_id, :presence => true
+  validates :status, :presence => true
   validates_inclusion_of :status, :in => ["Pending", "Completed", "Rejected"], :allow_nil => false, :message => ": Invalid status value"
-
+  
   validate :evmethods_blank
-
   def evmethods_blank
     if self.evmethod_id.blank?
       errors.add(:evmethods, I18n.t("assignments.message.error.at_least_one_evmethod"))
@@ -34,7 +23,6 @@ class Assignment < ActiveRecord::Base
   end
 
   validate :duplicated_assignment
-
   def duplicated_assignment
     if self.id.nil?
       assignments = Assignment.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id)

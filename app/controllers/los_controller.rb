@@ -216,7 +216,7 @@ class LosController < ApplicationController
     @lo.destroy
 
     respond_to do |format|
-      format.html { redirect_to(:back) }
+      format.html { redirect_to home_path, notice: I18n.t("los.message.success.delete") }
       format.json { head :no_content }
     end
   end

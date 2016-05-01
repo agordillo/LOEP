@@ -5,7 +5,7 @@ class Ability
 
         user ||= User.new # guest user (not logged in)
 
-        if user.role? :SuperAdmin 
+        if user.role? :SuperAdmin
             #SuperAdmin
             can [:update, :destroy], User do |u|
                user.value > u.value || user.id == u.id
@@ -37,7 +37,10 @@ class Ability
             can [:update, :destroy], User do |u|
                user.value > u.value || user.id == u.id
             end
-            can [:create, :update, :destroy], Lo
+            can :create, Lo
+            can [:update, :destroy], Lo do |lo|
+                lo.user.nil? || user.value > lo.user.value || user.id == lo.user.id
+            end
             can [:create, :update, :destroy], Assignment
             can :create, Evaluation
             can :create, App

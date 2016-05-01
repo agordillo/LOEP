@@ -785,6 +785,7 @@ es:
         repository_id: "Si se incluye el identificador del OA del repositorio, este debe ser único"
       success:
         create: "El Objeto de Aprendizaje se creó correctamente."
+        delete: "El Objeto de Aprendizaje fue borrado correctamente."
         update: "El Objeto de Aprendizaje se actualizó correctamente."
     name:
       all: "Todos los Objetos de Aprendizaje"

@@ -5,18 +5,8 @@ class Evmethod < ActiveRecord::Base
   has_and_belongs_to_many :metrics
   has_many :evaluations, :dependent => :destroy
 
-  validates :name,
-  :presence => true,
-  :length => { :in => 2..255 },
-  :uniqueness => {
-    :case_sensitive => false
-  }
-  validates :module,
-  :presence => true,
-  :length => { :in => 2..255 },
-  :uniqueness => {
-    :case_sensitive => false
-  }
+  validates :name, :presence => true, :length => { :in => 2..255 }, :uniqueness => { :case_sensitive => false }
+  validates :module, :presence => true, :length => { :in => 2..255 }, :uniqueness => { :case_sensitive => false }
 
   def self.allc
     Evmethod.where("name in (?)",LOEP::Application.config.evmethod_names)
