@@ -1,0 +1,8 @@
+<h1 class="loep_title loep_title_with_bottom_margin"><%=t("session_tokens.name.plural")%>
+  <% unless @app.nil? %>
+    <%= "(" + t("applications.name.one") + ": " + @app.name + ")" %>
+  <% end %>
+</h1>
+<%= render '/session_tokens/index' %>
+<br/>
+<%= generic_back_link %>

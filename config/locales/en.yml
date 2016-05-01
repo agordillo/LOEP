@@ -11,6 +11,7 @@ en:
         ́ : ""
   #Dictionary should be the first block.
   dictionary:
+    action: "Action"
     age: "Age"
     all: "All"
     anonymous: "Anonymous"
@@ -40,6 +41,8 @@ en:
       one: "Criterion"
       plural: "Criteria"
     deadline: "Deadline"
+    delete_all: "Delete all"
+    delete_all_expired: "Delete all expired ones"
     details: "Details"
     description: "Description"
     design: "Design"
@@ -917,14 +920,21 @@ en:
       one: "Score"
       plural: "Scores"
   session_tokens:
+    actions:
+      all: "All"
+      evaluate: "Evaluate"
+      showchart: "Show Graph"
     name:
       one: "Session Token"
       plural: "Session Tokens"
     new: "Create new session token"
     new_fast: "Create token immediately"
     message:
+      action: "Action: %{action}"
+      expired: "Expired"
       expires: "Expires in less than %{hours} hours"
-      notokens: "There are no active session tokens for this application."
+      notokens: "There are no session tokens."
+      notokens_active: "There are no active session tokens for this application."
       success:
         create: "Session token was sucesfully created"
         destroy: "Session token was sucesfully destroyed"

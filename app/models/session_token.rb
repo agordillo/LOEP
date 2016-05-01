@@ -1,15 +1,18 @@
 class SessionToken < ActiveRecord::Base
-  attr_accessible :app_id, :auth_token, :expire_at, :permanent, :multiple, :hours
+  attr_accessible :app_id, :auth_token, :expire_at, :permanent, :multiple, :hours, :action, :action_params
   attr_accessor :hours
 
   belongs_to :app
 
   before_validation :checkAuthToken
   before_validation :checkExpirationDate
+  before_validation :checkAction
 
   validates :app_id, :presence => true
   validates :auth_token, :presence => true, :uniqueness => true
   validates :expire_at, :presence => true
+  validates :action, :presence => true
+  validates_inclusion_of :action, :in => ["all", "evaluate", "showchart"], :allow_nil => false, :message => ": " + I18n.t("dictionary.invalid")
   validate :check_auth_token
   def check_auth_token
     if !self.auth_token.is_a? String
@@ -27,11 +30,15 @@ class SessionToken < ActiveRecord::Base
   # Class Methods
   ###########
   
-  def self.deleteExpiredTokens   
+  def self.deleteExpiredTokens
     expiredSessionTokens = SessionToken.where("expire_at < ?", Time.now)
     expiredSessionTokens.each do |s|
       s.destroy
     end
+  end
+
+  def self.expired
+    self.where("expire_at < ?", Time.now)
   end
 
   ###########
@@ -57,6 +64,15 @@ class SessionToken < ActiveRecord::Base
     ((self.expire_at - Time.now)/3600).ceil
   end
 
+  def allow_to?(action,params={})
+    return true if self.action=="all"
+    return false if self.action!=action
+    return true if self.action_params.blank?
+    return false if params.blank?
+    #Check params (params and self.action_params)
+    true
+  end
+
 
   private
 
@@ -73,6 +89,10 @@ class SessionToken < ActiveRecord::Base
         self.expire_at = Time.now + 1000.years
       end
     end
+  end
+
+  def checkAction
+    self.action = "all" if self.action.nil?
   end
 
 end

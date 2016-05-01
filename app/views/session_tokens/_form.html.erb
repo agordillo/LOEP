@@ -21,6 +21,9 @@
     <p class="form_legend"><%=t("session_tokens.period")%></p>
     <%= f.number_field :hours, { :value=> 12, :id => "session_token_hours" } %>
 
+    <p class="form_legend"><%=t("dictionary.action")%></p>
+    <%= f.select :action, options_for_select(I18n.t("session_tokens.actions").map{|k,v| [v,k.to_s]},"all"), {} ,{ :id=> "session_token_action",:class=>'optionalInput loep_input select_without_bottom_margin'} %>
+
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
     <%unless params["action"]=="edit"%>

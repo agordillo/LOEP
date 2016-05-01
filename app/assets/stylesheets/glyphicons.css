@@ -62,3 +62,7 @@
 .glyphiconfull.group:before {
 	content: "\E044";
 }
+
+.glyphiconfull.remove-sign:before {
+    content: "\E193";
+}

@@ -1,0 +1,15 @@
+<% if can?(:create,SessionToken.new) %>
+<%= link_to t("session_tokens.new"), @app.nil? ? new_session_token_path : new_session_token_path({:app_id => @app.id}) %>
+<% end %>
+<% if can?(:destroy,@session_tokens) %>
+  | <%= link_to t("dictionary.delete_all"), destroy_all_path((@app.nil? ? nil : @app.id)) %> | <%= link_to t("dictionary.delete_all_expired"), destroy_all_expired_path((@app.nil? ? nil : @app.id)) %>
+  <br/><br/>
+<% end %>
+
+<% unless @session_tokens.blank? %>
+  <% @session_tokens.each do |s| %>
+    <%= render "session_tokens/session_token", :s => s %>
+  <% end %>
+<% else %>
+  <p><%=I18n.t("session_tokens.message.notokens")%></p>
+<% end %>

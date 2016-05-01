@@ -27,33 +27,14 @@
 
     <p class="space_small"></p>
 
-    <p class="form_legend"><%=t("dictionary.auth_tokens_active")%> | <%= link_to I18n.t("session_tokens.new_fast"), app_new_session_token_path(@app) %> | <%= link_to I18n.t("session_tokens.new"), new_session_token_path({:app_id => @app.id}) %></p>
+    <p class="form_legend"><%=t("dictionary.auth_tokens_active")%> | <%= link_to I18n.t("session_tokens.new_fast"), app_new_session_token_path(@app) %> | <%= link_to I18n.t("session_tokens.new"), new_session_token_path({:app_id => @app.id}) %> | <%= link_to I18n.t("dictionary.view_all"), session_tokens_path({:app_id => @app.id}) %></p>
     <% sessionTokens = @app.valid_session_tokens.first(10) %>
     <% unless sessionTokens.blank? %>
       <% sessionTokens.each do |s| %>
-        <div class="session_token_wrapper">
-          <p>
-            <%=text_field_tag nil, s.auth_token, class: 'loep_input', readonly: true %>
-            <% if s.permanent %>
-              <span title="<%=t("dictionary.permanent.permanent").capitalize%>" class="glyphicon glyphiconfull globe2"></span>
-            <% else %>
-              <span title="<%=t("session_tokens.message.expires",:hours => s.hours_to_expire)%>" class="glyphicon glyphiconfull leaf"></span>
-              <% if s.multiple %>
-                <span title="<%=t("dictionary.permanent.unlimiteduse").capitalize%>" class="glyphicon glyphiconfull group"></span>
-              <% else %>
-                <span title="<%=t("dictionary.permanent.oneuse").capitalize%>" class="glyphicon glyphicon-user"></span>
-              <% end %>
-            <% end %>
-          </p>
-          <p class="session_token_actions">
-            <%if can?(:destroy,s) %>
-              <a class="ralink" href="<%=session_token_path(s)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><%=t("dictionary.remove")%></a>
-            <% end %>
-          </p>
-        </div>
+        <%= render "session_tokens/session_token", :s => s %>
       <% end %>
     <% else %>
-      <p><%=I18n.t("session_tokens.message.notokens")%></p>
+      <p><%=I18n.t("session_tokens.message.notokens_active")%></p>
     <% end %>
     <p class="space_small"></p>
 

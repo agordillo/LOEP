@@ -1,0 +1,27 @@
+<div class="session_token_wrapper">
+  <p>
+    <%=text_field_tag nil, s.auth_token, class: 'loep_input', readonly: true %>
+    <% if s.permanent %>
+      <span title="<%=t("dictionary.permanent.permanent").capitalize%>" class="glyphicon glyphiconfull globe2"></span>
+    <% else %>
+      <% if s.expired? %>
+        <span title="<%=t("session_tokens.message.expired",:hours => s.hours_to_expire)%>" class="glyphicon glyphiconfull remove-sign"></span>
+      <% else %>
+        <span title="<%=t("session_tokens.message.expires",:hours => s.hours_to_expire)%>" class="glyphicon glyphiconfull leaf"></span>
+      <% end %>
+      <% if s.multiple %>
+        <span title="<%=t("dictionary.permanent.unlimiteduse").capitalize%>" class="glyphicon glyphiconfull group"></span>
+      <% else %>
+        <span title="<%=t("dictionary.permanent.oneuse").capitalize%>" class="glyphicon glyphicon-user"></span>
+      <% end %>
+    <% end %>
+    <% unless s.action.blank? %>
+      <span title="<%=t("session_tokens.message.action", :action => t("session_tokens.actions." + s.action).capitalize)%>" class="<%=action_class(s)%>"></span>
+    <% end %>
+  </p>
+  <p class="session_token_actions">
+    <%if can?(:destroy,s) %>
+      <a class="ralink" href="<%=session_token_path(s)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><%=t("dictionary.remove")%></a>
+    <% end %>
+  </p>
+</div>

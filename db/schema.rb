@@ -397,10 +397,12 @@ ActiveRecord::Schema.define(:version => 20160501161727) do
     t.integer  "app_id"
     t.string   "auth_token"
     t.datetime "expire_at"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.boolean  "permanent",  :default => false
-    t.boolean  "multiple",   :default => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.boolean  "permanent",     :default => false
+    t.boolean  "multiple",      :default => false
+    t.string   "action"
+    t.text     "action_params"
   end
 
   create_table "settings", :force => true do |t|

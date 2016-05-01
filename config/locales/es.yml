@@ -1,6 +1,7 @@
 es:
   #'Dictionary' debe ser el primer bloque.
   dictionary:
+    action: "Acción"
     age: "Edad"
     all: "Todos"
     anonymous: "Anónimo"
@@ -30,6 +31,8 @@ es:
       one: "Criterio"
       plural: "Criterios"
     deadline: "Fecha Límite (Deadline)"
+    delete_all: "Borrar todos"
+    delete_all_expired: "Borrar todos los expirados"
     details: "Detalles"
     description: "Descripción"
     design: "Diseño"
@@ -905,14 +908,21 @@ es:
       one: "Puntuación"
       plural: "Puntuaciones"
   session_tokens:
+    actions:
+      all: "Todas"
+      evaluate: "Evaluar"
+      showchart: "Mostrar Gráfico"
     name:
       one: "Token de Sesión"
       plural: "Tokens de Sesión"
     new: "Crear nuevo token de sesión"
     new_fast: "Crear token inmediatamente"
     message:
+      action: "Acción: %{action}"
+      expired: "Expirado"
       expires: "Expira en menos de %{hours} horas"
-      notokens: "No hay tokens de sesión activos para esta aplicación."
+      notokens: "No hay tokens de sesión."
+      notokens_active: "No hay tokens de sesión activos para esta aplicación."
       success:
         create: "El token de sesión fue creado satisfactoriamente"
         destroy: "El token de sesión fue borrado satisfactoriamente"
