@@ -39,7 +39,7 @@ class Evaluations::Qinteraction < Evaluation
   ##################
 
   def self.createAutomaticEvaluation(lo)
-    return nil if lo.lo_interaction.nil?
+    return nil if lo.getInteraction.nil?
     evaluation = super
     evaluation.ditem1 = Metrics::QinteractionTime.getScoreForLo(lo)
     evaluation.ditem2 = Metrics::QinteractionPermanency.getScoreForLo(lo)

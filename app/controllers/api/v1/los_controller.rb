@@ -29,7 +29,7 @@ class Api::V1::LosController < Api::V1::BaseController
           render json: {"error" => "Learning Object not found"}, status: :not_found, :content_type => "application/json"
         end
       }
-    end  
+    end
   end
 
   # POST /api/v1/los
@@ -41,14 +41,10 @@ class Api::V1::LosController < Api::V1::BaseController
     @lo.owner_id = current_app.user.id
 
     @lo.valid?
-    if @lo.errors.blank? and @lo.save
-      #Look for interactions
-      @lo.createLoInteraction(params[:lo_interactions]) unless params[:lo_interactions].blank?
-    end
 
     respond_to do |format|
       format.any { 
-        if @lo.errors.blank? and @lo.persisted?
+        if @lo.errors.blank? and @lo.save
           render :json => @lo.extended_attributes, :content_type => "application/json"
         else
           render json: @lo.errors, status: :bad_request, :content_type => "application/json"
@@ -106,13 +102,6 @@ class Api::V1::LosController < Api::V1::BaseController
     end
     language = Language.find_by_code("lanot") if language.nil?
     params[:lo][:language_id] = language.id
-
-    #Filter LO interactions
-    if params[:lo][:interactions]
-      params[:lo_interactions] = params[:lo][:interactions]
-      params[:lo].delete :interactions
-      params[:lo_interactions] = params[:lo_interactions].parse_types
-    end
   end
 
 end

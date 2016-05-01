@@ -16,8 +16,9 @@ class Metrics::QinteractionItem < Metric
   end
 
   def self.getScoreForLo(lo)
-    return nil if lo.lo_interaction.nil?
-    interactions = lo.lo_interaction.extended_attributes
+    loInteraction = lo.getInteraction
+    return nil if loInteraction.nil?
+    interactions = loInteraction.extended_attributes
     threshold = thresholds(lo.repository)[self.name]
     score = threshold.blank? ? getScoreForInteractions(interactions) : getScoreForInteractions(interactions,threshold)
     ([[score,0].max,10].min).round(2)

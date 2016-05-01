@@ -22,9 +22,14 @@ class LoInteraction < ActiveRecord::Base
   #   }
   # }
   def self.createWithHash(lo,h={})
+    h = {} unless h.is_a? Hash
+    h = h.parse_types #Convert strings to numbers when possible
+    
+    loInteraction = lo.getInteraction
+    loInteraction.destroy unless loInteraction.blank? #Remove previous record
+
     i = LoInteraction.new(:lo_id => lo.id)
     i.nsamples = h["nsamples"].to_i unless h["nsamples"].blank?
-    lo.lo_interaction.destroy unless lo.lo_interaction.blank? #Remove previous one
     i.valid?
     raise(i.errors.full_messages.to_sentence) unless i.errors.blank? and i.save
     if h["interactions"].is_a? Hash

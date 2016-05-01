@@ -1,5 +1,6 @@
 class Lo < ActiveRecord::Base
-  attr_accessible :description, :name, :repository, :id_repository, :technology, :language_id, :lotype, :url, :scope, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list, :metadata_url
+  attr_accessible :description, :name, :repository, :id_repository, :technology, :language_id, :lotype, :url, :scope, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list, :metadata_url, :interactions
+  attr_accessor :interactions
 
   acts_as_xlsx
 
@@ -41,6 +42,7 @@ class Lo < ActiveRecord::Base
   has_one :lo_interaction, :dependent => :destroy
 
   after_save :save_metadata
+  after_save :save_interactions
   after_save :calculate_automatic_scores
 
   #---------------------------------------------------------------------------------
@@ -172,10 +174,14 @@ class Lo < ActiveRecord::Base
     end
   end
 
-  def createLoInteraction(h={})
-    LoInteraction.createWithHash(self,h)
+  def update_interactions
+    return if self.interactions.nil?
+    LoInteraction.createWithHash(self,self.interactions)
   end
 
+  def getInteraction
+    LoInteraction.find_by_lo_id(self.id)
+  end
 
   #######################
   # Get extended LO Data
@@ -329,6 +335,10 @@ class Lo < ActiveRecord::Base
 
   def save_metadata
     self.update_metadata
+  end
+
+  def save_interactions
+    self.update_interactions
   end
 
   def calculate_automatic_scores
