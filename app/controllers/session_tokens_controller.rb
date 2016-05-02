@@ -1,15 +1,14 @@
 class SessionTokensController < ApplicationController
   before_filter :authenticate_admin!
+  before_filter :find_app_and_tokens, :only => [:index, :destroy_all, :destroy_all_expired]
+  before_filter :find_token, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @app = App.find_by_id(params[:app_id]) unless params[:app_id].blank?
-    unless @app.nil?
-      @session_tokens = @app.session_tokens
-    else
-      @session_tokens = SessionToken.all
-    end 
-
     authorize! :show, @session_tokens
+  end
+
+  def show
+   authorize! :show, @session_token
   end
 
   def new
@@ -45,7 +44,7 @@ class SessionTokensController < ApplicationController
     respond_to do |format|
       if @session_token.save
         format.html {
-          redirect_to (params[:link]==="true" ? view_context.link_session_token_path(@session_token) : app_path(@session_token.app)), notice: I18n.t("session_tokens.message.success.create") 
+          redirect_to (params[:link]==="true" ? session_token_path(@session_token) : app_path(@session_token.app)), notice: I18n.t("session_tokens.message.success.create") 
         }
         format.json { render json: @session_token, status: :created, location: @session_token }
       else
@@ -58,12 +57,7 @@ class SessionTokensController < ApplicationController
     end
   end
 
-  def show_link
-    @session_token = SessionToken.find(params[:id])
-  end
-
   def edit
-    @session_token = SessionToken.find(params[:id])
     authorize! :update, @session_token
     @app = @session_token.app
     authorize! :update, @app
@@ -77,7 +71,6 @@ class SessionTokensController < ApplicationController
   end
 
   def update
-    @session_token = SessionToken.find(params[:id])
     #Update action_params
     params[:session_token] ||= params[:session_token]
     params[:session_token][:action_params] ||= {}
@@ -100,9 +93,7 @@ class SessionTokensController < ApplicationController
   end
 
   def destroy
-    @session_token = SessionToken.find(params[:id])
     authorize! :destroy, @session_token
-
     @session_token.destroy
 
     respond_to do |format|
@@ -112,38 +103,32 @@ class SessionTokensController < ApplicationController
   end
 
   def destroy_all
-    @app = App.find_by_id(params[:app_id]) unless params[:app_id].blank?
-    unless @app.nil?
-      @session_tokens = @app.session_tokens
-    else
-      @session_tokens = SessionToken
-    end 
     authorize! :destroy, @session_tokens
     @session_tokens.destroy_all
-
-    unless @app.nil?
-      redirect_to app_path(@app)
-    else
-      redirect_to session_tokens_path
-    end
+    redirect_to (@app.nil? ? session_tokens_path : app_path(@app))
   end
 
   def destroy_all_expired
+    @session_tokens = @session_tokens.expired
+    authorize! :destroy, @session_tokens
+    @session_tokens.destroy_all
+    redirect_to (@app.nil? ? session_tokens_path : app_path(@app))
+  end
+
+
+  private
+
+  def find_app_and_tokens
     @app = App.find_by_id(params[:app_id]) unless params[:app_id].blank?
     unless @app.nil?
       @session_tokens = @app.session_tokens
     else
-      @session_tokens = SessionToken
-    end 
-    @session_tokens = @session_tokens.expired
-    authorize! :destroy, @session_tokens
-    @session_tokens.destroy_all
-
-    unless @app.nil?
-      redirect_to app_path(@app)
-    else
-      redirect_to session_tokens_path
+      @session_tokens = SessionToken.where(true)
     end
+  end
+
+  def find_token
+    @session_token = SessionToken.find(params[:id])
   end
 
 end

@@ -1,4 +1,5 @@
-<% sessionTokenActionParams = @session_token.parsed_action_params %>
+<% @lo ||= @session_token.lo %>
+<% @evmethod ||= @session_token.evmethod %>
 <% params[:link] = "false" if params[:link] and !@session_token.new_record? %>
 
 <div class="loep_form_wrapper new_lo_form">
@@ -18,8 +19,8 @@
     <% if params[:link]==="true" %>
       <input type="hidden" name="link" value="true"/>
       <%= f.hidden_field :action, { :id => "session_token_action_hidden", :value=> "evaluate" } %>
-      <% if sessionTokenActionParams["lo"] %>
-        <%= f.hidden_field "action_params[lo]", { :value=> sessionTokenActionParams["lo"] } %>
+      <% if @lo %>
+        <%= f.hidden_field "action_params[lo]", { :value=> @lo.id } %>
       <% end %>
     <% end %>
 
@@ -92,7 +93,7 @@
       $("#action_oa_checkbox").on("change", function(e){
         if($(this).is(':checked')){
           $("#action_oas_wrapper").show();
-          <% unless params[:link]==="true" and sessionTokenActionParams["lo"] %>
+          <% unless params[:link]==="true" and @lo %>
             $("select#select_lo").removeAttr("disabled");
           <% end %>
           if(typeof $("#select_lo").attr("select2fix") === "undefined"){
@@ -129,18 +130,18 @@
         $("#session_token_permanent").trigger("change");
       },10);
 
-      <% if sessionTokenActionParams["lo"] %>
+      <% if @lo %>
         <% if params[:link]==="true" %>
           $("select#select_lo").attr("disabled","disabled");
         <% end %>
         $("#action_oa_checkbox").prop("checked","checked");
-        $("select#select_lo option[value='<%=sessionTokenActionParams["lo"]%>']").attr("selected","selected");
+        $("select#select_lo option[value='<%=@lo.id%>']").attr("selected","selected");
         $("#action_oa_checkbox").trigger("change");
       <% end %>
 
-      <% if sessionTokenActionParams["evmethod"] %>
+      <% if @evmethod %>
         $("#action_evmethod_checkbox").prop("checked","checked");
-        $("select#select_evmethod option[value='<%=sessionTokenActionParams["evmethod"]%>']").attr("selected","selected");
+        $("select#select_evmethod option[value='<%=@evmethod.id%>']").attr("selected","selected");
         $("#action_evmethod_checkbox").trigger("change");
       <% end %>
   </script>

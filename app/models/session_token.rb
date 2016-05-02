@@ -50,7 +50,7 @@ class SessionToken < ActiveRecord::Base
   end
 
   def expired?
-    !self.permanent and (self.expire_at.nil? or self.expire_at < Time.now)
+    self.expire_at.nil? or self.expire_at < Time.now
   end
 
   def invalidate
@@ -66,10 +66,11 @@ class SessionToken < ActiveRecord::Base
   def allow_to?(action,params={})
     return false if self.expired?
     return false if self.action!="all" and self.action!=action
+    #Check params
     selfActionParams = self.parsed_action_params
-    return true if selfActionParams.blank?
-    return false if params.blank?
-    #Check params (params and selfActionParams)
+    selfActionParams.each do |k,v|
+      return false if selfActionParams[k].to_s!=params[k].to_s
+    end
     true
   end
 
@@ -78,18 +79,34 @@ class SessionToken < ActiveRecord::Base
     JSON.parse(self.action_params) rescue {}
   end
 
+  def lo
+    self.app.los.find_by_id(parsed_action_params["lo"]) unless self.app.nil? or parsed_action_params.blank?
+  end
+
+  def evmethod
+    Evmethod.allc.find_by_id(parsed_action_params["evmethod"]) unless parsed_action_params.blank?
+  end
+
   def link
+    return nil if self.expired?
     link = LOEP::Application.config.full_domain + "/"
+
     actionParams = self.parsed_action_params
     lo = Lo.find_by_id(actionParams["lo"])
+    return nil if lo.nil? or lo.id_repository.blank?
     evMethod = Evmethod.allc.find_by_id(actionParams["evmethod"])
+    return nil if evMethod.nil?
+
     case self.action
     when "evaluate"
       link += "evaluations/" + evMethod.shortname.pluralize + "/embed?lo_id=" + lo.id_repository
-    when "showgraph"
+    when "showchart"
+      link += "los/" + lo.id_repository + "/representation?evmethods=" + evMethod.shortname
     else
+      return nil
     end
-    link += "app_name=" + self.app.name + "&session_token=" + self.auth_token + "&ajax=true&locale=es"
+
+    link += "&app_name=" + self.app.name + "&session_token=" + self.auth_token + "&ajax=true&locale=" + I18n.locale.to_s
     link
   end
 

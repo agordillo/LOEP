@@ -23,11 +23,18 @@
     <% end %>
   </p>
   <p class="session_token_actions">
-    <%if can?(:update,s) %>
-      <a href="<%=edit_session_token_path(s)%>"><%=t("dictionary.edit")%></a>
+    <% if can?(:show,s) %>
+      <a href="<%=session_token_path(s)%>"><%=t("dictionary.details")%></a>
     <% end %>
-    <%if can?(:destroy,s) %>
+    <% if can?(:update,s) %>
+      | <a href="<%=edit_session_token_path(s)%>"><%=t("dictionary.edit")%></a>
+    <% end %>
+    <% if can?(:destroy,s) %>
       | <a class="ralink" href="<%=session_token_path(s)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><%=t("dictionary.remove")%></a>
+    <% end %>
+    <% sLink = s.link %>
+    <% unless s.link.blank? %>
+      | <a href="<%=sLink%>" target="_blank"><%=t("dictionary.link")%></a>
     <% end %>
   </p>
 </div>

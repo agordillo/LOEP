@@ -483,6 +483,11 @@ class LosController < ApplicationController
       @evmethods = @evmethods.sort_by{|ev| ev.name}
     end
 
+    unless @evmethods.length > 0
+      @message = I18n.t("evmethods.message.no_available")
+      return render "application/embed_empty", :layout => 'embed'
+    end
+
     if @sessionToken
       #Validate token permissions
       sessionTokenParams = {"lo" => @lo.id}

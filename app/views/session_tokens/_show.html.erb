@@ -1,0 +1,50 @@
+<% @lo ||= @session_token.lo %>
+<% @evmethod ||= @session_token.evmethod %>
+<% @link = @session_token.link %>
+
+<div class="show_wrapper loep_form_wrapper">
+
+  <h2><%=t("session_tokens.name.one")%></h2>
+  <% if can?(:edit,@session_token) %>
+    <%= link_to t("dictionary.edit"), edit_session_token_path(@session_token) %>
+  <% end %>
+  <% if can?(:destroy,@session_token) %>
+    | <a class="ralink" href="<%=session_token_path(@session_token)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><%=t("dictionary.remove")%></a>
+  <% end %>
+  <p class="space_medium"></p>
+
+  <p class="show_legend"><%=t("applications.name.one")%></p>
+  <p class="show_value"><%= @session_token.app.name %></p>
+
+  <p class="show_legend"><%=t("dictionary.type")%></p>
+  <p class="show_value"><%= @session_token.permanent? ? t("dictionary.permanent.permanent") : t("dictionary.permanent.temporary") %></p>
+
+  <p class="show_legend"><%=t("session_tokens.period")%></p>
+  <p class="show_value">
+    <%= @session_token.expired? ? t("session_tokens.message.expired_token") : (@session_token.permanent ? t("dictionary.permanent.permanent") : @session_token.hours_to_expire) %>
+  </p>
+
+  <p class="show_legend"><%=t("dictionary.number_of_uses")%></p>
+  <p class="show_value"><%= @session_token.multiple? ? t("dictionary.permanent.unlimiteduse") : t("dictionary.permanent.oneuse") %></p>
+
+  <p class="show_legend"><%=t("dictionary.action")%></p>
+  <p class="show_value"><%= t("session_tokens.actions." + @session_token.action) %></p>
+
+  <% if @lo %>
+    <p class="show_legend"><%=t("los.name.one")%></p>
+    <p class="show_value"><a href="<%=lo_path(@lo)%>"><%=@lo.name%></a></p>
+  <% end %>
+
+  <% if @evmethod %>
+    <p class="show_legend"><%=t("evmethods.name.one")%></p>
+    <p class="show_value"><a href="<%=@evmethod.documentation_path%>"><%=@evmethod.name%></a></p>
+  <% end %>
+
+  <% unless @session_token.link.blank? %>
+    <div class="session_token_link_wrapper">
+      <p class="show_legend"><%=t("dictionary.link")%></p>
+      <a href="<%=@session_token.link%>" target="_blank"><%=@session_token.link%></a>
+    </div>
+  <% end %>
+
+</div>

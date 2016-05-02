@@ -101,6 +101,13 @@ class EvaluationsController < ApplicationController
   def embed
     @evaluation = @evModel.new
     @evmethod = @evaluation.evmethod
+    if @sessionToken
+      #Validate token permissions
+      unless @sessionToken.is_a? SessionToken and @sessionToken.allow_to?("evaluate",{"lo" => @lo.id, "evmethod" => @evaluation.evmethod.id})
+        @message = I18n.t("api.message.error.unauthorized")
+        return render "application/embed_empty", :layout => 'embed'
+      end
+    end
     unless @evmethod.allowExternalEvaluations?
       @message = I18n.t("evaluations.message.error.external_evaluations_disabled")
       return render "application/embed_empty", :layout => 'embed'
