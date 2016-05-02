@@ -129,6 +129,11 @@ class Assignment < ActiveRecord::Base
     self.status=="Pending" and !self.deadline.nil? and Time.now > self.deadline
   end
 
+  def update_suitability
+    self.update_column :suitability, MatchingSystem.getMatchingScore(self.lo,self.user)
+    self.suitability
+  end
+
 
   private
 

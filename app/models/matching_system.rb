@@ -202,13 +202,14 @@ class MatchingSystem
 
   def self.getMatchingScore(lo,reviewer)
     weights = {:language => 0.8, :tags => 0.2}
-    score = (weights[:language] * getLanguageScore(lo,reviewer) + weights[:tags] * getTagsSimilarityScore(lo,reviewer))
-    return score
+    score = (weights[:language] * getLanguageScore(lo,reviewer) + weights[:tags] * getTagsScore(lo,reviewer))
+    [0,[score,100].min].max
   end
 
   # The language score is a value between 0 and 100.
   def self.getLanguageScore(lo,reviewer)
-    if lo.language === reviewer.language
+    return 0 if ["lanin","lanot"].include? lo.language.code
+    if lo.language == reviewer.language
       #Preferred or Native language match
       return 100
     elsif reviewer.languages.include? lo.language
@@ -221,19 +222,15 @@ class MatchingSystem
   end
 
   # The tag similarity score is a value between 0 and 100.
-  def self.getTagsSimilarityScore(lo,reviewer)
-    if lo.tags.blank?
-      return 0
-    end
+  def self.getTagsScore(lo,reviewer)
+    reviewerTags = UtilsTfidf.normalizeArray(reviewer.tags.map{|t| t.name})
+    loTags = UtilsTfidf.normalizeArray(lo.tags.map{|t| t.name})
+    getSemanticDistanceForKeywords(reviewerTags,loTags)*100
+  end
 
-    similarTags = 0
-    reviewer.tags.each do |tag|
-      if lo.tags.include? tag
-        similarTags += 1
-      end
-    end
-
-    return ((similarTags/lo.tags.length.to_f)*100)
+  def self.getSemanticDistanceForKeywords(keywordsA,keywordsB)
+    return 0 if keywordsA.blank? or keywordsB.blank?
+    (2*(keywordsA & keywordsB).length)/(keywordsA.length+keywordsB.length).to_f
   end
 
 end
