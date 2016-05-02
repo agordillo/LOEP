@@ -102,21 +102,20 @@ class ApplicationController < ActionController::Base
   ####################
 
   def getLoForUsersOrApps
-    if @app.nil?
-      @lo = Lo.find(params[:id])
-    else
-      #Access from an application
-      if params[:use_id_loep].nil?
-        @lo = @app.los.find_by_id_repository(params[:lo_id]||params[:id])
-      else
-        @lo = @app.los.find_by_id(params[:lo_id]||params[:id])
-      end
+    los = Lo.scoped
+    los = los.where(:app_id => @app.id) unless @app.nil?
+    los = los.where(:repository => params[:repository]) unless params[:repository].blank?
 
-      if @lo.nil?
-        @message = I18n.t("api.message.error.lo_unexists")
-        @error_code = 404
-        return render "application/embed_empty", :layout => 'embed'
-      end
+    if params[:use_id_loep].nil?
+      @lo = los.find_by_id_repository(params[:lo_id]||params[:id])
+    else
+      @lo = los.find_by_id(params[:lo_id]||params[:id])
+    end
+
+    if @lo.nil?
+      @message = I18n.t("api.message.error.lo_unexists")
+      @error_code = 404
+      return render "application/embed_empty", :layout => 'embed'
     end
   end
 

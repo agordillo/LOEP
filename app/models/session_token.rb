@@ -93,20 +93,21 @@ class SessionToken < ActiveRecord::Base
 
     actionParams = self.parsed_action_params
     lo = Lo.find_by_id(actionParams["lo"])
-    return nil if lo.nil? or lo.id_repository.blank?
+    return nil if lo.nil? or lo.id_repository.blank? or lo.repository.blank?
     evMethod = Evmethod.allc.find_by_id(actionParams["evmethod"])
     return nil if evMethod.nil?
 
     case self.action
     when "evaluate"
-      link += "evaluations/" + evMethod.shortname.pluralize + "/embed?lo_id=" + lo.id_repository
+      link += "evaluations/" + evMethod.shortname.pluralize + "/embed?lo_id=" + lo.id_repository + "&repository=" + lo.repository
     when "showchart"
-      link += "los/" + lo.id_repository + "/representation?evmethods=" + evMethod.shortname
+      link += "los/" + lo.id_repository + "/representation?evmethods=" + evMethod.shortname + "&repository=" + lo.repository
     else
       return nil
     end
 
-    link += "&app_name=" + self.app.name + "&session_token=" + self.auth_token + "&ajax=true&locale=" + I18n.locale.to_s
+    link += "&app_name=" + self.app.name + "&session_token=" + self.auth_token + "&locale=" + I18n.locale.to_s
+    # link += "&ajax=true"
     link
   end
 
