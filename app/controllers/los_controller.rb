@@ -476,12 +476,21 @@ class LosController < ApplicationController
     authorize! :show, @lo
 
     @evmethods = @lo.evmethods.uniq
-
     unless params["evmethods"].nil?
       paramsEvmethods = params["evmethods"].split(",")
-      @evmethods = (@evmethods & Evmethod.all.select{|e| paramsEvmethods.include? e.shortname}).sort_by{|ev| paramsEvmethods.index(ev.shortname)}
+      @evmethods = (@evmethods & Evmethod.allc.select{|e| paramsEvmethods.include? e.shortname}).sort_by{|ev| paramsEvmethods.index(ev.shortname)}
     else
       @evmethods = @evmethods.sort_by{|ev| ev.name}
+    end
+
+    if @sessionToken
+      #Validate token permissions
+      sessionTokenParams = {"lo" => @lo.id}
+      sessionTokenParams["evmethod"] = @evmethods.first.id if @evmethods.length===1
+      unless @sessionToken.is_a? SessionToken and @sessionToken.allow_to?("showchart",sessionTokenParams)
+        @message = I18n.t("api.message.error.unauthorized")
+        return render "application/embed_empty", :layout => 'embed'
+      end
     end
 
     #Do not show title, only representation

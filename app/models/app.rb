@@ -45,7 +45,8 @@ class App < ActiveRecord::Base
 
   def isSessionTokenValid(sessionToken)
     sessionToken = self.session_tokens.find_by_auth_token(sessionToken)
-    !sessionToken.nil? and !sessionToken.expired?
+    return false if sessionToken.nil? or sessionToken.expired?
+    sessionToken
   end
 
   def create_session_token(permanent=false)

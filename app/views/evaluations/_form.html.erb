@@ -7,7 +7,7 @@
     <% if @embed %>
       <% user = @app.user %>
       <%= hidden_field_tag "embed", true, class: "skipValidation" %>
-      <%= hidden_field_tag "session_token", @sessionToken, class: "skipValidation" %>
+      <%= hidden_field_tag "session_token", @sessionToken.auth_token, class: "skipValidation" %>
       <%= hidden_field_tag "app_id", @app.id, class: "skipValidation" %>
       <% surveyTitle = t("forms.evmethod.title_for_embed", lo: @lo.name) %>
       <% submitButtonText = t("forms.submit") %>

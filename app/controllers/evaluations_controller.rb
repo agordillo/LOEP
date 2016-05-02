@@ -101,7 +101,7 @@ class EvaluationsController < ApplicationController
   def embed
     @evaluation = @evModel.new
     @evmethod = @evaluation.evmethod
-    unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evmethod.name
+    unless @evmethod.allowExternalEvaluations?
       @message = I18n.t("evaluations.message.error.external_evaluations_disabled")
       return render "application/embed_empty", :layout => 'embed'
     end
@@ -134,13 +134,21 @@ class EvaluationsController < ApplicationController
   end
 
   # POST /evaluations
-  def create  
+  def create
     evaluationParams = getEvaluationParams
     @evaluation = @evModel.new(evaluationParams)
     @evaluation.completed_at = Time.now
 
+    if @sessionToken
+      #Validate token permissions
+      unless @sessionToken.is_a? SessionToken and @sessionToken.allow_to?("evaluate",{"lo" => @evaluation.lo.id, "evmethod" => @evaluation.evmethod.id})
+        @message = I18n.t("api.message.error.unauthorized")
+        return render "application/embed_empty", :layout => 'embed'
+      end
+    end
+
     if params[:embed]
-      unless !LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? and LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? @evaluation.evmethod.name
+      unless @evaluation.evmethod.allowExternalEvaluations?
         @message = I18n.t("evaluations.message.error.external_evaluations_disabled")
         return render "application/embed_empty", :layout => 'embed'
       end
@@ -164,8 +172,7 @@ class EvaluationsController < ApplicationController
         else
           #Invalidate session Token 
           #Only 1 evaluation can be created with a session token, unless the token is 'multiple'
-          sessionToken = SessionToken.find_by_auth_token(params["session_token"])
-          sessionToken.invalidate unless sessionToken.nil? or sessionToken.multiple
+          @sessionToken.invalidate unless @sessionToken.nil? or @sessionToken.multiple
 
           format.html {
             render "embed_finish", :layout => 'embed' 

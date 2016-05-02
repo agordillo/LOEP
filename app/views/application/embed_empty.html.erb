@@ -9,12 +9,12 @@
       window.parent.postMessage(msg,'*');
     }
   </script>
-<%else%>
-  <div id="wrapper">
-    <div id='container'>
-      <%unless @message.nil? %>
-        <p><%=@message%></p>
-      <%end%>
-    </div>
-  </div>
 <%end%>
+
+<div id="wrapper">
+  <div id='container'>
+    <%unless @message.nil? %>
+      <p><%=@message%></p>
+    <%end%>
+  </div>
+</div>

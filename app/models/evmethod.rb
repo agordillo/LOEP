@@ -173,4 +173,8 @@ class Evmethod < ActiveRecord::Base
     lookup_context.template_exists?("representation", "evmethods/"+self.shortname, true)
   end
 
+  def allowExternalEvaluations?
+    LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].nil? or LOEP::Application.config.APP_CONFIG['allow_external_evaluations'].include? self.name
+  end
+
 end

@@ -142,27 +142,25 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_session_token
-    if (params["app_name"].nil? and params["app_id"].nil?) or params["session_token"].nil?
+    if (params["app_name"].blank? and params["app_id"].blank?) or params["session_token"].blank?
       @message = I18n.t("api.message.error.unauthorized")
       @error_code = 401
       return render :embed_empty, :layout => 'embed'
     end
 
-    begin
-      unless params["app_id"].nil?
-        @app = App.find(params["app_id"])
-      else
-        @app = App.find_by_name(params["app_name"])
-      end
-    rescue
+    unless params["app_id"].blank?
+      @app = App.find_by_id(params["app_id"])
+    else
+      @app = App.find_by_name(params["app_name"])
+    end
+    if @app.nil? or @app.user.nil? or !@app.user.isAdmin?
       @message = I18n.t("api.message.error.unauthorized")
       @error_code = 401
       return render :embed_empty, :layout => 'embed'
     end
-
-    @sessionToken = params["session_token"]
-
-    if @app.nil? or !@app.isSessionTokenValid(@sessionToken) or @app.user.nil? or !@app.user.isAdmin?
+    
+    @sessionToken = @app.isSessionTokenValid(params["session_token"])
+    unless @sessionToken.is_a? SessionToken
       @message = I18n.t("api.message.error.unauthorized")
       @error_code = 401
       return render :embed_empty, :layout => 'embed'
