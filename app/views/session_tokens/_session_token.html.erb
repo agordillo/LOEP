@@ -9,19 +9,25 @@
       <% else %>
         <span title="<%=t("session_tokens.message.expires",:hours => s.hours_to_expire)%>" class="glyphicon glyphiconfull leaf"></span>
       <% end %>
-      <% if s.multiple %>
-        <span title="<%=t("dictionary.permanent.unlimiteduse").capitalize%>" class="glyphicon glyphiconfull group"></span>
-      <% else %>
-        <span title="<%=t("dictionary.permanent.oneuse").capitalize%>" class="glyphicon glyphicon-user"></span>
-      <% end %>
+    <% end %>
+    <% if s.multiple %>
+      <span title="<%=t("dictionary.permanent.unlimiteduse").capitalize%>" class="glyphicon glyphiconfull group"></span>
+    <% else %>
+      <span title="<%=t("dictionary.permanent.oneuse").capitalize%>" class="glyphicon glyphicon-user"></span>
     <% end %>
     <% unless s.action.blank? %>
       <span title="<%=t("session_tokens.message.action", :action => t("session_tokens.actions." + s.action).capitalize)%>" class="<%=action_class(s)%>"></span>
     <% end %>
+    <% unless s.parsed_action_params.blank? %>
+      <span title="<%=t("session_tokens.message.action_params")%>" class="glyphicon glyphiconfull shield"></span>
+    <% end %>
   </p>
   <p class="session_token_actions">
+    <%if can?(:update,s) %>
+      <a href="<%=edit_session_token_path(s)%>"><%=t("dictionary.edit")%></a>
+    <% end %>
     <%if can?(:destroy,s) %>
-      <a class="ralink" href="<%=session_token_path(s)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><%=t("dictionary.remove")%></a>
+      | <a class="ralink" href="<%=session_token_path(s)%>" data-confirm="<%=t("dictionary.are_you_sure")%>" data-ok-button="<%=t("dialog.ok")%>" data-cancel-button="<%=t("dialog.cancel")%>" data-method="delete" rel="nofollow"><%=t("dictionary.remove")%></a>
     <% end %>
   </p>
 </div>

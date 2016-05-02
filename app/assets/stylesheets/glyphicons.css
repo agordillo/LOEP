@@ -66,3 +66,7 @@
 .glyphiconfull.remove-sign:before {
     content: "\E193";
 }
+
+.glyphiconfull.shield:before {
+    content: "\E271";
+}

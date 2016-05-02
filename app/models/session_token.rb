@@ -50,11 +50,10 @@ class SessionToken < ActiveRecord::Base
   end
 
   def expired?
-    self.expire_at < Time.now
+    !self.permanent and self.expire_at < Time.now
   end
 
-  def invalidate(force=false)
-    return if self.permanent and force==false
+  def invalidate
     self.expire_at = Time.now
     self.save!
   end
@@ -65,12 +64,18 @@ class SessionToken < ActiveRecord::Base
   end
 
   def allow_to?(action,params={})
-    return true if self.action=="all"
-    return false if self.action!=action
-    return true if self.action_params.blank?
+    return false if self.expired?
+    return false if self.action!="all" and self.action!=action
+    selfActionParams = self.parsed_action_params
+    return true if selfActionParams.blank?
     return false if params.blank?
-    #Check params (params and self.action_params)
+    #Check params (params and selfActionParams)
     true
+  end
+
+  def parsed_action_params
+    return {} if self.action_params.blank?
+    JSON.parse(self.action_params) rescue {}
   end
 
 
@@ -81,18 +86,19 @@ class SessionToken < ActiveRecord::Base
   end
 
   def checkExpirationDate
-    if self.expire_at.nil?
-      unless self.permanent===true
-        hoursToAdd = (self.hours.is_a? String and self.hours.is_numeric? and self.hours.to_i > 0) ? self.hours.to_i : 12
-        self.expire_at = Time.now + hoursToAdd.hours
-      else
-        self.expire_at = Time.now + 1000.years
+    if self.permanent
+      self.expire_at = Time.now + 1000.years if self.expire_at.nil?
+    else
+      if (self.hours.is_a? String and self.hours.is_numeric? and self.hours.to_i > 0)
+        self.expire_at = Time.now + (self.hours.to_i).hours
       end
+      self.expire_at = Time.now + 12.hours if self.expire_at.nil?
     end
   end
 
   def checkAction
     self.action = "all" if self.action.nil?
+    self.action_params = self.action_params.to_json rescue nil unless self.action_params.is_a? String
   end
 
 end

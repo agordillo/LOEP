@@ -114,6 +114,7 @@ en:
       one: &text "Text"
       plural: "Text"
     type: "Type"
+    unlimited: "Unlimited"
     unspecified: &unspecified "Unspecified"
     update: "Update"
     update_model: "Update %{model}"
@@ -924,6 +925,11 @@ en:
       all: "All"
       evaluate: "Evaluate"
       showchart: "Show Graph"
+    form:
+      action_params:
+        title: "Specify action parameters"
+        oa: "Specific Learning Object"
+        evmethod: "Specific Evaluation Method"
     name:
       one: "Session Token"
       plural: "Session Tokens"
@@ -931,6 +937,7 @@ en:
     new_fast: "Create token immediately"
     message:
       action: "Action: %{action}"
+      action_params: "This token has specific action params"
       expired: "Expired"
       expires: "Expires in less than %{hours} hours"
       notokens: "There are no session tokens."
@@ -938,7 +945,8 @@ en:
       success:
         create: "Session token was sucesfully created"
         destroy: "Session token was sucesfully destroyed"
-    period: "Period of validity"
+        update: "Session token was sucesfully updated"
+    period: "Period of validity (hours)"
   settings:
     title: "Settings"
   surveys:

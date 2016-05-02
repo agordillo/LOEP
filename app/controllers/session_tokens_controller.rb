@@ -13,12 +13,21 @@ class SessionTokensController < ApplicationController
   end
 
   def new
-    @session_token = SessionToken.new({:app_id => params[:app_id]})
+    @app = App.find_by_id(params[:app_id]) unless params[:app_id].blank?
+    if @app
+      authorize! :update, @app
+      @session_token = SessionToken.new({:app_id => @app.id})
+      @los = @app.los
+    else
+      @session_token = SessionToken.new
+      @los = Lo.all
+    end
     authorize! :create, @session_token
+    authorize! :show, @los
 
     respond_to do |format|
       format.html
-      format.json { render json: @icode }
+      format.json { render json: @session_token }
     end
   end
 
@@ -34,6 +43,43 @@ class SessionTokensController < ApplicationController
         format.html { 
           flash.now[:alert] = @session_token.errors.full_messages
           render action: "new"
+        }
+        format.json { render json: @session_token.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def edit
+    @session_token = SessionToken.find(params[:id])
+    authorize! :update, @session_token
+    @app = @session_token.app
+    authorize! :update, @app
+    @los = @app.los
+    authorize! :show, @los
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @session_token }
+    end
+  end
+
+  def update
+    @session_token = SessionToken.find(params[:id])
+    #Update action_params
+    params[:session_token] ||= params[:session_token]
+    params[:session_token][:action_params] ||= {}
+    @session_token.assign_attributes(params[:session_token])
+    authorize! :update, @session_token
+    @session_token.valid?
+
+    respond_to do |format|
+      if @session_token.errors.blank? and @session_token.save
+        format.html { redirect_to app_path(@session_token.app), notice: I18n.t("session_tokens.message.success.update") }
+        format.json { render json: @session_token, status: :created, location: @session_token }
+      else
+        format.html { 
+          flash.now[:alert] = @session_token.errors.full_messages
+          render action: "edit"
         }
         format.json { render json: @session_token.errors, status: :unprocessable_entity }
       end

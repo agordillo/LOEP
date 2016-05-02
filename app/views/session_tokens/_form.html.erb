@@ -1,3 +1,5 @@
+<% sessionTokenActionParams = @session_token.parsed_action_params %>
+
 <div class="loep_form_wrapper new_lo_form">
   
   <p class="form_before_button">&nbsp;</p>
@@ -13,16 +15,38 @@
     <% end %>
 
     <p class="form_legend"><%=t("dictionary.type")%></p>
-    <%= f.select :permanent, options_for_select([[t("dictionary.permanent.permanent"),true],[t("dictionary.permanent.temporary"),false]],false), {} ,{ :id=> "session_token_permanent", :class=>'optionalInput loep_input select_without_bottom_margin'} %>
+    <%= f.select :permanent, options_for_select([[t("dictionary.permanent.permanent"),true],[t("dictionary.permanent.temporary"),false]],@session_token.permanent), {} ,{ :id=> "session_token_permanent", :class=>'optionalInput loep_input select_without_bottom_margin'} %>
+
+    <div class="optional_session_token_field" id="validity_period" style="display:block">
+      <p class="form_legend"><%=t("session_tokens.period")%></p>
+      <%= f.number_field :hours, { :id => "session_token_hours" } %>
+    </div>
 
     <p class="form_legend"><%=t("dictionary.number_of_uses")%></p>
-    <%= f.select :multiple, options_for_select([[t("dictionary.permanent.unlimiteduse"),true],[t("dictionary.permanent.oneuse"),false]],false), {} ,{ :id=> "session_token_use",:class=>'optionalInput loep_input select_without_bottom_margin'} %>
-
-    <p class="form_legend"><%=t("session_tokens.period")%></p>
-    <%= f.number_field :hours, { :value=> 12, :id => "session_token_hours" } %>
+    <%= f.select :multiple, options_for_select([[t("dictionary.permanent.unlimiteduse"),true],[t("dictionary.permanent.oneuse"),false]],@session_token.multiple), {} ,{ :id=> "session_token_use",:class=>'optionalInput loep_input select_without_bottom_margin'} %>
 
     <p class="form_legend"><%=t("dictionary.action")%></p>
     <%= f.select :action, options_for_select(I18n.t("session_tokens.actions").map{|k,v| [v,k.to_s]},"all"), {} ,{ :id=> "session_token_action",:class=>'optionalInput loep_input select_without_bottom_margin'} %>
+
+    <p class="form_legend"><%=t("session_tokens.form.action_params.title")%></p>
+    <ul class="session_token_action_params">
+      <li><input id="action_oa_checkbox" type="checkbox"/> <%=t("session_tokens.form.action_params.oa")%></li>
+      <li><input id="action_evmethod_checkbox" type="checkbox"/> <%=t("session_tokens.form.action_params.evmethod")%></li>
+    </ul>
+
+    <div class="optional_session_token_field" id="action_oas_wrapper" style="display:none">
+      <p class="form_legend"><%=t("los.name.one")%></p>
+      <select name="session_token[action_params][lo]" size="2" id="select_lo" class="loep_input">
+        <% @los.each do |lo| %>
+          <option value="<%=lo.id%>"><%=lo.name%></option>
+        <% end %>
+      </select>
+    </div>
+
+    <div class="optional_session_token_field" id="action_evmethod_wrapper" style="display:none">
+      <p class="form_legend"><%=t("evmethods.name.one")%></p>
+      <%= select_tag "session_token[action_params][evmethod]", options_for_select(Utils.getEvMethods,[]), { :id => "select_evmethod", :multiple => false, :size => 2, :class=>'loep_input' }  %>
+    </div>
 
     <p class="form_before_button">&nbsp;</p>
     <p class="form_before_button">&nbsp;</p>
@@ -41,10 +65,60 @@
       $("#session_token_permanent").on("change", function(e){
         if($(this).val()==="true"){
           //Permanent
-          $("#session_token_hours, #session_token_use").attr("disabled","disabled").attr("readonly","readonly")
+          // $("#validity_period").hide();
+          $("#session_token_hours").attr("disabled","disabled").attr("value",0).attr("readonly","readonly");
         } else {
-          $("#session_token_hours, #session_token_use").removeAttr("disabled").removeAttr("readonly")
+          var defaultHours = "<%= @session_token.permanent ? 12 : @session_token.hours_to_expire || 12%>"
+          $("#session_token_hours").removeAttr("disabled").attr("value",defaultHours).removeAttr("readonly");
+          // $("#validity_period").show();
         }
-      })
-    });
+      });
+
+      //Add search icon
+      $(".select2-container-multi").prepend($("<div class='multiselect2search'><span class='glyphicon glyphicon-search'></span></div>"));
+      });
+
+      $("#action_oa_checkbox").on("change", function(e){
+        if($(this).is(':checked')){
+          $("#action_oas_wrapper").show();
+          $("select#select_lo").removeAttr("disabled");
+          if(typeof $("#select_lo").attr("select2fix") === "undefined"){
+            $("#select_lo").attr("style","width:" + $("#select_lo").width() + "px").attr("select2fix","true");
+            $("#select_lo").select2();
+          }
+        } else {
+          $("#action_oas_wrapper").hide();
+          $("select#select_lo").attr("disabled","disabled");
+        }
+      });
+
+      $("#action_evmethod_checkbox").on("change", function(e){
+        if($(this).is(':checked')){
+          $("#action_evmethod_wrapper").show();
+          $("select#select_evmethod").removeAttr("disabled");
+          if(typeof $("#select_evmethod").attr("select2fix") === "undefined"){
+            $("#select_evmethod").attr("style","width:" + $("#select_evmethod").width() + "px").attr("select2fix","true");
+            $("#select_evmethod").select2();
+          }
+        } else {
+          $("#action_evmethod_wrapper").hide();
+          $("select#select_evmethod").attr("disabled","disabled");
+        }
+      });
+
+      setTimeout(function(){
+        $("#session_token_permanent").trigger("change");
+      },10);
+
+      <% if sessionTokenActionParams["lo"] %>
+        $("#action_oa_checkbox").prop("checked","checked");
+        $("select#select_lo option[value='<%=sessionTokenActionParams["lo"]%>']").attr("selected","selected");
+        $("#action_oa_checkbox").trigger("change");
+      <% end %>
+
+      <% if sessionTokenActionParams["evmethod"] %>
+        $("#action_evmethod_checkbox").prop("checked","checked");
+        $("select#select_evmethod option[value='<%=sessionTokenActionParams["evmethod"]%>']").attr("selected","selected");
+        $("#action_evmethod_checkbox").trigger("change");
+      <% end %>
   </script>

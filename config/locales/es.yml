@@ -104,6 +104,7 @@ es:
       one: &text "Texto"
       plural: "Textos"
     type: "Tipo"
+    unlimited: "Ilimitado"
     unspecified: &unspecified "Sin especificar"
     update: "Actualizar"
     update_model: "Actualizar %{model}"
@@ -912,6 +913,11 @@ es:
       all: "Todas"
       evaluate: "Evaluar"
       showchart: "Mostrar Gráfico"
+    form:
+      action_params:
+        title: "Especificar parámetros de la acción"
+        oa: "Objeto de Aprendizaje especifico"
+        evmethod: "Método de evaluación especifico"
     name:
       one: "Token de Sesión"
       plural: "Tokens de Sesión"
@@ -919,6 +925,7 @@ es:
     new_fast: "Crear token inmediatamente"
     message:
       action: "Acción: %{action}"
+      action_params: "Este token tiene parámetros de acción específicos"
       expired: "Expirado"
       expires: "Expira en menos de %{hours} horas"
       notokens: "No hay tokens de sesión."
@@ -926,7 +933,8 @@ es:
       success:
         create: "El token de sesión fue creado satisfactoriamente"
         destroy: "El token de sesión fue borrado satisfactoriamente"
-    period: "Periodo de validez"
+        update: "El token de sesión fue actualizado satisfactoriamente"
+    period: "Periodo de validez (horas)"
   settings:
     title: "Ajustes"
   surveys:
