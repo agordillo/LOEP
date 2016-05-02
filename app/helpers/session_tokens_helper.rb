@@ -10,13 +10,17 @@ module SessionTokensHelper
 		end
 	end
 
-	def destroy_all_path(app_id=nil)
+	def link_session_token_path(s)
+		edit_session_token_path(s).gsub("edit","link")
+	end
+
+	def destroy_all_session_token_path(app_id=nil)
 		path = "/session_tokens/destroy_all"
 		path += "?app_id=" + app_id.to_s unless app_id.blank?
 		path
 	end
 
-	def destroy_all_expired_path(app_id=nil)
+	def destroy_all_expired_session_token_path(app_id=nil)
 		path = "/session_tokens/destroy_all_expired"
 		path += "?app_id=" + app_id.to_s unless app_id.blank?
 		path

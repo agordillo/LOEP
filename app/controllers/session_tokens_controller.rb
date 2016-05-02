@@ -22,6 +22,13 @@ class SessionTokensController < ApplicationController
       @session_token = SessionToken.new
       @los = Lo.all
     end
+
+    actionParams = {}
+    actionParams[:lo] = params[:lo_id] if params[:lo_id]
+    actionParams[:evmethod] = params[:evmethod_id] if params[:evmethod_id]
+    actionParams[:evmethod] = Utils.getEvMethods.first[1] if params[:link] and actionParams[:evmethod].blank?
+    @session_token.assign_attributes({:action_params => actionParams.to_json}) unless actionParams.blank?
+
     authorize! :create, @session_token
     authorize! :show, @los
 
@@ -37,7 +44,9 @@ class SessionTokensController < ApplicationController
 
     respond_to do |format|
       if @session_token.save
-        format.html { redirect_to app_path(@session_token.app), notice: I18n.t("session_tokens.message.success.create") }
+        format.html {
+          redirect_to (params[:link]==="true" ? view_context.link_session_token_path(@session_token) : app_path(@session_token.app)), notice: I18n.t("session_tokens.message.success.create") 
+        }
         format.json { render json: @session_token, status: :created, location: @session_token }
       else
         format.html { 
@@ -47,6 +56,10 @@ class SessionTokensController < ApplicationController
         format.json { render json: @session_token.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def show_link
+    @session_token = SessionToken.find(params[:id])
   end
 
   def edit

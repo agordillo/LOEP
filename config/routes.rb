@@ -66,6 +66,7 @@ LOEP::Application.routes.draw do
   #Session Tokens
   match "/session_tokens/destroy_all" => 'session_tokens#destroy_all'
   match "/session_tokens/destroy_all_expired" => 'session_tokens#destroy_all_expired'
+  match "/session_tokens/:id/link" => 'session_tokens#show_link'
   resources :session_tokens
   
   #Surveys

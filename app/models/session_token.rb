@@ -50,7 +50,7 @@ class SessionToken < ActiveRecord::Base
   end
 
   def expired?
-    !self.permanent and self.expire_at < Time.now
+    !self.permanent and (self.expire_at.nil? or self.expire_at < Time.now)
   end
 
   def invalidate
@@ -76,6 +76,21 @@ class SessionToken < ActiveRecord::Base
   def parsed_action_params
     return {} if self.action_params.blank?
     JSON.parse(self.action_params) rescue {}
+  end
+
+  def link
+    link = LOEP::Application.config.full_domain + "/"
+    actionParams = self.parsed_action_params
+    lo = Lo.find_by_id(actionParams["lo"])
+    evMethod = Evmethod.allc.find_by_id(actionParams["evmethod"])
+    case self.action
+    when "evaluate"
+      link += "evaluations/" + evMethod.shortname.pluralize + "/embed?lo_id=" + lo.id_repository
+    when "showgraph"
+    else
+    end
+    link += "app_name=" + self.app.name + "&session_token=" + self.auth_token + "&ajax=true&locale=es"
+    link
   end
 
 

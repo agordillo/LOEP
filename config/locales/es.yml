@@ -86,7 +86,7 @@ es:
       oneuse: "Un sólo uso"
       permanent: "Permanente"
       temporary: "Temporal"
-      unlimiteduse: "Usos limitados"
+      unlimiteduse: "Usos ilimitados"
     process_completed: "Proceso completado"
     quality: "Calidad"
     quiz:
@@ -132,6 +132,8 @@ es:
     download_evaluations: "Descargar Evaluaciones"
     evaluate: "Evaluar"
     evaluate_with_evmethod: "Evaluar con %{evmethod}"
+    generate_link_for_external_evaluation: "Generar enlace"
+    generate_link_for_external_evaluation_long: "Generar enlace para evaluación externa"
     reject: "Rechazar"
     search: "Buscar"
     view: "Ver"
@@ -918,11 +920,14 @@ es:
         title: "Especificar parámetros de la acción"
         oa: "Objeto de Aprendizaje especifico"
         evmethod: "Método de evaluación especifico"
+    link:
+      title: "Enlace del Token de Sesión"
     name:
       one: "Token de Sesión"
       plural: "Tokens de Sesión"
     new: "Crear nuevo token de sesión"
     new_fast: "Crear token inmediatamente"
+    new_link: "Crear token de sesión para enlace externo"
     message:
       action: "Acción: %{action}"
       action_params: "Este token tiene parámetros de acción específicos"

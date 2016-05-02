@@ -1,4 +1,5 @@
 <% sessionTokenActionParams = @session_token.parsed_action_params %>
+<% params[:link] = "false" if params[:link] and !@session_token.new_record? %>
 
 <div class="loep_form_wrapper new_lo_form">
   
@@ -14,6 +15,14 @@
       <%= f.select :app_id, options_for_select(current_user.apps.map{|app| [app.name,app.id]},@session_token.app_id), {} ,{ :id=> "session_token_app", :class=>'optionalInput loep_input select_without_bottom_margin'} %>
     <% end %>
 
+    <% if params[:link]==="true" %>
+      <input type="hidden" name="link" value="true"/>
+      <%= f.hidden_field :action, { :id => "session_token_action_hidden", :value=> "evaluate" } %>
+      <% if sessionTokenActionParams["lo"] %>
+        <%= f.hidden_field "action_params[lo]", { :value=> sessionTokenActionParams["lo"] } %>
+      <% end %>
+    <% end %>
+
     <p class="form_legend"><%=t("dictionary.type")%></p>
     <%= f.select :permanent, options_for_select([[t("dictionary.permanent.permanent"),true],[t("dictionary.permanent.temporary"),false]],@session_token.permanent), {} ,{ :id=> "session_token_permanent", :class=>'optionalInput loep_input select_without_bottom_margin'} %>
 
@@ -26,13 +35,15 @@
     <%= f.select :multiple, options_for_select([[t("dictionary.permanent.unlimiteduse"),true],[t("dictionary.permanent.oneuse"),false]],@session_token.multiple), {} ,{ :id=> "session_token_use",:class=>'optionalInput loep_input select_without_bottom_margin'} %>
 
     <p class="form_legend"><%=t("dictionary.action")%></p>
-    <%= f.select :action, options_for_select(I18n.t("session_tokens.actions").map{|k,v| [v,k.to_s]},"all"), {} ,{ :id=> "session_token_action",:class=>'optionalInput loep_input select_without_bottom_margin'} %>
+    <%= f.select :action, options_for_select(I18n.t("session_tokens.actions").map{|k,v| [v,k.to_s]}, (params[:link]=="true" ? "evaluate" : (@session_token.action || "all"))), {} ,{ :id=> "session_token_action", :class=>'optionalInput loep_input select_without_bottom_margin'} %>
 
-    <p class="form_legend"><%=t("session_tokens.form.action_params.title")%></p>
-    <ul class="session_token_action_params">
-      <li><input id="action_oa_checkbox" type="checkbox"/> <%=t("session_tokens.form.action_params.oa")%></li>
-      <li><input id="action_evmethod_checkbox" type="checkbox"/> <%=t("session_tokens.form.action_params.evmethod")%></li>
-    </ul>
+    <div class="optional_session_token_field">
+      <p class="form_legend"><%=t("session_tokens.form.action_params.title")%></p>
+      <ul class="session_token_action_params">
+        <li><input id="action_oa_checkbox" type="checkbox"/> <%=t("session_tokens.form.action_params.oa")%></li>
+        <li><input id="action_evmethod_checkbox" type="checkbox"/> <%=t("session_tokens.form.action_params.evmethod")%></li>
+      </ul>
+    </div>
 
     <div class="optional_session_token_field" id="action_oas_wrapper" style="display:none">
       <p class="form_legend"><%=t("los.name.one")%></p>
@@ -68,7 +79,7 @@
           // $("#validity_period").hide();
           $("#session_token_hours").attr("disabled","disabled").attr("value",0).attr("readonly","readonly");
         } else {
-          var defaultHours = "<%= @session_token.permanent ? 12 : @session_token.hours_to_expire || 12%>"
+          var defaultHours = "<%= @session_token.permanent ? 12 : (@session_token.hours_to_expire > 0 ? @session_token.hours_to_expire : 12)%>"
           $("#session_token_hours").removeAttr("disabled").attr("value",defaultHours).removeAttr("readonly");
           // $("#validity_period").show();
         }
@@ -81,7 +92,9 @@
       $("#action_oa_checkbox").on("change", function(e){
         if($(this).is(':checked')){
           $("#action_oas_wrapper").show();
-          $("select#select_lo").removeAttr("disabled");
+          <% unless params[:link]==="true" and sessionTokenActionParams["lo"] %>
+            $("select#select_lo").removeAttr("disabled");
+          <% end %>
           if(typeof $("#select_lo").attr("select2fix") === "undefined"){
             $("#select_lo").attr("style","width:" + $("#select_lo").width() + "px").attr("select2fix","true");
             $("#select_lo").select2();
@@ -106,11 +119,20 @@
         }
       });
 
+      <% if params[:link]==="true" %>
+        $("#session_token_action").attr("disabled","disabled");
+        $("#action_oa_checkbox").attr("disabled","disabled");
+        $("#action_evmethod_checkbox").attr("disabled","disabled");
+      <% end %>
+
       setTimeout(function(){
         $("#session_token_permanent").trigger("change");
       },10);
 
       <% if sessionTokenActionParams["lo"] %>
+        <% if params[:link]==="true" %>
+          $("select#select_lo").attr("disabled","disabled");
+        <% end %>
         $("#action_oa_checkbox").prop("checked","checked");
         $("select#select_lo option[value='<%=sessionTokenActionParams["lo"]%>']").attr("selected","selected");
         $("#action_oa_checkbox").trigger("change");

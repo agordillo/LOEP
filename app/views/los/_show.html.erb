@@ -9,7 +9,12 @@
     <% end %>
     <a class="ralink" href="<%=new_assignment_path_for(@lo.id,nil)%>"><%=t("actions.add_assignment")%></a> |
     <a class="ralink" href="<%=download_path(@lo,"xlsx")%>"><%=t("actions.download")%></a> |
-    <a class="ralink" href="<%=download_evs_path(@lo,"xlsx")%>"><%=t("actions.download_evaluations")%></a>
+    <a class="ralink" href="<%=download_evs_path(@lo,"xlsx")%>"><%=t("actions.download_evaluations")%></a> | 
+    <% 
+      generateLinkParams = {:lo_id => @lo.id, :link => true}
+      generateLinkParams[:app_id] = @lo.app.id unless @lo.app.nil?
+    %>
+    <a class="ralink" title="<%=t("actions.generate_link_for_external_evaluation_long")%>" href="<%=new_session_token_path(generateLinkParams)%>"><%=t("actions.generate_link_for_external_evaluation")%></a>
   <% end %>
 
   <p class="space_medium"></p>

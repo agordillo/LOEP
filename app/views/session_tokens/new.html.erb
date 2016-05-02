@@ -1,5 +1,5 @@
 <div class="loep_form_wrapper">
-	<h2><%=t("session_tokens.new")%></h2>
+	<h2><%= params[:link]=="true" ? t("session_tokens.new_link") : t("session_tokens.new") %></h2>
 </div>
 
 <%= render 'form' %>

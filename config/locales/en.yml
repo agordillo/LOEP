@@ -142,6 +142,8 @@ en:
     download_evaluations: "Download Evaluations"
     evaluate: "Evaluate"
     evaluate_with_evmethod: "Evaluate with %{evmethod}"
+    generate_link_for_external_evaluation: "Generate link"
+    generate_link_for_external_evaluation_long: "Generate link for external evaluation"
     reject: "Reject"
     search: "Search"
     view: "View"
@@ -930,11 +932,14 @@ en:
         title: "Specify action parameters"
         oa: "Specific Learning Object"
         evmethod: "Specific Evaluation Method"
+    link:
+      title: "Session Token Link"
     name:
       one: "Session Token"
       plural: "Session Tokens"
     new: "Create new session token"
     new_fast: "Create token immediately"
+    new_link: "Create session token for external link"
     message:
       action: "Action: %{action}"
       action_params: "This token has specific action params"

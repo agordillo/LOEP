@@ -2,7 +2,7 @@
 <%= link_to t("session_tokens.new"), @app.nil? ? new_session_token_path : new_session_token_path({:app_id => @app.id}) %>
 <% end %>
 <% if can?(:destroy,@session_tokens) %>
-  | <%= link_to t("dictionary.delete_all"), destroy_all_path((@app.nil? ? nil : @app.id)) %> | <%= link_to t("dictionary.delete_all_expired"), destroy_all_expired_path((@app.nil? ? nil : @app.id)) %>
+  | <%= link_to t("dictionary.delete_all"), destroy_all_session_token_path((@app.nil? ? nil : @app.id)) %> | <%= link_to t("dictionary.delete_all_expired"), destroy_all_expired_session_token_path((@app.nil? ? nil : @app.id)) %>
   <br/><br/>
 <% end %>
 
