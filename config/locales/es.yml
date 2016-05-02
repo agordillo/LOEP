@@ -946,6 +946,7 @@ es:
     sLengthMenu: "Mostrar %{select}"
     sInfo: "Mostrando del %{_START_} al %{_END_} de un total de %{_TOTAL_} elementos"
     sInfoEmpty: "Mostrando 0 elementos"
+    sInfoFiltered: "(filtrados de un total de %{_MAX_} entradas)"
     sSearch: "Buscar"
     sZeroRecords: "No se encontró ningún elemento"
   tags:

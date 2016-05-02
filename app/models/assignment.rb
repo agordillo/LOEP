@@ -4,7 +4,7 @@ class Assignment < ActiveRecord::Base
   belongs_to :user
   belongs_to :lo
   belongs_to :evmethod
-  has_many :evaluations #optional
+  has_many :evaluations
 
   validates :author_id, :presence => true
   validates :user_id, :presence => true
@@ -21,7 +21,7 @@ class Assignment < ActiveRecord::Base
       true
     end
   end
-
+  
   validate :duplicated_assignment
   def duplicated_assignment
     if self.id.nil?
@@ -46,9 +46,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def author
-  	unless self.author_id.nil?
-  		User.find(self.author_id)
-  	end
+    User.find_by_id(self.author_id)
   end
 
   def reviewer
@@ -60,7 +58,11 @@ class Assignment < ActiveRecord::Base
   end
 
   def readable_deadline
-  	Utils.getReadableDate(self.deadline)
+    ("<span class='" + (self.delayed? ? "delayed_assignment" : "") + "'>" + self.readable_deadline_raw + "</span>").html_safe
+  end
+
+  def readable_deadline_raw
+    Utils.getReadableDate(self.deadline)
   end
 
   def readable_updated_at
@@ -68,7 +70,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def readable_completed_at
-  	unless Utils.getReadableDate(self.completed_at).blank?
+    unless Utils.getReadableDate(self.completed_at).blank?
       Utils.getReadableDate(self.completed_at)
     else
       (I18n.t("assignments.status.uncompleted") + " <span class='status_in_completed_at'>(" + readable_status + ")</span>").html_safe
@@ -78,11 +80,11 @@ class Assignment < ActiveRecord::Base
   def readable_status
     case self.status
       when "Pending"
-        return ("<span class='glyphicon glyphicon-time'></span> " + I18n.t("assignments.status.pending")).html_safe;
+        return ("<span class='glyphicon glyphicon-time'></span> <span>" + I18n.t("assignments.status.pending") + "</span>").html_safe
       when "Completed"
-        return ("<span class='glyphicon glyphicon-ok'></span> " + I18n.t("assignments.status.completed")).html_safe;
+        return ("<span class='glyphicon glyphicon-ok'></span> " + I18n.t("assignments.status.completed")).html_safe
       when "Rejected"    
-        return ("<span class='glyphicon glyphicon-remove'></span> " + I18n.t("assignments.status.rejected")).html_safe;
+        return ("<span class='glyphicon glyphicon-remove'></span> " + I18n.t("assignments.status.rejected")).html_safe
       else
         return "";
       end
@@ -97,9 +99,7 @@ class Assignment < ActiveRecord::Base
       end
     end
 
-    if assignment.status=="Pending"
-      return -1
-    end
+    return -1 if assignment.status=="Pending"
 
     #No pending assignments at this point
 
@@ -111,9 +111,7 @@ class Assignment < ActiveRecord::Base
       end
     end
 
-    if assignment.status=="Completed"
-      return -1
-    end
+    return -1 if assignment.status=="Completed"
 
     return self.updated_at <=> assignment.updated_at
   end
@@ -127,13 +125,15 @@ class Assignment < ActiveRecord::Base
     self.completed_at = Time.now
   end
 
+  def delayed?
+    self.status=="Pending" and !self.deadline.nil? and Time.now > self.deadline
+  end
+
 
   private
 
   def add_suitability
-    if self.suitability.nil?
-      self.suitability = MatchingSystem.getMatchingScore(self.lo,self.user)
-    end
+    self.suitability = MatchingSystem.getMatchingScore(self.lo,self.user) if self.suitability.nil?
   end
 
 end

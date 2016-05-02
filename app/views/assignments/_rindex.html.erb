@@ -24,7 +24,7 @@
       <% end %>
     </tr>
     <% @assignments.each_with_index do |assignment,i| %>
-      <% canEvaluateThisLo = can?(:evaluate, assignment.lo, assignment.evmethod)%>
+      <% canEvaluateThisLo = can?(:evaluate, assignment.lo, assignment.evmethod) %>
       <% showEvaluationBigButtonForAssignment = (showEvaluationBigButton and canEvaluateThisLo) %>
       <% showEvaluationButtonForAssignment = (showEvaluationButton and canEvaluateThisLo) %>
       <tr>

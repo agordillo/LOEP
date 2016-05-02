@@ -44,7 +44,7 @@
     <textarea class="loep_input" cols="40" id="assignment_description" name="assignment[description]" rows="20"></textarea>
 
     <p class="form_legend"><%=t("dictionary.deadline")%></p>
-    <%=text_field_tag "assignment[deadline]",@assignment.readable_deadline, :class=>'loep_input', :id=>"deadline_datepicker" %>
+    <%=text_field_tag "assignment[deadline]",@assignment.readable_deadline_raw, :class=>'loep_input', :id=>"deadline_datepicker" %>
 
     <input id="assignment_author_id" name="assignment[author_id]" type="hidden" value="<%=current_user.id%>">
 
