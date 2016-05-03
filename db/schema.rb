@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160501161727) do
+ActiveRecord::Schema.define(:version => 20160503165016) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -193,7 +193,7 @@ ActiveRecord::Schema.define(:version => 20160501161727) do
     t.integer  "item97"
     t.integer  "item98"
     t.integer  "item99"
-    t.boolean  "anonymous",                                                        :default => false
+    t.boolean  "external",                                                         :default => false
     t.integer  "app_id"
     t.integer  "uc_age"
     t.integer  "uc_gender"
@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(:version => 20160501161727) do
     t.decimal  "ditem18",                           :precision => 12, :scale => 6
     t.decimal  "ditem19",                           :precision => 12, :scale => 6
     t.decimal  "ditem20",                           :precision => 12, :scale => 6
+    t.string   "id_user_app"
   end
 
   create_table "evmethods", :force => true do |t|

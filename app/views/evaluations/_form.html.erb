@@ -3,16 +3,20 @@
 
 <div class="loep_form_wrapper <%=@evaluation.evmethod.shortname%>_evmethod_form_wrapper">
   <%= form_for(@evaluation, remote: ajax, :html => {:'data-type' => (ajax ? "json" : "html")}) do |f| %>
-
     <% if @embed %>
-      <% user = @app.user %>
       <%= hidden_field_tag "embed", true, class: "skipValidation" %>
       <%= hidden_field_tag "session_token", @sessionToken.auth_token, class: "skipValidation" %>
       <%= hidden_field_tag "app_id", @app.id, class: "skipValidation" %>
+      <% unless @evaluation.id_user_app.blank? %>
+        <%= f.hidden_field :id_user_app, :value => @evaluation.id_user_app, :class => "skipValidation" %>
+      <% end %>
       <% surveyTitle = t("forms.evmethod.title_for_embed", lo: @lo.name) %>
       <% submitButtonText = t("forms.submit") %>
     <% elsif user_signed_in? %>
-      <% user = current_user %>
+      <%= f.hidden_field :user_id, :value => current_user.id, :class => "skipValidation" %>
+      <% unless @assignment.nil? %>
+        <%= f.hidden_field :assignment_id, :value => @assignment.id, :class => "skipValidation" %>
+      <% end %>
       <% surveyTitle = t("forms.evmethod.title", evmethod: @evmethod.name) %>
       <% unless params["action"] == "edit" %>
         <% submitButtonText = t("forms.submit_with_evmethod", evmethod: @evmethod.name) %>
@@ -21,11 +25,6 @@
       <% end %>
     <% end %>
 
-    <%= f.hidden_field :user_id, :value => user.id, :class => "skipValidation" %>
-
-    <% unless @assignment.nil? %>
-      <%= f.hidden_field :assignment_id, :value => @assignment.id, :class => "skipValidation" %>
-    <% end %>
     <%= f.hidden_field :lo_id, :value => @lo.id, :class => "skipValidation" %>
     <%= f.hidden_field :evmethod_id, :value => @evmethod.id, :class => "skipValidation" %>
 
@@ -41,8 +40,7 @@
 
     <p class="form_before_button">&nbsp;</p>
     <%= f.submit "#{submitButtonText}", :class => 'loep_button' unless readonly %>
-
   <% end %>
 </div>
 
-<%= render 'evaluations/common_partials/common_js', :ajax => ajax, :readonly => readonly, :embed => @embed %>
+<%= render 'evaluations/common_partials/common_js', :readonly => readonly, :embed => @embed, :ajax => ajax %>

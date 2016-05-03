@@ -2,3 +2,11 @@ div#loep_notifications {
 	margin: 0px;
 	padding: 0px;
 }
+
+body.loep_embed_layout #loep_notifications {
+	padding: 10px 40px 0px 40px;
+}
+
+body.loep_embed_layout #loep_notifications > div {
+	font-size: 0.8rem;
+}

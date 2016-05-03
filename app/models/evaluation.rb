@@ -1,5 +1,5 @@
 class Evaluation < ActiveRecord::Base
-  attr_accessible :user_id, :assignment_id, :lo_id, :evmethod_id, :completed_at, :comments, :score, :anonymous, :app_id,
+  attr_accessible :user_id, :assignment_id, :lo_id, :evmethod_id, :completed_at, :comments, :score, :external, :app_id, :id_user_app,
   :item1, :item2, :item3, :item4, :item5, :item6, :item7, :item8, :item9, :item10, :item11, :item12, :item13, :item14, :item15, :item16, :item17, :item18, :item19, :item20, :item21, :item22, :item23, :item24, :item25, :item26, :item27, :item28, :item29, :item30, :item31, :item32, :item33, :item34, :item35, :item36, :item37, :item38, :item39, :item40, :item41, :item42, :item43, :item44, :item45, :item46, :item47, :item48, :item49, :item50, :item51, :item52, :item53, :item54, :item55, :item56, :item57, :item58, :item59, :item60, :item61, :item62, :item63, :item64, :item65, :item66, :item67, :item68, :item69, :item70, :item71, :item72, :item73, :item74, :item75, :item76, :item77, :item78, :item79, :item80, :item81, :item82, :item83, :item84, :item85, :item86, :item87, :item88, :item89, :item90, :item91, :item92, :item93, :item94, :item95, :item96, :item97, :item98, :item99, 
   :titem1, :titem2, :titem3, :titem4, :titem5, :titem6, :titem7, :titem8, :titem9, :titem10, :titem11, :titem12, :titem13, :titem14, :titem15, :titem16, :titem17, :titem18, :titem19, :titem20, :titem21, :titem22, :titem23, :titem24, :titem25, :titem26, :titem27, :titem28, :titem29, :titem30, :titem31, :titem32, :titem33, :titem34, :titem35, :titem36, :titem37, :titem38, :titem39, :titem40,
   :sitem1, :sitem2, :sitem3, :sitem4, :sitem5,
@@ -11,49 +11,47 @@ class Evaluation < ActiveRecord::Base
   belongs_to :evmethod
   belongs_to :assignment #optional
 
-  validate :has_user
-  def has_user
-    if user_id.blank? and !self.automatic?
-      errors.add(:user, "Evaluation without user")
+  validate :has_owner
+  def has_owner
+    return true if self.automatic? #Automatic evaluations do not require owners
+    unless self.external
+      return errors[:base] << "Evaluation without user" if user_id.blank?
     else
-      true
+      return errors[:base] << "External evaluation without app" if self.app_id.blank?
     end
+    true
   end
-
   validates :lo_id, :presence => true
   validates :evmethod_id, :presence => true
-
   validate :is_score_wrong
   def is_score_wrong
-    if !self.score.nil? and !Utils.is_numeric?(self.score)
-      errors.add(:score, I18n.t("evaluations.message.error.overall_score"))
-    else
-      true
-    end
+    return errors.add(:score, I18n.t("evaluations.message.error.overall_score")) if !self.score.nil? and !Utils.is_numeric?(self.score)
+    true
   end
-
   validate :duplicated_evaluation
   def duplicated_evaluation
-    if self.new_record? and !self.evmethod.allow_multiple_evaluations and (self.automatic? or !user.isAdmin?)
-      unless self.automatic?
-        evaluations = Evaluation.where(:user_id => self.user.id, :lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
-      else
-        evaluations = Evaluation.where(:lo_id => self.lo_id, :evmethod_id => self.evmethod.id)
-      end
-      if evaluations.length > 0
-        errors.add(:duplicated_evaluation, ": " + I18n.t("evaluations.message.error.duplicated"))
-      else
-        true
-      end
-    else
-      #No check duplicated evaluations when:
-        #!self.new_record?? => Updating an existing evaluation
-        #self.evmethod.allow_multiple_evaluations => EvMethod that allows multiple evaluations
-        #!self.automatic? and user.isAdmin? => The user is an Admin, and evmethod is manual
-      true
-    end
-  end
+    #No check duplicated evaluations when:
+    #!self.new_record?? => Updating an existing evaluation
+    #!self.external and self.evmethod.allow_multiple_evaluations => EvMethod that allows multiple evaluations
+    #self.external and self.anonymous? => External anonymous evaluations (without id_user_app)
+    #!self.automatic? and !user.nil? and user.isAdmin? => The user is an Admin, and evmethod is manual
+    return true if !self.new_record? or (!self.external and self.evmethod.allow_multiple_evaluations) or 
+    (self.external and self.anonymous?) or (!self.automatic? and !user.nil? and user.isAdmin?)
 
+    queryParams = {:lo_id => self.lo_id, :evmethod_id => self.evmethod.id}
+    unless self.automatic?
+      if !self.external
+        queryParams[:user_id] = self.user.id
+      elsif !self.id_user_app.nil?
+        queryParams[:app_id] = self.app_id
+        queryParams[:id_user_app] = self.id_user_app
+      end
+    end
+
+    evaluations = Evaluation.where(queryParams)
+    return errors[:base] << I18n.t("evaluations.message.error.duplicated") if evaluations.length > 0
+    true
+  end
   validates :uc_age, :numericality => { :greater_than => 0, :less_than_or_equal_to => 100 }, :allow_blank => true
   validates :uc_gender, :numericality => { :greater_than => 0, :less_than_or_equal_to => 2 }, :allow_blank => true
   validates_inclusion_of :loc_context, :in => I18n.t("context.lo.context_select", :locale => :en).map{|k,v| k.to_s}, :allow_nil => true, :message => ": " + I18n.t("dictionary.invalid")
@@ -236,14 +234,12 @@ class Evaluation < ActiveRecord::Base
 
   #Get the real reviewer of the Evaluation
   def readable_reviewer
-    if self.anonymous and !self.app.nil?
-      (I18n.t("dictionary.anonymous") + ' (<a href="'+Rails.application.routes.url_helpers.app_path(self.app)+'">'+self.app.name+'</a>)').html_safe
+    if self.external
+      ((self.anonymous? ? I18n.t("dictionary.anonymous") : "#" + self.id_user_app[0..6]) + ' (<a href="'+Rails.application.routes.url_helpers.app_path(self.app)+'">'+self.app.name+'</a>)').html_safe
     elsif !self.user.nil?
       ('<a href="'+Rails.application.routes.url_helpers.user_path(self.user)+'">'+self.user.name+'</a>').html_safe
     elsif self.automatic?
       "Automatic"
-    else
-      ""
     end
   end
   
@@ -310,6 +306,10 @@ class Evaluation < ActiveRecord::Base
     self.evmethod.automatic
   end
 
+  def anonymous?
+    self.external and self.id_user_app.blank?
+  end
+
 
   ################################
   # Method for evaluations to inherit
@@ -371,26 +371,20 @@ class Evaluation < ActiveRecord::Base
 
   #Prevent wrong scores to be saved
   def checkScoreBeforeSave
-    if !self.score.nil? and Utils.is_numeric?(self.score)
-        self.score = [[0,self.score].max,10].min
-    end
+    self.score = [[0,self.score].max,10].min if !self.score.nil? and Utils.is_numeric?(self.score)
   end
 
   def checkAssignment
-    return if self.automatic?
+    return if self.automatic? or self.external
 
     # Look for the related assignment of this evaluation
     # It should be a pending assignment of the user with the same Lo and the same evaluation method
     assignment = self.user.assignments.where(:status => "Pending", :lo_id=>self.lo.id, :evmethod_id=>self.evmethod.id).first
 
-    if !assignment.nil?
+    unless assignment.nil?
       #Add the evaluation to the assignment, if its not included
-      if self.assignment_id.nil? and !assignment.evaluations.include? self
-        assignment.evaluations.push(self)
-      end
-      unless self.evmethod.allow_multiple_evaluations
-        assignment.markAsComplete
-      end
+      assignment.evaluations.push(self) if self.assignment_id.nil? and !assignment.evaluations.include? self
+      assignment.markAsComplete unless self.evmethod.allow_multiple_evaluations
       assignment.save!
     end
   end

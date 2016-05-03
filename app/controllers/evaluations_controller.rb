@@ -8,10 +8,7 @@ class EvaluationsController < ApplicationController
   # GET /evaluations
   # GET /evaluations.json
   def index
-    unless current_user.isAdmin?
-      redirect_to "/revaluations"
-      return
-    end
+    return redirect_to "/revaluations" unless current_user.isAdmin?
 
     @evaluations = Evaluation.allc
     authorize! :show, @evaluations
@@ -116,6 +113,7 @@ class EvaluationsController < ApplicationController
 
     @title = @evmethod.name + ": " + @lo.name
     @embed = true
+    @evaluation.id_user_app = params[:id_user_app] unless params[:id_user_app].blank?
 
     render :embed, :layout => 'embed'
   end
@@ -160,8 +158,9 @@ class EvaluationsController < ApplicationController
         return render "application/embed_empty", :layout => 'embed'
       end
       action = "embed"
-      @evaluation.anonymous = true
+      @evaluation.external = true
       @evaluation.app_id = @app.id
+      @evaluation.user_id = nil
     else
       action = "new"
     end
@@ -173,7 +172,7 @@ class EvaluationsController < ApplicationController
     respond_to do |format|
       if @evaluation.errors.blank? and @evaluation.save
         unless params[:embed]
-          format.html { 
+          format.html {
             redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("evaluations.message.success.create") 
           }
         else
@@ -207,10 +206,7 @@ class EvaluationsController < ApplicationController
     authorize! :update, @evaluation
 
     evaluationParams = getEvaluationParams
-
-    if !evaluationParams.nil? and current_user.isAdmin?
-      evaluationParams.delete("user_id")
-    end
+    evaluationParams.delete("user_id") if !evaluationParams.nil? and current_user.isAdmin?
 
     respond_to do |format|
       if @evaluation.update_attributes(evaluationParams)
@@ -244,19 +240,12 @@ class EvaluationsController < ApplicationController
 
   def getEvaluationParams
     evaluationParams = nil
-
     #Look for evaluation params
     params.each do |key,val|
-      if val.is_a?(Hash)
-        evaluationParams = val
-      end
+      evaluationParams = val if val.is_a?(Hash)
     end
-
     #Validate score if present
-    if !evaluationParams.nil? and !evaluationParams["score"].nil? and !Utils.is_numeric?(evaluationParams["score"])
-      evaluationParams.delete("score")
-    end
-
+    evaluationParams.delete("score") unless evaluationParams.blank? or evaluationParams["score"].blank? or Utils.is_numeric?(evaluationParams["score"])
     evaluationParams
   end
 
