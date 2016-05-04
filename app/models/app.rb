@@ -49,19 +49,16 @@ class App < ActiveRecord::Base
     sessionToken
   end
 
-  def create_session_token(permanent=false)
-    s = SessionToken.new
+  def create_session_token(params={})
+    s = SessionToken.new(params)
     s.app_id = self.id
-    s.permanent = permanent
     s.save!
     s
   end
 
   def current_session_token
     currentToken = valid_session_tokens.first
-    if currentToken.nil? or ((currentToken.expire_at-Time.now)/60 < 1)
-      currentToken = create_session_token
-    end
+    currentToken = create_session_token if currentToken.nil? or ((currentToken.expire_at-Time.now)/60 < 1)
     currentToken
   end
 
