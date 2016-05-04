@@ -99,11 +99,15 @@ class Api::V1::LosController < Api::V1::BaseController
   private
 
   def getLO
+    return if params[:id].blank?
+    query = {}
+    query[:repository] = params["repository"] unless params["repository"].blank?
     if params[:use_id_loep].nil?
-      @lo = current_app.los.find_by_id_repository(params[:id])
+      query[:id_repository] = params[:id]
     else
-      @lo = current_app.los.find_by_id(params[:id])
+      query[:id] = params[:id]
     end
+    @lo = current_app.los.where(query).first
   end
 
   def filterParams
