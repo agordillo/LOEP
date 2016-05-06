@@ -22,7 +22,7 @@ namespace :interactions do
       iPermanencyRates = []
       iClickFrequencies = []
       interactions.each do |i|
-        if i["tlo"].is_a? Hash and i["tlo"]["average_value"].is_a? Numeric
+        if i["tlo"].is_a? Hash and i["tlo"]["average_value"].is_a? Numeric and i["tlo"]["average_value"] > 0
           iTimes << i["tlo"]["average_value"]
           iClickFrequencies << (i["nclicks"]["average_value"]/(i["tlo"]["average_value"]/60.to_f).to_f) if i["nclicks"].is_a? Hash and i["nclicks"]["average_value"].is_a? Numeric
         end
