@@ -23,8 +23,7 @@ class Ability
             can [:update, :destroy], Icode do |icode|
                 icode.owner.nil? or icode.owner.value < user.value or icode.owner==user
             end
-            can :create, SessionToken
-            can [:update, :destroy], SessionToken do |s|
+            can [:create, :update, :destroy], SessionToken do |s|
                 s.app.nil? or can?(:update, s.app)
             end
 
@@ -43,7 +42,7 @@ class Ability
             end
             can :create, Lo
             can [:update, :destroy], Lo do |lo|
-                lo.user.nil? || user.value > lo.user.value || user.id == lo.user.id
+                lo.owner.nil? || user.value > lo.owner.value || user.id == lo.owner.id
             end
             can [:create, :update, :destroy], Assignment
             can :create, Evaluation
@@ -57,8 +56,7 @@ class Ability
             can [:update, :destroy], Icode do |icode|
                 icode.owner.nil? or icode.owner.value < user.value or icode.owner==user
             end
-            can :create, SessionToken
-            can [:update, :destroy], SessionToken do |s|
+            can [:create, :update, :destroy], SessionToken do |s|
                 s.app.nil? or can?(:update, s.app)
             end
 
