@@ -25,3 +25,4 @@ config/application_config.yml
 public/lom_metadata.xml
 config/deploy/*
 !config/deploy/example.yml
+reports/*

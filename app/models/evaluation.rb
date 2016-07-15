@@ -232,6 +232,14 @@ class Evaluation < ActiveRecord::Base
     Evaluation.where("evmethod_id in (?)", evmethods_ids)
   end
 
+  def self.automatic
+    Evaluation.joins(:evmethod).where("evmethods.automatic = true")
+  end
+
+  def self.human
+    Evaluation.joins(:evmethod).where("evmethods.automatic = false")
+  end
+
   #Get the real reviewer of the Evaluation
   def readable_reviewer
     if self.external
