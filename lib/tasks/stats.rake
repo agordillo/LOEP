@@ -9,6 +9,7 @@ namespace :stats do
     Rake::Task["stats:prepare"].invoke
     Rake::Task["stats:evaluations"].invoke(false)
     Rake::Task["stats:evaluated_los"].invoke(false)
+    Rake::Task["stats:users"].invoke(false)
   end
 
   task :prepare do
@@ -205,6 +206,43 @@ namespace :stats do
           accumulativeLosRepositories[repository].each_with_index do |n,i|
             rows[rowIndex+i] = [allDates[i],accumulativeLosRepositories[repository][i],accumulativeHLosRepositories[repository][i]]
           end
+        end
+
+        rows.each do |row|
+          sheet.add_row row
+        end
+      end
+
+      prepareFile(filePath)
+      p.serialize(filePath)
+
+      puts("Task Finished. Results generated at " + filePath)
+    end
+  end
+
+  #Usage
+  #Development:   bundle exec rake stats:users
+  task :users, [:prepare] => :environment do |t,args|
+    args.with_defaults(:prepare => true)
+    Rake::Task["stats:prepare"].invoke if args.prepare
+
+    puts "Users Stats"
+
+    allUsers = User.all.sort{|b,a| a.compareUsers(b)}
+
+    filePath = "reports/users_stats.xlsx"
+    prepareFile(filePath)
+
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Users Stats") do |sheet|
+        rows = []
+        rows << ["Users Stats"]
+        rows << ["Id","Role","Registration date","Evaluations","Assignments"]
+        rowIndex = rows.length
+        
+        rows += Array.new(allUsers.length).map{|e|[]}
+        allUsers.each_with_index do |u,i|
+          rows[rowIndex+i] = [u.id.to_s,u.readable_role,u.created_at,u.evaluations.human.internal.count,u.assignments.count]
         end
 
         rows.each do |row|

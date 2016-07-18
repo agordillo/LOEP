@@ -240,6 +240,14 @@ class Evaluation < ActiveRecord::Base
     Evaluation.joins(:evmethod).where("evmethods.automatic = false")
   end
 
+  def self.external
+    Evaluation.where("external = true")
+  end
+
+  def self.internal
+    Evaluation.where("external = false")
+  end
+
   #Get the real reviewer of the Evaluation
   def readable_reviewer
     if self.external
