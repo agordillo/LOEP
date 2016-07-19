@@ -26,7 +26,11 @@ class Score < ActiveRecord::Base
   before_validation :checkScoreBeforeSave
 
 
-#-------------------------------------------------------------------------------------
+  def automatic?
+    self.metric.automatic?
+  end
+
+  #-------------------------------------------------------------------------------------
 
   private
 

@@ -10,6 +10,8 @@ namespace :stats do
     Rake::Task["stats:evaluations"].invoke(false)
     Rake::Task["stats:evaluated_los"].invoke(false)
     Rake::Task["stats:users"].invoke(false)
+    Rake::Task["stats:assignments"].invoke(false)
+    Rake::Task["stats:scores"].invoke(false)
   end
 
   task :prepare do
@@ -84,7 +86,7 @@ namespace :stats do
     prepareFile(filePath)
 
     Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "Presentations Stats") do |sheet|
+      p.workbook.add_worksheet(:name => "Evaluations Stats") do |sheet|
         rows = []
         rows << ["Evaluations Stats"]
         rows << ["Date","Created Evaluations (Human)","Accumulative Created Evaluations (Human)","Created Evaluations (Automatic)","Accumulative Created Evaluations (Automatic)","Created Evaluations (AutomaticB)","Accumulative Created Evaluations (AutomaticB)"]
@@ -183,7 +185,7 @@ namespace :stats do
     prepareFile(filePath)
 
     Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "Presentations Stats") do |sheet|
+      p.workbook.add_worksheet(:name => "LOs Stats") do |sheet|
         rows = []
         rows << ["LOs Stats"]
         rows << ["Date","Evaluated LOs","Evaluated LOs (Human)"]
@@ -243,6 +245,160 @@ namespace :stats do
         rows += Array.new(allUsers.length).map{|e|[]}
         allUsers.each_with_index do |u,i|
           rows[rowIndex+i] = [u.id.to_s,u.readable_role,u.created_at,u.evaluations.human.internal.count,u.assignments.count]
+        end
+
+        rows.each do |row|
+          sheet.add_row row
+        end
+      end
+
+      prepareFile(filePath)
+      p.serialize(filePath)
+
+      puts("Task Finished. Results generated at " + filePath)
+    end
+  end
+
+  #Usage
+  #Development:   bundle exec rake stats:assignments
+  task :assignments, [:prepare] => :environment do |t,args|
+    args.with_defaults(:prepare => true)
+    Rake::Task["stats:prepare"].invoke if args.prepare
+
+    puts "Assignment Stats"
+
+    allDates = []
+    allAssignmentsByDate = []
+    allAssignmentsBeforeDate = []
+    for year in 2012..2016
+      12.times do |index|
+        month = index+1
+        # date = DateTime.new(params[:year],params[:month],params[:day])
+        startDate = DateTime.new(year,month,1)
+        endDate = startDate.next_month
+        assignments = Assignment.where(:created_at => startDate..endDate)
+        allDates.push(startDate.strftime("%B %Y"))
+        allAssignmentsByDate.push(assignments)
+        allAssignmentsBeforeDate.push(Assignment.where("created_at < ?", endDate))
+      end
+    end
+
+    #Created assignments
+    createdAssignments = []
+    accumulativeCreatedAssignments = []
+    allAssignmentsByDate.each_with_index do |assignments,index|
+      lastAcCreatedAssignments = (index > 0 ? accumulativeCreatedAssignments[index-1] : 0)
+      nCreated = assignments.count
+      createdAssignments.push(nCreated)
+      accumulativeCreatedAssignments.push(lastAcCreatedAssignments + nCreated)
+    end
+
+    #Assignments by status
+    aStatuses = Assignment.all.map{|a| a.status}.uniq
+    accumulativeAssignmentsByStatus = {}
+    aStatuses.each do |status|
+      accumulativeAssignmentsByStatus[status] = []
+    end
+    allAssignmentsBeforeDate.each_with_index do |assignments,index|
+      aStatuses.each do |status|
+        accumulativeAssignmentsByStatus[status].push(assignments.where("status='"+status+"'").count)
+      end
+    end
+
+    filePath = "reports/assignments_stats.xlsx"
+    prepareFile(filePath)
+
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Assignments Stats") do |sheet|
+        rows = []
+        rows << ["Assignment Stats"]
+        rows << (["Date","Created Assignments","Accumulative Created Assignments"] + aStatuses.map{|s| "Accumulative " + s + " Assignments" })
+        rowIndex = rows.length
+        
+        rows += Array.new(createdAssignments.length).map{|e|[]}
+        createdAssignments.each_with_index do |n,i|
+          rows[rowIndex+i] = ([allDates[i],createdAssignments[i],accumulativeCreatedAssignments[i]] + aStatuses.map{|s| accumulativeAssignmentsByStatus[s][i] })
+        end
+
+        rows.each do |row|
+          sheet.add_row row
+        end
+      end
+
+      prepareFile(filePath)
+      p.serialize(filePath)
+
+      puts("Task Finished. Results generated at " + filePath)
+    end
+  end
+
+  #Usage
+  #Development:   bundle exec rake stats:scores
+  task :scores, [:prepare] => :environment do |t,args|
+    args.with_defaults(:prepare => true)
+    Rake::Task["stats:prepare"].invoke if args.prepare
+
+    puts "Score Stats"
+
+    allDates = []
+    allManualScoresByDate = []
+    allLosByDate = []
+    for year in 2012..2016
+      12.times do |index|
+        month = index+1
+        # date = DateTime.new(params[:year],params[:month],params[:day])
+        startDate = DateTime.new(year,month,1)
+        endDate = startDate.next_month
+        scores = Score.where(:created_at => startDate..endDate).reject{|s| s.automatic?}
+        allManualScoresByDate.push(scores)
+        los = Lo.where(:created_at => startDate..endDate)
+        allLosByDate.push(los)
+        allDates.push(startDate.strftime("%B %Y"))
+      end
+    end
+
+    #Automatic scores (These scores are generated when the LOs are registered)
+    generatedAutomaticScores = []
+    accumulativeAutomaticScores = []
+    allLosByDate.each_with_index do |los,index|
+      lastAcAutomaticScores = (index > 0 ? accumulativeAutomaticScores[index-1] : 0)
+      automaticScores = los.map{|lo| lo.scores.select{|s| s.automatic?}.length}.sum
+      generatedAutomaticScores.push(automaticScores)
+      accumulativeAutomaticScores.push(lastAcAutomaticScores + automaticScores)
+    end
+
+    #Manual scores (These scores are generated when reviewers create complete evaluations for each of evmethods required by the metric of the score)
+    generatedManualScores = []
+    accumulativeManualScores = []
+    allManualScoresByDate.each_with_index do |scores,index|
+      lastAcManualScores = (index > 0 ? accumulativeManualScores[index-1] : 0)
+      manualScores = scores.length
+      generatedManualScores.push(manualScores)
+      accumulativeManualScores.push(lastAcManualScores + manualScores)
+    end
+
+
+    #Total scores
+    totalScores = []
+    accumulativeTotalScores = []
+    generatedAutomaticScores.each_with_index do |scores,index|
+      totalScores.push(generatedAutomaticScores[index]+generatedManualScores[index])
+      accumulativeTotalScores.push(accumulativeAutomaticScores[index]+accumulativeManualScores[index])
+    end
+
+    filePath = "reports/scores_stats.xlsx"
+    prepareFile(filePath)
+
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "Scores Stats") do |sheet|
+        rows = []
+        rows << ["Scores Stats"]
+        rows << ["Date","Generated Automatic Scores","Accumulative Automatic scores","Manual scores","Accumulative Manual scores","Total scores","Accumulative Total scores"]
+        rowIndex = rows.length
+        
+        rows += Array.new(generatedAutomaticScores.length).map{|e|[]}
+        generatedAutomaticScores.each_with_index do |n,i|
+          rows[rowIndex+i] = [allDates[i],generatedAutomaticScores[i],accumulativeAutomaticScores[i],generatedManualScores[i],accumulativeManualScores[i],totalScores[i],accumulativeTotalScores[i]]
         end
 
         rows.each do |row|
