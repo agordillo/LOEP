@@ -57,21 +57,14 @@ namespace :stats do
       accumulativeCreatedHumanEvaluations.push(lastAcCreatedHuman + nHumanCreated)
 
       lastAcCreatedAutomatic = (index > 0 ? accumulativeCreatedAutomaticEvaluations[index-1] : 0)
-      nAutomaticCreated = evaluations.automatic.count
+      nAutomaticCreated = allLosByDate[index].map{|lo| lo.evaluations.automatic.length}.sum
       createdAutomaticEvaluations.push(nAutomaticCreated)
       accumulativeCreatedAutomaticEvaluations.push(lastAcCreatedAutomatic + nAutomaticCreated)
 
-      lastAcCreatedAutomaticB = (index > 0 ? accumulativeCreatedAutomaticBEvaluations[index-1] : 0)
-      nAutomaticBCreated = allLosByDate[index].map{|lo| lo.evaluations.automatic.length}.sum
+      lastAcCreatedBAutomatic = (index > 0 ? accumulativeCreatedAutomaticBEvaluations[index-1] : 0)
+      nAutomaticBCreated = evaluations.automatic.count
       createdAutomaticBEvaluations.push(nAutomaticBCreated)
-      accumulativeCreatedAutomaticBEvaluations.push(lastAcCreatedAutomaticB + nAutomaticBCreated)
-    end
-
-    #Accumulated Evaluated LOs
-    accumulativeLos = []
-    allLosByDate.each_with_index do |los,index|
-      lastAcLos = (index > 0 ? accumulativeLos[index-1] : 0)
-      accumulativeLos.push(lastAcLos + allLosByDate[index].length)
+      accumulativeCreatedAutomaticBEvaluations.push(lastAcCreatedBAutomatic + nAutomaticBCreated)
     end
 
     #Evaluations by ev method
@@ -81,6 +74,46 @@ namespace :stats do
       evmethods.push(e.name)
       evaluationsByEvMethod.push(Evaluation.where(:evmethod_id => e.id).count)
     end
+
+    #Accumulated Evaluated LOs by repository
+    repositories = Lo.all.map{|lo| lo.repository}.uniq
+    createdHumanEvaluationsRepositories = {}
+    accumulativeCreatedHumanEvaluationsRepositories = {}
+    createdAutomaticEvaluationsRepositories = {}
+    accumulativeCreatedAutomaticEvaluationsRepositories = {}
+    repositories.each do |repository|
+      createdHumanEvaluationsRepositories[repository] = []
+      accumulativeCreatedHumanEvaluationsRepositories[repository] = []
+      createdAutomaticEvaluationsRepositories[repository] = []
+      accumulativeCreatedAutomaticEvaluationsRepositories[repository] = []
+    end
+
+    allEvaluationsByDate.each_with_index do |evaluations,index|
+      repositories.each do |repository|
+        lastAcCreatedHuman = (index > 0 ? accumulativeCreatedHumanEvaluationsRepositories[repository][index-1] : 0)
+        nHumanCreated = evaluations.human.select{|e| e.lo.repository==repository}.count
+        createdHumanEvaluationsRepositories[repository].push(nHumanCreated)
+        accumulativeCreatedHumanEvaluationsRepositories[repository].push(lastAcCreatedHuman + nHumanCreated)
+
+        lastAcCreatedAutomatic = (index > 0 ? accumulativeCreatedAutomaticEvaluationsRepositories[repository][index-1] : 0)
+        nAutomaticCreated = allLosByDate[index].select{|lo| lo.repository==repository}.map{|lo| lo.evaluations.automatic.length}.sum
+        createdAutomaticEvaluationsRepositories[repository].push(nAutomaticCreated)
+        accumulativeCreatedAutomaticEvaluationsRepositories[repository].push(lastAcCreatedAutomatic + nAutomaticCreated)
+      end
+    end
+
+    #Evaluations by ev method and repository
+    evaluationsByEvMethodAndRepository = {}
+    repositories.each do |repository|
+      evaluationsByEvMethodAndRepository[repository] = []
+    end
+    Evmethod.all.each do |e|
+      repositories.each do |repository|
+        mEvaluations = Lo.where(:repository => repository).map{|lo| lo.evaluations}.flatten.select{|ev| ev.evmethod_id == e.id}
+        evaluationsByEvMethodAndRepository[repository].push(mEvaluations.length)
+      end
+    end
+
 
     filePath = "reports/evaluations_stats.xlsx"
     prepareFile(filePath)
@@ -104,6 +137,28 @@ namespace :stats do
         rows += Array.new(evmethods.length).map{|e|[]}
         evmethods.each_with_index do |e,i|
           rows[rowIndex+i] = [e,evaluationsByEvMethod[i]]
+        end
+
+        repositories.each do |repository|
+          rows << []
+          rows << ["Repository: " + repository.to_s]
+          rows << ["Evaluations Stats"]
+          rows << ["Date","Created Evaluations (Human)","Accumulative Created Evaluations (Human)","Created Evaluations (Automatic)","Accumulative Created Evaluations (Automatic)"]
+          rowIndex = rows.length
+
+          rows += Array.new(createdHumanEvaluationsRepositories[repository].length).map{|e|[]}
+          createdHumanEvaluationsRepositories[repository].each_with_index do |n,i|
+            rows[rowIndex+i] = [allDates[i],createdHumanEvaluationsRepositories[repository][i],accumulativeCreatedHumanEvaluationsRepositories[repository][i],createdAutomaticEvaluationsRepositories[repository][i],accumulativeCreatedAutomaticEvaluationsRepositories[repository][i]]
+          end
+
+          rows << []
+          rows << ["Evaluations by ev method"]
+          rows << ["Ev Method","Number of evaluations"]
+          rowIndex = rows.length
+          rows += Array.new(evmethods.length).map{|e|[]}
+          evmethods.each_with_index do |e,i|
+            rows[rowIndex+i] = [e,evaluationsByEvMethodAndRepository[repository][i]]
+          end
         end
 
         rows.each do |row|
