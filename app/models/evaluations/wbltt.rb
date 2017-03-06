@@ -20,7 +20,7 @@ class Evaluations::Wbltt < Evaluation
     end
     3.times do |i|
       items << {
-        :name => I18n.t("evmethods.Wbltt.item" + (i+12).to_s + ".name") + ".",
+        :name => I18n.t("evmethods.Wbltt.item" + (i+12).to_s + ".name"),
         :type=> "text"
       }
     end

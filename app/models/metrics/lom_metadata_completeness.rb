@@ -60,7 +60,6 @@ class Metrics::LomMetadataCompleteness < Metrics::LomMetadataItem
     fieldWeights["5.2"] = BigDecimal(0.037667,6)
     fieldWeights["5.3"] = BigDecimal(0.009721,6)
     fieldWeights["5.4"] = BigDecimal(0.006075,6)
-
     fieldWeights["5.5"] = BigDecimal(0.029162,6)
     fieldWeights["5.6"] = BigDecimal(0.031592,6)
     fieldWeights["5.7"] = BigDecimal(0.037667,6)
