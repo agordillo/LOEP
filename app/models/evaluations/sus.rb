@@ -37,7 +37,7 @@ class Evaluations::Sus < Evaluation
   
   def self.representationData(lo,metric=nil)
     evmethod = Evmethod.find_by_module(self.name)
-    metric = Metric.find_by_name("Global SUS Score") if metric.nil?
+    metric = Metric.find_by_type("Metrics::SUSG") if metric.nil?
     metric = Metric.allc.select{|m| m.evmethods == [evmethod]}.first  if metric.nil?
     return if metric.nil?
 

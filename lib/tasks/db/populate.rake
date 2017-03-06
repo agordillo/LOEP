@@ -281,23 +281,23 @@ namespace :db do
 				{name:"LORI WAM CCW", module_name:"Metrics::LORIWAM3", evmethods:["LORI v1.5"]},
 				{name:"LORI Pedagogical WAM", module_name:"Metrics::LORIPWAM", evmethods:["LORI v1.5"]},
 				{name:"LORI Technological WAM", module_name:"Metrics::LORITWAM", evmethods:["LORI v1.5"]},
-				{name:"LORI Orthogonal Metric", module_name:"Metrics::LORIORT", evmethods:["LORI v1.5"]},
-				{name:"LORI Square Root Metric", module_name:"Metrics::LORISQRT", evmethods:["LORI v1.5"]},
-				{name:"LORI Logarithmic Metric", module_name:"Metrics::LORILOG", evmethods:["LORI v1.5"]},
+				{name:"LORI Orthogonal", module_name:"Metrics::LORIORT", evmethods:["LORI v1.5"]},
+				{name:"LORI Square Root", module_name:"Metrics::LORISQRT", evmethods:["LORI v1.5"]},
+				{name:"LORI Logarithmic", module_name:"Metrics::LORILOG", evmethods:["LORI v1.5"]},
 				{name:"LOEM Arithmetic Mean", module_name:"Metrics::LOEMAM", evmethods:["LOEM"]},
 				{name:"WBLT-S Arithmetic Mean", module_name:"Metrics::WBLTSAM", evmethods:["WBLT-S"]},
 				{name:"WBLT-T Arithmetic Mean", module_name:"Metrics::WBLTTAM", evmethods:["WBLT-T"]},
-				{name:"Global SUS Score", module_name:"Metrics::SUSG", evmethods:["SUS"]},
+				{name:"Global SUS", module_name:"Metrics::SUSG", evmethods:["SUS"]},
 				{name:"LORIEM", module_name:"Metrics::LORIEM", evmethods:["LORI v1.5","LOEM"]},
-				{name:"LOM Metadata Quality Metric", module_name:"Metrics::LomMetadata", evmethods:["Metadata Quality"]},
-				{name:"LOM Completeness Metadata Quality Metric", module_name:"Metrics::LomMetadataCompleteness", evmethods:["Metadata Quality"]},
-				{name:"Interaction Quality Metric", module_name:"Metrics::Qinteraction", evmethods:["Interaction Quality"]}
+				{name:"LOM Metadata Quality", module_name:"Metrics::LomMetadata", evmethods:["Metadata Quality"]},
+				{name:"LOM Completeness Metadata Quality", module_name:"Metrics::LomMetadataCompleteness", evmethods:["Metadata Quality"]},
+				{name:"Interaction Quality", module_name:"Metrics::Qinteraction", evmethods:["Interaction Quality"]}
 			]
 
 			addedMetrics = []
 
 			LOEP_VANILLA_Metrics.each do |metric|
-				m = Metric.find_by_name(metric[:name])
+				m = Metric.find_by_type(metric[:module_name])
 				if m.nil?
 					#Create metric
 					puts "Creating new metric: " + metric[:name]
@@ -306,6 +306,11 @@ namespace :db do
 					m.evmethods.push(Evmethod.find_all_by_name(metric[:evmethods]))
 					m.save!
 					addedMetrics.push(m)
+				else
+					if m.name != metric[:name]
+						#Update name
+						m.update_column :name, metric[:name]
+					end
 				end
 			end
 
