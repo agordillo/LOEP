@@ -18,35 +18,25 @@ class Metrics::LomMetadataConsistency < Metrics::LomMetadataItem
     weights = ruleWeights
 
     # A Rules
-    # Rule 1. All included fields are defined in the standard.
+    # Rule 1. All included fields are defined in the LOM standard.
     rules.push(Metadata::Lom.getElements(metadataJSON,{"lomcompliant"=>false}).length === 0)
+    
+    # B Rules
     # Rule 2. All mandatory fields are included. Mandatory fields: identifier and title.
     rules.push(!(metadataFields["1.1.1"].blank? and metadataFields["1.1.2"].blank? and metadataFields["1.2"].blank?))
 
-    # B Rules.
-    # Rule 3. Categorical fields only contain values from a fixed list.
+    # C Rules
+    # Rule 3. Categorical fields only contain values that belong to the LOM vocabulary.
     rules.push(Metadata::Lom.getElements(metadataJSON,{"datatype"=>"Vocabulary","valid"=>false}).length === 0)
 
-    # C Rules. Combination of values in categorical fields are consistent.
+    # D Rules. Combination of values in categorical fields are consistent.
     # Rule 4. Structure and Aggregation level
     unless metadataFields["1.7"].blank? or metadataFields["1.8"].blank?
       rules.push(!((metadataFields["1.7"]=="atomic" and metadataFields["1.8"]!="1") or (metadataFields["1.8"]=="1" and metadataFields["1.7"]!="atomic")))
     else
       rules.push(true)
     end
-    # Rule 5. Interactivity Type and Interactivity Level
-    unless metadataFields["5.1"].blank? or metadataFields["5.3"].blank?
-      rules.push(!(metadataFields["5.1"]=="active" and !(["high","very high"].include?(metadataFields["5.3"]))))
-    else
-      rules.push(true)
-    end
-    # Rule 6. Semantic Density and Difficulty
-    unless metadataFields["5.4"].blank? or metadataFields["5.8"].blank?
-      rules.push(!(["high","very high"].include?(metadataFields["5.4"]) and !(["difficult","very difficult"].include?(metadataFields["5.4"]))))
-    else
-      rules.push(true)
-    end
-    # Rule 7. Context and Age Range
+    # Rule 5. Context and Typical Age Range
     unless metadataFields["5.6"].blank? or metadataFields["5.7"].blank?
       parsedAgeRange = getAgeRange(metadataFields["5.7"])
       rules.push(!(metadataFields["5.6"]=="higher education" and (!parsedAgeRange.is_a? Numeric or parsedAgeRange < 17)))
@@ -71,7 +61,7 @@ class Metrics::LomMetadataConsistency < Metrics::LomMetadataItem
     ruleWeights << BigDecimal(0.25,6)
 
     weightForCRules = BigDecimal(0.25,6)
-    nCRules = 4
+    nCRules = 2
     nCRules.times do |i|
       ruleWeights << BigDecimal(weightForCRules/nCRules,6)
     end
