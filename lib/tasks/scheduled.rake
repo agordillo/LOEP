@@ -8,7 +8,7 @@ namespace :scheduled do
     puts "Updating LOEP context"
     Rake::Task["metadata:updateMetadataFieldRecords"].invoke
     Rake::Task["metadata:updateGraphs"].invoke
-    Rake::Task["interactions:updateInteractionThresholds"].invoke
+    Rake::Task["interactions:updateThresholds"].invoke
     puts "Task finished"
   end
 
