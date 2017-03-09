@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class Api::V1::LosController < Api::V1::BaseController
-  before_filter :getLO, :only => [:show, :update, :destroy, :showEvaluationsRepresentation]
+  before_filter :getLO, :only => [:show, :update, :destroy]
   before_filter :filterParams, :only => [:create, :update]
 
   # API REST for LOs
