@@ -24,8 +24,12 @@ LOEP::Application.configure do
     config.evmethod_names = config.APP_CONFIG['evmethods'].reject{ |n| Evmethod.find_by_name(n).nil? }
     config.evmethods = config.evmethod_names.map{|n| Evmethod.find_by_name(n)}
     config.evmethods_ids = config.evmethods.map{|evmethod| evmethod.id }
-    config.evmethods_human_ids = config.evmethods.reject{|ev| ev.automatic}.map{|evmethod| evmethod.id}
-    
+    if ActiveRecord::Base.connection.column_exists?("evmethods","automatic")
+      config.evmethods_human_ids = config.evmethods.reject{|ev| ev.automatic}.map{|evmethod| evmethod.id}
+    else
+      config.evmethods_human_ids = config.evmethods.map{|evmethod| evmethod.id}
+    end
+
     #Configure the metrics you want to use in your LOEP instance
     #See app/models/metrics for more possible metrics to add
     config.metric_names = config.APP_CONFIG['metrics'].reject{ |n|
