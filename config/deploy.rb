@@ -26,6 +26,7 @@ rescue Exception => e
   exit
 end
 
+set :keep_releases, 2
 set :scm, :git
 
 set :application, "LOEP"
