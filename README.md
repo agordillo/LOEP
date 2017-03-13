@@ -30,17 +30,17 @@ The last releases can be seen [here](https://github.com/agordillo/LOEP/releases)
     * Prioritize workload balancing with random matching 
     * Prioritize workload balancing with best-effort matching
     * Prioritize reviewer suitability
-* Support of several Learning Object evaluation methods (as well as general purpose evaluation methods)
+* Support of several Learning Object evaluation models (as well as general purpose evaluation models)
   * LORI (Learning Object Review Instrument)
   * LOEM (Learning Object Evaluation Metric)
   * WBLT-S (WBLT Evaluation Scale for Students)
   * WBLT-T (WBLT Evaluation Scale for Teachers)
   * Metadata Quality evaluation model (automatic)
   * SUS (System Usability Scale)
-* Support for automatic evaluation methods and human reviews
+* Support for automatic evaluation models and human reviews
 * Support of several Learning Object quality metrics (as well as general purpose quality metrics)
-  * AM (Arithmetic Mean) Metric for all evaluation methods
-  * WAM (Weighted Arithmetic Mean) Metric for all evaluation methods
+  * AM (Arithmetic Mean) Metric for all evaluation models
+  * WAM (Weighted Arithmetic Mean) Metric for all evaluation models
   * Additional metrics for LORI: Pedagogical, Technical, Orthogonal, Logarithmic, Square Root, ...
   * Metadata Quality metrics: Overall metadata quality, Completeness, Coherence, Conformance, Consistency and Findability.
   * SUS (System Usability Scale) score

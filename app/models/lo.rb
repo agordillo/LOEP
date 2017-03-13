@@ -243,7 +243,7 @@ class Lo < ActiveRecord::Base
   # Evaluation Data
   #############
 
-  #Return the evaluations and average item values, grouped by evaluation methods.
+  #Return the evaluations and average item values, grouped by evaluation models.
   def getEvaluationData(evmethods=nil)
     evData = Hash.new
 

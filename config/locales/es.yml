@@ -174,7 +174,7 @@ es:
       mark_as_completed: "¿Estás seguro de que quieres marcar esta asignación como completada?"
     message:
       error:
-        at_least_one_evmethod: "Debes seleccionar al menos un método de evaluación para crear una asignación."
+        at_least_one_evmethod: "Debes seleccionar al menos un modelo de evaluación para crear una asignación."
         at_least_one_lo: "Debes seleccionar al menos un Objeto de Aprendizaje para crear una asignación."
         at_least_one_reviewer: "Debes seleccionar al menos un revisor para crear una asignación."
         automatic_generic: "Ocurrió un error en la generación automática de asignaciones"
@@ -185,7 +185,7 @@ es:
         create: "Las asignaciones fueron creadas correctamente."
         update: "La asignación fue actualizada correctamente."
       warning:
-        duplicated: "Algunas asignaciones no fueron creadas porque ya se habian creado asignaciones con el mismo Objeto de Aprendizaje, Método de Evaluación y Revisor."
+        duplicated: "Algunas asignaciones no fueron creadas porque ya se habian creado asignaciones con el mismo Objeto de Aprendizaje, Modelo de Evaluación y Revisor."
     name:
       all: "Todas las Asignaciones"
       his:
@@ -319,16 +319,16 @@ es:
       subsection_title: "Evaluación"
     message:
       error:
-        automatic: "El Objeto de Aprendizaje no pudo ser evaluado automáticamente empleando el método de evaluación: %{evmethod}"
+        automatic: "El Objeto de Aprendizaje no pudo ser evaluado automáticamente empleando el modelo de evaluación: %{evmethod}"
         duplicated: "La evaluación no fue creada porque este usuario ya había evaluado el Objeto de Aprendizaje."
-        external_evaluations_disabled: "Error: Este método de evaluación no admite evaluaciones externas."
+        external_evaluations_disabled: "Error: Este modelo de evaluación no admite evaluaciones externas."
         generic_create: "Ocurrió un error y la evaluación no pudo ser creada. Comprueba todos los campos y vuelve a intentarlo."
         generic_update: "La evaluación no pudo ser actualizada. Los parámetros eran incorrectos."
         overall_score: "La puntuación global propuesta no es válida. Por favor, revísela."
         uc_age: "La edad especificada no es válida. Por favor, revísela."
       no_evaluations: "Todavía no has evaluado ningún Objeto de Aprendizaje.</p><p>Cuando evalúes uno, la evaluación aparecerá en este panel."
       success:
-        automatic: "El Objeto de Aprendizaje ha sido automáticamente evaluado mediante el método de evaluación: %{evmethod}"
+        automatic: "El Objeto de Aprendizaje ha sido automáticamente evaluado mediante el modelo de evaluación: %{evmethod}"
         create: "La evaluación fue enviada correctamente."
         update: "La evaluación fue actualizada correctamente."
     name:
@@ -355,7 +355,7 @@ es:
         name: "Puntuación Global"
         description: "De forma opcional, puede proponer una puntuación global entre 0.0 y 10.0 para este Objeto de Aprendizaje."
     form:
-      available: "Métodos de Evaluación Disponibles"
+      available: "Modelos de Evaluación Disponibles"
       documentation: "Documentación de %{evmethod}"
     interactions:
       item1:
@@ -560,16 +560,16 @@ es:
         name: "Cumplimiento de estándares"
         description: "Adecuación a los estándares y especificaciones internacionales"
     message:
-      no_available: "No hay métodos de evaluación disponibles."
+      no_available: "No hay modelos de evaluación disponibles."
       no_canvas_support: "[Tu navegador web no tiene soporte de canvas]"
-      no_documentation: "No hay documentación disponible para este método de evaluación."
-      no_representation: "No hay datos de representación disponibles para este método de evaluación."
+      no_documentation: "No hay documentación disponible para este modelo de evaluación."
+      no_representation: "No hay datos de representación disponibles para este modelo de evaluación."
     name:
-      one: "Método de Evaluación"
-      plural: "Métodos de Evaluación"
+      one: "Modelo de Evaluación"
+      plural: "Modelos de Evaluación"
       short:
-        one: "Método"
-        plural: "Métodos"
+        one: "Modelo"
+        plural: "Modelos"
     metadata:
       item1:
         name: "Completitud"
@@ -875,7 +875,7 @@ es:
   metrics:
     message:
       error:
-        one_evmethod_at_least: "Una métrica debe tener por lo menos un método de evaluación."
+        one_evmethod_at_least: "Una métrica debe tener por lo menos un modelo de evaluación."
     name:
       one: "Métrica"
       plural: "Métricas"
@@ -920,7 +920,7 @@ es:
       action_params:
         title: "Especificar parámetros de la acción"
         oa: "Objeto de Aprendizaje especifico"
-        evmethod: "Método de evaluación especifico"
+        evmethod: "Modelo de evaluación especifico"
     link:
       title: "Enlace del Token de Sesión"
     name:

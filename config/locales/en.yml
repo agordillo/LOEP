@@ -184,7 +184,7 @@ en:
       mark_as_completed: "Are you sure you want to mark as completed this assignment?"
     message:
       error:
-        at_least_one_evmethod: "You must select at least one evaluation method to create an assignment."
+        at_least_one_evmethod: "You must select at least one evaluation model to create an assignment."
         at_least_one_lo: "You must select at least one Learning Object to create an assignment."
         at_least_one_reviewer: "You must select at least one Reviewer to create an assignment."
         automatic_generic: "An error ocurred in the automatic assignments generation"
@@ -195,7 +195,7 @@ en:
         create: "Assignments were successfully created."
         update: "Assignment was successfully updated."
       warning:
-        duplicated: "Some assignments haven't been created because there are assignments already created with the same Learning Object, Evaluation Method and Reviewer."
+        duplicated: "Some assignments haven't been created because there are assignments already created with the same Learning Object, Evaluation Model and Reviewer."
     name:
       all: "All Assignments"
       his:
@@ -332,16 +332,16 @@ en:
       subsection_title: "Evaluation"
     message:
       error:
-        automatic: "The Learning Object couldn't be automatically evaluated using the evaluation method: %{evmethod}"
+        automatic: "The Learning Object couldn't be automatically evaluated using the evaluation model: %{evmethod}"
         duplicated: "The evaluation hasn't been created because this user had already evaluated the Learning Object."
-        external_evaluations_disabled: "Error: This evaluation method does not allow external evaluations."
+        external_evaluations_disabled: "Error: This evaluation model does not allow external evaluations."
         generic_create: "An error occurred and the evaluation could not be created. Check all the fields and try again."
         generic_update: "Evaluation cannot be updated. Wrong params."
         overall_score: "The proposed overall score is not valid. Please, check it."
         uc_age: "The specified age is not valid. Please, check it."
       no_evaluations: "You haven't evaluated any Learning Object yet.</p><p> When you evaluate one, the evaluation will appear in this panel."
       success:
-        automatic: "The Learning Object has been automatically evaluated using the evaluation method: %{evmethod}"
+        automatic: "The Learning Object has been automatically evaluated using the evaluation model: %{evmethod}"
         create: "The evaluation was successfully submitted."
         update: "The evaluation was successfully updated."
     name:
@@ -368,7 +368,7 @@ en:
         name: "Overall Score"
         description: "Optionally, you may propose an overall score between 0.0 and 10.0 for this Learning Object."
     form:
-      available: "Available Evaluation Methods"
+      available: "Available Evaluation Models"
       documentation: "%{evmethod} documentation"
     interactions:
       item1:
@@ -573,16 +573,16 @@ en:
         name: "Standards Compliance"
         description: "Adherence to international standards and specifications"
     message:
-      no_available: "There are no available evaluation methods."
+      no_available: "There are no available evaluation models."
       no_canvas_support: "[Your web browser has not canvas support]"
-      no_documentation: "There is no documentation available for this evaluation method."
-      no_representation: "There is no representation data available for this evaluation method."
+      no_documentation: "There is no documentation available for this evaluation model."
+      no_representation: "There is no representation data available for this evaluation model."
     name:
-      one: "Evaluation Method"
-      plural: "Evaluation Methods"
+      one: "Evaluation Model"
+      plural: "Evaluation Models"
       short:
-        one: "Method"
-        plural: "Methods"
+        one: "Model"
+        plural: "Models"
     metadata:
       item1:
         name: "Completeness"
@@ -887,7 +887,7 @@ en:
   metrics:
     message:
       error:
-        one_evmethod_at_least: "A metric should have at least one evaluation method."
+        one_evmethod_at_least: "A metric should have at least one evaluation model."
     name:
       one: "Metric"
       plural: "Metrics"
@@ -932,7 +932,7 @@ en:
       action_params:
         title: "Specify action parameters"
         oa: "Specific Learning Object"
-        evmethod: "Specific Evaluation Method"
+        evmethod: "Specific Evaluation Model"
     link:
       title: "Session Token Link"
     name:

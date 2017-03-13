@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-#Generic Arithmetic Mean Metric for metrics that use several evaluation methods
-#The aim of this class is to facilitate the creation of specific Arithmetic Mean Metrics for metrics that use several evaluation methods
+#Generic Arithmetic Mean Metric for metrics that use multiple evaluation models
+#The aim of this class is to facilitate the creation of specific Arithmetic Mean Metrics that use multiple evaluation models
 
 class Metrics::AM < Metric
   #this is for Metrics with type=AM

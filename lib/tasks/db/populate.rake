@@ -22,7 +22,7 @@ namespace :db do
 				Rake::Task["db:reset"].invoke
 			end
 
-			#Create Roles, Languages, Evaluation Methods, Metrics and Scores
+			#Create Roles, Languages, Evaluation Models, Metrics and Scores
 			Rake::Task["db:populate:components"].invoke
 
 			#Create users
@@ -156,7 +156,7 @@ namespace :db do
 			desc 'Populate database for production'
 			puts "Populating database for production"
 
-			#Create Roles, Languages, Evaluation Methods, Metrics and Scores
+			#Create Roles, Languages, Evaluation Models, Metrics and Scores
 			Rake::Task["db:populate:components"].invoke
 
 			#Create users
@@ -173,7 +173,7 @@ namespace :db do
 			#Apply new migrations
 			Rake::Task["db:migrate"].invoke
 
-			#Create new Roles, Languages, Evaluation Methods, Metrics and update scores
+			#Create new Roles, Languages, Evaluation Models, Metrics and update scores
 			Rake::Task["db:populate:components"].invoke
 
 			puts "Upgrade finished"
@@ -235,9 +235,9 @@ namespace :db do
 		end
 
 		task :evmethods => :environment do
-			desc "Create Evaluation Methods"
+			desc "Create Evaluation Models"
 			
-			#Create the evaluation methods in the database if they are not created
+			#Create the evaluation models in the database if they are not created
 			LOEP_VANILLA_EvMethods = [
 				{name:"LORI v1.5", module_name:"Evaluations::Lori", multiple:false, automatic: false},
 				{name:"LOEM", module_name:"Evaluations::Loem", multiple:false, automatic: false},
@@ -254,7 +254,7 @@ namespace :db do
 				ev = Evmethod.find_by_name(evmethod[:name])
 				if ev.nil?
 					#Create ev method
-					puts "Creating new evaluation method: " + evmethod[:name]
+					puts "Creating new evaluation model: " + evmethod[:name]
 					ev = Evmethod.new
 					ev.name = evmethod[:name]
 					ev.module = evmethod[:module_name]
@@ -265,7 +265,7 @@ namespace :db do
 				end
 			end
 
-			#Create scores for the new evaluation methods (only possible for automatic evmethods)
+			#Create scores for the new evaluation models (only possible for automatic evaluation models)
 			Rake::Task["db:populate:scores"].reenable
 			Rake::Task["db:populate:scores"].invoke([],addedEvmethods.map{|m| m.name}.join(","))
 		end

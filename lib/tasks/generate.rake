@@ -20,7 +20,7 @@ namespace :generate do
   # bundle exec rake generate:evmethod["methodName","multiple","automatic","moduleName"] RAILS_ENV=production
   # For instance: bundle exec rake generate:evmethod["LORI v1.5","false","false","Lori"]
   task :evmethod, [:name,:multiple,:automatic,:module_name] => :environment do |t, args|
-    puts "Generating new evaluation method"
+    puts "Generating new evaluation model"
 
     abort("Task aborted. Invalid Sintax for task 'bundle exec rake generate:evmethod[\"methodName\",\"multiple\",\"automatic\",\"moduleName\"]'") if args[:name].blank?
 
@@ -42,7 +42,7 @@ namespace :generate do
     automatic = (args[:automatic]=="true")
 
     ev = Evmethod.where(:module => moduleName).first
-    abort("Task aborted. An evaluation method with module '" + moduleName + "' already exists.") unless ev.nil?
+    abort("Task aborted. An evaluation model with module '" + moduleName + "' already exists.") unless ev.nil?
 
     #Create the new ev method
     ev = Evmethod.new
@@ -77,7 +77,7 @@ namespace :generate do
         puts("The controller was created in " + controllerFilePath)
       end
       
-      puts "The evaluation method was succesfully generated"
+      puts "The evaluation model was succesfully generated"
       puts ev.to_json
     else
       puts "Some error has ocurred:"

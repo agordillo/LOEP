@@ -371,7 +371,7 @@ class Evaluation < ActiveRecord::Base
     Evmethod.find_by_module(self.name).representationDataForComparingLos(los)
   end
 
-  #Create automatic evaluations (only for automatic evaluation methods)
+  #Create automatic evaluations (only for automatic evaluation models)
   def self.createAutomaticEvaluation(lo)
     evaluation = self.where(:lo_id => lo.id).first
     if evaluation.nil?
@@ -394,7 +394,7 @@ class Evaluation < ActiveRecord::Base
     return if self.automatic? or self.external
 
     # Look for the related assignment of this evaluation
-    # It should be a pending assignment of the user with the same Lo and the same evaluation method
+    # It should be a pending assignment of the user with the same Lo and the same evaluation model
     assignment = self.user.assignments.where(:status => "Pending", :lo_id=>self.lo.id, :evmethod_id=>self.evmethod.id).first
 
     unless assignment.nil?
