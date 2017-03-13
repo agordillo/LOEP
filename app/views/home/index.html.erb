@@ -1,6 +1,6 @@
 <div id="home_header">
   <h1><%=t("frontpage.welcome")%></h1>
-  <p><%=t("frontpage.description")%></p>
+  <p><%=t("frontpage.description").html_safe%></p>
 </div>
 
 <% roleName = current_user.role_name %>

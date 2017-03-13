@@ -724,7 +724,7 @@ es:
           b: "preguntas que no han sido rellenadas."
   frontpage:
     welcome: "Bienvenido a LOEP, la Plataforma de Evaluación de Objetos de Aprendizaje"
-    description: "Esta plataforma tiene como objetivo proporcionar a profesores y docentes un conjunto de herramientas para facilitar la evaluación de recursos educativos web pequeños y autocontenidos, conocidos como Objetos de Aprendizaje (OAs) en español o Learning Objects (LOs) en inglés. LOEP proporciona funcionalidades de gestión de usuarios y Objetos de Aprendizaje, asignaciones de revisiones, un conjunto de herramientas de evaluación (formularios en formato web y descargables, mecanismos de revisión por pares, ...) para evaluar Objetos de Aprendizaje conforme a varios modelos de evaluación formales, y material de formación para revisores y educadores."
+    description: "LOEP es una plataforma de código abierto que tiene como objetivo facilitar la evaluación en diferentes escenarios de recursos educativos web pequeños y autocontenidos, conocidos como Objetos de Aprendizaje (OAs) en español o Learning Objects (LOs) en inglés. La plataforma ha sido diseñada para proveer de evaluación sistemática de Objetos de Aprendizaje y generación de puntuaciones de calidad a sistemas de e&#8209;Learning de acuerdo a múltiples modelos de evaluación y métricas de calidad. LOEP proporciona diversas funcionalidades incluyendo gestión de usuarios y Objetos de Aprendizaje, herramientas de evaluación de Objetos de Aprendizaje, asignaciones de revisión, interoperabilidad con sistemas de e&#8209;Learning, y generación de estadísticas."
     new_to_loep: "¿Nuevo en LOEP?"
   helpers:
     submit:
@@ -733,7 +733,7 @@ es:
   icodes:
     actions:
       create: "Generar Invitación"
-    imessage: "Hola, has recibido una invitación para unirte a la plataforma LOEP (%{loepURL}). Esta plataforma tiene como objetivo proporcionar a profesores y docentes un conjunto de herramientas para facilitar la evaluación de recursos educativos. \nPara unirte solo tienes que registrarte en la plataforma mediante este enlace: %{iURL}. Automáticamente se te asignará el siguiente rol: %{rolName}. \n\nMuchas gracias por tu atención."
+    imessage: "Hola, has recibido una invitación para unirte a la plataforma LOEP (%{loepURL}). LOEP es una plataforma de código abierto que tiene como objetivo facilitar la evaluación en diferentes escenarios de recursos educativos web pequeños y autocontenidos, conocidos como Objetos de Aprendizaje. \nPara unirte solo tienes que registrarte en la plataforma mediante este enlace: %{iURL}. Automáticamente se te asignará el siguiente rol: %{rolName}. \n\nMuchas gracias por tu atención."
     imessage_title: "Mensaje de Invitación"
     iurl: "URL de la Invitación"
     mail:

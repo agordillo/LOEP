@@ -1,6 +1,6 @@
 # LOEP (Learning Object Evaluation Platform)
 
-LOEP is an open source web platform developed using Ruby on Rails that aims to facilitate the evaluation of small and self-contained web educational resources, known as Learning Objects, in different scenarios and educational settings by providing a set of tools and technologies and supporting and integrating several evaluation models and quality metrics.  
+LOEP is an open source web-based platform developed using Ruby on Rails that aims to facilitate the evaluation of small and self-contained web educational resources, known as Learning Objects, in different scenarios and educational contexts. It has been designed to provide systematic evaluation of Learning Objects and generation of quality scores to e-Learning systems according to multiple evaluation models and quality metrics. LOEP provides several features including user and Learning Object management, Learning Object evaluations tools, review assignments, interoperability with e-Learning systems, and statistics.
 
 LOEP can provide Learning Object evaluation to e-Learning systems in an open, low cost, reliable and effective way.
 Repositories of educational resources can use LOEP to implement quality control policies and to enhance search services and recommender systems. 
@@ -16,9 +16,9 @@ The last releases can be seen [here](https://github.com/agordillo/LOEP/releases)
   * Reviewer
   * Regular User
 * User Interface
-  * For admins: administration of the platform
-  * For reviewers: access to evaluation tools and materials
-  * For third-party e-Learning systems. LOEP provide evaluation forms that can be integrated in the external e-Learning systems.  
+  * For admins: administration of the platform.
+  * For reviewers: access to evaluation tools and training materials.
+  * For third-party e-Learning systems. LOEP provide evaluation forms that can be integrated in the external e-Learning systems. 
 * Learning Object management
   * Registration and edition
   * Ranking
@@ -33,26 +33,29 @@ The last releases can be seen [here](https://github.com/agordillo/LOEP/releases)
 * Support of several Learning Object evaluation models (as well as general purpose evaluation models)
   * LORI (Learning Object Review Instrument)
   * LOEM (Learning Object Evaluation Metric)
+  * SUS (System Usability Scale)
   * WBLT-S (WBLT Evaluation Scale for Students)
   * WBLT-T (WBLT Evaluation Scale for Teachers)
   * Metadata Quality evaluation model (automatic)
-  * SUS (System Usability Scale)
+  * Interaction Quality evaluation model (automatic)
 * Support for automatic evaluation models and human reviews
 * Support of several Learning Object quality metrics (as well as general purpose quality metrics)
   * AM (Arithmetic Mean) Metric for all evaluation models
   * WAM (Weighted Arithmetic Mean) Metric for all evaluation models
   * Additional metrics for LORI: Pedagogical, Technical, Orthogonal, Logarithmic, Square Root, ...
-  * Metadata Quality metrics: Overall metadata quality, Completeness, Coherence, Conformance, Consistency and Findability.
   * SUS (System Usability Scale) score
+  * Metadata Quality metrics: Overall metadata quality, Completeness, Coherence, Conformance, Consistency and Findability.
+  * Interaction Quality metric
 * Support for defining and adding new evaluation models
 * Support for defining and adding new quality metrics
 * Evaluation reports, scores, statistics and graphs
 * Evaluations and reports can be exported to excel files
 * Learning Object Quality comparison and aggregated statistics
 * API for connecting LOEP with e-Learning systems:
-  * Learning Object API: allows to register and update Learning Objects.
-  * Notifications: allows the e-Learning system to be notified of updates in the Learning Objects (new evaluations, updates of quality scores, etc).
-* The same LOEP instance can be used to provide evaluation services to several e-Learning systems (with some constraints).
+  * Learning Object API: allows to register, update and delete Learning Objects.
+  * LOEP Callback API: allows the e-Learning systems to be notified of updates on the Learning Objects (new evaluations, updates of quality scores, ...).
+  * LOEP Session Token API: allows third-party applications to generate session tokens that can be later used for different actions such as embedding evaluation web forms and showing results of evaluations through charts.
+* The same LOEP instance can be used to provide systematic evaluation to several e-Learning systems (with some constraints).
 
 # Requirements:  
 
@@ -85,11 +88,10 @@ Visit our [wiki](http://github.com/agordillo/LOEP/wiki) to see all the available
 
 # Copyright
 
-Copyright 2016 Aldo Gordillo Méndez
+Copyright 2017 Aldo Gordillo Méndez
 
 LOEP is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 LOEP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License along with LOEP. If not, see [http://www.gnu.org/licenses](http://www.gnu.org/licenses).
-
