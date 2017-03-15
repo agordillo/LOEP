@@ -22,30 +22,44 @@ even_row_style = wb.styles.add_style :bg_color => "FFF",
 
 wb.add_worksheet(:name => @resourceName) do |sheet|
 
-	if @resources.length < 1
-		return
-	end
-
-	rowContents = [];
-	rowContents[0] = @resources.first.extended_attributes.keys
-	headerIndexs = [0]
+	return if @resources.length < 1
 
 	resourceType = @resources.first[:type]
 	useType = !resourceType.nil?
 	offset = 0
 
+	rowContents = [];
+	if useType
+		rowContents[0] = @resources.first.xlsx_attributes.keys
+	else
+		#Get common keys
+		commonKeys = @resources.first.xlsx_attributes.keys
+		@resources.each do |r|
+			commonKeys = commonKeys & r.xlsx_attributes.keys
+		end
+		rowContents[0] = commonKeys
+	end
+	headerIndexs = [0]
+
 	@resources.each_with_index do |resource,index|
+		attrs = resource.xlsx_attributes
 		if useType
 			if resource[:type] != resourceType
 				resourceType = resource[:type]
 				rowContents[index+1+offset] = []
 				offset = offset+1
-				rowContents[index+1+offset] = resource.extended_attributes.keys
+				rowContents[index+1+offset] = attrs.keys
 				headerIndexs.push(index+1+offset)
 				offset = offset+1
 			end
+		else
+			#Remove non common keys
+			(attrs.keys - commonKeys).each do |key|
+				attrs.delete(key)
+			end
 		end
-		rowContents[index+1+offset] = resource.extended_attributes.values
+
+		rowContents[index+1+offset] = attrs.values
 	end
 
 	rowContents.each_with_index do |rowContent,index|

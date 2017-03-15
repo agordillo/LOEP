@@ -29,8 +29,8 @@
         <div class="rs_loslistelement_right">
           <p>&nbsp;</p>
           <p>&nbsp;</p>
-          <p>Average Ranking: <%=array["avgranking"]%></p>
-          <p>Average Score: <%=array["avgscore"]%></p>
+          <p>Average Ranking: <%=array["avgranking"].round(2) unless array["avgranking"].blank?%></p>
+          <p>Average Score: <%=array["avgscore"].round(2) unless array["avgscore"].blank?%></p>
         </div>
       </div>
       </li>

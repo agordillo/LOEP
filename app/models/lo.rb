@@ -187,11 +187,11 @@ class Lo < ActiveRecord::Base
   # Get extended LO Data
   #######################
 
-  def extended_attributes
+  def extended_attributes(xlsx_attributes=false)
     attrs = self.attributes
     attrs["tag_list"] = self.tag_list.to_s
     attrs["lanCode"] = self.language.code
-    attrs["interactions"] = self.lo_interaction.extended_attributes unless self.lo_interaction.nil?
+    attrs["interactions"] = self.lo_interaction.extended_attributes unless self.lo_interaction.nil? or xlsx_attributes
 
     attrs["created_at"] = Utils.getReadableDate(attrs["created_at"])
     attrs["updated_at"] = Utils.getReadableDate(attrs["updated_at"])
@@ -214,36 +214,39 @@ class Lo < ActiveRecord::Base
       evMethodFullValidEvaluations = Evaluation.getValidEvaluationsForItems(evMethodEvaluations,mandatoryItemsArray)
       attrs["Completed Evaluations with " + evmethod.name] = evMethodFullValidEvaluations.length
 
-      unless evData.blank? or evData[evmethod.name].blank?
-        #Numeric Items
-        evDataItems = []
-        evDataItems = evData[evmethod.name][:items] unless evData[evmethod.name][:items].blank?
-        itemsArray.each_with_index do |itemName,index|
-          attrKey = evmethod.name + " " + itemName.to_s
-          unless evDataItems[index].blank?
-            attrs[attrKey] = evDataItems[index].to_f.round(2)
-          else
-            attrs[attrKey] = ""
-          end
+      evData = {} if evData.blank? 
+      evData[evmethod.name] = {} if evData[evmethod.name].blank?
+      
+      #Numeric Items
+      evDataItems = []
+      evDataItems = evData[evmethod.name][:items] unless evData[evmethod.name][:items].blank?
+      itemsArray.each_with_index do |itemName,index|
+        attrKey = evmethod.name + " " + itemName.to_s
+        unless evDataItems[index].blank?
+          attrs[attrKey] = evDataItems[index].to_f.round(2)
+        else
+          attrs[attrKey] = ""
         end
+      end
 
-        #Textual Items
-        evDataTitems = []
-        evDataTitems = evData[evmethod.name][:titems] unless evData[evmethod.name][:titems].blank?
-        tItemsArray.each do |itemName|
-          attrKey = evmethod.name + " " + itemName.to_s
-          unless evDataTitems[itemName].blank?
-            attrs[attrKey] = evDataTitems[itemName]
-          else
-            attrs[attrKey] = ""
-          end
+      #Textual Items
+      evDataTitems = {}
+      evDataTitems = evData[evmethod.name][:titems] unless evData[evmethod.name][:titems].blank?
+      tItemsArray.each do |itemName|
+        attrKey = evmethod.name + " " + itemName.to_s
+        unless evDataTitems[itemName].blank?
+          attrs[attrKey] = evDataTitems[itemName]
+        else
+          attrs[attrKey] = ""
         end
+      end
 
-        #Comments
-        unless evData[evmethod.name][:comments].blank?
-          attrCommentsKey = evmethod.name + " comments"
-          attrs[attrCommentsKey] = evData[evmethod.name][:comments]
-        end
+      #Comments
+      attrCommentsKey = evmethod.name + " comments"
+      unless evData[evmethod.name][:comments].blank?
+        attrs[attrCommentsKey] = evData[evmethod.name][:comments]
+      else
+        attrs[attrCommentsKey] = ""
       end
     end
 
@@ -258,7 +261,20 @@ class Lo < ActiveRecord::Base
       end
     end
 
-   attrs
+    attrs
+  end
+
+  def xlsx_attributes
+    attrs = self.extended_attributes(true)
+    unless self.lo_interaction.nil?
+      attrs["interactions [nsamples]"] = self.lo_interaction.nsamples unless self.lo_interaction.nsamples.blank?
+      unless self.lo_interaction.lo_interaction_fields.blank?
+        self.lo_interaction.lo_interaction_fields.map{|f| f}.each do |f|
+          attrs["interactions [" + f.name + "]"] = f.average_value.round(2)
+        end
+      end
+    end
+    attrs
   end
 
 

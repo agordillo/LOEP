@@ -27,9 +27,9 @@ wb.add_worksheet(:name => @resourceName) do |sheet|
 	end
 
 	rowContents = [];
-	rowContents[0] = @resources.first.extended_attributes.keys
+	rowContents[0] = @resources.first.xlsx_attributes.keys
 	@resources.each_with_index do |result,index|
-		rowContents[index+1] = result.extended_attributes.values
+		rowContents[index+1] = result.xlsx_attributes.values
 	end
 
 	rowContents.each_with_index do |rowContent,index|

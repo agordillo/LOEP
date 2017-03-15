@@ -48,6 +48,11 @@ class LoInteraction < ActiveRecord::Base
     attrs
   end
 
+  def xlsx_attributes
+    attrs = self.extended_attributes
+    attrs
+  end
+
 
   private
 
