@@ -16,8 +16,9 @@ class Metrics::LomMetadataItem < Metric
   end
 
   def self.getScoreForLo(lo)
-    lomMetadataJSON = lo.getMetadata({:schema => "LOMv1.0", :format => "json"})
-    return getScoreForMetadata(lomMetadataJSON,{:repository => lo.repository, :metadata_record => lo.metadata})
+    metadataRecord = Metadata.find_by_lo_id(lo.id)
+    lomMetadataJSON = metadataRecord.nil? ? {} : metadataRecord.getMetadata({:schema => "LOMv1.0", :format => "json"})
+    return getScoreForMetadata(lomMetadataJSON,{:repository => lo.repository, :metadata_record => metadataRecord})
   end
 
   def self.getScoreForMetadata(lomMetadataJSON,options={})
