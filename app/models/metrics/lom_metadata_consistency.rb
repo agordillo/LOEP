@@ -9,25 +9,32 @@
 
 class Metrics::LomMetadataConsistency < Metrics::LomMetadataItem
 
-  def self.getScoreForMetadata(metadataJSON,options={})
+  def self.getScoreForMetadata(lomMetadataJSON,options={})
     score = 0
-    return score if metadataJSON.blank?
+    return score if options[:metadata_record].blank?
+    return score if options[:metadata_record].schema != Metadata::Lom.schema
 
-    metadataFields = Metadata::Lom.metadata_fields_from_json(metadataJSON) rescue {}
+    originalMetadataJSON = options[:metadata_record].getMetadata({:schema => "original", :format => "json"})
+    return score if originalMetadataJSON.blank? or originalMetadataJSON["lom"].blank?
+    originalMetadataJSON = originalMetadataJSON["lom"]
+
+    metadataFields = Metadata::Lom.metadata_fields_from_json(lomMetadataJSON) rescue {}
+    return score if metadataFields.blank?
+
     rules = []
     weights = ruleWeights
 
     # A Rules
     # Rule 1. All included fields are defined in the LOM standard.
-    rules.push(Metadata::Lom.getElements(metadataJSON,{"lomcompliant"=>false}).length === 0)
+    rules.push(Metadata::Lom.getElements(originalMetadataJSON,{"lomcompliant"=>false}).length === 0)
     
     # B Rules
     # Rule 2. All mandatory fields are included. Mandatory fields: identifier and title.
-    rules.push(!(metadataFields["1.1.1"].blank? and metadataFields["1.1.2"].blank? and metadataFields["1.2"].blank?))
+    rules.push(!(metadataFields["1.1.1"].blank? or metadataFields["1.1.2"].blank? or metadataFields["1.2"].blank?))
 
     # C Rules
     # Rule 3. Categorical fields only contain values that belong to the LOM vocabulary.
-    rules.push(Metadata::Lom.getElements(metadataJSON,{"datatype"=>"Vocabulary","valid"=>false}).length === 0)
+    rules.push(Metadata::Lom.getElements(lomMetadataJSON,{"datatype"=>"Vocabulary","valid"=>false}).length === 0)
 
     # D Rules. Combination of values in categorical fields are consistent.
     # Rule 4. Structure and Aggregation level

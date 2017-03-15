@@ -16,11 +16,11 @@ class Metrics::LomMetadataItem < Metric
   end
 
   def self.getScoreForLo(lo)
-    metadataJSON = lo.getMetadata({:schema => "LOMv1.0", :format => "json"})
-    return getScoreForMetadata(metadataJSON,{:repository => lo.repository})
+    lomMetadataJSON = lo.getMetadata({:schema => "LOMv1.0", :format => "json"})
+    return getScoreForMetadata(lomMetadataJSON,{:repository => lo.repository, :metadata_record => lo.metadata})
   end
 
-  def self.getScoreForMetadata(metadataJSON,options={})
+  def self.getScoreForMetadata(lomMetadataJSON,options={})
     #Override me
   end
 

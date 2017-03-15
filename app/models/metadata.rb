@@ -33,7 +33,6 @@ class Metadata < ActiveRecord::Base
     begin
       metadata_content = nil
       doc = Nokogiri::HTML(open(metadata_url,:read_timeout => 10))
-      
       if Metadata::Lom.compliant?(doc)
         self.schema = Metadata::Lom.schema
         metadata_content = Metadata::Lom.getContent(doc)
@@ -41,12 +40,10 @@ class Metadata < ActiveRecord::Base
         self.schema = Metadata::Dc.schema
         metadata_content = Metadata::Dc.getContent(doc)
       else
-        return if self.schema != "Unknown" and !self.content.nil?
         self.schema = "Unknown"
         metadata_content = doc
       end
-
-      metadata_content = Hash.from_xml_with_attributes(metadata_content)
+      metadata_content = Hash.from_xml_with_attributes(metadata_content) rescue {}
       self.content = metadata_content.to_json
 
       #Translation to LOM
@@ -61,11 +58,16 @@ class Metadata < ActiveRecord::Base
         #   #Translate DC to LOM.
         # else
         # end
+        self.lom_content = nil
+      else
+        self.lom_content = nil
       end
-
     rescue
-      return if self.schema != "Unknown" and !self.content.nil?
-      populate_from_lo
+      return if !self.schema.nil? and !self.content.nil?
+      self.schema = "Unknown"
+      metadata_content = {}
+      self.content = metadata_content.to_json
+      self.lom_content = nil
     end
   end
 
@@ -133,8 +135,10 @@ class Metadata < ActiveRecord::Base
       end
     when Metadata::Dc.schema
       return Metadata::Dc.metadata_json(self)
+    when "original"
+      (JSON.parse(self.content) rescue {})
     else
-      return {}
+      {}
     end
   end
 
