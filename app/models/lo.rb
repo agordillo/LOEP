@@ -189,8 +189,9 @@ class Lo < ActiveRecord::Base
 
   def extended_attributes
     attrs = self.attributes
-    attrs["keywords"] = self.tag_list.to_s
-    attrs["language"] = self.language.translated_name
+    attrs["tag_list"] = self.tag_list.to_s
+    attrs["lanCode"] = self.language.code
+    attrs["interactions"] = self.lo_interaction.extended_attributes unless self.lo_interaction.nil?
 
     attrs["created_at"] = Utils.getReadableDate(attrs["created_at"])
     attrs["updated_at"] = Utils.getReadableDate(attrs["updated_at"])
@@ -208,18 +209,40 @@ class Lo < ActiveRecord::Base
       evMethodEvaluations = self.evaluations.where(:evmethod_id => evmethod.id)
       attrs["Evaluations with " + evmethod.name] = evMethodEvaluations.length
       itemsArray = evmethod.getEvaluationModule.getItemsArray("numeric")
+      tItemsArray = evmethod.getEvaluationModule.getItemsArray("textual")
       mandatoryItemsArray = evmethod.getEvaluationModule.getItemsArray("numeric")
       evMethodFullValidEvaluations = Evaluation.getValidEvaluationsForItems(evMethodEvaluations,mandatoryItemsArray)
       attrs["Completed Evaluations with " + evmethod.name] = evMethodFullValidEvaluations.length
 
-      evDataItems = []
-      evDataItems = evData[evmethod.name][:items] unless evData.blank? or evData[evmethod.name].blank? or evData[evmethod.name][:items].blank?
-      itemsArray.each_with_index do |itemName,index|
-        attrKey = evmethod.name + " " + itemName.to_s
-        unless evDataItems[index].blank?
-          attrs[attrKey] = evDataItems[index].to_f.round(2)
-        else
-          attrs[attrKey] = ""
+      unless evData.blank? or evData[evmethod.name].blank?
+        #Numeric Items
+        evDataItems = []
+        evDataItems = evData[evmethod.name][:items] unless evData[evmethod.name][:items].blank?
+        itemsArray.each_with_index do |itemName,index|
+          attrKey = evmethod.name + " " + itemName.to_s
+          unless evDataItems[index].blank?
+            attrs[attrKey] = evDataItems[index].to_f.round(2)
+          else
+            attrs[attrKey] = ""
+          end
+        end
+
+        #Textual Items
+        evDataTitems = []
+        evDataTitems = evData[evmethod.name][:titems] unless evData[evmethod.name][:titems].blank?
+        tItemsArray.each do |itemName|
+          attrKey = evmethod.name + " " + itemName.to_s
+          unless evDataTitems[itemName].blank?
+            attrs[attrKey] = evDataTitems[itemName]
+          else
+            attrs[attrKey] = ""
+          end
+        end
+
+        #Comments
+        unless evData[evmethod.name][:comments].blank?
+          attrCommentsKey = evmethod.name + " comments"
+          attrs[attrCommentsKey] = evData[evmethod.name][:comments]
         end
       end
     end
@@ -248,7 +271,7 @@ class Lo < ActiveRecord::Base
     evData = Hash.new
 
     if evmethods.nil?
-      loEvmethods = self.evmethods.uniq
+      loEvmethods = (self.evmethods.uniq & Evmethod.allc)
     else
       evmethods = [evmethods] unless evmethods.is_a? Array
       loEvmethods = evmethods
@@ -257,29 +280,45 @@ class Lo < ActiveRecord::Base
     loEvmethods.each do |evmethod|
       evData[evmethod.name] = Hash.new
       evData[evmethod.name][:evaluations] = self.evaluations.where(:evmethod_id => evmethod.id)
-      evData[evmethod.name][:items] = [] #itemsAverageValue
+      evData[evmethod.name][:items] = [] #Average value of numeric items
+      evData[evmethod.name][:titems] = {} #Hash with array of values of textual items
+      evData[evmethod.name][:comments] = [] #Array with comments
 
+      #Numeric Items
       items = evmethod.module.constantize.getItemsArray("numeric")
       nItems = items.length
-
       if evData[evmethod.name][:evaluations].length === 0
         nItems.times do |i|
           evData[evmethod.name][:items].push(nil)
         end
-        next
+      else
+        items.each do |itemName|
+          validEvaluations = Evaluation.getValidEvaluationsForItem(evData[evmethod.name][:evaluations],itemName)
+          if validEvaluations.length == 0
+            #Means that this item has not been evaluated in any evaluation
+            #All evaluations had leave this item in blank
+            iScore = nil
+          else
+            iScore = validEvaluations.average(itemName.to_s).to_f
+          end
+          evData[evmethod.name][:items].push(iScore)
+        end
       end
 
-      items.each do |itemName|
+      #Textual Items
+      tItems = evmethod.module.constantize.getItemsArray("textual")
+      tItems.each do |itemName|
         validEvaluations = Evaluation.getValidEvaluationsForItem(evData[evmethod.name][:evaluations],itemName)
-        if validEvaluations.length == 0
-          #Means that this item has not been evaluated in any evaluation
-          #All evaluations had leave this item in blank
-          iScore = nil
+        if validEvaluations.blank?
+          evData[evmethod.name][:titems][itemName] = []
         else
-          iScore = validEvaluations.average(itemName.to_s).to_f
+          evData[evmethod.name][:titems][itemName] = validEvaluations.map{|e| e.send(itemName)}
         end
-        evData[evmethod.name][:items].push(iScore)
       end
+
+      #Comments
+      evaluationsWithComments = Evaluation.getValidEvaluationsForItem(evData[evmethod.name][:evaluations],"comments")
+      evData[evmethod.name][:comments] = evaluationsWithComments.map{|e| e.comments} unless evaluationsWithComments.blank?
     end
 
     evData

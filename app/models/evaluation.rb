@@ -274,7 +274,11 @@ class Evaluation < ActiveRecord::Base
     query = "";
     itemNames.each_with_index do |itemName,index|
       query = query + " and " if (index!=0)
-      query = query + (itemName.to_s) + ' != -1'
+      if itemName=="comments" or itemName.start_with?("titem") or itemName.start_with?("sitem")
+        query = query + (itemName.to_s) + ' is NOT NULL and RTRIM(' + (itemName.to_s) + ') !=""'
+      else
+        query = query + (itemName.to_s) + ' != -1'
+      end
     end
     evaluations = Evaluation.where("id in (?)",evaluations.map{|ev| ev.id}) if evaluations.is_a? Array
     evaluations.where(query)
@@ -315,6 +319,10 @@ class Evaluation < ActiveRecord::Base
       itemTypes.delete("numeric")
       itemTypes += ["integer","decimal"]
     end
+    if itemTypes.include?("textual")
+      itemTypes.delete("textual")
+      itemTypes += ["string","text"]
+    end
     itemTypes.uniq
   end
 
@@ -337,8 +345,11 @@ class Evaluation < ActiveRecord::Base
     evmethodModule = self.evmethod.getEvaluationModule
     evData[evmethodName] = Hash.new
     evData[evmethodName][:evaluations] = [self]
-    evData[evmethodName][:items] = []
-    
+    evData[evmethodName][:items] = [] #Value of numeric items
+    evData[evmethodName][:titems] = {} #Hash with array of values of textual items
+    evData[evmethodName][:comments] = [] #Array with comments
+
+    #Numeric Items
     evMethodItems = evmethodModule.getItemsArray("numeric")
     validEvaluations = Evaluation.getValidEvaluationsForItem([self],evMethodItems)
 
@@ -352,6 +363,21 @@ class Evaluation < ActiveRecord::Base
         evData[evmethod.name][:items].push(iScore)
       end
     end
+
+    #Textual Items
+    evMethodItemsTitems = evmethodModule.getItemsArray("textual")
+    evMethodItemsTitems.each do |itemName|
+      validEvaluations = Evaluation.getValidEvaluationsForItem([self],itemName)
+      if validEvaluations.blank?
+        evData[evmethodName][:titems][itemName] = []
+      else
+        evData[evmethodName][:titems][itemName] = validEvaluations.map{|e| e.send(itemName)}
+      end
+    end
+
+    #Comments
+    evaluationsWithComments = Evaluation.getValidEvaluationsForItem([self],"comments")
+    evData[evmethodName][:comments] = evaluationsWithComments.map{|e| e.comments} unless evaluationsWithComments.blank?
 
     evData
   end
