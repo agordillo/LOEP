@@ -19,6 +19,104 @@ namespace :stats do
   end
 
   #Usage
+  #Development:   bundle exec rake stats:general
+  task :general, [:prepare] => :environment do |t,args|
+    args.with_defaults(:prepare => true)
+    Rake::Task["stats:prepare"].invoke if args.prepare
+    puts "General Stats"
+
+    #General vars
+    startDate = DateTime.new(2000,1,1)
+    endDate = DateTime.new(2060,1,1)
+    repositoryNames = Lo.all.map{|lo| lo.repository}.uniq
+    repositories = {}
+    
+    repositoryNames.each do |repositoryName|
+      repositories[repositoryName] = {}
+      repositories[repositoryName][:los] = Lo.where(:created_at => startDate..endDate, :repository => repositoryName)
+      repositories[repositoryName][:lo_ids] = repositories[repositoryName][:los].map{|lo| lo.id}
+
+      puts "Stats for repository " + (repositoryName || "nil")
+      repositories[repositoryName]["elos"] = {}
+      repositories[repositoryName]["evs"] = {}
+      repositories[repositoryName]["assignments"] = {}
+      repositories[repositoryName]["scores"] = {}
+      Evmethod.all.each do |evmethod|
+        evaluations = Evaluation.where("evmethod_id=" + evmethod.id.to_s + " and lo_id in (?)",repositories[repositoryName][:lo_ids])
+        repositories[repositoryName]["elos"][evmethod.name] = evaluations.map{|e| e.lo}.uniq.length
+        repositories[repositoryName]["evs"][evmethod.name] = evaluations.count
+        assignments = Assignment.where("evmethod_id=" + evmethod.id.to_s + " and lo_id in (?)",repositories[repositoryName][:lo_ids])
+        
+        repositories[repositoryName]["assignments"][evmethod.name] = {}
+        repositories[repositoryName]["assignments"][evmethod.name]["Total"] = assignments.count
+        ["Pending", "Completed", "Rejected"].each do |status|
+          repositories[repositoryName]["assignments"][evmethod.name][status] = assignments.where("status='"+status+"'").count
+        end
+      end
+      Metric.all.each do |metric|
+        scores = Score.where("metric_id=" + metric.id.to_s + " and lo_id in (?)",repositories[repositoryName][:lo_ids])
+        repositories[repositoryName]["scores"][metric.name] = scores.count
+      end
+
+      repositories[repositoryName][:los] = []
+      repositories[repositoryName][:lo_ids] = []
+    end
+
+    filePath = "reports/general_stats.xlsx"
+    prepareFile(filePath)
+
+    Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "General LOEP Stats") do |sheet|
+        rows = []
+        rows << ["LOEP General Stats by Repository"]
+        repositoryNames.each do |repositoryName|
+          rows << []
+          rows << []
+          rows << ["General Stats for Repository: " + repositoryName]
+          rows << ["Evaluated LOs"]
+          rows << ["EvMethod","Evaluated LOs"]
+          repositories[repositoryName]["elos"].each do |key,value|
+            rows << [key,value]
+          end
+
+          rows << []
+          rows << ["Evaluations"]
+          rows << ["EvMethod","Number of evaluations"]
+          repositories[repositoryName]["evs"].each do |key,value|
+            rows << [key,value]
+          end
+
+          rows << []
+          rows << ["Assignments"]
+          rows << ["EvMethod","Status","Number of assignments"]
+          repositories[repositoryName]["assignments"].each do |key,value|
+            ["Total", "Pending", "Completed", "Rejected"].each do |status|
+              rows << [key,status,value[status]]
+            end
+          end
+
+          rows << []
+          rows << ["Scores"]
+          rows << ["Metric","Number of scores"]
+          repositories[repositoryName]["scores"].each do |key,value|
+            rows << [key,value]
+          end
+        end
+
+        rows.each do |row|
+          sheet.add_row row
+        end
+      end
+
+      prepareFile(filePath)
+      p.serialize(filePath)
+
+      puts("Task Finished. Results generated at " + filePath)
+    end
+
+  end
+
+  #Usage
   #Development:   bundle exec rake stats:evaluations
   task :evaluations, [:prepare] => :environment do |t,args|
     args.with_defaults(:prepare => true)
