@@ -48,11 +48,13 @@ LOEP::Application.routes.draw do
   #Evaluations
   match '/revaluations' => 'evaluations#rindex'
   namespace :evaluations do
-    Evmethod.allc.map{|evMethod| evMethod.shortname.pluralize}.each do |evMethod|
-      evMethod = "metadatas" if evMethod=="metadata" #Metadata route fix
-      resources evMethod do
-        get 'embed', :on => :collection
-        get 'print', :on => :collection
+    if ActiveRecord::Base.connection.table_exists? "evmethods"
+      Evmethod.allc.map{|evMethod| evMethod.shortname.pluralize}.each do |evMethod|
+        evMethod = "metadatas" if evMethod=="metadata" #Metadata route fix
+        resources evMethod do
+          get 'embed', :on => :collection
+          get 'print', :on => :collection
+        end
       end
     end
   end
