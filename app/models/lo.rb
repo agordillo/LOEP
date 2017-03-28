@@ -2,7 +2,7 @@ class Lo < ActiveRecord::Base
   attr_accessible :description, :name, :repository, :id_repository, :technology, :language_id, :lotype, :url, :scope, :hasText, :hasImages, :hasVideos, :hasAudios, :hasQuizzes, :hasWebs, :hasFlashObjects, :hasApplets, :hasDocuments, :hasFlashcards, :hasVirtualTours, :hasEnrichedVideos, :tag_list, :metadata_url, :interactions
   attr_accessor :interactions
 
-  acts_as_xlsx
+  acts_as_xlsx if ActiveRecord::Base.connection.table_exists? "los"
 
   before_validation :fill_values
 
