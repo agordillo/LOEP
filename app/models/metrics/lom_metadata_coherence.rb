@@ -23,7 +23,7 @@ class Metrics::LomMetadataCoherence < Metrics::LomMetadataItem
         if i<j
           keyA = metadataTextFields.keys[i]
           keyB = metadataTextFields.keys[j]
-          score += UtilsTfidf.getSemanticDistance(metadataTextFields[keyA],metadataTextFields[keyB],options.merge({:words => "min"}))
+          score += UtilsTfidf.getSemanticSimilarity(metadataTextFields[keyA],metadataTextFields[keyB],options.merge({:words => "min"}))
         end
       end
     end

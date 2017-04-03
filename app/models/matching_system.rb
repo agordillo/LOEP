@@ -225,10 +225,10 @@ class MatchingSystem
   def self.getTagsScore(lo,reviewer)
     reviewerTags = UtilsTfidf.normalizeArray(reviewer.tags.map{|t| t.name})
     loTags = UtilsTfidf.normalizeArray(lo.tags.map{|t| t.name})
-    getSemanticDistanceForKeywords(reviewerTags,loTags)*100
+    getSemanticSimilarityForKeywords(reviewerTags,loTags)*100
   end
 
-  def self.getSemanticDistanceForKeywords(keywordsA,keywordsB)
+  def self.getSemanticSimilarityForKeywords(keywordsA,keywordsB)
     return 0 if keywordsA.blank? or keywordsB.blank?
     (2*(keywordsA & keywordsB).length)/(keywordsA.length+keywordsB.length).to_f
   end

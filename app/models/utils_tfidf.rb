@@ -30,7 +30,7 @@ class UtilsTfidf
   def self.IDF(word,options={})
     totalEntries = LOEP::Application.config.total_entries[options[:repository]]
     return 1 if totalEntries.nil? or totalEntries < 2 #disable IDF (for first LO in repository)
-    Math::log(totalEntries/(1+(LOEP::Application.config.words[options[:repository]][word] || 0 rescue 0)).to_f)
+    Math::log((2+totalEntries)/(1+(LOEP::Application.config.words[options[:repository]][word] || 0 rescue 0)).to_f)
   end
 
   # TF-IDF
@@ -48,9 +48,9 @@ class UtilsTfidf
     freeTextTFIDF
   end
 
-  #Semantic distance in a [0,1] scale.
-  #It calculates the semantic distance using the Cosine similarity measure, and the TF-IDF function to calculate the vectors.
-  def self.getSemanticDistance(textA,textB,options={})
+  #Semantic similarity in a [0,1] scale.
+  #It calculates the semantic similarity using the cosine similarity metric and the TF-IDF function
+  def self.getSemanticSimilarity(textA,textB,options={})
     return 0 if (textA.blank? or textB.blank?)
 
     #We need to limit the length of the text due to performance issues
