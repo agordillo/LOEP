@@ -8,13 +8,13 @@ class Metrics::LORIWAM2 < Metrics::WAM
     [
       BigDecimal(0.1475,4),
       BigDecimal(0.0665,4),
-      BigDecimal(0.1381,4),
-      BigDecimal(0.2424,4),
-      BigDecimal(0.0052,4),
-      BigDecimal(0.1322,4),
-      BigDecimal(0.0901,4),
-      BigDecimal(0.1090,4),
-      BigDecimal(0.069,4)
+      BigDecimal(0.1383,4),
+      BigDecimal(0.2427,4),
+      BigDecimal(0.0054,4),
+      BigDecimal(0.1324,4),
+      BigDecimal(0.0899,4),
+      BigDecimal(0.1084,4),
+      BigDecimal(0.0689,4)
     ]
   end
 
