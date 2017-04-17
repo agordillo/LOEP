@@ -8,14 +8,14 @@ LOEP::Application.configure do
     config.action_mailer.default_url_options = {:host => config.APP_CONFIG["domain"]}
     
     if loepMailConf["type"] == "SENDMAIL"
-      config.action_mailer.delivery_method = :sendmail
+      ActionMailer::Base.delivery_method = :sendmail
       ActionMailer::Base.default :from => loepMailConf["no_reply_mail"] unless loepMailConf["no_reply_mail"].blank?
       ActionMailer::Base.sendmail_settings = {
         :location => "/usr/sbin/sendmail",
         :arguments => "-i -t"
       }
     else
-      config.action_mailer.delivery_method = :smtp
+      ActionMailer::Base.delivery_method = :smtp
       if loepMailConf["gmail_credentials"].blank?
         ActionMailer::Base.default :from => loepMailConf["no_reply_mail"] unless loepMailConf["no_reply_mail"].blank?
         smtp_settings = {}
@@ -29,7 +29,7 @@ LOEP::Application.configure do
         config.action_mailer.smtp_settings = smtp_settings
       else
         #Use gmail Credentials
-        config.action_mailer.smtp_settings = {
+        smtp_settings = {
           :address => "smtp.gmail.com",
           :port => 587,
           :domain => "gmail.com",
@@ -39,6 +39,7 @@ LOEP::Application.configure do
           :enable_starttls_auto => true
         }
       end
+      ActionMailer::Base.smtp_settings = smtp_settings
     end
   end
 end
