@@ -35,32 +35,6 @@ namespace :fixes do
 		end
 	end
 
-	task :fixViSHLOs => :environment do |t, args|
-		puts "Fixing ViSH Learning Objects"
-		puts "Fix repository id field"
-
-		Lo.where(:repository=>"ViSH").each do |lo|
-			unless lo.url.nil?
-				id = lo.url.split("/").pop
-				idRepository = "Excursion:" + id
-				lo.update_column :id_repository, idRepository
-			end
-		end
-	end
-
-	task :updateViSHLOsMetadata => :environment do |t, args|
-		puts "Updating metadata of ViSH Learning Objects"
-
-		Lo.where(:repository=>["ViSH","EducaInternet"]).each do |lo|
-			unless lo.url.nil?
-				if lo.metadata_url.blank?
-					lo.update_column :metadata_url, lo.url + "/metadata.xml"
-				end
-				lo.update_metadata
-			end
-		end
-	end
-
 	task :updateLOsFromMetadata => :environment do |t, args|
 		puts "Updating LOs from Metadata"
 		Metadata.all.each do |m|
@@ -85,24 +59,4 @@ namespace :fixes do
 	def metadataFieldNormalizeText(str)
 		str.gsub(/([\n|\r])/,"") if str.is_a? String
 	end
-
-	task :rolesValue => :environment do
-		roles = [
-			{name:"SuperAdmin", value:9},
-			{name:"Admin", value:8},
-			{name:"Reviewer", value:2},
-			{name:"User", value:1}
-		]
-		roles.each do |role|
-			r = Role.find_by_name(role[:name])
-			unless r.nil?
-				puts "Updating role: " + role[:name]
-				r.value = role[:value]
-				r.save!
-			end
-		end
-	end
-
 end
-
- 

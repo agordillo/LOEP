@@ -70,14 +70,6 @@
 						<% end %>
 					</ul>
 				</li>
-				<%if LOEP::Application.config.show_surveys %>
-					<li class="<%='menu_option_selected' if params[:controller] == 'surveys'%>">
-						<a href="/surveys"><h3><span class="glyphicon glyphicon-list-alt"></span><%=t("menu.surveys")%></h3></a>
-					</li>
-				<% end %>
-<!-- 				<li>
-	      	<a title="Settings" href="%=edit_user_registration_path(current_user)%>"><h3><span class="glyphicon glyphicon-wrench"></span><%=t("menu.settings")%></h3></a>
-	      </li> -->
 	      <li>
 	      	<a title="<%=t("login.sign_out")%>" href="/users/sign_out" data-method="delete" rel="nofollow"><h3><span class="glyphicon glyphicon-log-out"></span><%=t("login.sign_out")%></h3></a>
 	      </li>

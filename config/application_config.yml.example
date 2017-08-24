@@ -24,7 +24,6 @@ development:
   # recaptcha:
   #   public_key: ""
   #   private_key: ""
-  surveys: "false"
   evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T","Metadata Quality"]
   metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean","LOM Metadata Quality","LOM Completeness Metadata Quality"]
   allow_external_evaluations: ["WBLT-S","WBLT-T"]
@@ -42,7 +41,6 @@ production:
   # recaptcha:
   #   public_key: ""
   #   private_key: ""
-  surveys: "false"
   evmethods: ["LORI v1.5","LOEM","WBLT-S","WBLT-T","Metadata Quality"]
   metrics: ["LORI Arithmetic Mean","LORI WAM CW","LOEM Arithmetic Mean","WBLT-S Arithmetic Mean","WBLT-T Arithmetic Mean","LOM Metadata Quality","LOM Completeness Metadata Quality"]
   allow_external_evaluations: ["WBLT-S","WBLT-T"]

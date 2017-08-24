@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160503165016) do
+ActiveRecord::Schema.define(:version => 20170824102602) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -289,22 +289,6 @@ ActiveRecord::Schema.define(:version => 20160503165016) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "lorics", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "item1"
-    t.integer  "item2"
-    t.integer  "item3"
-    t.integer  "item4"
-    t.integer  "item5"
-    t.integer  "item6"
-    t.integer  "item7"
-    t.integer  "item8"
-    t.integer  "item9"
-    t.text     "comments"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "los", :force => true do |t|
     t.text     "url",               :limit => 16777215
     t.string   "name"
@@ -410,12 +394,6 @@ ActiveRecord::Schema.define(:version => 20160503165016) do
     t.string   "key"
     t.text     "value"
     t.string   "repository"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "survey_ranking_as", :force => true do |t|
-    t.text     "results"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

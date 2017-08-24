@@ -278,7 +278,6 @@ namespace :db do
 				{name:"LORI Arithmetic Mean", module_name:"Metrics::LORIAM", evmethods:["LORI v1.5"]},
 				{name:"LORI WAM CW", module_name:"Metrics::LORIWAM1", evmethods:["LORI v1.5"]},
 				{name:"LORI WAM IW", module_name:"Metrics::LORIWAM2", evmethods:["LORI v1.5"]},
-				{name:"LORI WAM CCW", module_name:"Metrics::LORIWAM3", evmethods:["LORI v1.5"]},
 				{name:"LORI Pedagogical WAM", module_name:"Metrics::LORIPWAM", evmethods:["LORI v1.5"]},
 				{name:"LORI Technological WAM", module_name:"Metrics::LORITWAM", evmethods:["LORI v1.5"]},
 				{name:"LORI Orthogonal", module_name:"Metrics::LORIORT", evmethods:["LORI v1.5"]},

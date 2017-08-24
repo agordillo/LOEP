@@ -882,7 +882,6 @@ en:
     learning_objects: "Learning Objects"
     main: "Main Menu"
     settings: "Settings"
-    surveys: "Surveys"
     users: "Users"
   metrics:
     message:
@@ -956,14 +955,6 @@ en:
     period: "Period of validity (hours)"
   settings:
     title: "Settings"
-  surveys:
-    fill: "Fill Survey"
-    lori_15_items:
-      title: "LORI v1.5 Items Rating Survey"
-      description: "The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, the LORI WAM CW Metric is defined and their scores are calculated."
-      detailed_description: "The following survey is intended to evaluate the importance of the different LORI v1.5 items. Based on the results of this survey, the LORI WAM CW Metric is defined and their scores are calculated.</p><p>For each of the items, rate the importance that it has for you regarding pedagogical quality in a scale from 0 to 10, being 0 valueless and 10 extremely valuable."
-    submit: "Submit Survey"
-    title: "Available Surveys"
   tables:
     paginate:
       sFirst: "First"

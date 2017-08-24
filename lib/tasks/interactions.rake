@@ -56,5 +56,3 @@ namespace :interactions do
   end
 
 end
-
- 

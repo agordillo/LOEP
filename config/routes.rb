@@ -71,20 +71,12 @@ LOEP::Application.routes.draw do
   match "/session_tokens/:id/link" => 'session_tokens#show_link'
   resources :session_tokens
   
-  #Surveys
-  match '/surveys/completed' => 'surveys#completed'
-  namespace :surveys do
-    resources :lorics
-    resources :survey_ranking_as
-  end
-
   #Contact
   match '/contact' => 'contact#new', via: [:get]
   match '/contact_send' => 'contact#send_mail', via: [:post]
 
   #Web Services
   match '/tags' => 'application#serve_tags'
-  match '/surveys' => 'surveys#index'
   match '/generateToken' => 'application#generateToken'
   match '/lom_validator' => 'lom_validator#index', via: [:get]
   match '/lom_validator/validate' => 'lom_validator#validate', via: [:post]
@@ -101,10 +93,6 @@ LOEP::Application.routes.draw do
       resources :los
     end
   end
-
-  #Special pages used for research
-  match '/custom' => 'customSearch#index'
-  match '/slidesetsstats' => 'application#slidesetsstats', via: [:get]
 
   #Wildcard route (This rule should be placed the last)
   match '*path' => 'application#page_not_found'

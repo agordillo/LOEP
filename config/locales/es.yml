@@ -869,7 +869,6 @@ es:
     home: "Inicio"
     learning_objects: "Objetos de Aprendizaje"
     main: "Menú Principal"
-    surveys: "Encuestas"
     settings: "Ajustes"
     users: "Usuarios"
   metrics:
@@ -944,14 +943,6 @@ es:
     period: "Periodo de validez (horas)"
   settings:
     title: "Ajustes"
-  surveys:
-    fill: "Rellenar Encuesta"
-    lori_15_items:
-      title: "Encuesta de valoración de los Items de LORI v1.5"
-      description: "El siguiente formulario pretende evaluar la importancia de los diferentes Items de LORI v1.5. En base a los resultados de esta encuesta, la métrica 'LORI WAM CW' es definida y sus puntuaciones son calculadas."
-      detailed_description: "El siguiente formulario pretende evaluar la importancia de los diferentes elementos o Items de LORI v1.5. En base a los resultados de esta encuesta, la métrica 'LORI WAM CW' es definida y sus puntuaciones son calculadas.</p><p>Para cada uno de los elementos, valore la importancia y valor que tiene para usted en relación a la calidad pedagógica en una escala de 0 a 10, siendo 0 sin valor y 10 extremadamente valioso."
-    submit: "Enviar Encuesta"
-    title: "Encuestas Disponibles"
   tables:
     paginate:
       sFirst: "Primero"

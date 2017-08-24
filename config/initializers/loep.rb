@@ -43,7 +43,4 @@ LOEP::Application.configure do
     #Get all repositories (nil means all repositories)
     config.repositories = (Lo.all.map{|lo| lo.repository} + [nil]).uniq
   end
-
-  #UI
-  config.show_surveys = (config.APP_CONFIG['surveys']=="true")
 end
