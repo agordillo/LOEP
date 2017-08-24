@@ -117,6 +117,8 @@
 
 <% if ajax %>
   <script type="text/javascript">
+    var errorMessage;
+
     $(document).ajaxSuccess( function(event,data){
       //Ajax Success
       _showLOEPDialog('<%=t("evaluations.message.success.create")%>', false, function(result){
@@ -125,14 +127,14 @@
     });
     $(document).ajaxError( function(event,data){
       //Ajax Error
-      var errorMessage;
+      errorMessage = "";
       if((typeof data == "object")&&(typeof data.responseJSON == "object")&&(data.responseJSON["base"] instanceof Array)&&(typeof data.responseJSON["base"][0] == "string")){
         errorMessage = data.responseJSON["base"][0];
       } else {
         errorMessage = '<%=t("evaluations.message.error.generic_create")%>';
       }
       _showLOEPDialog(errorMessage, false, function(result){
-          _sendLOEPMessage({"type":"LOEPMessage", "success": false});
+          _sendLOEPMessage({"type":"LOEPMessage", "success": false, "msg": errorMessage});
       });
     });
 

@@ -5,6 +5,7 @@
   <%= form_for(@evaluation, remote: ajax, :html => {:'data-type' => (ajax ? "json" : "html")}) do |f| %>
     <% if @embed %>
       <%= hidden_field_tag "embed", true, class: "skipValidation" %>
+      <%= hidden_field_tag "locale", I18n.locale.to_s, class: "skipValidation" %>
       <%= hidden_field_tag "session_token", @sessionToken.auth_token, class: "skipValidation" %>
       <%= hidden_field_tag "app_id", @app.id, class: "skipValidation" %>
       <% unless @evaluation.id_user_app.blank? %>
@@ -39,7 +40,7 @@
     <% end %>
 
     <p class="form_before_button">&nbsp;</p>
-    <%= f.submit "#{submitButtonText}", :class => 'loep_button' unless readonly %>
+    <%= f.submit "#{submitButtonText}", :disable_with => "#{submitButtonText}", :class => 'loep_button' unless readonly %>
   <% end %>
 </div>
 
