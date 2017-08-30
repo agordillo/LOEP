@@ -7,7 +7,7 @@ class Lo < ActiveRecord::Base
   before_validation :fill_values
 
   validates :url, :presence => true, :uniqueness => { :case_sensitive => false }
-  validates :name, :presence => true, :length => { :in => 3..255 }
+  validates :name, :presence => true, :length => { :in => 1..255 }
   validates :language_id, :presence => { :message => I18n.t("dictionary.errors.unspecified") }
   validates :language_id, :exclusion => { :in => [-1], :message => I18n.t("dictionary.errors.unspecified")}
   validates :lotype, :presence => true
