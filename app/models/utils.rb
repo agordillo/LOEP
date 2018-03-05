@@ -2,6 +2,12 @@
 
 class Utils
 
+  def self.getEvMethods
+    Evmethod.allc.reject{|evmethod| evmethod.automatic?}.map { |evmethod| [evmethod.name,evmethod.id] }
+  end
+
+
+  #Options for selects
   def self.getOptionsForSelectLan(resource,options=nil)
     addUnespecified = false
     addLIndependent = false
@@ -46,12 +52,18 @@ class Utils
     languages
   end
 
-  def self.getEvMethods
-    Evmethod.allc.reject{|evmethod| evmethod.automatic?}.map { |evmethod| [evmethod.name,evmethod.id] }
-  end
-
   def self.getOptionsForSelectAssignmentStatus
     [[I18n.t("assignments.status.pending"),"Pending"],[I18n.t("assignments.status.completed"),"Completed"],[I18n.t("assignments.status.rejected"),"Rejected"]]
+  end
+
+  def self.getOptionsForSelectLOApp(lo,options=nil)
+    if options[:current_user] and (lo.new_record? or options[:current_user].id == lo.owner_id) 
+      ((options[:current_user].apps.map{ |app|
+        [app.name,app.id]
+      }) << ["",""]).reverse
+    else
+      []
+    end
   end
 
   def self.getOptionsForSelectLOScope
@@ -80,7 +92,6 @@ class Utils
     end
     roles.map{|r| [r.readable,r.id] }
   end
-
 
 
   #Dates
@@ -149,6 +160,7 @@ class Utils
     end
     composedQuery
   end
+
 
   #More Utils
 

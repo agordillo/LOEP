@@ -22,6 +22,18 @@ class SessionTokensController < ApplicationController
       @los = Lo.all
     end
 
+    if params[:lo_id]
+      lo = Lo.find_by_id(params[:lo_id])
+      if lo.nil? or lo.app.nil? or (@app.present? && lo.app_id != @app.id)
+        return respond_to do |format|
+          format.html {
+            redirect_to "/home", alert: I18n.t("session_tokens.message.error.invalid_lo")
+          }
+          format.json { render :json => {message: I18n.t("session_tokens.message.error.invalid_lo")}, :content_type => "application/json" }
+        end
+      end
+    end
+
     actionParams = {}
     actionParams[:lo] = params[:lo_id] if params[:lo_id]
     actionParams[:evmethod] = params[:evmethod_id] if params[:evmethod_id]
@@ -48,7 +60,9 @@ class SessionTokensController < ApplicationController
         }
         format.json { render json: @session_token, status: :created, location: @session_token }
       else
-        format.html { 
+        format.html {
+          @app = @session_token.app
+          @los = @app.present? ? @app.los : Lo.all
           flash.now[:alert] = @session_token.errors.full_messages
           render action: "new"
         }

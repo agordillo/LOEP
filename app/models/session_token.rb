@@ -23,6 +23,23 @@ class SessionToken < ActiveRecord::Base
       true
     end
   end
+  validate :check_action_params
+  def check_action_params
+    unless self.action_params.blank?
+      begin
+        action_params = JSON.parse(self.action_params)
+        if action_params["lo"].present?
+          lo = Lo.find_by_id(action_params["lo"])
+          if lo.nil? or lo.app.nil? or lo.app.id != self.app_id
+            return errors[:base] <<  I18n.t("session_tokens.message.error.invalid_action_params")
+          end
+        end
+      rescue
+        return errors[:base] <<  I18n.t("session_tokens.message.error.invalid_action_params")
+      end
+    end
+    true
+  end
 
 #-------------------------------------------------------------------------------------
 
@@ -93,19 +110,22 @@ class SessionToken < ActiveRecord::Base
 
     actionParams = self.parsed_action_params
     lo = Lo.find_by_id(actionParams["lo"])
-    return nil if lo.nil? or lo.id_repository.blank? or lo.repository.blank?
+    return nil if lo.nil? 
     evMethod = Evmethod.allc.find_by_id(actionParams["evmethod"])
     return nil if evMethod.nil?
 
+    loId = (lo.id_repository.blank? ? lo.id.to_s : lo.id_repository)
     case self.action
     when "evaluate"
-      link += "evaluations/" + evMethod.shortname.pluralize + "/embed?lo_id=" + lo.id_repository + "&repository=" + lo.repository
+      link += "evaluations/" + evMethod.shortname.pluralize + "/embed?lo_id=" + loId
     when "showchart"
-      link += "los/" + lo.id_repository + "/representation?evmethods=" + evMethod.shortname + "&repository=" + lo.repository
+      link += "los/" + loId + "/representation?evmethods=" + evMethod.shortname
     else
       return nil
     end
 
+    link += "&use_id_loep=true" if lo.id_repository.blank?
+    link += "&repository=" + lo.repository unless lo.repository.blank?
     link += "&app_name=" + self.app.name + "&session_token=" + self.auth_token + "&locale=" + I18n.locale.to_s
     # link += "&ajax=true"
     link

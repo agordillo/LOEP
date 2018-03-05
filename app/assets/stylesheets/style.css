@@ -310,6 +310,10 @@ a.ralink {
 	font-size: 0.7rem;
 }
 
+a.ralink.ralink_disabled {
+	color: gray;
+}
+
 a.backLink{
 	font-size: 0.7rem;
 }

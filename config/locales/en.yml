@@ -89,6 +89,7 @@ en:
     no_evaluated: "No evaluated"
     no_item_selected: "You have not selected any item."
     no_resources_yet: "There are no %{resources} yet."
+    none: "None"
     number_of_uses: "Number of uses"
     ok: "Ok"
     or: "OR"
@@ -106,6 +107,7 @@ en:
       plural: "Quizzes"
     remove: "Remove"
     repository: "Repository"
+    repository_id: "Identifier in the repository"
     role: "Role"
     send: "Send"
     scope: "Scope"
@@ -146,6 +148,7 @@ en:
     evaluate: "Evaluate"
     evaluate_with_evmethod: "Evaluate with %{evmethod}"
     generate_link_for_external_evaluation: "Generate link"
+    generate_link_for_external_evaluation_disabled: "You need to assign an app to the Learning Object in order to generate a link for external evaluation"
     generate_link_for_external_evaluation_long: "Generate link for external evaluation"
     reject: "Reject"
     search: "Search"
@@ -945,6 +948,9 @@ en:
     message:
       action: "Action: %{action}"
       action_params: "This token has specific action params"
+      error:
+        invalid_action_params: "Invalid action params"
+        invalid_lo: "Invalid Learning Object"
       expired: "Expired"
       expired_token: "Expired Token"
       expires: "Expires in less than %{hours} hours"

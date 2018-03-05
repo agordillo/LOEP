@@ -16,6 +16,12 @@
     <p class="form_legend"><%=t("dictionary.repository")%></p>
     <%= f.text_field :repository, :class=>'loep_input' %>
 
+    <p class="form_legend"><%=t("dictionary.repository_id")%></p>
+    <%= f.text_field :id_repository, :class=>'loep_input' %>
+
+    <p class="form_legend"><%=t("applications.name.one")%></p>
+    <%= f.select :app_id, options_for_select(Utils.getOptionsForSelectLOApp(@lo,{:current_user => current_user}),@lo.app_id || ""), {} ,{ :class=>'loep_input' } %>
+
     <p class="form_legend">* <%=t("dictionary.scope")%></p>
     <%= f.select :scope, options_for_select(Utils.getOptionsForSelectLOScope,@lo.scope || "Private"), {} ,{ :class=>'loep_input' } %>
 

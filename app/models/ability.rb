@@ -40,9 +40,14 @@ class Ability
             can [:update, :destroy], User do |u|
                user.value > u.value || user.id == u.id
             end
-            can :create, Lo
-            can [:update, :destroy], Lo do |lo|
-                lo.owner.nil? || user.value > lo.owner.value || user.id == lo.owner.id
+            can :create, Lo do |lo|
+                lo.app_id.nil? || lo.app.user_id == user.id
+            end
+            can :update, Lo do |lo|
+                (lo.owner.nil? || user.value > lo.owner.value || user.id == lo.owner.id) && (lo.app_id.nil? || lo.app.user_id == user.id)
+            end
+            can :destroy, Lo do |lo|
+                (lo.owner.nil? || user.value > lo.owner.value || user.id == lo.owner.id)
             end
             can [:create, :update, :destroy], Assignment
             can :create, Evaluation
