@@ -151,7 +151,7 @@ class SessionToken < ActiveRecord::Base
 
   def checkAction
     self.action = "all" if self.action.nil?
-    self.action_params = self.action_params.to_json rescue nil unless self.action_params.is_a? String
+    (self.action_params = self.action_params.to_json rescue nil) unless self.action_params.nil? or self.action_params.is_a? String
   end
 
 end

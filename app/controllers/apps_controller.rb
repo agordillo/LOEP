@@ -64,7 +64,7 @@ class AppsController < ApplicationController
 
     respond_to do |format|
       if @app.save 
-        format.html { redirect_to Utils.return_after_create_or_update(session), notice: I18n.t("applications.message.success.create") }
+        format.html { redirect_to app_path(@app), notice: I18n.t("applications.message.success.create") }
         format.json { render json: @app, status: :created, location: @app }
       else
         format.html { 

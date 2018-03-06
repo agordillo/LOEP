@@ -7,7 +7,7 @@ class App < ActiveRecord::Base
   belongs_to :user
   has_many :los
   has_many :evaluations
-  has_many :session_tokens
+  has_many :session_tokens, :dependent => :destroy
 
   before_validation :checkAuthToken
 
