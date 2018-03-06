@@ -87,7 +87,7 @@ class Utils
     if current_user.isAdmin?
       roles = Role.all.reject{|r| r.value >= current_user.value}.map{|r| r}
       if LOEP::Application.config.register_policy=="FREE"
-        roles = (roles & [Role.default])
+        roles = (roles | [Role.default])
       end
     end
     roles.map{|r| [r.readable,r.id] }
