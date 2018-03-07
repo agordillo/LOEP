@@ -2,6 +2,13 @@ PATH
   remote: loep_plugins/loep_une71362
   specs:
     loep_une71362 (0.0.1)
+      rails (~> 3.2.22)
+
+PATH
+  remote: loep_plugins/stars
+  specs:
+    stars (0.0.1)
+      rails (~> 3.2.22)
 
 GEM
   remote: https://rubygems.org/
@@ -217,6 +224,7 @@ DEPENDENCIES
   rest-client (= 1.6.7)
   rubyzip (= 1.0.0)
   sass-rails (~> 3.2.3)
+  stars!
   test-unit
   therubyracer (= 0.12.0)
   uglifier (>= 1.0.3)

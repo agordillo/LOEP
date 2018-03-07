@@ -1,0 +1,9 @@
+<% embed ||= false %>
+<% formOptions ||= @evaluation.getFormOptions %>
+<% scale ||= @evaluation.getScale %>
+
+<% @evmethodItems.each_with_index do |item,i| %>
+    <%= render 'evaluations/common_partials/item_integer', :f => f, :readonly => readonly, :formOptions => formOptions, :item => item, :nItem => (i+1), :scale => scale %>
+<% end %>
+
+<%= render 'evaluations/common_partials/item_integer_js', :f => f , :readonly => readonly, :formOptions => formOptions %>
