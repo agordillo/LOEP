@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '>= 2.0.0'
+
 gem 'rails', '3.2.22'
 gem 'rake', '10.3.2'
 
@@ -10,7 +12,7 @@ gem 'pg', '= 0.17.1'
 
 gem 'jquery-rails', '3.0.4'
 
-gem 'recaptcha', '0.3.5', :require => 'recaptcha/rails'
+gem "recaptcha", '4.6.6', require: "recaptcha/rails"
 
 gem 'devise', '3.2.0'
 gem 'devise-token_authenticatable', '0.1.0'

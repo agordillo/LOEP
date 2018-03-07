@@ -59,7 +59,7 @@ The last releases can be seen [here](https://github.com/agordillo/LOEP/releases)
 
 # Requirements:  
 
-* Ruby 1.9.3 or newer
+* Ruby 2.0 or newer
 * Ruby on Rails 3.2.22
 * MySQL 5.5+
 
