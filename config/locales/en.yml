@@ -963,6 +963,9 @@ en:
     period: "Period of validity (hours)"
   settings:
     title: "Settings"
+  survey:
+    title: "Survey"
+    url: "https://docs.google.com/forms/d/e/1FAIpQLSd-CqgGReSeIqc2p6OIL4T6fqDRvjWaj-J-bsgKK4c_mdT6AQ/viewform"
   tables:
     paginate:
       sFirst: "First"

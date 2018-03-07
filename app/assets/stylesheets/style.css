@@ -151,12 +151,19 @@ li.userbox img {
 #footer ul {
 	display: inline-block;
 	width: 100%;
+	padding: 0px;
 }
 
 #footer ul li {
 	display: inline-block;
 	margin-left: 3%;
 	margin-right: 3%;
+}
+
+@media (max-width: 640px) {
+  #footer {
+	display: none;
+  }
 }
 
 

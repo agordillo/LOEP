@@ -951,6 +951,9 @@ es:
     period: "Periodo de validez (horas)"
   settings:
     title: "Ajustes"
+  survey:
+    title: "Encuesta"
+    url: "https://docs.google.com/forms/d/e/1FAIpQLSe0TGbAldtZcmIgqfwop24wpr-8I9RbMCqWq5qEZ0dBeS6e4g/viewform"
   tables:
     paginate:
       sFirst: "Primero"
