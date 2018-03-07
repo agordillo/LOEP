@@ -67,3 +67,12 @@ gem 'exception_notification', '= 4.1.1'
 
 #Statistics
 gem 'descriptive_statistics', '~> 2.4.0', :require => 'descriptive_statistics/safe'
+
+#LOEP plugins
+pluginsPath = "./loep_plugins"
+if File.directory?(pluginsPath)
+  Dir.glob(pluginsPath+"/*").select {|f| File.directory? f}.each do |f|
+    gemName = f.gsub(pluginsPath+"/","")
+    gem gemName, :path => f
+  end
+end

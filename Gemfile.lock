@@ -1,3 +1,8 @@
+PATH
+  remote: loep_plugins/loep_une71362
+  specs:
+    loep_une71362 (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -196,6 +201,7 @@ DEPENDENCIES
   faker (= 1.2.0)
   i18n (= 0.6.11)
   jquery-rails (= 3.0.4)
+  loep_une71362!
   multi_json (= 1.10.1)
   mysql2 (= 0.3.14)
   net-scp (= 1.2.1)

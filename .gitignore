@@ -26,3 +26,4 @@ public/lom_metadata.xml
 config/deploy/*
 !config/deploy/example.yml
 reports/*
+loep_plugins/*
