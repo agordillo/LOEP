@@ -27,4 +27,4 @@ config/deploy/*
 !config/deploy/example.yml
 reports/*
 loep_plugins/*
-!loep_plugins/stars
+!loep_plugins/loep_stars

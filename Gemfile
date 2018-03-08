@@ -69,10 +69,19 @@ gem 'exception_notification', '= 4.1.1'
 gem 'descriptive_statistics', '~> 2.4.0', :require => 'descriptive_statistics/safe'
 
 #LOEP plugins
+enabledPlugins = []
+if File.exists?("./config/application_config.yml")
+  require 'yaml'
+  APP_CONFIG = YAML.load_file("./config/application_config.yml")[ENV["RAILS_ENV"] || "development"] rescue nil
+  if !APP_CONFIG.nil? and APP_CONFIG['plugins'].is_a? Array
+    enabledPlugins = APP_CONFIG['plugins']
+  end
+end
+
 pluginsPath = "./loep_plugins"
 if File.directory?(pluginsPath)
   Dir.glob(pluginsPath+"/*").select {|f| File.directory? f}.each do |f|
     gemName = f.gsub(pluginsPath+"/","")
-    gem gemName, :path => f
+    gem gemName, :path => f if enabledPlugins.include?(gemName)
   end
 end
