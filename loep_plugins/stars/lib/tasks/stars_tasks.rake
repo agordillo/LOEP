@@ -50,6 +50,7 @@ namespace :stars do
 		end
 
 		puts "Remember that to use the new evaluation model 'Star' you need to enable it in the config/application_config.yml file"
+		puts "Remember that to use the new metric 'Star Metric' you need to enable it in the config/application_config.yml file"
     	puts "The plugin was succesfully installed"
 	end
 end
