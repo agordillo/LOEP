@@ -1,3 +1,7 @@
 <% formOptions ||= @evaluation.getFormOptions %>
-<%= render 'evaluations/common_partials/item_comments', :f => f , :readonly => readonly, :formOptions => formOptions %>
-<%= render 'evaluations/common_partials/item_score', :f => f , :readonly => readonly, :formOptions => formOptions %>
+<% unless formOptions[:comments] == false %>
+	<%= render 'evaluations/common_partials/item_comments', :f => f , :readonly => readonly, :formOptions => formOptions %>
+<% end %>
+<% unless formOptions[:global_score] == false %>
+	<%= render 'evaluations/common_partials/item_score', :f => f , :readonly => readonly, :formOptions => formOptions %>
+<% end %>

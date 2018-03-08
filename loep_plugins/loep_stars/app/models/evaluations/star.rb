@@ -23,6 +23,9 @@ class Evaluations::Star < Evaluation
 
   def self.getFormOptions
     {
+      contexts: false,
+      comments: false,
+      global_score: false,
       :scaleLegend => {
         :min => "1", 
         :max => "5"

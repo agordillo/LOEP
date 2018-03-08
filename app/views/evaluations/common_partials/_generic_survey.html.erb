@@ -3,7 +3,9 @@
 <% scale ||= @evaluation.getScale %>
 
 <% if embed %>
-  <%= render 'evaluations/common_partials/contexts', :f => f, :readonly => readonly, :formOptions => formOptions, :contexts => {:user_context => ["all"]} %>
+  <% unless formOptions[:contexts] == false %>
+    <%= render 'evaluations/common_partials/contexts', :f => f, :readonly => readonly, :formOptions => formOptions, :contexts => {:user_context => ["all"]} %>
+  <% end %>
 <% end %>
 
 <% nItems = {} %>
