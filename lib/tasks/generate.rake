@@ -19,7 +19,7 @@ namespace :generate do
   # bundle exec rake generate:evmethod["methodName","multiple","automatic","moduleName"]
   # bundle exec rake generate:evmethod["methodName","multiple","automatic","moduleName"] RAILS_ENV=production
   # For instance: bundle exec rake generate:evmethod["LORI v1.5","false","false","Lori"]
-  task :evmethod, [:name,:multiple,:automatic,:module_name] => :environment do |t, args|
+  task :evmethod, [:name,:multiple,:automatic,:module_name,:plugin_name] => :environment do |t, args|
     puts "Generating new evaluation model"
 
     abort("Task aborted. Invalid Sintax for task 'bundle exec rake generate:evmethod[\"methodName\",\"multiple\",\"automatic\",\"moduleName\"]'") if args[:name].blank?
@@ -40,6 +40,13 @@ namespace :generate do
 
     multiple = (args[:multiple]=="true")
     automatic = (args[:automatic]=="true")
+
+    plugin = args[:plugin_name]
+    unless plugin.blank?
+      #Validate plugin
+      abort("Task aborted. Plugin " + plugin + " does not exist.") unless LOEP::Application::config.available_plugins.include?(plugin)
+      abort("Task aborted. Plugin " + plugin + " is not enabled.") unless LOEP::Application::config.enabled_plugins.include?(plugin)
+    end
 
     ev = Evmethod.where(:module => moduleName).first
     abort("Task aborted. An evaluation model with module '" + moduleName + "' already exists.") unless ev.nil?
@@ -62,7 +69,16 @@ namespace :generate do
       modelContent += "  def self.getItems\n    [\n      {\n        :name => \"Item1\",\n        :type=> \"integer\"\n      },{\n        :name => \"Item2\",\n        :type=> \"integer\"\n      }\n    ]\n  end\n\n"
       modelContent += "  def self.getScale\n    return [1,5]\n  end\n\n"
       modelContent += "end"
-      modelFilePath = Rails.root.join('app', 'models', 'evaluations').to_s + "/" + evaluationModelClassName.downcase + ".rb"
+     
+      modelFilePath = Rails.root.join.to_s
+      modelFilePath += '/loep_plugins/' + plugin unless plugin.blank?
+      modelFilePath += "/app/models/evaluations/"
+      unless File.exists?(modelFilePath)
+        require 'fileutils'
+        FileUtils::mkdir_p modelFilePath
+      end
+      modelFilePath += evaluationModelClassName.downcase + ".rb"
+
       unless File.exist?(modelFilePath)
         File.open(modelFilePath, 'w') {|f| f.write(modelContent) }
         puts("The model was created in " + modelFilePath)
@@ -71,7 +87,16 @@ namespace :generate do
       #Create controller
       evaluationControllerClassName = evaluationModelClassName.pluralize
       controllerContent = "class Evaluations::" + evaluationControllerClassName + "Controller < EvaluationsController\nend"
-      controllerFilePath = Rails.root.join('app', 'controllers', 'evaluations').to_s + "/" + evaluationControllerClassName.downcase + "_controller.rb"
+      
+      controllerFilePath = Rails.root.join.to_s
+      controllerFilePath += '/loep_plugins/' + plugin unless plugin.blank?
+      controllerFilePath += "/app/controllers/evaluations/"
+      unless File.exists?(controllerFilePath)
+        require 'fileutils'
+        FileUtils::mkdir_p controllerFilePath
+      end
+      controllerFilePath += evaluationControllerClassName.downcase + "_controller.rb"
+
       unless File.exist?(controllerFilePath)
         File.open(controllerFilePath, 'w') {|f| f.write(controllerContent) }
         puts("The controller was created in " + controllerFilePath)
@@ -92,7 +117,7 @@ namespace :generate do
   # bundle exec rake generate:metric["metricName","evMethodNames","moduleName"]
   # bundle exec rake generate:metric["metricName","evMethodNames","moduleName"] RAILS_ENV=production
   # For instance: bundle exec rake generate:metric["LOEM Arithmetic Mean","LOEM","LOEMAM"]
-  task :metric, [:name,:evMethods,:module_name] => :environment do |t, args|
+  task :metric, [:name,:evMethods,:module_name,:plugin_name] => :environment do |t, args|
     puts "Generating new metric"
     abort("Task aborted. Invalid Sintax for task 'bundle exec rake generate:metric[\"metricName\",\"evMethodNames\",\"moduleName\"]'") if args[:name].blank? or args[:evMethods].blank?
 
@@ -108,6 +133,13 @@ namespace :generate do
     evMethods = (Evmethod.find_all_by_name(args[:evMethods].split(",").map{|s| s.strip})) rescue []
     abort("Task aborted. Evmethods '" + args[:evMethods] + "' not found.") if evMethods.blank?
 
+    plugin = args[:plugin_name]
+    unless plugin.blank?
+      #Validate plugin
+      abort("Task aborted. Plugin " + plugin + " does not exist.") unless LOEP::Application::config.available_plugins.include?(plugin)
+      abort("Task aborted. Plugin " + plugin + " is not enabled.") unless LOEP::Application::config.enabled_plugins.include?(plugin)
+    end
+
     #Check that metric doesn't exists
     m = Metric.where(:name => moduleName).first
     abort("Task aborted. A metric with module name '" + moduleName + "' already exists.") unless m.nil?
@@ -120,7 +152,16 @@ namespace :generate do
     modelContent += "  #Override methods here\n\n"
     modelContent += "  def self.getLoScore(evData)\n  end\n"
     modelContent += "end"
-    modelFilePath = Rails.root.join('app', 'models', 'metrics').to_s + "/" + metricModelClassName.downcase + ".rb"
+
+
+    modelFilePath = Rails.root.join.to_s
+    modelFilePath += '/loep_plugins/' + plugin unless plugin.blank?
+    modelFilePath += "/app/models/metrics/"
+    unless File.exists?(modelFilePath)
+      require 'fileutils'
+      FileUtils::mkdir_p modelFilePath
+    end
+    modelFilePath += metricModelClassName.downcase + ".rb"
     unless File.exist?(modelFilePath)
       File.open(modelFilePath, 'w') {|f| f.write(modelContent) }
       puts("The model was created in " + modelFilePath)
