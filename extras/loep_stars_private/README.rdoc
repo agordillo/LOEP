@@ -1,0 +1,3 @@
+= LOEP Stars Private
+
+A simple template for creating LOEP private plugins.
