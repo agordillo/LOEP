@@ -1,0 +1,3 @@
+= LOEP Stars
+
+This project is a template for creating LOEP plugins.
