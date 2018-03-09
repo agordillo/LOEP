@@ -4,3 +4,4 @@ server_url: 127.0.0.1 #server URL (e.g. example.com)
 username: ubuntu
 keys: /home/username/.ssh/ssh-keypair #empty or remove this line if you don't have any key
 branch: master
+#private_plugins: ["loep_stars_private"]

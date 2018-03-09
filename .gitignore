@@ -26,5 +26,4 @@ public/lom_metadata.xml
 config/deploy/*
 !config/deploy/example.yml
 reports/*
-loep_plugins/*
-!loep_plugins/loep_stars
+loep_plugins/loep_stars_private

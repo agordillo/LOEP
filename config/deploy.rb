@@ -33,7 +33,7 @@ set :application, "LOEP"
 set :repository,  repository
 
 set :user, username
-deploy_to = "/home/#{ user }/#{ application }" if deploy_to.nil?
+deploy_to = "/home/#{user}/#{application}" if deploy_to.nil?
 set :deploy_to, deploy_to
 set :use_sudo, false
 
@@ -69,12 +69,23 @@ namespace :deploy do
 
   task :link_files do
     puts "Link Files do..."
-    run "ln -s #{ shared_path}/database.yml #{ release_path }/config/database.yml"
-    run "ln -s #{ shared_path}/application_config.yml #{ release_path }/config/application_config.yml"   
+    run "ln -s #{shared_path}/database.yml #{release_path}/config/database.yml"
+    run "ln -s #{shared_path}/application_config.yml #{release_path}/config/application_config.yml"
+    if config["private_plugins"].is_a? Array and config["private_plugins"].length > 0
+      config["private_plugins"].each do |pplugin|
+        #Check if the private plugin file exists on the remote server
+        if 'true' ==  capture("if [ -e #{shared_path}/private_plugins/#{pplugin} ]; then echo 'true'; fi").strip
+          puts "Creating symlink for private plugin " + pplugin
+          run "ln -s #{shared_path}/private_plugins/#{pplugin} #{release_path}/loep_plugins/#{pplugin}"
+        else
+          puts "Private plugin " + pplugin + " was not found on the remote server"
+        end
+      end
+    end
   end
 
   task :precompile_assets do
-    run "cd #{ release_path } && bundle exec \"rake assets:precompile --trace RAILS_ENV=production\""
+    run "cd #{release_path} && bundle exec \"rake assets:precompile --trace RAILS_ENV=production\""
   end
 
 end
