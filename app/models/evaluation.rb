@@ -256,14 +256,11 @@ class Evaluation < ActiveRecord::Base
   #Get the real reviewer of the Evaluation
   def readable_reviewer
     if self.external
-      if self.anonymous?
-        I18n.t("dictionary.anonymous")
+      reviewerName = self.anonymous? ? I18n.t("dictionary.anonymous") : ("#" + self.id_user_app[0..6])
+      if self.app.present?
+        (reviewerName + ' (<a href="'+Rails.application.routes.url_helpers.app_path(self.app)+'">'+self.app.name+'</a>)').html_safe
       else
-        if self.app.present?
-          (("#" + self.id_user_app[0..6]) + ' (<a href="'+Rails.application.routes.url_helpers.app_path(self.app)+'">'+self.app.name+'</a>)').html_safe
-        else
-          "#" + self.id_user_app[0..6] + " (" + I18n.t("dictionary.unknown") + ")"
-        end
+        reviewerName + " (" + I18n.t("dictionary.unknown") + ")"
       end
     elsif !self.user.nil?
       ('<a href="'+Rails.application.routes.url_helpers.user_path(self.user)+'">'+self.user.name+'</a>').html_safe
