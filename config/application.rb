@@ -24,9 +24,27 @@ module LOEP
     # config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
-    # Only load the plugins named here, in the order given (default is alphabetical).
-    # :all can be used as a placeholder for all plugins not explicitly named.
-    # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
+    #Plugins
+    config.available_plugins = []
+    pluginsPath = "./loep_plugins"
+    if File.directory?(pluginsPath)
+      Dir.glob(pluginsPath+"/*").select {|f| File.directory? f}.each do |f|
+        config.available_plugins << f.gsub(pluginsPath+"/","")
+      end
+    end
+
+    config.enabled_plugins = []
+    if config.APP_CONFIG['plugins'].is_a? Array
+      config.enabled_plugins = (config.APP_CONFIG['plugins'] & config.available_plugins)
+    end
+
+    #Load LOEP plugins
+    config.before_configuration do
+      config.enabled_plugins.each do |eplugin|
+        $:.unshift File.expand_path("#{__FILE__}/../../loep_plugins/#{eplugin}/lib")
+        require eplugin
+      end
+    end
 
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer

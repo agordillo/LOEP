@@ -18,20 +18,6 @@ LOEP::Application.configure do
   config.register_policy = config.APP_CONFIG['register_policy'] || "FREE"
   config.default_role = config.APP_CONFIG['default_role'] || "User"
 
-  #Plugins
-  config.available_plugins = []
-  pluginsPath = "./loep_plugins"
-  if File.directory?(pluginsPath)
-    Dir.glob(pluginsPath+"/*").select {|f| File.directory? f}.each do |f|
-      config.available_plugins << f.gsub(pluginsPath+"/","")
-    end
-  end
-
-  config.enabled_plugins = []
-  if config.APP_CONFIG['plugins'].is_a? Array
-    config.enabled_plugins = (config.APP_CONFIG['plugins'] & config.available_plugins)
-  end
-
   if ActiveRecord::Base.connection.table_exists? "evmethods" and ActiveRecord::Base.connection.table_exists? "metrics"
     #Configure the evaluation models you want to use in your LOEP instance
     #See app/models/evaluations for more possible methods to add
