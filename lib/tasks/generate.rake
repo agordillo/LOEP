@@ -26,10 +26,12 @@ namespace :generate do
 
     if args[:module_name].blank?
       #Try to get from name
-      moduleName = args[:name].split(" ")[0].downcase.capitalize
+      moduleName = args[:name].split(" ")[0]
     else
       moduleName = args[:module_name]
     end
+    moduleName = moduleName.split("_").map{|s| s.downcase.capitalize}.join("")
+
     if moduleName.pluralize == moduleName
       puts("The name '" + moduleName + "' needs an inflection rule since it has an irregular plural.")
       puts("You need to add the following line in the 'config/initializers/inflections.rb' file:")
@@ -77,7 +79,7 @@ namespace :generate do
         require 'fileutils'
         FileUtils::mkdir_p modelFilePath
       end
-      modelFilePath += evaluationModelClassName.downcase + ".rb"
+      modelFilePath += evaluationModelClassName.split(/([[:upper:]][[:lower:]]*[0-9]*)/).delete_if(&:empty?).map{|s| s.downcase}.join("_") + ".rb"
 
       unless File.exist?(modelFilePath)
         File.open(modelFilePath, 'w') {|f| f.write(modelContent) }
@@ -95,7 +97,7 @@ namespace :generate do
         require 'fileutils'
         FileUtils::mkdir_p controllerFilePath
       end
-      controllerFilePath += evaluationControllerClassName.downcase + "_controller.rb"
+      controllerFilePath += evaluationControllerClassName.split(/([[:upper:]][[:lower:]]*[0-9]*)/).delete_if(&:empty?).map{|s| s.downcase}.join("_") + "_controller.rb"
 
       unless File.exist?(controllerFilePath)
         File.open(controllerFilePath, 'w') {|f| f.write(controllerContent) }

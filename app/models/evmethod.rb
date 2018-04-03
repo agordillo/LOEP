@@ -111,7 +111,6 @@ class Evmethod < ActiveRecord::Base
   #############
 
   def new_evaluation_path(lo)
-    evaluationModule = getEvaluationModule
     helper_method_name = "new_" + self.module.gsub(":","").underscore + "_path"
     new_evaluation_path = Rails.application.routes.url_helpers.send(helper_method_name)
 
@@ -138,11 +137,11 @@ class Evmethod < ActiveRecord::Base
   end
 
   #############
-  # Nick Name for Paths
+  # Alias for paths
   #############
 
   def shortname
-    self.module.split("Evaluations::")[1].downcase
+    self.module.split("Evaluations::")[1].split(/([[:upper:]][[:lower:]]*[0-9]*)/).delete_if(&:empty?).map{|s| s.downcase}.join("_")
   end
 
   def self.getShortnameFromName(name)
@@ -154,7 +153,7 @@ class Evmethod < ActiveRecord::Base
   end
 
   def self.getEvMethodFromShortname(shortname)
-    Evmethod.find_by_module("Evaluations::" + shortname.capitalize)
+    Evmethod.find_by_module("Evaluations::" + shortname.split("_").map{|s| s.downcase.capitalize}.join(""))
   end
 
   def getEvaluationModule

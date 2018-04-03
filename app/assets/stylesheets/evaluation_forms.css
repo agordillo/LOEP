@@ -53,6 +53,13 @@ div.survey_block_context .survey_question_title {
   margin-bottom: 8px;
 }
 
+.survey_question_group_subtitle {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 15px;
+  margin-top: -8px;
+}
+
 .survey_question_subtitle {
   font-size: 0.75rem;
   color: #666;
@@ -193,19 +200,20 @@ p.or_block_separator {
   height: 10px;
 }
 
-textarea.evaluation_survey_text_item_input{
+textarea.evaluation_survey_text_item_input {
+  resize: none;
   margin-bottom: 15px;
 }
 
 /* Context */
-input.user_context_age_input{
+input.user_context_age_input {
   max-width: 50px;
   text-align: center;
   margin-bottom: 10px;
   margin-top: 0px;
 }
 
-div.survey_block_context select.loep_input:not(.select_without_bottom_margin), div.survey_block_context input.loep_input:not(.select_without_bottom_margin){
+div.survey_block_context select.loep_input:not(.select_without_bottom_margin), div.survey_block_context input.loep_input:not(.select_without_bottom_margin) {
   margin-bottom: 15px;
 }
 

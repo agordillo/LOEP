@@ -28,3 +28,4 @@ config/deploy/*
 reports/*
 loep_plugins/*
 !loep_plugins/loep_stars
+!loep_plugins/loep_une71362

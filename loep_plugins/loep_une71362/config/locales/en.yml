@@ -1,0 +1,224 @@
+en:
+  evmethods:
+    une71362_teacher:
+      section1:
+        name: "Descripción didáctica: valor y coherencia didácticos"
+      item1:
+        name: "Los objetivos didácticos se especifican de manera clara y precisa en el MED (que voy a enseñar)."
+      item2:
+        name: "Se especifican los destinatarios; los objetivos didácticos son alcanzables por los destinatarios según el perfil requerido en el propio MED."
+      item3:
+        name: "Las competencias y/o destrezas a desarrollar están claramente especificadas; son coherentes con los objetivos y los destinatarios."
+      item4:
+        name: "Existen instrucciones o sugerencias sobre los posibles usos didácticos para el profesor y/o para el estudiante (autoformación)."
+      item5:
+        name: "Se indica el tiempo estimado de aprendizaje."
+      item6:
+        name: "Se indican qué conocimientos previos del alumno son requeridos."
+      section2:
+        name: "Calidad de los contenidos"
+      item7:
+        name: "El contenido es coherente con los objetivos didácticos (se trabaja cada uno de los objetivos)."
+      item8:
+        name: "El contenido se presenta de manera clara y comprensible. Se destacan las ideas clave y se dan instrucciones claras en las actividades."
+      item9:
+        name: "Las ideas y conceptos se presentan en número adecuado y ordenada y equilibradamente a lo largo del MED."
+      item10:
+        name: "El contenido es científicamente correcto, no presenta sesgo ideológico, es objetivo y contiene información veraz."
+      item11:
+        name: "El contenido está actualizado o bien es intemporal (no es necesario actualizarlo)."
+      item12:
+        name: "El contenido respeta los derechos de propiedad intelectual si utiliza otros materiales (textos, imágenes, etc)."
+      item13:
+        name: "El contenido declara las condiciones de uso del material educativo."
+      section3:
+        name: "Capacidad para generar aprendizaje"
+      item14:
+        name: "El MED promueve el aprendizaje significativo del alumno (relaciona los conceptos nuevos con los que ya conoce)."
+      item15:
+        name: "Se estimula la reflexión."
+      item16:
+        name: "Se estimula la capacidad crítica."
+      item17:
+        name: "Se fomenta la creatividad e innovación, que el alumno genere nuevas ideas y formas de aplicarlo."
+      section4:
+        name: "Adaptabilidad"
+      item18:
+        name: "El contenido se adapta al conocimiento previo del alumno y a sus necesidades de aprendizaje."
+      item19:
+        name: "Se puede modificar fácilmente el contenido/actividad del MED para ajustarlo a distintos grupos/tipos de alumnos (e.g. niveles de conocimiento o ritmos de aprendizaje diferentes)."
+      item20:
+        name: "Se proponen diferentes contenidos/actividades o diferentes itinerarios de contenidos/actividades según los niveles de conocimiento y/o, posibilidades y capacidades de aprendizaje."
+      item21:
+        name: "El MED respeta los distintos estilos de aprendizaje."
+      item22:
+        name: "Los contenidos pueden usarse independientemente del método de enseñanza y aprendizaje."
+      section5:
+        name: "Interactividad"
+      item23:
+        name: "El MED fomenta la participación del alumno durante la lectura, visualización o interacción con el mismo."
+      item24:
+        name: "El MED contiene actividades interactivas para las ideas clave."
+      item25:
+        name: "Se facilita que el alumno controle y maneje su aprendizaje."
+      item26:
+        name: "Se puede obtener el historial de ejecución de la actividad del alumno."
+      item27:
+        name: "La tipología de actividades interactivas es variada."
+      section6:
+        name: "Motivación"
+      item28:
+        name: "Existe relación entre lo aprendido y el entorno vital (profesional y/o social) del destinatario del MED."
+      item29:
+        name: "Se promueve el aprendizaje autónomo del alumno."
+      item30:
+        name: "El tiempo de aprendizaje estimado es adecuado para alcanzar los objetivos didácticos y está de acuerdo con las previsiones y posibilidades de los alumnos."
+      item31:
+        name: "Los contenidos se presentan de forma atractiva o innovadora."
+      item32:
+        name: "Se favorece la comunicación y colaboración."
+      section7:
+        name: "Formato y diseño"
+      item33:
+        name: "El diseño del MED está bien organizado y es claro, conciso e intuitivo."
+      item34:
+        name: "Las imágenes, audios y vídeos son de calidad."
+      item35:
+        name: "Los contenidos audiovisuales facilitan y/o refuerzan el aprendizaje. No son adornos que entorpecen o ralentizan."
+      item36:
+        name: "El MED incluye formato multimodal: texto, imagen, audio y/o vídeo."
+      item37:
+        name: "El manejo de la interfaz es intuitivo (por ejemplo, los contenidos e instrucciones se localizan fácilmente) y, si no lo es, existen instrucciones de uso muy claras."
+      item38:
+        name: "La estética es compatible y adecuada al estudio del MED. No presenta ruido visual ni sobrecarga informativa innecesaria."
+      item39:
+        name: "Se mantiene la consistencia en la apariencia (forma, tamaño, color, ubicación, etc.) de los elementos que tienen la misma funcionalidad (enlaces, iconos, botones,..) en todo el MED."
+      item40:
+        name: "Existe una opción de \"preferencias\" que permite personalizar la interfaz (tipo, color y tamaño de fuente, color del fondo, apariencia del menú, etc.) y estas se mantienen para siguientes sesiones."
+      section8:
+        name: "Reusabilidad"
+      item41:
+        name: "El MED se organiza modularmente de forma que es escalable."
+      item42:
+        name: "El MED o alguno de sus módulos puede utilizarse para crear nuevos MED."
+      item43:
+        name: "El MED o alguno de sus módulos puede utilizarse en más de una disciplina o grupo de alumnos."
+        description: "Esto puede no ser deseable si el material es muy especializado, en tal caso puntuar como No Aplicable."
+      section9:
+        name: "Portabilidad"
+      item44:
+        name: "El MED se ha creado con formatos de uso mayoritario o estándares de facto (e.g. txt, word, pdf, html, xml, wav, mp3, mp4, jpeg, gif, etc.). Si el MED no está creado con un formato estándar oficial o de uso mayoritario se describen los requisitos informáticos y se facilita el software necesario para utilizarlo."
+      item45:
+        name: "El alumno puede utilizar el MED con cualquier dispositivo con o sin conexión a internet."
+      item46:
+        name: "El MED tiene asociado una ficha de metadatos que lo describe."
+      item47:
+        name: "Los metadatos del MED están creados conforme a estándares internacionales (e.g. LOM-ES, Dublin Core)."
+      item48:
+        name: "El MED se exporta utilizando los estándares internacionales de intercambio de contenidos educativos (e.g. SCORM, IMS Content Package)."
+      section10:
+        name: "Robustez; estabilidad técnica"
+      item49:
+        name: "El MED no falla durante su funcionamiento."
+      item50:
+        name: "El MED no se ve afectado por errores del usuario."
+      item51:
+        name: "El MED responde con rapidez, de forma visible y audible ante las acciones del usuario."
+      item52:
+        name: "Se proporcionan funciones de ayuda sobre problemas comunes de los usuarios y sus soluciones."
+      section11:
+        name: "Estructura del escenario de aprendizaje"
+        description: "Escenario de aprendizaje es el espacio del MED donde el usuario trabaja con el contenido. Por ejemplo, las pantallas de las aplicaciones software, las \"transparencias\" de las presentaciones o las páginas web."
+      item53:
+        name: "Cada escenario de aprendizaje tiene un título único y significativo, y se puede acceder por canal visual, de forma directa o por acceso con los productos de apoyo."
+      item54:
+        name: "La estructura semántica y las relaciones de la información que contiene un escenario de aprendizaje se explicitan en la presentación y se puede acceder de forma directa o por acceso compatible con los productos de apoyo (e.g. lector de pantalla, teclado alternativo, display braille dinámico o magnificador de pantalla)."
+      item55:
+        name: "Los escenarios de aprendizaje permiten el uso \"siempre adelante\", mantener simultáneamente escenarios anteriores en caso de que sea necesario y \"volver a escenarios anteriores\" en caso de que no tengan que mantenerse simultáneamente."
+      item56:
+        name: "Si se permiten escenarios de aprendizaje superpuestos, se pueden minimizar, maximizar, cambiar tamaño, restaurar y cerrar."
+      section12:
+        name: "Navegación"
+      item57:
+        name: "El nombre de cada enlace es descriptivo, claro y diferente del resto de los enlaces. Los enlaces que llevan al mismo sitio utilizan el mismo texto descriptivo."
+      item58:
+        name: "Los enlaces funcionan correctamente."
+      item59:
+        name: "Se proporcionan, al menos, dos mecanismos para localizar cada escenario de aprendizaje de la interfaz."
+        description: "Por ejemplo, si se trata de una interfaz web los escenarios de aprendizaje son las páginas web y los mecanismos de localización de las páginas pueden ser enlaces a otras páginas relacionadas, un índice de contenidos (tabla, barra, etc), un mapa del material educativo digital, un buscador, una lista de enlaces a todas las páginas del material educativo digital en la página de inicio, etc."
+      item60:
+        name: "Se mantiene el orden lógico de navegación y la ubicación de los mecanismos de navegación, a menos que el usuario los cambie."
+      item61:
+        name: "Se proporciona información al usuario acerca de dónde se encuentra dentro del MED."
+        description: "Por ejemplo, se indica el camino de escenarios de aprendizaje visitados y el escenario actual mediante \"migas de pan\", barra de progreso, etc., o bien mediante un menú/índice o mapa del material con indicación de la ubicación actual."
+      item62:
+        name: "El alumno conoce su progreso en la ejecución del contenido."
+      item63:
+        name: "La interfaz proporciona tiempo ilimitado o suficiente para leer y usar el contenido. En cualquier caso, se puede ajustar el tiempo de lectura y uso del contenido."
+      item64:
+        name: "Se evita el paso obligado por elementos de contenido repetitivos."
+        description: "Por ejemplo, en el caso de un sitio web, en el inicio de cada página web se deben proporcionar enlaces para poder \"saltar\" directamente al contenido principal y evitar pasar por otros elementos repetidos en todas las páginas del sitio como un acceso al correo, menús de navegación, enlaces a foros, etc."
+      item65:
+        name: "En cada inicio de sesión el contenido vuelve a su configuración inicial."
+      item66:
+        name: "El MED informa acerca de su estado (activo / inactivo) al usuario."
+      item67:
+        name: "Es posible salir del material en cualquier punto."
+      section13:
+        name: "Operabilidad"
+      item68:
+        name: "El MED debe ser operable a través de acceso compatible o directo."
+      item69:
+        name: "La operatividad es completa con teclado, ratón y cualquier otro dispositivo de entrada que se ofrezca, incluidos emuladores, activación por voz, interacción táctil, etc."
+      item70:
+        name: "Se distingue visualmente donde está el foco del teclado (u otro dispositivo alternativo como el ratón) cuando se esté operando con el teclado (u otro dispositivo alternativo)."
+        description: "Ayuda: este ítem se puede verificar navegando en el MED con el teclado u otro dispositivo alternativo y comprobando que se ve claramente dónde está el cursor y si se está navegando con el tabulador, se marca de alguna forma la posición (o elemento) en la que está el tabulador y cómo va cambiando a la siguiente posición según pulsamos el tabulador."
+      item71:
+        name: "Para realizar las tareas, o bien no existe ninguna limitación temporal o bien existe un plazo de tiempo limitado establecido en el que el alumno debe ser capaz de poder adaptarlo a su velocidad y necesidades."
+      item72:
+        name: "Se proporcionan atajos de teclado o teclas rápidas para enlaces principales y controles de formulario importantes."
+        description: "Ayuda: las teclas rápidas las define el autor del MED y se indican de forma accesible en el mismo recurso."
+      item73:
+        name: "Todos los escenarios de aprendizaje del MED aparecen y operan de manera predecible. Si se producen cambios de contexto se advierte previamente al alumno."
+        description: "Por ejemplo, un icono de una pantalla de un MED cuando recibe el foco queda resaltado y aparece una caja de texto con una explicación. Esta forma de operar debe mantenerse en todos los iconos o, si no es así, advertir de alguna forma al usuario."
+      section14:
+        name: "Accesibilidad del contenido audiovisual"
+      item74:
+        name: "Hay contraste suficiente entre el color de las imágenes y el color de fondo para que se vean bien."
+      item75:
+        name: "Todos los contenidos audiovisuales (imágenes, gráficos, figuras, etc.) han de tener una descripción textual alternativa a la que se pueda acceder bien de forma directa bien a través de productos de apoyo."
+      item76:
+        name: "Los contenidos audiovisuales (vídeo, audio, animaciones,...) tienen alternativas sincronizadas, como subtitulado (para personas con discapacidad auditiva o dificultades de comprensión oral), audiodescripción, transcripción completa o lenguaje de signos."
+      item77:
+        name: "En los contenidos audiovisuales el alumno tiene el control del manejo de la reproducción y de sus alternativas textuales (e.g. activar/desactivar el subtitulado...)."
+      item78:
+        name: "Si el MED tiene sonidos inesperados, el alumno ha de poder controlarlo (apagar, bajar el volumen, etc.)."
+      item79:
+        name: "El contenido no incluye efectos de destello con un umbral que pueda provocar ataques, espasmos o convulsiones."
+      item80:
+        name: "Si hay alertas visuales o sonoras, han de tener sus respectivas alternativas: sonoras para las visuales, visuales para las sonoras."
+      section15:
+        name: "Accesibilidad del contenido textual"
+      item81:
+        name: "El texto es legible y/o puede ajustarse su tamaño."
+      item82:
+        name: "Existe contraste entre el color de texto y el color del fondo para leerlo claramente y sin esfuerzo."
+      item83:
+        name: "No se proporciona información exclusivamente por características sensoriales."
+        description: "Por ejemplo, si se utilizan colores para transmitir información se deben utilizar, además, marcas textuales para que no pierdan esta información las personas con discapacidad visual."
+      item84:
+        name: "Si hay formularios, tienen una estructura clara y coherente con la información que se presenta y se solicita. Son fáciles de rellenar y se ofrecen las ayudas necesarias tanto para rellenarlos como para prevenir y/o corregir los errores que se puedan cometer al cumplimentarlos. Además deben estar programados de tal forma que permitan el acceso compatible con productos de apoyo."
+      item85:
+        name: "Si hay tablas han de utilizarse correctamente, estar bien estructuradas y descritas, además de estar programadas de tal forma que permitan el acceso compatible con los productos de apoyo."
+      item86:
+        name: "Si hay tablas son sencillas, evitando en la medida de lo posible las celdas combinadas, divididas y anidadas. Solo se utilizan para mostrar/organizar datos, no para maquetar contenido. Deben estar correctamente programadas para que permitan el acceso compatible con productos de apoyo."
+        description: "Por ejemplo, las tablas HTML en las páginas web deben utilizar los elementos HTML correctos para marcar el resumen, título, encabezamiento, filas y datos."
+      item87:
+        name: "Si hay listas se utilizan solo para mostrar/organizar secuencias de elementos, no para maquetar texto. Han de estar programadas de tal forma que permitan el acceso compatible con los productos de apoyo."
+        description: "Ayuda: si las listas se crean con la función de listas que proporcionan los editores de contenidos en cada uno de los posibles formatos: texto, páginas web, pdf,..., los productos de apoyo no tienen problemas."
+      section16:
+        name: "Preguntas abiertas"
+      item88:
+        name: "¿Hay algo más que te gustaría contarnos sobre tu experiencia con el uso de estos materiales?"
+      item89:
+        name: "¿Hay alguna forma de que estos materiales puedan ser mejorados? Por favor, en caso afirmativo indica el número del ítem que mejorarías, cómo y porqué."

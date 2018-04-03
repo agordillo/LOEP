@@ -1,14 +1,15 @@
 <% itemName ||= "item" + nItem.to_s %>
+<% itemTitle ||= nItem.to_s + ". " + item[:name] %>
 <% scale ||= [1,5] %>
 <% formOptions ||= {} %>
 <% formOptions = {:scaleLegend => {:min => t("forms.evmethod.low"), :max => t("forms.evmethod.high")}}.merge(formOptions) %>
 
 <div class="survey_block" item="<%=nItem%>">
   <% unless nItem.nil? %>
-    <p class="survey_question_title"><%=nItem%>. <%=item[:name]%></p>
-    <%unless item[:description].blank?%>
+    <p class="survey_question_title"><%=itemTitle%></p>
+    <% unless item[:description].blank? %>
       <p class="survey_question_subtitle"><%=item[:description]%></p>
-    <%end%>
+    <% end %>
   <% end %>
 
   <p class="survey_block_top_space"></p>
