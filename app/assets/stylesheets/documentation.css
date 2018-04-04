@@ -31,11 +31,21 @@
 	font-weight: bold;
 }
 
-img.download_file {
+img.doc_file {
 	height: 40px;
+	max-width: 60px;
 }
 
-table.loep_table td.download_file {
-	max-width: 45px;
+img.doc_file_link {
+	height: 25px !important;
+}
+
+div.documentation_container table.loep_table td.doc_file {
+	max-width: 80px;
+	text-align: center;
+}
+
+div.documentation_container table.loep_table td.locale {
+	max-width: 60px;
 	text-align: center;
 }

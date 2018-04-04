@@ -402,7 +402,7 @@ table.loep_table_form_view .tdchecked {
 /* loep table */
 
 table.loep_table {
-	width: 100%;
+	width: 99.5%;
 	font-family:Arial, Helvetica, sans-serif;
 	color:#666;
 	font-size: 0.65rem;
@@ -544,12 +544,9 @@ table.loep_table td.tdseparator {
 	padding: 3px !important;
 }
 
-table.loep_table tr.trpointer {
-	cursor: pointer;
-}
-
 table.loep_table tr.loeprowselected {
 }
+
 table.loep_table tr.loeprowselected td {
 	background: #ffc;
 }

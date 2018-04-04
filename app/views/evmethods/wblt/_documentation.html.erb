@@ -1,0 +1,10 @@
+<% 
+  files = {
+    :all => [
+      {:url => "https://www.sciencedirect.com/science/article/pii/S0747563211000732", :title => "Evaluating learning, design, and engagement in web-based learning tools (WBLTs): The WBLT Evaluation Scale", :filetype => "link", :locale => "en"},
+      {:url => "https://www.learntechlib.org/p/44749/", :title => "Examining the Effectiveness of Web-Based Learning Tools in Middle and Secondary School Science Classrooms", :filetype => "link", :locale => "en"}
+    ]
+  }
+%>
+
+<%= render 'evmethods/documentation/generic_documentation', :files => files, :title => I18n.t("evmethods.wblt.documentation.title") %>

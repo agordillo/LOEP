@@ -1,0 +1,11 @@
+<% 
+  files = {
+    :all => [
+      {:url => "/docs/UNE_71362_2017_AnexoF_UCM.pdf", :title => "ANEXO F de la Norma UNE 71362: Perfiles de Aplicación", :filetype => "pdf", :locale => "es"},
+      {:url => "/docs/UNE_71362_2017_AnexoF_UCM_Student.pdf", :title => "UNE 71362: Perfil del Alumno", :filetype => "pdf", :locale => "es"},
+      {:url => "/docs/UNE_71362_2017_AnexoF_UCM_Teacher.pdf", :title => "UNE 71362: Perfil del Profesor", :filetype => "pdf", :locale => "es"}
+    ]
+  }
+%>
+
+<%= render 'evmethods/documentation/generic_documentation', :files => files, :title => I18n.t("evmethods.une71362.documentation.title"), :description => I18n.t("evmethods.une71362.documentation.description") %>

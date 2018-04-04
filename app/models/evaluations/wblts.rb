@@ -13,14 +13,14 @@ class Evaluations::Wblts < Evaluation
     items = []
     13.times do |i|
       items << {
-        :name => I18n.t("evmethods.Wblts.item" + (i+1).to_s + ".name") + ".",
-        :shortname => I18n.t("evmethods.Wblts.item" + (i+1).to_s + ".shortname"),
+        :name => I18n.t("evmethods.wblts.item" + (i+1).to_s + ".name") + ".",
+        :shortname => I18n.t("evmethods.wblts.item" + (i+1).to_s + ".shortname"),
         :type=> "integer"
       }
     end
     2.times do |i|
       items << {
-        :name => I18n.t("evmethods.Wblts.item" + (i+14).to_s + ".name"),
+        :name => I18n.t("evmethods.wblts.item" + (i+14).to_s + ".name"),
         :type=> "text"
       }
     end

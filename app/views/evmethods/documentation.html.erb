@@ -1,5 +1,5 @@
-<%if lookup_context.template_exists?("documentation", "evmethods/"+@shortname, true)%>
-	<%= render "evmethods/"+@shortname+"/documentation" %>
+<%if lookup_context.template_exists?("documentation", "evmethods/" + @shortname, true)%>
+  <%= render "evmethods/"+@shortname+"/documentation" %>
 <% else %>
-	<%= render "evmethods/empty_doc" %>
+  <%= render "evmethods/documentation/empty_doc" %>
 <% end %>

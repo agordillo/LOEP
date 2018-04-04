@@ -324,6 +324,8 @@ en:
   dialog:
     ok: "Ok"
     cancel: "Cancel"
+  documentation:
+    files_header: "Files"
   evaluations:
     embed:
       message:
@@ -550,6 +552,9 @@ en:
           b: "The language (words used, vocabulary, sentence structure) is appropriate for the age, reading level and interests of the expected users <b>some of the time</b>"
           c: "The language (words used, vocabulary, sentence structure) is appropriate for the age, reading level and interests of the expected users <b>all/most of the time</b>"
     lori:
+      documentation:
+        title: "Learning Object Review Instrument (LORI) v1.5"
+        description: "The Learning Object Review Instrument (LORI) is used to evaluate the quality of e-learning resources. LORI is an online form consisting of rubrics, rating scales and comment fields. LORI 1.5 is the last version of the instrument."
       item1:
         name: "Content Quality"
         description: "Veracity, accuracy, balanced presentation of ideas, and appropriate level of detail"
@@ -627,7 +632,10 @@ en:
         name: "I needed to learn a lot of things before I could get going with this %{system}"
       score: 
         name: "Global SUS Score"
-    Wblts:
+    wblt:
+      documentation:
+        title: "WBLT Evaluation Scale"
+    wblts:
       item1:
         name: "The learning object was well organized"
         shortname: "Organization"
@@ -671,7 +679,7 @@ en:
         name: "What (if anything) did you LIKE about using the learning object?"
       item15:
         name: "What (if anything) did you NOT LIKE about using the learning object?"
-    Wbltt:
+    wbltt:
       item1:
         name: "The learning object was easy for me to use"
         shortname: "Usability for teachers"

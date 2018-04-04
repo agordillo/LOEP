@@ -1,0 +1,47 @@
+<%
+  title ||= I18n.t("evmethods." + @evmethod.shortname + ".documentation.title", default: "")
+  title = @evmethod.name if title.blank?
+  description ||= I18n.t("evmethods." + @evmethod.shortname + ".documentation.description", default: "")
+  files ||= {}
+  files = ({:all => []}).merge(files)
+  files.keys.reject{|k| k==:all}.each do |locale|
+    files.delete(locale) unless current_user.languages.include?(Language.find_by_code(locale.to_s)) and files[locale].length > 0
+  end
+%>
+
+<div class="documentation_container">
+  <% unless title.blank? %>
+	 <h1><%= title %></h1>
+  <% end %>
+  <% unless description.blank? %>
+    <p class="grey"><%= description %></p>
+  <% end %>
+	<br/>
+
+  <% if files.map{|k,v| v.length}.sum > 0 %>
+    <h2><%=I18n.t("documentation.files_header")%></h2>
+    <table cellspacing='0' class="loep_table">
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+      <% files.keys.reject{|k| k==:all}.each do |locale| %>
+        <% files[locale].each do |f| %>
+          <%= render 'evmethods/documentation/generic_file', :url => f[:url], :fileTitle => f[:title], :filetype=>f[:filetype], :locale => f[:locale] %>
+        <% end %>
+        <tr>
+          <td class="tdseparator" colspan="100%"></td>
+        </tr>
+      <% end %>
+      <% files[:all].each do |f| %>
+        <%= render 'evmethods/documentation/generic_file', :url => f[:url], :fileTitle => f[:title], :filetype=>f[:filetype], :locale => f[:locale] %>
+      <% end %>
+    </table>
+  <% else %>
+    <p class="grey"><%=t("evmethods.message.no_documentation")%></p>
+  <% end %>
+</div>
+
+<br/>
+<%= link_to t("dictionary.back"), :back, :class=>'backLink' %>

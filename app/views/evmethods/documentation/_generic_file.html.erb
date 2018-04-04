@@ -1,0 +1,34 @@
+<%
+  filetype ||= "generic"
+  fileIconUrl ||= "/assets/filetype_" + filetype + ".png"
+  url ||= nil
+  download ||= true
+  download = false if filetype == "link"
+  locale ||= "en"
+  fileTitle ||= "File"
+%>
+
+<% unless url.nil? %>
+  <tr>
+    <td class="doc_file <%="doc_file_"+filetype%>">
+      <a href="<%=url%>" <%=download ? "download" : "target=_blank"%>>
+        <img src='<%=fileIconUrl%>' class="doc_file <%="doc_file_"+filetype%>"/>
+      </a>
+    </td>
+    <td class="locale">
+      <% case locale %>
+      <% when "en" %>
+        <img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-gb"/>
+      <% when "es" %>
+        <img src='data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw==' class="flag flag-es"/>
+      <% else %>
+        <span><%=locale%></span>
+      <% end %>
+    </td>
+    <td>
+      <a href="<%=url%>" <%=download ? "download" : "target='blank'"%>>
+        <span class="doc_entry"><%=fileTitle.html_safe%></span>
+      </a>
+    </td>
+  </tr>
+<% end %>

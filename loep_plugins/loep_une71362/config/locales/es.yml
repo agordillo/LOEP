@@ -1,5 +1,9 @@
 es:
   evmethods:
+    une71362:
+      documentation:
+        title: "UNE 71362"
+        description: "Esta página contiene documentación sobre la norma UNE 71362."
     une71362_teacher:
       section1:
         name: "Descripción didáctica: valor y coherencia didácticos"
