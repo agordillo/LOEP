@@ -18,7 +18,7 @@ class Evmethod < ActiveRecord::Base
 
 
   ################################
-  # Method for represent evaluations of a specific evmethod through graphs
+  # Methods for representing evaluations of a specific evmethod through graphs
   ################################
 
   def buildRepresentationData(lo,metric=nil)
