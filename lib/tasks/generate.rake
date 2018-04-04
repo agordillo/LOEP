@@ -125,10 +125,11 @@ namespace :generate do
 
     if args[:module_name].blank?
       #Try to get from name
-      moduleName = args[:name].split(" ").join("_").downcase.capitalize
+      moduleName = args[:name].split(" ")[0]
     else
       moduleName = args[:module_name]
     end
+    moduleName = moduleName.split("_").map{|s| s.downcase.capitalize}.join("")
     moduleName = "Metrics::" + moduleName
 
     #Validate evmethods
@@ -163,7 +164,7 @@ namespace :generate do
       require 'fileutils'
       FileUtils::mkdir_p modelFilePath
     end
-    modelFilePath += metricModelClassName.downcase + ".rb"
+    modelFilePath += metricModelClassName.split(/([[:upper:]][[:lower:]]*[0-9]*)/).delete_if(&:empty?).map{|s| s.downcase}.join("_") + ".rb"
     unless File.exist?(modelFilePath)
       File.open(modelFilePath, 'w') {|f| f.write(modelContent) }
       puts("The model was created in " + modelFilePath)

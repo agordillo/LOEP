@@ -37,9 +37,7 @@ class Score < ActiveRecord::Base
   def checkScoreBeforeSave
     if self.value.nil?
       loScore = self.metric.getScoreForLo(self.lo)
-      unless loScore.nil?
-        self.value = loScore
-      end
+      self.value = loScore unless loScore.nil?
     end
   end
 

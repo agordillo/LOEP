@@ -69,28 +69,19 @@ class Metric < ActiveRecord::Base
   end
 
   def getScoreForEvData(evData)
-    if evData.blank?
-      return nil
-    end
-
-    if evData.length < self.evmethods.length
-      #Data about some required evmethod is missing
-      return nil
-    end
+    return nil if evData.blank?
+    return nil if evData.length < self.evmethods.length #Data about some required evmethod is missed
 
     evData.each do |key,value|
       itemAverageValues = value[:items]
-      if itemAverageValues.blank? or itemAverageValues.include? nil
-        #Some evmethod data is missing
-        return nil
+      return nil if itemAverageValues.blank?
+      unless self.class.respond_to?("allowEmptyItems") and self.class.allowEmptyItems
+        return nil if itemAverageValues.include? nil
       end
     end
 
     loScore = self.class.getLoScore(evData)
-
-    unless loScore.nil?
-      loScore = ([[loScore,0].max,10].min).round(2)
-    end
+    loScore = ([[loScore,0].max,10].min).round(2) unless loScore.nil?
 
     return loScore
   end

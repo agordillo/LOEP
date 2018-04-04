@@ -109,7 +109,6 @@ class Lo < ActiveRecord::Base
 
   def hasBeenEvaluatedWithEvmethod(evmethod)
     return false if evmethod.nil?
-    # This method requires a single evaluation to rate all the EvMethod numeric items of the LO to considere it as evaluated
     #We consider that a LO has been evaluated with a evmethod, if for each numeric item of the method, exists at least one evaluation that rate it with a valid score.
     evMethodEvaluations = self.evaluations.where(:evmethod_id => evmethod.id)
     evmethod.getEvaluationModule.getItemsArray("numeric").each do |itemName|

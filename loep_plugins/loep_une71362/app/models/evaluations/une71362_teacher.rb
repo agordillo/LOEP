@@ -86,7 +86,7 @@ class Evaluations::Une71362Teacher < Evaluation
     evData = lo.getEvaluationData(evmethod)[evmethod.name]
 
     iScores = evData[:items]
-    return nil if iScores.blank? or iScores.include? nil
+    return nil if iScores.blank?
 
     #There is no need to scale scores since UNE scale is [0,10]
 
@@ -118,9 +118,10 @@ class Evaluations::Une71362Teacher < Evaluation
       end
 
       sectionScores.push(sectionScore)
+
       labels.push(I18n.t("evmethods.une71362_teacher.section" + (i+1).to_s + ".name"))
     end
-
+    
     return nil if sectionScores.blank? or sectionScores.include? nil
 
     representationData = Hash.new
