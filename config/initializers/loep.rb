@@ -1,6 +1,6 @@
 # Be sure to restart your server when you modify this file.
 LOEP::Application.configure do
-  config.version = "1.1"
+  config.version = "1.2"
   config.full_domain = "http://" + config.APP_CONFIG["domain"]
   #Secret key for verifying the integrity of signed cookies.
   config.secret_token = config.APP_CONFIG['secret_token']

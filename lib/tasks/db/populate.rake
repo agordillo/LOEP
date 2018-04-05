@@ -153,8 +153,12 @@ namespace :db do
 		#bundle exec rake db:populate:install
 		#bundle exec rake db:populate:install RAILS_ENV=production
 		task :install => :environment do
-			desc 'Populate database for production'
-			puts "Populating database for production"
+			desc 'Install LOEP'
+			puts "Installing LOEP"
+
+			installedVersionInstance = LoepSetting.find_by_key("installed_version")
+			installedVersion = installedVersionInstance.nil? ? nil : installedVersionInstance.value
+			abort("LOEP has been already installed.") unless installedVersion.blank?
 
 			#Create Roles, Languages, Evaluation Models, Metrics and Scores
 			Rake::Task["db:populate:components"].invoke
@@ -165,19 +169,50 @@ namespace :db do
 			#Install plugins
 			Rake::Task["db:populate:install_plugins"].invoke
 
-			puts "Population finished"
+			installedVersionInstance = LoepSetting.new(:key => "installed_version") if installedVersionInstance.nil?
+			installedVersionInstance.value = LOEP::Application.config.version
+			installedVersionInstance.save!
+
+			puts "Installation finished"
 		end
 
 		#bundle exec rake db:populate:upgrade
 		#bundle exec rake db:populate:upgrade RAILS_ENV=production
 		task :upgrade => :environment do
-			puts "Upgrading LOEP to the version: " + LOEP::Application.config.version
+			currentVersion = LOEP::Application.config.version
+			if ActiveRecord::Base.connection.table_exists?("loep_settings")
+				installedVersionInstance = LoepSetting.find_by_key("installed_version")
+			else
+				installedVersionInstance = nil
+			end
+			installedVersion = installedVersionInstance.nil? ? nil : installedVersionInstance.value
 
+			if installedVersion.blank?
+				if !ActiveRecord::Base.connection.table_exists?("loep_settings") and ActiveRecord::Base.connection.table_exists?("roles") and Roles.count > 0
+					#An old version of LOEP that lacks of LoepSettings was previously installed
+					installedVersion = "1.0"
+				else
+					abort("LOEP needs to be installed. Execute bundle exec rake db:populate:install.")
+				end
+			end
+
+			abort("LOEP is already in version " + currentVersion + ". No upgrade was performed.") if installedVersion == currentVersion
+			abort("A more recent version (" + installedVersion + ") of LOEP was previously installed. No upgrade was performed.") if Gem::Version.new(currentVersion) < Gem::Version.new(installedVersion)
+			
+			puts "Upgrading LOEP to version: " + currentVersion
+			
 			#Apply new migrations
 			Rake::Task["db:migrate"].invoke
 
 			#Create new Roles, Languages, Evaluation Models, Metrics and update scores
 			Rake::Task["db:populate:components"].invoke
+
+			#Install plugins
+			Rake::Task["db:populate:install_plugins"].invoke
+
+			installedVersionInstance = LoepSetting.new(:key => "installed_version") if installedVersionInstance.nil?
+			installedVersionInstance.value = currentVersion
+			installedVersionInstance.save!
 
 			puts "Upgrade finished"
 		end
@@ -394,7 +429,7 @@ namespace :db do
 		end
 
 		task :install_plugins => :environment do
-			puts "Installing plugins"
+			puts "Installing and upgrading plugins"
 			
 			LOEP::Application.config.enabled_plugins.each do |p|
 				if Rake::Task.task_defined?(p + ':install')
