@@ -79,9 +79,36 @@ class Evaluations::Une71362Teacher < Evaluation
     end
   end
 
-  def self.representationData(lo,metric=nil)
-    metric = Metric.allc.select{|m| m.evmethods == [self]}.first if metric.nil?
+  def self.hasEvaluatedLo(lo)
+    #By default, LOEP consider that a LO has been evaluated with a evmethod, if for each numeric item of the method, exists at least one evaluation that rate it with a valid score.
+    #For the UNE 71362 Teacher Profile evaluation method, LOEP will consider that a LO has been evaluated if, for each section, there is at least one evaluation that rate one of its items with a valid score.
+    evmethod = Evmethod.find_by_module(self.name)
+    evMethodEvaluations = lo.evaluations.where(:evmethod_id => evmethod.id)
+    sections = self.getSections
 
+    #Optimization
+    return true unless Evaluation.getValidEvaluationsForItems(evMethodEvaluations,self.getItemsArray("numeric")).empty?
+
+    firstSectionItem = 0
+    lastSectionItem = 0
+    nSections = sections.length
+    sections.each_with_index do |length,i|
+      break if i == nSections-1
+      begin
+        firstSectionItem = lastSectionItem+1
+        lastSectionItem = firstSectionItem+length-1
+        length.times do |i|
+          raise "Break inner loop" unless Evaluation.getValidEvaluationsForItem(evMethodEvaluations,"item#{firstSectionItem+i}").empty?
+          return false if i==length-1
+        end
+      rescue
+        next
+      end
+    end
+    return true
+  end
+
+  def self.representationData(lo,metric=nil)
     evmethod = Evmethod.find_by_module(self.name)
     evData = lo.getEvaluationData(evmethod)[evmethod.name]
 
@@ -127,6 +154,7 @@ class Evaluations::Une71362Teacher < Evaluation
     representationData = Hash.new
     representationData["iScores"] = sectionScores
 
+    metric = Metric.allc.select{|m| m.evmethods == [evmethod]}.first if metric.nil?
     unless metric.nil?
       loScoreForAverage = lo.scores.find_by_metric_id(metric.id)
       representationData["averageScore"] = loScoreForAverage.value.round(2) unless loScoreForAverage.nil?

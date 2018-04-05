@@ -109,7 +109,10 @@ class Lo < ActiveRecord::Base
 
   def hasBeenEvaluatedWithEvmethod(evmethod)
     return false if evmethod.nil?
-    #We consider that a LO has been evaluated with a evmethod, if for each numeric item of the method, exists at least one evaluation that rate it with a valid score.
+    return evmethod.module.constantize.hasEvaluatedLo(self) if evmethod.module.constantize.respond_to?("hasEvaluatedLo")
+
+    #By default, LOEP consider that a LO has been evaluated with a evmethod, if for each numeric item of the method, exists at least one evaluation that rate it with a valid score.
+    #This default behaviour can be customized by defining a custom hasEvaluatedLo method in the corresponding module.
     evMethodEvaluations = self.evaluations.where(:evmethod_id => evmethod.id)
     evmethod.getEvaluationModule.getItemsArray("numeric").each do |itemName|
       return false if Evaluation.getValidEvaluationsForItem(evMethodEvaluations,itemName).empty?
