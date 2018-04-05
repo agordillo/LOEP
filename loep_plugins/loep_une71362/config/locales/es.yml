@@ -223,6 +223,143 @@ es:
       section16:
         name: "Preguntas abiertas"
       item88:
-        name: "¿Hay algo más que te gustaría contarnos sobre tu experiencia con el uso de estos materiales?"
+        name: "¿Hay algo más que te gustaría contar sobre tu experiencia con el uso de este material?"
       item89:
-        name: "¿Hay alguna forma de que estos materiales puedan ser mejorados? Por favor, en caso afirmativo indica el número del ítem que mejorarías, cómo y porqué."
+        name: "¿Hay alguna forma de que este material pueda ser mejorado? Por favor, en caso afirmativo indica el número del ítem que mejorarías, cómo y porqué."
+    une71362_student:
+      section1:
+        name: "Descripción didáctica: valor y coherencia didácticos"
+      item1:
+        name: "Entiendo claramente los objetivos a alcanzar con este material."
+      item2:
+        name: "Se especifica que el material va dirigido a mi nivel educativo y/o edad; puedo alcanzar los objetivos didácticos que me propone."
+      item3:
+        name: "Tengo claro desde el principio qué competencias y habilidades voy a desarrollar con este material."
+      item4:
+        name: "Conozco las instrucciones y sugerencias para los posibles usos del material (en el aula con profesor o auto-aprendizaje)."
+      item5:
+        name: "Conozco cuánto tiempo voy a necesitar aproximadamente para estudiar/realizar el contenido del material educativo."
+      item6:
+        name: "Conozco si necesito conocimientos previos a la utilización del material y cuáles son en su caso."
+      section2:
+        name: "Calidad de los contenidos"
+      item7:
+        name: "El contenido incluye todos los objetivos de aprendizaje y es adecuado a mi nivel de conocimientos."
+      item8:
+        name: "Los contenidos están claros y entiendo cuáles son las ideas clave que debo aprender."
+      item9:
+        name: "Los contenidos se presentan de forma objetiva, respetuosa y sin sesgo ideológico."
+      section3:
+        name: "Capacidad para generar aprendizaje"
+      item10:
+        name: "Este material me ayuda a relacionar el nuevo conocimiento con mis conocimientos anteriores."
+      item11:
+        name: "El material me ayuda a ser crítico y a hacerme preguntas."
+      item12:
+        name: "Este material me ayuda a generar nuevo conocimiento."
+      item13:
+        name: "Puedo aplicar este material a la práctica."
+      section4:
+        name: "Adaptabilidad"
+      item14:
+        name: "Este material cubre mis expectativas y necesidades de aprendizaje y aumenta mi interés sobre el tema."
+      item15:
+        name: "Me siento cómodo con este material porque ofrece distintos niveles y formatos de contenido que me facilitan el aprendizaje."
+      section5:
+        name: "Interactividad"
+      item16:
+        name: "El material es interactivo (aprendo de forma activa)."
+      item17:
+        name: "El material contiene actividades interactivas para las ideas clave."
+      item18:
+        name: "El material me permite controlar y manejar mi aprendizaje. Puedo elegir qué y cómo aprender."
+      item19:
+        name: "Puedo consultar mi progreso."
+      item20:
+        name: "El tipo de actividades y ejercicios es variado."
+      section6:
+        name: "Motivación"
+      item21:
+        name: "Siento que lo aprendido con este material es importante para mi formación."
+      item22:
+        name: "Siento que este material promueve que aprenda por mi cuenta."
+      item23:
+        name: "El tiempo de aprendizaje estimado es adecuado para alcanzar mis expectativas."
+      item24:
+        name: "Los contenidos son atractivos e innovadores."
+      item25:
+        name: "El material favorece la comunicación y colaboración entre estudiantes."
+      section7:
+        name: "Formato y diseño"
+      item26:
+        name: "El material tiene un diseño fácil, claro y organizado."
+      item27:
+        name: "Los textos, imágenes, audios y vídeos son de buena calidad."
+      item28:
+        name: "Los contenidos audiovisuales me facilitan y refuerzan el aprendizaje."
+      item29:
+        name: "Se incluyen formatos multimedia diferentes (texto, imagen, audio y/o video)."
+      item30:
+        name: "El material es fácil de utilizar."
+      item31:
+        name: "El material es atractivo y apoya el estudio."
+      section8:
+        name: "Portabilidad"
+      item32:
+        name: "Puedo visualizar y utilizar los materiales en todos los dispositivos que utilizo (ordenador, tableta, móvil, …)."
+      item33:
+        name: "El material se puede utilizar con cualquier dispositivo con o sin conexión a internet."
+      section9:
+        name: "Robustez; estabilidad técnica"
+      item34:
+        name: "El material no falla durante su funcionamiento."
+      item35:
+        name: "El material responde rápido cuando interactúo con él."
+      item36:
+        name: "Encuentro las ayudas para manejar el material si tengo algún problema."
+      section10:
+        name: "Navegación"
+      item37:
+        name: "El nombre de los enlaces me indica dónde van a ir."
+      item38:
+        name: "Los enlaces funcionan correctamente."
+      item39:
+        name: "Tengo claro en cada momento en qué parte del material estoy, cuánto he hecho y cuánto me falta."
+      item40:
+        name: "Es posible salir del material en cualquier punto."
+      section11:
+        name: "Operabilidad"
+      item41:
+        name: "El material funciona con teclado y ratón. También funciona si se usa con una pantalla táctil u otros productos de apoyo."
+      item42:
+        name: "No tengo problemas en ver y mover el cursor."
+      item43:
+        name: "Tengo tiempo suficiente para poder leer y realizar las actividades."
+      section12:
+        name: "Accesibilidad del contenido audiovisual"
+      item44:
+        name: "Puedo ver o leer la descripción de las imágenes."
+      item45:
+        name: "Puedo ver, escuchar y leer el contenido de los vídeos. Puedo escuchar y leer el contenido de los audios."
+      item46:
+        name: "Puedo manejar la reproducción de los vídeos y audios."
+      section13:
+        name: "Accesibilidad del contenido textual"
+      item47:
+        name: "Leo bien el texto y puedo ajustar su tamaño."
+      item48:
+        name: "Si hay formularios son fáciles de rellenar."
+      item49:
+        name: "Si hay tablas son fáciles de leer y entender."
+      item50:
+        name: "Si hay listas son fáciles de leer y entender."
+      section14:
+        name: "Competencias"
+      item51:
+        name: "Tras completar la sesión con el material de aprendizaje, he adquirido las competencias enumeradas en su descripción didáctica."
+      section15:
+        name: "Preguntas abiertas"
+      item52:
+        name: "¿Hay algo más que te gustaría contar sobre tu experiencia con el uso de este material?"
+      item53:
+        name: "¿Hay alguna forma de que este material pueda ser mejorado? Por favor, en caso afirmativo indica el número del ítem que mejorarías, cómo y porqué."

@@ -1,0 +1,5 @@
+<% embed ||= false %>
+<% formOptions ||= @evaluation.getFormOptions %>
+<% scale ||= @evaluation.getScale %>
+
+<%= render 'evaluations/une71362/survey', :f => f, :readonly => readonly, :embed => embed, :formOptions => formOptions, :scale => scale, :entity => "student", :sections => Evaluations::Une71362Student.getSections %>

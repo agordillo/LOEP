@@ -166,12 +166,12 @@ namespace :db do
 			#Create users
 			Rake::Task["db:populate:create_users"].invoke
 
-			#Install plugins
-			Rake::Task["db:populate:install_plugins"].invoke
-
 			installedVersionInstance = LoepSetting.new(:key => "installed_version") if installedVersionInstance.nil?
 			installedVersionInstance.value = LOEP::Application.config.version
 			installedVersionInstance.save!
+
+			#Install plugins
+			Rake::Task["db:populate:install_plugins"].invoke
 
 			puts "Installation finished"
 		end
@@ -188,7 +188,7 @@ namespace :db do
 			installedVersion = installedVersionInstance.nil? ? nil : installedVersionInstance.value
 
 			if installedVersion.blank?
-				if !ActiveRecord::Base.connection.table_exists?("loep_settings") and ActiveRecord::Base.connection.table_exists?("roles") and Roles.count > 0
+				if !ActiveRecord::Base.connection.table_exists?("loep_settings") and ActiveRecord::Base.connection.table_exists?("roles") and Role.count > 0
 					#An old version of LOEP that lacks of LoepSettings was previously installed
 					installedVersion = "1.0"
 				else
@@ -207,12 +207,12 @@ namespace :db do
 			#Create new Roles, Languages, Evaluation Models, Metrics and update scores
 			Rake::Task["db:populate:components"].invoke
 
-			#Install plugins
-			Rake::Task["db:populate:install_plugins"].invoke
-
 			installedVersionInstance = LoepSetting.new(:key => "installed_version") if installedVersionInstance.nil?
 			installedVersionInstance.value = currentVersion
 			installedVersionInstance.save!
+
+			#Install plugins
+			Rake::Task["db:populate:install_plugins"].invoke
 
 			puts "Upgrade finished"
 		end
