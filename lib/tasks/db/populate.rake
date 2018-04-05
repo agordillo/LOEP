@@ -162,6 +162,9 @@ namespace :db do
 			#Create users
 			Rake::Task["db:populate:create_users"].invoke
 
+			#Install plugins
+			Rake::Task["db:populate:install_plugins"].invoke
+
 			puts "Population finished"
 		end
 
@@ -265,9 +268,11 @@ namespace :db do
 				end
 			end
 
-			#Create scores for the new evaluation models (only possible for automatic evaluation models)
-			Rake::Task["db:populate:scores"].reenable
-			Rake::Task["db:populate:scores"].invoke([],addedEvmethods.map{|m| m.name}.join(","))
+			unless addedEvmethods.blank?
+				#Create scores for the new evaluation models (only possible for automatic evaluation models)
+				Rake::Task["db:populate:scores"].reenable
+				Rake::Task["db:populate:scores"].invoke([],addedEvmethods.map{|m| m.name}.join(","))
+			end
 		end
 
 		task :metrics => :environment do
@@ -313,10 +318,12 @@ namespace :db do
 				end
 			end
 
-			#Create scores for the new metrics
-			uploadScoreMetrics = addedMetrics.select{|m| Lo.evaluatedWithEvmethods(m.evmethods).length > 0}
-			Rake::Task["db:populate:scores"].reenable
-			Rake::Task["db:populate:scores"].invoke(uploadScoreMetrics.map{|m| m.name}.join(","),[])
+			unless addedMetrics.blank?
+				#Create scores for the new metrics
+				uploadScoreMetrics = addedMetrics.select{|m| Lo.evaluatedWithEvmethods(m.evmethods).length > 0}
+				Rake::Task["db:populate:scores"].reenable
+				Rake::Task["db:populate:scores"].invoke(uploadScoreMetrics.map{|m| m.name}.join(","),[])
+			end
 		end
 
 		task :scores, [:metrics,:evmethods] => :environment do |t, args|
@@ -384,6 +391,59 @@ namespace :db do
 			user_reviewer.roles.push(role_reviewer)
 			user_reviewer.save!
 			puts "Reviewer created with email: '" + user_reviewer.email + "' and password: '" + user_reviewer.password + "'."
+		end
+
+		task :install_plugins => :environment do
+			puts "Installing plugins"
+			
+			LOEP::Application.config.enabled_plugins.each do |p|
+				if Rake::Task.task_defined?(p + ':install')
+					#Install plugin
+					
+					pluginSettingsInstance = LoepSetting.find_by_key("plugin_" + p)
+					pluginSettings = pluginSettingsInstance.nil? ? {} : (JSON.parse(pluginSettingsInstance.value) rescue {})
+					installedVersion = pluginSettings["installed_version"]
+
+					require p + '/version'
+					currentVersion = eval(p.split(" ")[0].split("_").map{|s| s.downcase.capitalize}.join("") + "::VERSION")
+
+					if !installedVersion.blank? and installedVersion == currentVersion
+						puts "LOEP plugin '" + p + " (" + currentVersion + ")' is already installed"
+						next
+					end
+
+					installed = false
+					upgraded = false
+
+					if installedVersion.blank?
+						puts "Installing LOEP plugin '" + p + " (" + currentVersion + ")'"
+						Rake::Task[p + ':install'].invoke
+						installed = true
+					elsif Gem::Version.new(currentVersion) > Gem::Version.new(installedVersion)
+						puts "Upgrading LOEP plugin '" + p + "' to version " + currentVersion
+						if Rake::Task.task_defined?(p + ':upgrade')
+							#Update plugin
+							Rake::Task[p + ':upgrade'].invoke(installedVersion)
+						end
+						upgraded = true
+					else
+						puts "A more recent version (" + installedVersion + ") of the LOEP plugin '" + p + "' was previously installed. No installation was performed."
+						next
+					end
+
+					pluginSettings["installed_version"] = currentVersion
+					pluginSettingsInstance = LoepSetting.new(:key => "plugin_" + p) if pluginSettingsInstance.nil?
+					pluginSettingsInstance.value = (pluginSettings.to_json)
+					pluginSettingsInstance.save!
+
+					if installed
+						puts "The LOEP plugin '" + p + " (" + currentVersion + ")' was succesfully installed"
+					elsif upgraded
+						puts "The LOEP plugin '" + p + "' was succesfully upgraded to version " + currentVersion
+					end
+				end
+			end
+			puts "Task finished"
 		end
 
 	end

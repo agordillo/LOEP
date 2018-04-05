@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170824102602) do
+ActiveRecord::Schema.define(:version => 20180405110929) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -285,6 +285,13 @@ ActiveRecord::Schema.define(:version => 20170824102602) do
   create_table "lo_interactions", :force => true do |t|
     t.integer  "lo_id"
     t.integer  "nsamples"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "loep_settings", :force => true do |t|
+    t.string   "key"
+    t.text     "value"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

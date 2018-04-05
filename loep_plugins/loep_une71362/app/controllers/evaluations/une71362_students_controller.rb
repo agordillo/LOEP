@@ -1,0 +1,2 @@
+class Evaluations::Une71362StudentsController < EvaluationsController
+end
