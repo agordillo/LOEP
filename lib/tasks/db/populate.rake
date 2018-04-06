@@ -428,6 +428,8 @@ namespace :db do
 			puts "Reviewer created with email: '" + user_reviewer.email + "' and password: '" + user_reviewer.password + "'."
 		end
 
+		#bundle exec rake db:populate:install_plugins
+		#bundle exec rake db:populate:install_plugins RAILS_ENV=production
 		task :install_plugins => :environment do
 			puts "Installing and upgrading plugins"
 			
