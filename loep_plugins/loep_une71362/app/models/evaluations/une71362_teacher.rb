@@ -131,7 +131,7 @@ class Evaluations::Une71362Teacher < Evaluation
       sectionScore = 0
       applicableItems = 0
       length.times do |i|
-        itemScore = iScores[i]
+        itemScore = iScores[firstSectionItem+i-1]
         if !itemScore.nil? and itemScore!=-1
           applicableItems += 1
           sectionScore += itemScore

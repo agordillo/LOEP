@@ -281,19 +281,23 @@ class Evaluation < ActiveRecord::Base
   end
 
   def self.getValidEvaluationsForItems(evaluations,itemNames)
-    # Evaluation.where(:lo_id => Lo.first.id).where('item1!=-1 and item2 !=-1 and item3!=-1 and item17 IS NOT NULL')
-    # Usage example: Evaluation.getValidEvaluationsForItems(Evaluation,["item1","item2","item3","ditem1"])
-    query = "";
+    evaluations.select{|e| e.isValidForItems(itemNames)}
+  end
+
+  def isValidForItem(itemName)
+    itemName = [itemName] unless itemName.is_a? Array
+    self.isValidForItems(itemName)
+  end
+
+  def isValidForItems(itemNames)
     itemNames.each_with_index do |itemName,index|
-      query = query + " and " if (index!=0)
-      if itemName=="comments" or itemName.start_with?("titem") or itemName.start_with?("sitem")
-        query = query + (itemName.to_s) + ' is NOT NULL and RTRIM(' + (itemName.to_s) + ') !=""'
-      else
-        query = query + (itemName.to_s) + ' != -1'
+      iValue = self.send("#{itemName}")
+      return false if iValue.blank?
+      unless itemName=="comments" or itemName.start_with?("titem") or itemName.start_with?("sitem")
+        return false if iValue==-1
       end
     end
-    evaluations = Evaluation.where("id in (?)",evaluations.map{|ev| ev.id}) if evaluations.is_a? Array
-    evaluations.where(query)
+    true
   end
 
   def getItemsArray(itemTypes=nil)
@@ -363,16 +367,11 @@ class Evaluation < ActiveRecord::Base
 
     #Numeric Items
     evMethodItems = evmethodModule.getItemsArray("numeric")
-    validEvaluations = Evaluation.getValidEvaluationsForItem([self],evMethodItems)
-
-    if validEvaluations.length === 0
-      evMethodItems.each do |itemName|
-        evData[evmethodName][:items].push(nil)
-      end
-    else
-      evMethodItems.each do |itemName|
-        iScore = validEvaluations.average(itemName).to_f
-        evData[evmethod.name][:items].push(iScore)
+    evMethodItems.each do |itemName|
+      unless self.isValidForItem(itemName)
+        evData[evmethod.name][:items].push(nil)
+      else
+        evData[evmethod.name][:items].push(self.send("#{itemName}").to_f.round(2))
       end
     end
 

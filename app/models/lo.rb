@@ -314,10 +314,11 @@ class Lo < ActiveRecord::Base
           validEvaluations = Evaluation.getValidEvaluationsForItem(evData[evmethod.name][:evaluations],itemName)
           if validEvaluations.length == 0
             #Means that this item has not been evaluated in any evaluation
-            #All evaluations had leave this item in blank
+            #All evaluations left this item blank
             iScore = nil
           else
-            iScore = validEvaluations.average(itemName.to_s).to_f
+            iScores = validEvaluations.map{|e| e.send("#{itemName}")}
+            iScore = (iScores.sum/iScores.size.to_f).round(2)
           end
           evData[evmethod.name][:items].push(iScore)
         end
