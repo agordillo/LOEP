@@ -74,7 +74,7 @@ class Metric < ActiveRecord::Base
 
     evData.each do |key,value|
       itemAverageValues = value[:items]
-      return nil if itemAverageValues.blank?
+      return nil if itemAverageValues.compact.blank?
       unless self.class.respond_to?("allowEmptyItems") and self.class.allowEmptyItems
         return nil if itemAverageValues.include? nil
       end
