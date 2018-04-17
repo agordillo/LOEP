@@ -12,7 +12,7 @@ en:
       item2:
         name: "Se especifican los destinatarios; los objetivos didácticos son alcanzables por los destinatarios según el perfil requerido en el propio MED."
       item3:
-        name: "Las competencias y/o destrezas a desarrollar están claramente especificadas; son coherentes con los objetivos y los destinatarios."
+        name: "Las competencias y/o destrezas a desarrollar están claramente especificadas; son coherentes con los objetivos didácticos y los destinatarios."
       item4:
         name: "Existen instrucciones o sugerencias sobre los posibles usos didácticos para el profesor y/o para el estudiante (autoformación)."
       item5:
@@ -230,7 +230,7 @@ en:
       section1:
         name: "Descripción didáctica: valor y coherencia didácticos"
       item1:
-        name: "Entiendo claramente los objetivos a alcanzar con este material."
+        name: "Entiendo claramente los objetivos didácticos a alcanzar con este material."
       item2:
         name: "Se especifica que el material va dirigido a mi nivel educativo y/o edad; puedo alcanzar los objetivos didácticos que me propone."
       item3:
@@ -356,7 +356,7 @@ en:
       section14:
         name: "Competencias"
       item51:
-        name: "Tras completar la sesión con el material de aprendizaje, he adquirido las competencias enumeradas en su descripción didáctica."
+        name: "Tras completar la sesión con el material de aprendizaje, he alcanzado los objetivos didácticos propuestos."
       section15:
         name: "Preguntas abiertas"
       item52:
