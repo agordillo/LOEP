@@ -31,7 +31,7 @@ class Evmethod < ActiveRecord::Base
 
     scale = self.module.constantize.getScale
     iScores.each_with_index do |iScore,index|
-      iScores[index] = ((iScore-scale[0]) * 10/(scale[1]-scale[0]).to_f).round(2)
+      iScores[index] = ((iScore.to_f-scale[0]) * 10/(scale[1]-scale[0]).to_f).round(2)
     end
 
     representationData = Hash.new
