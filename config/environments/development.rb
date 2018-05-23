@@ -14,6 +14,7 @@ LOEP::Application.configure do
   config.action_controller.perform_caching = false
 
   #Action mailer configuration
+  config.action_mailer.default_url_options = {:host => config.APP_CONFIG["domain"]} unless config.APP_CONFIG["mail"].nil?
   #Perform deliveries
   config.action_mailer.perform_deliveries = false
   # Don't care if the mailer can't send

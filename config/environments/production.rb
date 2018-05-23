@@ -49,6 +49,7 @@ LOEP::Application.configure do
   # config.assets.precompile += %w( search.js )
 
   #Action mailer configuration
+  config.action_mailer.default_url_options = {:host => config.APP_CONFIG["domain"]} unless config.APP_CONFIG["mail"].nil?
   #Perform deliveries
   config.action_mailer.perform_deliveries = true 
   # Disable delivery errors, bad email addresses will be ignored

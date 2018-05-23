@@ -5,7 +5,6 @@ LOEP::Application.configure do
 
   unless loepMailConf.nil?
     ActionMailer::Base.default :charset => "utf-8"
-    config.action_mailer.default_url_options = {:host => config.APP_CONFIG["domain"]}
     
     if loepMailConf["type"] == "SENDMAIL"
       ActionMailer::Base.delivery_method = :sendmail
