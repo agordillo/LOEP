@@ -10,6 +10,7 @@ class LoInteraction < ActiveRecord::Base
   # Example:
   # { 
   #   "nsamples" => 100,
+  #   "nsignificativesamples" => 60,
   #   "interactions" => {
   #     "nclics" => 25,
   #     "tlo" => {
@@ -30,7 +31,9 @@ class LoInteraction < ActiveRecord::Base
 
     i = LoInteraction.new(:lo_id => lo.id)
     i.nsamples = h["nsamples"].to_i unless h["nsamples"].blank?
+    i.nsignificativesamples = h["nsignificativesamples"].to_i unless h["nsignificativesamples"].blank?
     i.valid?
+
     raise(i.errors.full_messages.to_sentence) unless i.errors.blank? and i.save
     if h["interactions"].is_a? Hash
       h["interactions"].each do |key,value|

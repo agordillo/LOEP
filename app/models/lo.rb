@@ -270,6 +270,7 @@ class Lo < ActiveRecord::Base
     attrs = self.extended_attributes(true)
     unless self.lo_interaction.nil?
       attrs["interactions [nsamples]"] = self.lo_interaction.nsamples unless self.lo_interaction.nsamples.blank?
+      attrs["interactions [nsignificativesamples]"] = self.lo_interaction.nsignificativesamples unless self.lo_interaction.nsignificativesamples.blank?
       unless self.lo_interaction.lo_interaction_fields.blank?
         self.lo_interaction.lo_interaction_fields.map{|f| f}.each do |f|
           attrs["interactions [" + f.name + "]"] = f.average_value.round(2)
