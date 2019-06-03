@@ -36,6 +36,7 @@ The last releases can be seen [here](https://github.com/agordillo/LOEP/releases)
   * SUS (System Usability Scale)
   * WBLT-S (WBLT Evaluation Scale for Students)
   * WBLT-T (WBLT Evaluation Scale for Teachers)
+  * UNE 71362: Teacher profile and student profile
   * Metadata Quality evaluation model (automatic)
   * Interaction Quality evaluation model (automatic)
 * Support for automatic evaluation models and human reviews
@@ -47,7 +48,8 @@ The last releases can be seen [here](https://github.com/agordillo/LOEP/releases)
   * Metadata Quality metrics: Overall metadata quality, Completeness, Coherence, Conformance, Consistency and Findability.
   * Interaction Quality metric
 * Support for defining and adding new evaluation models
-* Support for defining and adding new quality metrics
+* Support for defining and adding new quality metrics  
+* Support for public and private plugins
 * Evaluation reports, scores, statistics and graphs
 * Evaluations and reports can be exported to excel files
 * Learning Object Quality comparison and aggregated statistics
