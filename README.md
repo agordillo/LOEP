@@ -88,7 +88,7 @@ Visit our [wiki](http://github.com/agordillo/LOEP/wiki) to see all the available
 
 # Copyright
 
-© Universidad Politécnica de Madrid, 2019
+© Universidad Politécnica de Madrid, 2019  
 Aldo Gordillo Méndez, Enrique Barra Arias
 
 LOEP is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
