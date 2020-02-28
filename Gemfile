@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '~> 2.0'
 
 gem 'rails', '3.2.22'
-gem 'rake', '10.3.2'
+gem 'rake', '12.3.3'
 
 # DBMS
 # gem 'sqlite3'
