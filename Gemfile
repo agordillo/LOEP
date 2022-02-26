@@ -58,7 +58,7 @@ end
 gem 'axlsx', '2.0.1'
 gem 'axlsx_rails', '0.1.5'
 gem 'acts_as_xlsx', '1.0.6'
-gem 'nokogiri', '1.6.3.1'
+gem 'nokogiri', '1.13.2'
 
 #Internacionalization
 gem 'i18n', '0.6.11'
