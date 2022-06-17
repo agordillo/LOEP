@@ -61,7 +61,7 @@ gem 'acts_as_xlsx', '1.0.6'
 gem 'nokogiri', '1.6.3.1'
 
 #Internacionalization
-gem 'i18n', '0.6.11'
+gem 'i18n', '0.8.0'
 
 gem 'exception_notification', '= 4.1.1'
 
