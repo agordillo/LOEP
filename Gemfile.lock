@@ -167,7 +167,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.48)
+    tzinfo (0.3.61)
     uglifier (3.0.0)
       execjs (>= 0.3.0, < 3)
     vpim (13.11.11)
