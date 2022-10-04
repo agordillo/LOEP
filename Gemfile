@@ -25,7 +25,7 @@ gem 'bcrypt-ruby', '3.1.5'
 gem 'acts-as-taggable-on', '2.2.2'
 gem 'multi_json', '1.10.1'
 gem 'rubyzip', '1.0.0'
-gem 'rest-client', '= 1.6.7'
+gem 'rest-client', '1.8.0'
 gem 'vpim', '= 13.11.11'
 gem 'test-unit'
 
